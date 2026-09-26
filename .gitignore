@@ -1,0 +1,27 @@
+# Secrets and local auth state
+.env
+.env.*
+!.env.example
+*.auth.json
+*.cookies.json
+.agent-browser/
+browser-state/
+playwright/.auth/
+
+# Local/private reference material
+reference/local/
+reference/private/
+reference/incoming/
+
+# Generated local media
+reference/video/generated/
+reference/audio/generated/
+reference/frames/generated/
+
+# Local runtime/build output
+node_modules/
+dist/
+build/
+coverage/
+.next/
+.DS_Store
