@@ -3,6 +3,12 @@
 Status: DESIGN (Stage 1). Interfaces and documents only; implementation lands in
 Stage 2 after Worker 1 freezes the shared contracts (`src/contracts/`).
 
+> **Post-freeze alignment (authoritative):** Worker 1's contract freeze exists
+> on branch `work/wflx-w1-contracts` @ `78be437` (not yet merged to main at the
+time of this addendum). Section 16 reconciles this design against those
+> actual contract shapes and **supersedes** any conflicting statements in
+> sections 3–5 and 15. Read section 16 before implementing.
+
 Evidence labels in this document follow AGENTS.md:
 OBSERVED / DOCUMENTED / HYPOTHESIS / REPRODUCED / UNRESOLVED.
 Claims about the real Gemini Notebook product are labeled; claims about this lab
@@ -200,6 +206,11 @@ below are design targets for the lab implementation; their claim that the real
 product behaves this way is HYPOTHESIS and each has a testable predicate plus
 a product-level falsifier in tests/audio/mode-semantics.md.
 
+> Post-freeze note (§16): mode-specific editorial STRUCTURE now materializes in
+> the plan's `audioTurns` (Worker 1's Director). W2 mode compilers VALIDATE and
+> REALIZE mode structure (text register, pacing, mode-aware checks); they do
+> not invent or restructure the authoritative turn skeleton.
+
 ### 4.1 Deep Dive (baseline mode)
 
 ```text
@@ -308,6 +319,12 @@ Speaking-rate model: words ≈ `rate(mode, style) * seconds`, baseline
 `targetDurationSeconds`; realized text is checked against the estimate.
 
 ### 5.2 Compression ladder (over-budget)
+
+> Post-freeze note (§16): plan-level durations are authoritative and
+> deep-validated (turn durations sum to target; coverage accounts for every
+> claim). Claim/example DROPPING is Director authority, not W2's. The ladder
+> below is repositioned by §16 to TEXT-DENSITY FITTING within each turn's
+> authoritative target, plus over-budget flagging — never silent editorial cuts.
 
 Applied in order, stopping when the budget fits:
 
@@ -525,21 +542,31 @@ tests/audio/
 
 ## 15. Open questions and handoffs
 
-HANDOFF → W1/TL (contract needs):
+> Post-freeze status per §16: items 1–3 are now ANSWERED by
+> `work/wflx-w1-contracts` @ `78be437`; see the updated numbering there.
+
+HANDOFF → W1/TL (contract needs, as originally written at design time):
 
 1. `AudioTurn` contract must expose, at minimum: turn id, speaker id,
    realized text, claim/evidence references, target duration, and a purpose
    or style field — the graph's QA metrics depend on these being first-class.
+   **ANSWERED (§16.1): all present, plus plan-level `brief` and
+   `speakerRole`.**
 2. `OverviewPlan` needs: emphasis weights per claim/topic, covered-set
    definition, contested/gap/weakness flags (Critique/Debate depend on them),
    language, target duration, style fields. If any are missing, Critique and
    Debate degrade to heuristics — flagged now, before freeze.
+   **PARTIALLY ANSWERED (§16.4): weights/coverage/style present;
+   contestedness/gap flags are NOT in ClaimRecord — remains open.**
 3. Does `OverviewPlan` carry realized narration text (Director-authored), or
    does W2 realize text from claims? Design supports both (realizer is
    plan-narration-adaptive with deterministic claim realization fallback),
    but the contract should say which is authoritative.
+   **ANSWERED (§16.2): plan turns carry `brief`; W2 fills `text`.**
 4. Duration backpressure: a Director-side "max claims for duration" query, or
    acceptance that audio emits `over-budget` issues (default).
+   **ANSWERED (§16.3): the plan is authoritative and deep-validated; W2
+   fits text density and emits over-budget issues, never cuts content.**
 
 Integration notes → W3/TL:
 
@@ -553,3 +580,128 @@ Integration notes → W3/TL:
 UNRESOLVED (product-level, needs black-box runs): gap distributions, loudness
 target, Brief length semantics, Debate persona persistence, interactive-mode
 structure. Tracked in tests/audio/mode-semantics.md.
+
+## 16. Contract alignment — `work/wflx-w1-contracts` @ `78be437`
+
+Worker 1's contract freeze (branch `work/wflx-w1-contracts`, commit `78be437`,
+not yet merged to main when this was written) was reviewed against this
+design. This section is AUTHORITATIVE where it conflicts with earlier
+sections. No shared contract was edited by W2 (path ownership respected).
+
+### 16.1 What the frozen contracts actually say (verified)
+
+- `OverviewPlan` carries **plan-level `audioTurns`**: the Director already
+  produces the turn skeleton — speaker + `speakerRole`
+  (`host-a|host-b|guest|narrator`), frozen `AudioTurnPurpose` enum
+  (`framing`, `question`, `explanation`, `example`, `connection`,
+  `clarification`, `interjection`, `transition`, `synthesis`, `conclusion`),
+  `brief` (plan-level directive), `claimIds` + `evidence` spans, `beatId`,
+  `TurnStyle` (`delivery`, optional `emphasis`), `targetDurationSeconds`,
+  and `index`.
+- `text` is **optional and absent at plan level — W2 fills it** (contract
+  comment: "The audio compiler (Worker 2) fills `text` with the final
+  narration script").
+- Plans carry `beats` (weights sum to 1, deep-validated), a `CoverageMap`
+  (every graph claim covered or omitted-with-reason), `language` (BCP-47),
+  `targetDurationSeconds`, `PlanStyle`, `customInstructions`, and generator
+  provenance with seed.
+- Deep validation mutants on the W1 branch confirm: turn durations must sum
+  to target (`s07`), claim refs must resolve (`s08`), all claims accounted
+  (`s09`), turns must reference existing beats (`s13`).
+- `GeneratedArtifact` already covers the full provenance sidecar this design
+  planned: `MediaInfo` (sha256, duration, audio spec), `ProviderUsage`
+  (stage `speech`, provider, model, latencyMs, costUsd), `QaSummary`
+  (severity/code/message/`unitId` = smallest regenerable unit), generator
+  info with seed + reproducible flag. W2 emits these; no audio-side variant
+  is invented.
+- Canonical audio fixture `fixtures/contracts/plan-audio-deep-dive-5min.json`:
+  deep-dive, 300 s, 6 beats, 22 turns, host-a 12 / host-b 10 (already
+  non-parity), purposes used: framing 5, explanation 7, question 3,
+  example 2, connection 1, clarification 1, transition 1, synthesis 1,
+  conclusion 1.
+
+### 16.2 Repositioned responsibilities (supersedes §§3–5 where conflicting)
+
+1. **Turn set, speakers, purposes, and durations are PLAN-AUTHORITATIVE.**
+   W2 does not add, drop, reorder, or re-assign turns. The DialogueGraph is
+   W2's working/validation/realization representation BUILT FROM
+   `plan.audioTurns` — not a generator of turns.
+2. **Mode compilers repositioned** to mode-aware VALIDATION + TEXT
+   REALIZATION: a Critique `explanation` brief realizes in evaluative
+   register; a Debate `clarification` brief realizes as rebuttal-flavored
+   discourse; pacing/gap policy and QA expectations are mode-conditioned.
+   Structural mode differences (which turns exist) are the Director's
+   (W1's) output — W2 tests compile W1's per-mode plan fixtures and check
+   realization + validation semantics, plus flag plans whose turn structure
+   violates mode semantics.
+3. **Compression ladder repositioned** to text-density fitting: realized
+   word count per turn fits the turn's authoritative target (rate model +
+   brief compression heuristics). If a turn cannot honestly realize its
+   brief within target, W2 emits an `over-budget` QA issue naming the turn —
+   never silently drops claims or stretches speaking rate beyond mode
+   bounds.
+4. **Turn-taking engine repositioned** to naturalness VALIDATION +
+   text-level conversational tissue: parity-rigidity, question-answer
+   pairing, and missing-interjection checks run against the PLAN's turn
+   structure and surface as QA issues feeding back to the Director;
+   conversational features within a frozen turn (discourse markers, natural
+   question phrasing, acknowledgment openers) are realized in `text`.
+   The canonical fixture currently contains NO `interjection` turns —
+   noted as a fixture gap, see §16.4 item 3.
+5. **Purpose taxonomy mapping.** W2's richer internal taxonomy (§3.1) is an
+   ENRICHMENT layer for realization and QA; the frozen
+   `AudioTurnPurpose` passes through unchanged in output. Mapping for
+   enriched tags: `acknowledgement`→`interjection`, `reaction`→
+   `interjection`, `opening_hook`/`agenda`→`framing`, `follow_up`→
+   `question`, `recap`→`synthesis`, `takeaway`→`conclusion`, Critique
+   `assessment`/`limitation`→`explanation` (evaluative register),
+   `verdict`→`conclusion`, Debate `position_statement`→`framing`,
+   `rebuttal`/`concession`→`clarification`, `cross_examination`→`question`.
+   Enriched tags derive deterministically from (purpose, mode, stance,
+   brief content) — they never rewrite contract data.
+6. **Evidence and grounding.** `EvidenceSpan` (quote + UTF-16 offsets into
+   `SourceBlock`s) feeds both realization (exact tokens for pronunciation
+   risk) and groundedness QA. W2's groundedness checks re-validate plan
+   turns against claim ids + spans — redundant with W1's deep validation by
+   design (defense in depth at the audio boundary).
+7. **Personas.** Plan `speakerRole` (`host-a`/`host-b`) + display name map
+   onto W2 `SpeakerPersona` (voice profiles, role bias). W2 does not change
+   plan speaker assignment; stance assignment (Debate) derives from brief
+   content + enriched tags, flagged as HYPOTHESIS-grade until W1 exposes
+   stance signals.
+
+### 16.3 Duration model under plan authority
+
+Beat weights (sum to 1) and per-turn targets are given. W2's timing engine
+computes gaps from the policy (§6), checks total = Σ turns + Σ gaps against
+`targetDurationSeconds`, and reports drift per turn after synthesis. Gap
+policy remains the W2-owned tuning surface (UNRESOLVED vs product, §6).
+
+### 16.4 Contract gaps still open (HANDOFF, do not resolve unilaterally)
+
+1. **Contestedness / gap / weakness signals for Critique & Debate.**
+   `ClaimRecord` has `kind` (incl. `opinion`, `constraint`, `goal`),
+   `salience`, `negated` — but no contested/gap/weakness flag, and beats do
+   not carry stance. Without a plan-level signal, Debate's contested-set and
+   Critique's limitation turns rest on heuristics (kind ∈ {opinion,
+   constraint} + salience ranking + brief wording) that are HYPOTHESIS-grade.
+   Request: stance/contestedness fields on beats or claims, or explicit
+   blessing of the heuristic with its label.
+2. **Canonical audio plan fixtures per mode.** Only
+   `plan-audio-deep-dive-5min.json` exists. EXP-A-01/02/03 tests need
+   canonical brief/critique/debate plans over the same source graph. Until
+   they exist, W2 uses audio-local stand-in fixtures labeled non-canonical
+   (not product parity evidence, per tests/README.md).
+3. **Interjection/backchannel turns** are absent from the canonical plan.
+   If natural-conversation tissue should be audible as separate turns, the
+   Director must plan them; W2 will flag their absence as an
+   `info`-severity QA note (not an error) until W1 rules.
+
+### 16.5 Provider boundary confirmation
+
+The Stage 1 `SpeechProvider` port needs no changes against the freeze:
+`SpeakerId` (string) maps directly to plan `speakerRole` values; neutral
+`SpeechTurnRequest.text` is the W2-filled `AudioTurn.text`; pronunciation
+hints derive from `EvidenceSpan` quotes; `ProviderUsage`/`QaIssue` in
+`GeneratedArtifact` cover the sidecar fields W2 emits. Adapters continue to
+keep provider-specific structs internal per the handoff.

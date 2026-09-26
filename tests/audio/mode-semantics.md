@@ -39,6 +39,20 @@ as collected in docs/notebooklm-overviews-research.md.
 
 ## 2. Mode semantics — hypotheses with testable predicates
 
+> **Post-freeze alignment** (against `work/wflx-w1-contracts` @ `78be437`,
+> see src/audio/DESIGN.md §16): the plan's `audioTurns` are the authoritative
+> turn skeleton (speakers, frozen 10-value purpose enum, durations, coverage).
+> Predicates below that name purposes outside the frozen enum
+> (`assessment`, `limitation`, `verdict`, `position_statement`, `rebuttal`,
+> `cross_examination`, `concession`, `acknowledgement`) are asserted against
+> W2's DialogueGraph ENRICHED TAGS and/or the plan's beat/brief structure —
+> on the wire they map to frozen purposes per DESIGN.md §16.2 item 5, and the
+> frozen purpose always passes through unchanged. Structural mode
+> differences materialize in the PLAN (W1's Director); W2 validates, realizes
+> and flags. Canonical fixtures per mode are a HANDOFF (DESIGN.md §16.4
+> item 2) — until they exist, mode-predicate tests run against audio-local
+> stand-in plans labeled non-canonical.
+
 Each hypothesis has: a product-level statement, the lab structural predicate
 (what `tests/audio` asserts on `DialogueGraph` / `AudioTurn[]` from fixture
 plans), and the product-level falsifier (what black-box observation would
@@ -50,19 +64,24 @@ Product statement [HYPOTHESIS]: Brief is not merely a shorter Deep Dive; it is
 editorially restructured — headline framing, top-emphasis claims only, no
 exploration agenda, no examples, denser pacing.
 
-Lab predicates (structural, deterministic on fixture plan + fixed seed):
+Lab predicates (structural, deterministic on fixture plan + fixed seed;
+post-freeze: structural differences live in the PLANS — W2 tests compile
+per-mode plans and validate realization + semantics):
 
-1. Same plan, Deep Dive vs Brief ⇒ different section plans: Brief has no
-   `agenda` turn, no `connection` turns, and (unless plan-essential) no
-   `example` turns; Deep Dive has ≥1 example and ≥1 connection when budget
-   permits.
-2. Turn-count(Deep Dive) > turn-count(Brief) for the same plan and target
-   duration band.
-3. Brief coverage ⊂ Deep Dive coverage, ordered by plan emphasis; dropped
-   claims appear in the QA `coverage` report — never silently.
-4. Purpose distributions differ: Brief has zero/near-zero `acknowledgement`
-   and `follow_up`; Deep Dive has ≥1 of each for a plan of sufficient size.
-5. Both graphs validate: every factual turn carries existing claim ids.
+1. Same source graph and target duration band, Deep Dive vs Brief plans ⇒
+   different turn skeletons: Brief has no `agenda`-tagged turn, no
+   `connection` turns, and (unless plan-essential) no `example` turns; Deep
+   Dive has ≥1 example and ≥1 connection when budget permits.
+2. Turn-count(Deep Dive plan) > turn-count(Brief plan) for the same source
+   graph and target duration band.
+3. Brief coverage ⊂ Deep Dive coverage, ordered by claim salience; dropped
+   claims appear in the plan's `CoverageMap.omitted` with reasons — never
+   silently (and W2's coverage QA re-reports them at the audio boundary).
+4. Purpose distributions differ: Brief has zero/near-zero `interjection`
+   and follow-up `question` turns; Deep Dive has ≥1 `question` for a plan
+   of sufficient size.
+5. Both plans and realizations validate: every factual turn carries
+   existing claim ids.
 
 Product-level falsifier: a real Brief that covers the same claim set as a
 Deep Dive of the same source with only speaking-rate compression — or a real
@@ -74,16 +93,21 @@ Product statement [HYPOTHESIS]: Critique keeps broad coverage but restructures
 each topic into evaluation (assessment, limitation, implication) and closes
 with a verdict rather than a summary.
 
-Lab predicates:
+Lab predicates (enriched-tag level; see §2 preamble for the frozen-enum
+mapping):
 
-1. Critique graph contains `assessment` and `limitation` purposes that do not
-   occur in a Deep Dive graph of the same plan.
+1. A Critique plan/realization contains `assessment`- and `limitation`-tagged
+   turns (enriched tags over `explanation`-family frozen purposes) that do not
+   occur in a Deep Dive realization of the same source.
 2. Every Critique topic cluster with plan-flagged weaknesses/gaps contains a
-   `limitation` turn citing the flagged claim; clusters without flags contain
-   an explicit "not addressed by the source" turn instead of an invented
-   criticism (grounding rule).
-3. Critique closing uses `verdict` purpose; Deep Dive closing uses
-   `takeaway`/`closing`.
+   `limitation`-tagged turn citing the flagged claim; clusters without flags
+   contain an explicit "not addressed by the source" stance in realized text
+   instead of an invented criticism (grounding rule). Note: plan-level
+   weakness/gap flags do not exist yet — DESIGN.md §16.4 item 1 HANDOFF.
+3. Critique closing realizes in verdict register (enriched `verdict` tag;
+   frozen purpose `conclusion`); Deep Dive closing realizes in summary
+   register — differentiated by enriched tag + realized text lexicon, not by
+   frozen purpose.
 4. Coverage sets are approximately equal (Critique ≈ Deep Dive), unlike Brief.
 5. Opening framing differs structurally: evaluative framing token/purpose
    signature vs exploratory.
@@ -98,16 +122,18 @@ Product statement [HYPOTHESIS]: Debate assigns the hosts opposing positions
 over contested claims and produces position/rebuttal/cross-examination turns,
 while uncontested claims are not artificially opposed.
 
-Lab predicates:
+Lab predicates (enriched-tag level; see §2 preamble):
 
-1. Debate graph contains `position_statement`, `rebuttal`, and
-   `cross_examination` purposes absent from Deep Dive.
-2. Host stances are assigned (`pro`/`con`) and stable across the graph.
-3. Each rebuttal cites different claim ids than the position it rebuts
-   (rebuttal-by-restatement fails validation).
-4. Uncontested plan claims appear only in agreement sections
-   (`points_of_agreement`), never as debate positions — no fabricated
-   disagreement (grounding rule).
+1. A Debate plan/realization contains `position_statement`-, `rebuttal`- and
+   `cross_examination`-tagged turns (enriched tags over `framing`/
+   `clarification`/`question` frozen purposes) absent from Deep Dive.
+2. Host stances are assigned (`pro`/`con`) and stable across the realization;
+   stance derivation is deterministic from (briefs, enriched tags) and labeled
+   HYPOTHESIS-grade until W1 exposes stance signals (DESIGN.md §16.4 item 1).
+3. Each rebuttal-tagged turn cites different claim ids than the position it
+   rebuts (rebuttal-by-restatement fails validation).
+4. Uncontested plan claims are never rendered as debate positions — no
+   fabricated disagreement (grounding rule).
 5. Closing is an evidence-weighted synthesis; with symmetric evidence it does
    not declare a winner (no unsupported verdict text).
 
@@ -123,12 +149,17 @@ occasional same-speaker continuation; speaker alternation is not fixed parity.
 
 Lab predicates (Deep Dive/Critique/Debate graphs of sufficient size):
 
-1. Speaker turn-share within 35–65% (not forced 50/50).
+1. Speaker turn-share within 35–65% (not forced 50/50). The canonical
+   deep-dive plan fixture (host-a 12 / host-b 10) already satisfies this
+   [REPRODUCED at plan-fixture level; product-level claim stays HYPOTHESIS].
 2. Longest strict ABAB run is bounded (no whole-graph parity walk).
-3. ≥1 backchannel (`acknowledgement`) and ≥1 question→answer
-   (`respondsTo`) link exist.
-4. Same-speaker merges occur only within justified purpose units and are
-   bounded (≤2 consecutive).
+3. ≥1 backchannel/acknowledgement feature and ≥1 question→answer
+   (`respondsTo`) link exist. Post-freeze note: separate `interjection`
+   turns are PLAN-authoritative — if the plan lacks them, W2 realizes
+   conversational tissue inside turn text and flags the gap as an
+   `info`-severity QA note (DESIGN.md §16.4 item 3).
+4. Same-speaker turns occur only within justified purpose units and are
+   bounded (≤2 consecutive) — validated against the plan's turn sequence.
 
 Product-level falsifier: real overviews showing strict host alternation with
 no backchannel/interjection behavior.
@@ -141,11 +172,14 @@ proportionally faster; a floor exists below which content is cut.
 
 Lab predicates:
 
-1. Same plan+mode with decreasing target durations applies the compression
-   ladder in ORDER: `example` turns drop before `follow_up` pairs, which drop
-   before non-critical claims; plan-critical claims never drop.
-2. Below a floor, the compiler emits `over-budget` issues listing uncovered
-   claims instead of silently degrading grounding.
+1. Same plan+mode with decreasing target durations shows the DIRECTOR
+   compressing coverage (plans with fewer/smaller turns and omitted-claim
+   reasons in the CoverageMap), while W2's realized text density per turn
+   stays within mode bounds — post-freeze, coverage cuts are plan authority
+   (DESIGN.md §16.2 item 3); W2 never drops claims itself.
+2. If a turn cannot honestly realize its brief within its authoritative
+   target, the compiler emits an `over-budget` QA issue naming the turn —
+   never silently degrades grounding.
 3. Speaking-rate parameter stays within mode bounds across targets (no
    2× velocity hack).
 

@@ -32,6 +32,15 @@ Provider adapter boundary for the audio pipeline. Ownership: Worker 2, per
 
 ## Related
 
-- Architecture: `src/audio/DESIGN.md`
+- Architecture: `src/audio/DESIGN.md` (see §16 for contract alignment with
+  Worker 1's frozen IR)
 - Testable mode semantics: `tests/audio/mode-semantics.md`
 - Adapter strategy in the research digest: `docs/notebooklm-overviews-research.md`
+
+## Contract alignment note (Stage 1 addendum)
+
+Against `work/wflx-w1-contracts` @ `78be437` the port needs no changes:
+`SpeakerId` maps directly to plan `speakerRole` values (`host-a`, `host-b`,
+...); `SpeechTurnRequest.text` carries the W2-filled `AudioTurn.text`;
+pronunciation hints derive from `EvidenceSpan` quotes; `GeneratedArtifact`'s
+`ProviderUsage`/`QaIssue` fields cover the provenance sidecar W2 emits.
