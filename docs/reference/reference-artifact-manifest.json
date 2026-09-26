@@ -1,0 +1,31 @@
+{
+  "artifact_id": "reference-video-overview-001",
+  "kind": "video-overview",
+  "role": "golden-reference",
+  "origin": "user-supplied Gemini Notebook / NotebookLM output",
+  "original_filename": "Orchestrating_Agentic_Development__Deconstructing_a_Multi-Agent.mp4",
+  "sha256": "36485eb804de5c69aadf9c0a9d4998dfa85ce4e3ed9a4f502bbd45fc170cdce2",
+  "duration_seconds": 415.660408,
+  "video": {
+    "codec": "h264",
+    "width": 1280,
+    "height": 720,
+    "frame_rate": 30
+  },
+  "audio": {
+    "codec": "aac",
+    "channels": 1,
+    "sample_rate_hz": 44100
+  },
+  "observed_family": "explainer / narrated illustration",
+  "reference_status": "fingerprinted-but-original-binary-not-committed",
+  "binary_import": {
+    "reason": "The repository bootstrap connector cannot upload a 65 MB binary directly.",
+    "expected_local_sha256": "36485eb804de5c69aadf9c0a9d4998dfa85ce4e3ed9a4f502bbd45fc170cdce2",
+    "instructions": "See reference/video/ORIGINAL-ARTIFACT.md and scripts/reference/import-and-verify-video.sh."
+  },
+  "sensitivity": {
+    "credential_like_visuals": "Do not commit unredacted source excerpts or credential-like values from the originating source.",
+    "browser_auth_state": "never commit"
+  }
+}
