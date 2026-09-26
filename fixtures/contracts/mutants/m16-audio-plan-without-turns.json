@@ -1,0 +1,227 @@
+{
+  "recordType": "OverviewPlan",
+  "contractVersion": "1.0.0",
+  "id": "plan-messy-note-audio-deep-dive-5min",
+  "sourceIds": [
+    "source-messy-note-redacted"
+  ],
+  "modality": "audio",
+  "mode": "deep-dive",
+  "objective": "Two hosts take a curious, expert listener through the note’s tool catalog, infrastructure short list and multi-agent architecture concerns, closing on why the note exists.",
+  "audience": "technical",
+  "language": "en",
+  "targetDurationSeconds": 300,
+  "style": {
+    "tone": "curious, expert, conversational",
+    "register": "plain-technical",
+    "pacing": "measured",
+    "speakerCount": 2
+  },
+  "coverage": {
+    "covered": [
+      {
+        "claimId": "claim-tool-catalog",
+        "role": "primary",
+        "unitIds": [
+          "beat-2",
+          "turn-4",
+          "turn-7"
+        ]
+      },
+      {
+        "claimId": "claim-oss-runtimes",
+        "role": "supporting",
+        "unitIds": [
+          "beat-2",
+          "turn-5"
+        ]
+      },
+      {
+        "claimId": "claim-forecasting-projects",
+        "role": "supporting",
+        "unitIds": [
+          "beat-2",
+          "turn-6"
+        ]
+      },
+      {
+        "claimId": "claim-infra-stack",
+        "role": "primary",
+        "unitIds": [
+          "beat-3",
+          "turn-8",
+          "turn-10",
+          "turn-11"
+        ]
+      },
+      {
+        "claimId": "claim-credentials-redacted",
+        "role": "mention",
+        "unitIds": [
+          "beat-3",
+          "turn-9"
+        ]
+      },
+      {
+        "claimId": "claim-multi-agent-orchestration",
+        "role": "primary",
+        "unitIds": [
+          "beat-4",
+          "turn-12",
+          "turn-15"
+        ]
+      },
+      {
+        "claimId": "claim-audits",
+        "role": "supporting",
+        "unitIds": [
+          "beat-4",
+          "turn-13"
+        ]
+      },
+      {
+        "claimId": "claim-provider-integrations",
+        "role": "supporting",
+        "unitIds": [
+          "beat-5",
+          "turn-16",
+          "turn-18",
+          "turn-19"
+        ]
+      },
+      {
+        "claimId": "claim-sandbox-limits",
+        "role": "mention",
+        "unitIds": [
+          "beat-4",
+          "turn-14"
+        ]
+      },
+      {
+        "claimId": "claim-deployment-pipelines",
+        "role": "supporting",
+        "unitIds": [
+          "beat-5",
+          "turn-17"
+        ]
+      },
+      {
+        "claimId": "claim-purpose",
+        "role": "primary",
+        "unitIds": [
+          "beat-1",
+          "beat-6",
+          "turn-1",
+          "turn-2",
+          "turn-3",
+          "turn-20",
+          "turn-21",
+          "turn-22"
+        ]
+      }
+    ],
+    "omitted": []
+  },
+  "beats": [
+    {
+      "id": "beat-1",
+      "index": 0,
+      "title": "Why this note exists",
+      "purpose": "Frame the note as a deliberately messy operational snapshot and state why it is worth mapping.",
+      "brief": "Frame the note as a deliberately messy operational snapshot and state why it is worth mapping. Stay grounded on: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "topicIds": [
+        "topic-purpose"
+      ],
+      "weight": 0.1
+    },
+    {
+      "id": "beat-2",
+      "index": 1,
+      "title": "A mixed catalog of AI tooling",
+      "purpose": "Tour the breadth of the tool catalog without drowning in item-by-item detail.",
+      "brief": "Tour the breadth of the tool catalog without drowning in item-by-item detail. Stay grounded on: The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems. The catalog also includes open-source media projects, local model runtimes and model catalogs. The catalog extends to forecasting and digital-twin/world-monitoring projects.",
+      "claimIds": [
+        "claim-tool-catalog",
+        "claim-oss-runtimes",
+        "claim-forecasting-projects"
+      ],
+      "topicIds": [
+        "topic-tool-catalog"
+      ],
+      "weight": 0.25
+    },
+    {
+      "id": "beat-3",
+      "index": 2,
+      "title": "The infrastructure short list",
+      "purpose": "Walk the infrastructure short list and the redaction discipline around it.",
+      "brief": "Walk the infrastructure short list and the redaction discipline around it. Stay grounded on: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure. All credentials in the source are redacted.",
+      "claimIds": [
+        "claim-infra-stack",
+        "claim-credentials-redacted"
+      ],
+      "topicIds": [
+        "topic-infrastructure"
+      ],
+      "weight": 0.25
+    },
+    {
+      "id": "beat-4",
+      "index": 3,
+      "title": "Multi-agent architecture and audits",
+      "purpose": "Explain the multi-agent architecture concerns and the audits that keep them honest.",
+      "brief": "Explain the multi-agent architecture concerns and the audits that keep them honest. Stay grounded on: The architecture section discusses multi-agent orchestration. The workflows include security/integrity audits. Sandbox and resource limits are discussed as architectural guardrails.",
+      "claimIds": [
+        "claim-multi-agent-orchestration",
+        "claim-audits",
+        "claim-sandbox-limits"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "weight": 0.2
+    },
+    {
+      "id": "beat-5",
+      "index": 4,
+      "title": "Integration and deployment workflows",
+      "purpose": "Show how provider integrations flow into deployment pipelines and operational loops.",
+      "brief": "Show how provider integrations flow into deployment pipelines and operational loops. Stay grounded on: Provider integrations are part of the discussed architecture and workflows. The source covers deployment pipelines, operational loops and execution workflows.",
+      "claimIds": [
+        "claim-provider-integrations",
+        "claim-deployment-pipelines"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "weight": 0.12
+    },
+    {
+      "id": "beat-6",
+      "index": 5,
+      "title": "What this note is for",
+      "purpose": "Close the loop on why the note exists and what testing it exercises.",
+      "brief": "Close the loop on why the note exists and what testing it exercises. Stay grounded on: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "topicIds": [
+        "topic-purpose"
+      ],
+      "weight": 0.08
+    }
+  ],
+  "audioTurns": [],
+  "videoScenes": [],
+  "generator": {
+    "name": "fixture-builder",
+    "version": "1.0.0",
+    "seed": "wflx-canonical-audio-deep-dive-5min",
+    "deterministic": true
+  },
+  "createdAt": "2026-09-26T00:00:00Z",
+  "notes": "Canonical Deep Dive plan fixture (~5 min). Deep Dive is a DOCUMENTED two-host Gemini Notebook audio format."
+}

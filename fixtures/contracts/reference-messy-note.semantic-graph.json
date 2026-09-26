@@ -1,0 +1,1127 @@
+{
+  "recordType": "SemanticGraph",
+  "contractVersion": "1.0.0",
+  "id": "graph-messy-note-redacted",
+  "sourceIds": [
+    "source-messy-note-redacted"
+  ],
+  "claims": [
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-tool-catalog",
+      "statement": "The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems.",
+      "kind": "fact",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b5",
+          "start": 252,
+          "end": 291,
+          "quote": "The source contains a mixed catalog of:"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b6",
+          "start": 294,
+          "end": 308,
+          "quote": "AI video tools"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b8",
+          "start": 330,
+          "end": 346,
+          "quote": "voice generation"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b10",
+          "start": 370,
+          "end": 388,
+          "quote": "agent tool systems"
+        }
+      ],
+      "entityIds": [
+        "entity-ai-video-tools",
+        "entity-voice-generation",
+        "entity-agent-tool-systems"
+      ],
+      "topicIds": [
+        "topic-tool-catalog"
+      ],
+      "salience": 1
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-oss-runtimes",
+      "statement": "The catalog also includes open-source media projects, local model runtimes and model catalogs.",
+      "kind": "fact",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b13",
+          "start": 426,
+          "end": 452,
+          "quote": "open-source media projects"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b14",
+          "start": 455,
+          "end": 475,
+          "quote": "local model runtimes"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b15",
+          "start": 478,
+          "end": 492,
+          "quote": "model catalogs"
+        }
+      ],
+      "entityIds": [
+        "entity-local-model-runtimes",
+        "entity-model-catalogs"
+      ],
+      "topicIds": [
+        "topic-tool-catalog"
+      ],
+      "salience": 0.7
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-forecasting-projects",
+      "statement": "The catalog extends to forecasting and digital-twin/world-monitoring projects.",
+      "kind": "fact",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b16",
+          "start": 495,
+          "end": 506,
+          "quote": "forecasting"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b17",
+          "start": 509,
+          "end": 547,
+          "quote": "digital-twin/world-monitoring projects"
+        }
+      ],
+      "entityIds": [
+        "entity-forecasting",
+        "entity-digital-twin-projects"
+      ],
+      "topicIds": [
+        "topic-tool-catalog"
+      ],
+      "salience": 0.6
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-infra-stack",
+      "statement": "The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
+      "kind": "fact",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b20",
+          "start": 615,
+          "end": 640,
+          "quote": "Cloudflare/object storage"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b21",
+          "start": 643,
+          "end": 656,
+          "quote": "Postgres/Neon"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b22",
+          "start": 659,
+          "end": 672,
+          "quote": "LLM providers"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b23",
+          "start": 675,
+          "end": 688,
+          "quote": "Vercel/GitHub"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b26",
+          "start": 714,
+          "end": 719,
+          "quote": "Redis"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b28",
+          "start": 735,
+          "end": 753,
+          "quote": "browser automation"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b29",
+          "start": 756,
+          "end": 779,
+          "quote": "realtime infrastructure"
+        }
+      ],
+      "entityIds": [
+        "entity-cloudflare",
+        "entity-postgres",
+        "entity-neon",
+        "entity-llm-providers",
+        "entity-vercel",
+        "entity-github",
+        "entity-redis",
+        "entity-browser-automation",
+        "entity-realtime-infrastructure"
+      ],
+      "topicIds": [
+        "topic-infrastructure"
+      ],
+      "salience": 0.9
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-credentials-redacted",
+      "statement": "All credentials in the source are redacted.",
+      "kind": "constraint",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b30",
+          "start": 781,
+          "end": 814,
+          "quote": "All credentials are `[REDACTED]`."
+        }
+      ],
+      "entityIds": [],
+      "topicIds": [
+        "topic-infrastructure"
+      ],
+      "salience": 0.3
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-multi-agent-orchestration",
+      "statement": "The architecture section discusses multi-agent orchestration.",
+      "kind": "fact",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33",
+          "start": 883,
+          "end": 908,
+          "quote": "multi-agent orchestration"
+        }
+      ],
+      "entityIds": [
+        "entity-multi-agent-orchestration"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "salience": 0.8
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-audits",
+      "statement": "The workflows include security/integrity audits.",
+      "kind": "fact",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b34",
+          "start": 911,
+          "end": 936,
+          "quote": "security/integrity audits"
+        }
+      ],
+      "entityIds": [
+        "entity-security-integrity-audits"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "salience": 0.5
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-provider-integrations",
+      "statement": "Provider integrations are part of the discussed architecture and workflows.",
+      "kind": "process",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b35",
+          "start": 939,
+          "end": 960,
+          "quote": "provider integrations"
+        }
+      ],
+      "entityIds": [
+        "entity-provider-integrations"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "salience": 0.5
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-sandbox-limits",
+      "statement": "Sandbox and resource limits are discussed as architectural guardrails.",
+      "kind": "fact",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b36",
+          "start": 963,
+          "end": 986,
+          "quote": "sandbox/resource limits"
+        }
+      ],
+      "entityIds": [
+        "entity-sandbox-resource-limits"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "salience": 0.4
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-deployment-pipelines",
+      "statement": "The source covers deployment pipelines, operational loops and execution workflows.",
+      "kind": "process",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b37",
+          "start": 989,
+          "end": 1009,
+          "quote": "deployment pipelines"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b38",
+          "start": 1012,
+          "end": 1029,
+          "quote": "operational loops"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b39",
+          "start": 1032,
+          "end": 1051,
+          "quote": "execution workflows"
+        }
+      ],
+      "entityIds": [
+        "entity-deployment-pipelines"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "salience": 0.5
+    },
+    {
+      "recordType": "ClaimRecord",
+      "contractVersion": "1.0.0",
+      "id": "claim-purpose",
+      "statement": "The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "kind": "goal",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b41",
+          "start": 1065,
+          "end": 1205,
+          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
+        }
+      ],
+      "entityIds": [],
+      "topicIds": [
+        "topic-purpose"
+      ],
+      "salience": 0.9
+    }
+  ],
+  "entities": [
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-ai-video-tools",
+      "name": "AI video tools",
+      "kind": "tool",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b6",
+          "start": 294,
+          "end": 308,
+          "text": "AI video tools"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-voice-generation",
+      "name": "voice generation",
+      "kind": "technology",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b8",
+          "start": 330,
+          "end": 346,
+          "text": "voice generation"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-agent-tool-systems",
+      "name": "agent tool systems",
+      "kind": "technology",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b10",
+          "start": 370,
+          "end": 388,
+          "text": "agent tool systems"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-local-model-runtimes",
+      "name": "local model runtimes",
+      "kind": "technology",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b14",
+          "start": 455,
+          "end": 475,
+          "text": "local model runtimes"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-model-catalogs",
+      "name": "model catalogs",
+      "kind": "concept",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b15",
+          "start": 478,
+          "end": 492,
+          "text": "model catalogs"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-forecasting",
+      "name": "forecasting",
+      "kind": "concept",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b16",
+          "start": 495,
+          "end": 506,
+          "text": "forecasting"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-digital-twin-projects",
+      "name": "digital-twin/world-monitoring projects",
+      "kind": "project",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b17",
+          "start": 509,
+          "end": 547,
+          "text": "digital-twin/world-monitoring projects"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-cloudflare",
+      "name": "Cloudflare",
+      "kind": "infrastructure",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b20",
+          "start": 615,
+          "end": 625,
+          "text": "Cloudflare"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-postgres",
+      "name": "Postgres",
+      "kind": "technology",
+      "aliases": [
+        "PostgreSQL"
+      ],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b21",
+          "start": 643,
+          "end": 651,
+          "text": "Postgres"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-neon",
+      "name": "Neon",
+      "kind": "service",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b21",
+          "start": 652,
+          "end": 656,
+          "text": "Neon"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-llm-providers",
+      "name": "LLM providers",
+      "kind": "service",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b22",
+          "start": 659,
+          "end": 672,
+          "text": "LLM providers"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-vercel",
+      "name": "Vercel",
+      "kind": "service",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b23",
+          "start": 675,
+          "end": 681,
+          "text": "Vercel"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-github",
+      "name": "GitHub",
+      "kind": "service",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b23",
+          "start": 682,
+          "end": 688,
+          "text": "GitHub"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-redis",
+      "name": "Redis",
+      "kind": "technology",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b26",
+          "start": 714,
+          "end": 719,
+          "text": "Redis"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-browser-automation",
+      "name": "browser automation",
+      "kind": "technology",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b28",
+          "start": 735,
+          "end": 753,
+          "text": "browser automation"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-realtime-infrastructure",
+      "name": "realtime infrastructure",
+      "kind": "infrastructure",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b29",
+          "start": 756,
+          "end": 779,
+          "text": "realtime infrastructure"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-multi-agent-orchestration",
+      "name": "multi-agent orchestration",
+      "kind": "workflow",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33",
+          "start": 883,
+          "end": 908,
+          "text": "multi-agent orchestration"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-security-integrity-audits",
+      "name": "security/integrity audits",
+      "kind": "process",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b34",
+          "start": 911,
+          "end": 936,
+          "text": "security/integrity audits"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-provider-integrations",
+      "name": "provider integrations",
+      "kind": "process",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b35",
+          "start": 939,
+          "end": 960,
+          "text": "provider integrations"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-sandbox-resource-limits",
+      "name": "sandbox/resource limits",
+      "kind": "concept",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b36",
+          "start": 963,
+          "end": 986,
+          "text": "sandbox/resource limits"
+        }
+      ]
+    },
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-deployment-pipelines",
+      "name": "deployment pipelines",
+      "kind": "process",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b37",
+          "start": 989,
+          "end": 1009,
+          "text": "deployment pipelines"
+        }
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "recordType": "TopicRecord",
+      "contractVersion": "1.0.0",
+      "id": "topic-tool-catalog",
+      "title": "AI tools, models and repositories",
+      "summary": "A mixed catalog of AI tooling spanning generation, editing, scraping/API access, agent systems, open-source media, local runtimes, catalogs and monitoring projects.",
+      "keywords": [
+        "tools",
+        "models",
+        "repositories",
+        "catalog"
+      ],
+      "claimIds": [
+        "claim-tool-catalog",
+        "claim-oss-runtimes",
+        "claim-forecasting-projects"
+      ],
+      "entityIds": [
+        "entity-ai-video-tools",
+        "entity-voice-generation",
+        "entity-agent-tool-systems",
+        "entity-local-model-runtimes",
+        "entity-model-catalogs",
+        "entity-forecasting",
+        "entity-digital-twin-projects"
+      ],
+      "blockRefs": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b4"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b5"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b6"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b7"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b8"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b9"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b10"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b11"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b12"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b13"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b14"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b15"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b16"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b17"
+        }
+      ],
+      "salience": 0.9
+    },
+    {
+      "recordType": "TopicRecord",
+      "contractVersion": "1.0.0",
+      "id": "topic-infrastructure",
+      "title": "Infrastructure",
+      "summary": "The infrastructure short list spans storage, databases, providers, hosting, messaging, payments, caching, compliance, automation and realtime services, with credentials redacted.",
+      "keywords": [
+        "infrastructure",
+        "storage",
+        "providers",
+        "realtime"
+      ],
+      "claimIds": [
+        "claim-infra-stack",
+        "claim-credentials-redacted"
+      ],
+      "entityIds": [
+        "entity-cloudflare",
+        "entity-postgres",
+        "entity-neon",
+        "entity-llm-providers",
+        "entity-vercel",
+        "entity-github",
+        "entity-redis",
+        "entity-browser-automation",
+        "entity-realtime-infrastructure"
+      ],
+      "blockRefs": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b18"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b19"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b20"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b21"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b22"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b23"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b24"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b25"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b26"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b27"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b28"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b29"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b30"
+        }
+      ],
+      "salience": 0.85
+    },
+    {
+      "recordType": "TopicRecord",
+      "contractVersion": "1.0.0",
+      "id": "topic-architecture-workflows",
+      "title": "Architecture and workflows",
+      "summary": "Architecture and workflow concerns: multi-agent orchestration, security/integrity audits, provider integrations, sandbox limits, deployment pipelines and operational loops.",
+      "keywords": [
+        "architecture",
+        "workflows",
+        "orchestration",
+        "audits",
+        "pipelines"
+      ],
+      "claimIds": [
+        "claim-multi-agent-orchestration",
+        "claim-audits",
+        "claim-provider-integrations",
+        "claim-sandbox-limits",
+        "claim-deployment-pipelines"
+      ],
+      "entityIds": [
+        "entity-multi-agent-orchestration",
+        "entity-security-integrity-audits",
+        "entity-provider-integrations",
+        "entity-sandbox-resource-limits",
+        "entity-deployment-pipelines"
+      ],
+      "blockRefs": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b31"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b32"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b34"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b35"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b36"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b37"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b38"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b39"
+        }
+      ],
+      "salience": 0.8
+    },
+    {
+      "recordType": "TopicRecord",
+      "contractVersion": "1.0.0",
+      "id": "topic-purpose",
+      "title": "Purpose of the note",
+      "summary": "The note exists to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "keywords": [
+        "purpose",
+        "testing"
+      ],
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "entityIds": [],
+      "blockRefs": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b40"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b41"
+        }
+      ],
+      "salience": 0.7
+    }
+  ],
+  "relationships": [
+    {
+      "recordType": "RelationshipRecord",
+      "contractVersion": "1.0.0",
+      "id": "rel-postgres-neon",
+      "kind": "alternative-to",
+      "subjectId": "entity-postgres",
+      "objectId": "entity-neon",
+      "predicate": "alternative hosted form of",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b21",
+          "start": 643,
+          "end": 656,
+          "quote": "Postgres/Neon"
+        }
+      ],
+      "claimIds": [
+        "claim-infra-stack"
+      ]
+    },
+    {
+      "recordType": "RelationshipRecord",
+      "contractVersion": "1.0.0",
+      "id": "rel-vercel-github",
+      "kind": "integrates-with",
+      "subjectId": "entity-vercel",
+      "objectId": "entity-github",
+      "predicate": "deploys from",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b23",
+          "start": 675,
+          "end": 688,
+          "quote": "Vercel/GitHub"
+        }
+      ],
+      "claimIds": [
+        "claim-infra-stack"
+      ]
+    },
+    {
+      "recordType": "RelationshipRecord",
+      "contractVersion": "1.0.0",
+      "id": "rel-provider-integrations-llm",
+      "kind": "uses",
+      "subjectId": "entity-provider-integrations",
+      "objectId": "entity-llm-providers",
+      "predicate": "integrates",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b22",
+          "start": 659,
+          "end": 672,
+          "quote": "LLM providers"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b35",
+          "start": 939,
+          "end": 960,
+          "quote": "provider integrations"
+        }
+      ],
+      "claimIds": [
+        "claim-provider-integrations",
+        "claim-infra-stack"
+      ]
+    },
+    {
+      "recordType": "RelationshipRecord",
+      "contractVersion": "1.0.0",
+      "id": "rel-orchestration-audits",
+      "kind": "related-to",
+      "subjectId": "entity-multi-agent-orchestration",
+      "objectId": "entity-security-integrity-audits",
+      "predicate": "operates under",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33",
+          "start": 883,
+          "end": 908,
+          "quote": "multi-agent orchestration"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b34",
+          "start": 911,
+          "end": 936,
+          "quote": "security/integrity audits"
+        }
+      ],
+      "claimIds": [
+        "claim-multi-agent-orchestration",
+        "claim-audits"
+      ]
+    },
+    {
+      "recordType": "RelationshipRecord",
+      "contractVersion": "1.0.0",
+      "id": "rel-orchestration-agent-tools",
+      "kind": "uses",
+      "subjectId": "entity-multi-agent-orchestration",
+      "objectId": "entity-agent-tool-systems",
+      "predicate": "orchestrated with",
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b10",
+          "start": 370,
+          "end": 388,
+          "quote": "agent tool systems"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33",
+          "start": 883,
+          "end": 908,
+          "quote": "multi-agent orchestration"
+        }
+      ],
+      "claimIds": [
+        "claim-tool-catalog",
+        "claim-multi-agent-orchestration"
+      ]
+    }
+  ],
+  "extractor": "hand-grounded-fixture@1.0.0",
+  "createdAt": "2026-09-26T00:00:00Z"
+}

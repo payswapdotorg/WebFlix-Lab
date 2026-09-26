@@ -1,0 +1,80 @@
+{
+  "recordType": "SemanticGraph",
+  "contractVersion": "1.0.0",
+  "id": "graph-minimal",
+  "sourceIds": [
+    "source-minimal"
+  ],
+  "claims": [
+    {
+      "recordType": "Claim",
+      "contractVersion": "1.0.0",
+      "id": "claim-alpha-audits",
+      "statement": "Alpha tools require scheduled audits.",
+      "kind": "constraint",
+      "evidence": [
+        {
+          "sourceId": "source-minimal",
+          "blockId": "b1",
+          "start": 0,
+          "end": 34,
+          "quote": "Alpha tools need scheduled audits."
+        }
+      ],
+      "entityIds": [
+        "entity-alpha-tools"
+      ],
+      "topicIds": [
+        "topic-minimal"
+      ],
+      "salience": 1
+    }
+  ],
+  "entities": [
+    {
+      "recordType": "EntityRecord",
+      "contractVersion": "1.0.0",
+      "id": "entity-alpha-tools",
+      "name": "Alpha tools",
+      "kind": "tool",
+      "aliases": [],
+      "mentions": [
+        {
+          "sourceId": "source-minimal",
+          "blockId": "b1",
+          "start": 0,
+          "end": 11,
+          "text": "Alpha tools"
+        }
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "recordType": "TopicRecord",
+      "contractVersion": "1.0.0",
+      "id": "topic-minimal",
+      "title": "Minimal operations note",
+      "summary": "A single-sentence note about scheduled audits.",
+      "keywords": [
+        "audits"
+      ],
+      "claimIds": [
+        "claim-alpha-audits"
+      ],
+      "entityIds": [
+        "entity-alpha-tools"
+      ],
+      "blockRefs": [
+        {
+          "sourceId": "source-minimal",
+          "blockId": "b1"
+        }
+      ],
+      "salience": 1
+    }
+  ],
+  "relationships": [],
+  "extractor": "hand-grounded-fixture@1.0.0",
+  "createdAt": "2026-09-26T00:00:00Z"
+}

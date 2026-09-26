@@ -1,0 +1,315 @@
+{
+  "recordType": "SourceArtifact",
+  "contractVersion": "1.0.0",
+  "id": "source-messy-note-redacted",
+  "title": "Reference Fixture — Redacted Messy Note",
+  "provenance": {
+    "kind": "markdown-note",
+    "label": "fixtures/reference-messy-note-redacted.md",
+    "authorization": "user-provided"
+  },
+  "fingerprint": {
+    "contentSha256": "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47",
+    "rawSha256": "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47",
+    "textLength": 1205
+  },
+  "text": "# Reference Fixture — Redacted Messy Note\n\nThis fixture represents the shape of the source used to generate the supplied reference Video Overview.\n\nCredential/API-key values are intentionally removed.\n\n## Section 1 — AI tools, models and repositories\n\nThe source contains a mixed catalog of:\n- AI video tools\n- image generation\n- voice generation\n- scraping/API tools\n- agent tool systems\n- video editors\n- music generators\n- open-source media projects\n- local model runtimes\n- model catalogs\n- forecasting\n- digital-twin/world-monitoring projects\n\n## Section 2 — Infrastructure\n\nThe source contains notes about:\n- Cloudflare/object storage\n- Postgres/Neon\n- LLM providers\n- Vercel/GitHub\n- messaging\n- payments\n- Redis\n- compliance\n- browser automation\n- realtime infrastructure\n\nAll credentials are `[REDACTED]`.\n\n## Section 3 — Architecture and workflows\n\nThe source discusses:\n- multi-agent orchestration\n- security/integrity audits\n- provider integrations\n- sandbox/resource limits\n- deployment pipelines\n- operational loops\n- execution workflows\n\n## Purpose\n\nTest semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+  "blocks": [
+    {
+      "id": "b1",
+      "kind": "heading",
+      "text": "# Reference Fixture — Redacted Messy Note",
+      "start": 0,
+      "end": 41,
+      "level": 1
+    },
+    {
+      "id": "b2",
+      "kind": "paragraph",
+      "text": "This fixture represents the shape of the source used to generate the supplied reference Video Overview.",
+      "start": 43,
+      "end": 146
+    },
+    {
+      "id": "b3",
+      "kind": "paragraph",
+      "text": "Credential/API-key values are intentionally removed.",
+      "start": 148,
+      "end": 200
+    },
+    {
+      "id": "b4",
+      "kind": "heading",
+      "text": "## Section 1 — AI tools, models and repositories",
+      "start": 202,
+      "end": 250,
+      "level": 2
+    },
+    {
+      "id": "b5",
+      "kind": "paragraph",
+      "text": "The source contains a mixed catalog of:",
+      "start": 252,
+      "end": 291
+    },
+    {
+      "id": "b6",
+      "kind": "list-item",
+      "text": "- AI video tools",
+      "start": 292,
+      "end": 308
+    },
+    {
+      "id": "b7",
+      "kind": "list-item",
+      "text": "- image generation",
+      "start": 309,
+      "end": 327
+    },
+    {
+      "id": "b8",
+      "kind": "list-item",
+      "text": "- voice generation",
+      "start": 328,
+      "end": 346
+    },
+    {
+      "id": "b9",
+      "kind": "list-item",
+      "text": "- scraping/API tools",
+      "start": 347,
+      "end": 367
+    },
+    {
+      "id": "b10",
+      "kind": "list-item",
+      "text": "- agent tool systems",
+      "start": 368,
+      "end": 388
+    },
+    {
+      "id": "b11",
+      "kind": "list-item",
+      "text": "- video editors",
+      "start": 389,
+      "end": 404
+    },
+    {
+      "id": "b12",
+      "kind": "list-item",
+      "text": "- music generators",
+      "start": 405,
+      "end": 423
+    },
+    {
+      "id": "b13",
+      "kind": "list-item",
+      "text": "- open-source media projects",
+      "start": 424,
+      "end": 452
+    },
+    {
+      "id": "b14",
+      "kind": "list-item",
+      "text": "- local model runtimes",
+      "start": 453,
+      "end": 475
+    },
+    {
+      "id": "b15",
+      "kind": "list-item",
+      "text": "- model catalogs",
+      "start": 476,
+      "end": 492
+    },
+    {
+      "id": "b16",
+      "kind": "list-item",
+      "text": "- forecasting",
+      "start": 493,
+      "end": 506
+    },
+    {
+      "id": "b17",
+      "kind": "list-item",
+      "text": "- digital-twin/world-monitoring projects",
+      "start": 507,
+      "end": 547
+    },
+    {
+      "id": "b18",
+      "kind": "heading",
+      "text": "## Section 2 — Infrastructure",
+      "start": 549,
+      "end": 578,
+      "level": 2
+    },
+    {
+      "id": "b19",
+      "kind": "paragraph",
+      "text": "The source contains notes about:",
+      "start": 580,
+      "end": 612
+    },
+    {
+      "id": "b20",
+      "kind": "list-item",
+      "text": "- Cloudflare/object storage",
+      "start": 613,
+      "end": 640
+    },
+    {
+      "id": "b21",
+      "kind": "list-item",
+      "text": "- Postgres/Neon",
+      "start": 641,
+      "end": 656
+    },
+    {
+      "id": "b22",
+      "kind": "list-item",
+      "text": "- LLM providers",
+      "start": 657,
+      "end": 672
+    },
+    {
+      "id": "b23",
+      "kind": "list-item",
+      "text": "- Vercel/GitHub",
+      "start": 673,
+      "end": 688
+    },
+    {
+      "id": "b24",
+      "kind": "list-item",
+      "text": "- messaging",
+      "start": 689,
+      "end": 700
+    },
+    {
+      "id": "b25",
+      "kind": "list-item",
+      "text": "- payments",
+      "start": 701,
+      "end": 711
+    },
+    {
+      "id": "b26",
+      "kind": "list-item",
+      "text": "- Redis",
+      "start": 712,
+      "end": 719
+    },
+    {
+      "id": "b27",
+      "kind": "list-item",
+      "text": "- compliance",
+      "start": 720,
+      "end": 732
+    },
+    {
+      "id": "b28",
+      "kind": "list-item",
+      "text": "- browser automation",
+      "start": 733,
+      "end": 753
+    },
+    {
+      "id": "b29",
+      "kind": "list-item",
+      "text": "- realtime infrastructure",
+      "start": 754,
+      "end": 779
+    },
+    {
+      "id": "b30",
+      "kind": "paragraph",
+      "text": "All credentials are `[REDACTED]`.",
+      "start": 781,
+      "end": 814
+    },
+    {
+      "id": "b31",
+      "kind": "heading",
+      "text": "## Section 3 — Architecture and workflows",
+      "start": 816,
+      "end": 857,
+      "level": 2
+    },
+    {
+      "id": "b32",
+      "kind": "paragraph",
+      "text": "The source discusses:",
+      "start": 859,
+      "end": 880
+    },
+    {
+      "id": "b33",
+      "kind": "list-item",
+      "text": "- multi-agent orchestration",
+      "start": 881,
+      "end": 908
+    },
+    {
+      "id": "b34",
+      "kind": "list-item",
+      "text": "- security/integrity audits",
+      "start": 909,
+      "end": 936
+    },
+    {
+      "id": "b35",
+      "kind": "list-item",
+      "text": "- provider integrations",
+      "start": 937,
+      "end": 960
+    },
+    {
+      "id": "b36",
+      "kind": "list-item",
+      "text": "- sandbox/resource limits",
+      "start": 961,
+      "end": 986
+    },
+    {
+      "id": "b37",
+      "kind": "list-item",
+      "text": "- deployment pipelines",
+      "start": 987,
+      "end": 1009
+    },
+    {
+      "id": "b38",
+      "kind": "list-item",
+      "text": "- operational loops",
+      "start": 1010,
+      "end": 1029
+    },
+    {
+      "id": "b39",
+      "kind": "list-item",
+      "text": "- execution workflows",
+      "start": 1030,
+      "end": 1051
+    },
+    {
+      "id": "b40",
+      "kind": "heading",
+      "text": "## Purpose",
+      "start": 1053,
+      "end": 1063,
+      "level": 2
+    },
+    {
+      "id": "b41",
+      "kind": "paragraph",
+      "text": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "start": 1065,
+      "end": 1205
+    }
+  ],
+  "language": "en",
+  "wordCount": 168,
+  "createdAt": "2026-09-26T00:00:00Z",
+  "normalizer": "fixture-builder@1.0.0"
+}

@@ -1,0 +1,36 @@
+{
+  "recordType": "ExperimentRecord",
+  "contractVersion": "1.0.0",
+  "id": "EXP-W1-FIXTURE-01",
+  "timestampUtc": "2026-09-26T00:00:00Z",
+  "operator": "w1",
+  "surface": "video",
+  "evidenceKind": "lab-reproduction",
+  "sourceFingerprint": "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47",
+  "selectedSources": [
+    "source-messy-note-redacted"
+  ],
+  "format": "explainer",
+  "language": "en",
+  "length": "about 7 minutes",
+  "visualStyle": "reference-ink",
+  "otherConfig": {},
+  "observations": [
+    "Canonical plan fixture validates against the frozen contracts (REPRODUCED).",
+    "Reference Video Overview duration is 415.66 s at 1280x720 30fps h264 (DOCUMENTED, docs/reference/reference-artifact-manifest.json).",
+    "Scene atlas visual types map one-to-one onto the fixture scene set (OBSERVED in fixture)."
+  ],
+  "invariants": [
+    "plan targetDurationSeconds 420 stays within 10 s of the reference duration 415.66 s"
+  ],
+  "differences": [],
+  "hypothesis": "A staged, source-grounded compiler can produce plan-level storyboards in the reference visual grammar without knowing product internals.",
+  "confidence": "medium",
+  "falsifier": "Plan scenes fail grounding or exact-label checks against the source artifact.",
+  "nextExperiment": "EXP-V-01",
+  "status": "unresolved",
+  "evidencePaths": [
+    "fixtures/contracts/plan-messy-note-video-explainer-7min.json",
+    "docs/reference/reference-video-scene-atlas.md"
+  ]
+}

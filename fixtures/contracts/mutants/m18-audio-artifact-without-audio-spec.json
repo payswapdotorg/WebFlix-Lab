@@ -1,0 +1,42 @@
+{
+  "recordType": "GeneratedArtifact",
+  "contractVersion": "1.0.0",
+  "id": "artifact-lab-audio-0001",
+  "kind": "audio-overview",
+  "planId": "plan-messy-note-audio-deep-dive-5min",
+  "sourceIds": [
+    "source-messy-note-redacted"
+  ],
+  "createdAt": "2026-09-26T00:00:00Z",
+  "media": {
+    "container": "m4a",
+    "sha256": "a017a765e1535ca3bf0475da1cb487efc8441bc9a45e56e25b18271cf99d70a6",
+    "sizeBytes": 0,
+    "durationSeconds": 300
+  },
+  "providers": [
+    {
+      "stage": "script",
+      "provider": "fixture-builder"
+    },
+    {
+      "stage": "speech",
+      "provider": "fixture-builder"
+    },
+    {
+      "stage": "evaluation",
+      "provider": "fixture-builder"
+    }
+  ],
+  "generator": {
+    "name": "fixture-builder",
+    "version": "1.0.0",
+    "seed": "wflx-canonical-audio-deep-dive-5min",
+    "reproducible": true
+  },
+  "qa": {
+    "status": "not-evaluated",
+    "issues": []
+  },
+  "notes": "Synthetic contract example demonstrating the GeneratedArtifact shape. No media bytes exist; media.sha256 hashes a fixed label string, not a real file."
+}
