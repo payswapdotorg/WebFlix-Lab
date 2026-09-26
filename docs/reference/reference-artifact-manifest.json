@@ -18,14 +18,39 @@
     "sample_rate_hz": 44100
   },
   "observed_family": "explainer / narrated illustration",
-  "reference_status": "fingerprinted-but-original-binary-not-committed",
+  "reference_status": "served-variant-committed-original-pin-preserved",
   "binary_import": {
     "reason": "The repository bootstrap connector cannot upload a 65 MB binary directly.",
     "expected_local_sha256": "36485eb804de5c69aadf9c0a9d4998dfa85ce4e3ed9a4f502bbd45fc170cdce2",
-    "instructions": "See reference/video/ORIGINAL-ARTIFACT.md and scripts/reference/import-and-verify-video.sh."
+    "instructions": "See reference/video/ORIGINAL-ARTIFACT.md and scripts/reference/import-and-verify-video.sh.",
+    "note": "The committed binary is the served variant (sha f124c21...); the import script's strict pin applies to the ORIGINAL bytes and will reject this variant by design — see served_variant for provenance."
   },
   "sensitivity": {
     "credential_like_visuals": "Do not commit unredacted source excerpts or credential-like values from the originating source.",
     "browser_auth_state": "never commit"
+  },
+  "served_variant": {
+    "note": "The exact bytes currently served by Gemini Notebook for this artifact differ from the original pinned sha256 (server-side remux). Both fetches through the authenticated reference browser session (2026-09-26, two distinct signed media URLs) returned byte-identical content, so the served variant is deterministic. The original pin is preserved unchanged; the served variant is recorded as a distinct verified identity with full provenance. Operator confirmation of the original file is requested (see EV-002).",
+    "sha256": "f1241c219a42906d35030eb01f51be490f5ec95ba0682d4b1c629ee88031768b",
+    "size_bytes": 67505094,
+    "captured_utc": "2026-09-26T19:26:00Z",
+    "captured_method": "authenticated replay-browser session; signed media URL fetched twice (VPN egress and raw egress), byte-identical both times",
+    "observed_metadata": {
+      "duration_seconds": 415.613968,
+      "video": {
+        "codec": "h264",
+        "width": 1280,
+        "height": 720,
+        "frame_rate": 30,
+        "nb_frames": 12468
+      },
+      "audio": {
+        "codec": "aac",
+        "channels": 1,
+        "sample_rate_hz": 44100
+      }
+    },
+    "repo_path": "reference/video/Orchestrating_Agentic_Development__Deconstructing_a_Multi-Agent.mp4",
+    "identity_status": "verified-deterministic-served-variant; original-pin-unreplaced"
   }
 }
