@@ -1,0 +1,725 @@
+{
+  "recordType": "OverviewPlan",
+  "contractVersion": "1.0.0",
+  "id": "plan-messy-note-video-explainer-7min",
+  "sourceIds": [
+    "source-messy-note-redacted"
+  ],
+  "modality": "video",
+  "mode": "explainer",
+  "objective": "A narrated technical explainer maps the note’s tool catalog, infrastructure stack and multi-agent architecture with exact labels and diagrams, closing on the note’s purpose.",
+  "audience": "technical",
+  "language": "en",
+  "targetDurationSeconds": 420,
+  "style": {
+    "tone": "clear, technical, quietly enthusiastic",
+    "register": "plain-technical",
+    "pacing": "measured",
+    "styleBibleId": "style-bible--reference-ink"
+  },
+  "coverage": {
+    "covered": [
+      {
+        "claimId": "claim-tool-catalog",
+        "role": "primary",
+        "unitIds": [
+          "beat-2",
+          "scene-3"
+        ]
+      },
+      {
+        "claimId": "claim-oss-runtimes",
+        "role": "supporting",
+        "unitIds": [
+          "beat-2",
+          "scene-5"
+        ]
+      },
+      {
+        "claimId": "claim-forecasting-projects",
+        "role": "supporting",
+        "unitIds": [
+          "beat-2",
+          "scene-4"
+        ]
+      },
+      {
+        "claimId": "claim-infra-stack",
+        "role": "primary",
+        "unitIds": [
+          "beat-3",
+          "scene-6",
+          "scene-8"
+        ]
+      },
+      {
+        "claimId": "claim-credentials-redacted",
+        "role": "mention",
+        "unitIds": [
+          "beat-3",
+          "scene-7"
+        ]
+      },
+      {
+        "claimId": "claim-multi-agent-orchestration",
+        "role": "primary",
+        "unitIds": [
+          "beat-4",
+          "scene-9",
+          "scene-11"
+        ]
+      },
+      {
+        "claimId": "claim-audits",
+        "role": "supporting",
+        "unitIds": [
+          "beat-4",
+          "scene-9"
+        ]
+      },
+      {
+        "claimId": "claim-provider-integrations",
+        "role": "supporting",
+        "unitIds": [
+          "beat-5",
+          "scene-12"
+        ]
+      },
+      {
+        "claimId": "claim-sandbox-limits",
+        "role": "mention",
+        "unitIds": [
+          "beat-4",
+          "scene-10"
+        ]
+      },
+      {
+        "claimId": "claim-deployment-pipelines",
+        "role": "supporting",
+        "unitIds": [
+          "beat-5",
+          "scene-13"
+        ]
+      },
+      {
+        "claimId": "claim-purpose",
+        "role": "primary",
+        "unitIds": [
+          "beat-1",
+          "beat-6",
+          "scene-1",
+          "scene-2",
+          "scene-14",
+          "scene-15"
+        ]
+      }
+    ],
+    "omitted": []
+  },
+  "beats": [
+    {
+      "id": "beat-1",
+      "index": 0,
+      "title": "What this note is",
+      "purpose": "Open on the note as a messy operational snapshot worth mapping end to end.",
+      "brief": "Open on the note as a messy operational snapshot worth mapping end to end. Stay grounded on: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "topicIds": [
+        "topic-purpose"
+      ],
+      "weight": 0.0857
+    },
+    {
+      "id": "beat-2",
+      "index": 1,
+      "title": "A mixed catalog of AI tooling",
+      "purpose": "Survey the breadth of the tool catalog with exact labels before diving deeper.",
+      "brief": "Survey the breadth of the tool catalog with exact labels before diving deeper. Stay grounded on: The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems. The catalog extends to forecasting and digital-twin/world-monitoring projects. The catalog also includes open-source media projects, local model runtimes and model catalogs.",
+      "claimIds": [
+        "claim-tool-catalog",
+        "claim-forecasting-projects",
+        "claim-oss-runtimes"
+      ],
+      "topicIds": [
+        "topic-tool-catalog"
+      ],
+      "weight": 0.2286
+    },
+    {
+      "id": "beat-3",
+      "index": 2,
+      "title": "The infrastructure short list",
+      "purpose": "Lay out the infrastructure stack as an exact-labeled diagram and honor the redaction discipline.",
+      "brief": "Lay out the infrastructure stack as an exact-labeled diagram and honor the redaction discipline. Stay grounded on: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure. All credentials in the source are redacted.",
+      "claimIds": [
+        "claim-infra-stack",
+        "claim-credentials-redacted"
+      ],
+      "topicIds": [
+        "topic-infrastructure"
+      ],
+      "weight": 0.2286
+    },
+    {
+      "id": "beat-4",
+      "index": 3,
+      "title": "Multi-agent architecture and audits",
+      "purpose": "Explain orchestration topology, audit gates and sandbox guardrails as diagrams.",
+      "brief": "Explain orchestration topology, audit gates and sandbox guardrails as diagrams. Stay grounded on: The architecture section discusses multi-agent orchestration. The workflows include security/integrity audits. Sandbox and resource limits are discussed as architectural guardrails.",
+      "claimIds": [
+        "claim-multi-agent-orchestration",
+        "claim-audits",
+        "claim-sandbox-limits"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "weight": 0.1714
+    },
+    {
+      "id": "beat-5",
+      "index": 4,
+      "title": "Integration and deployment workflows",
+      "purpose": "Trace provider integrations flowing into deployment pipelines and operational loops.",
+      "brief": "Trace provider integrations flowing into deployment pipelines and operational loops. Stay grounded on: Provider integrations are part of the discussed architecture and workflows. The source covers deployment pipelines, operational loops and execution workflows.",
+      "claimIds": [
+        "claim-provider-integrations",
+        "claim-deployment-pipelines"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "weight": 0.1429
+    },
+    {
+      "id": "beat-6",
+      "index": 5,
+      "title": "Why it matters",
+      "purpose": "Close on what testing this note exercises: semantic organization through video composition.",
+      "brief": "Close on what testing this note exercises: semantic organization through video composition. Stay grounded on: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "topicIds": [
+        "topic-purpose"
+      ],
+      "weight": 0.1429
+    }
+  ],
+  "audioTurns": [],
+  "videoScenes": [
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-1",
+      "index": 0,
+      "beatId": "beat-1",
+      "narrativePurpose": "Establish the artifact: one messy note, about to be mapped.",
+      "visualType": "hologram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "title",
+          "value": "A Messy Note, Mapped",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "AI tools, infrastructure and agentic workflows",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "narrationRef": "narr-s1",
+      "narrationBrief": "Welcome the viewer; state that the note is a messy operational snapshot worth mapping.",
+      "targetDurationSeconds": 18,
+      "motion": "static",
+      "transition": "cut",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-2",
+      "index": 1,
+      "beatId": "beat-1",
+      "narrativePurpose": "Set the visual tone: clutter resolving into a clean control surface.",
+      "visualType": "hero-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "narrationRef": "narr-s2",
+      "narrationBrief": "Preview the journey from clutter to a mapped system.",
+      "targetDurationSeconds": 18,
+      "motion": "zoom",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink",
+      "visualBrief": "Hand-drawn ink linework on graphite paper with cyan/teal emphasis, per the reference scene atlas. A cluttered desk of tool cards resolving into one clean technical control-surface composition."
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-3",
+      "index": 2,
+      "beatId": "beat-2",
+      "narrativePurpose": "Show the catalog breadth with exact labels, not stock imagery.",
+      "visualType": "table",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "AI video tools",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "voice generation",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "agent tool systems",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "model catalogs",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "the catalog, at a glance",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-tool-catalog"
+      ],
+      "narrationRef": "narr-s3",
+      "narrationBrief": "Walk the catalog categories as they are named in the source.",
+      "targetDurationSeconds": 32,
+      "motion": "pan",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-4",
+      "index": 3,
+      "beatId": "beat-2",
+      "narrativePurpose": "Call out the tail of the catalog: forecasting through digital twins.",
+      "visualType": "callout",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "forecasting",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "digital-twin/world-monitoring projects",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "from forecasting to digital twins",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-forecasting-projects"
+      ],
+      "narrationRef": "narr-s4",
+      "narrationBrief": "Note that the catalog reaches forecasting and world-monitoring projects.",
+      "targetDurationSeconds": 32,
+      "motion": "static",
+      "transition": "cut",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-5",
+      "index": 4,
+      "beatId": "beat-2",
+      "narrativePurpose": "Metaphor for catalog breadth: pinned cards spreading into constellations.",
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "claimIds": [
+        "claim-oss-runtimes"
+      ],
+      "narrationRef": "narr-s5",
+      "narrationBrief": "Reflect on how broad a \"mixed catalog\" really is.",
+      "targetDurationSeconds": 32,
+      "motion": "pan",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink",
+      "visualBrief": "Hand-drawn ink linework on graphite paper with cyan/teal emphasis, per the reference scene atlas. A workshop wall of pinned cards spreading into constellations of tools."
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-6",
+      "index": 5,
+      "beatId": "beat-3",
+      "narrativePurpose": "Lay out the infrastructure short list as an exact-labeled diagram.",
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "Cloudflare",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "Postgres",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "Neon",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "Vercel",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "GitHub",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "Redis",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "the infrastructure short list",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-infra-stack"
+      ],
+      "narrationRef": "narr-s6",
+      "narrationBrief": "Name each infrastructure piece exactly as the source lists it.",
+      "targetDurationSeconds": 32,
+      "motion": "animated-diagram",
+      "transition": "morph",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-7",
+      "index": 6,
+      "beatId": "beat-3",
+      "narrativePurpose": "Honor the redaction discipline with the source quote itself.",
+      "visualType": "quote-panel",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "quote",
+          "value": "All credentials are `[REDACTED]`.",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "the source keeps secrets out",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-credentials-redacted"
+      ],
+      "narrationRef": "narr-s7",
+      "narrationBrief": "Point out that the source keeps credentials out on purpose.",
+      "targetDurationSeconds": 32,
+      "motion": "static",
+      "transition": "cut",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-8",
+      "index": 7,
+      "beatId": "beat-3",
+      "narrativePurpose": "Ground the realtime tooling in a workstation dashboard scene.",
+      "visualType": "workstation-scene",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "realtime infrastructure",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "browser automation",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-infra-stack"
+      ],
+      "narrationRef": "narr-s8",
+      "narrationBrief": "Connect browser automation and realtime infrastructure to daily operations.",
+      "targetDurationSeconds": 32,
+      "motion": "pan",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink",
+      "visualBrief": "Hand-drawn ink linework on graphite paper with cyan/teal emphasis, per the reference scene atlas. Drafting-table workstation with a live operations dashboard sketch."
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-9",
+      "index": 8,
+      "beatId": "beat-4",
+      "narrativePurpose": "Show orchestration topology with audit gates.",
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "multi-agent orchestration",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "security/integrity audits",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "orchestration under audit",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-multi-agent-orchestration",
+        "claim-audits"
+      ],
+      "narrationRef": "narr-s9",
+      "narrationBrief": "Explain how multi-agent orchestration operates under audits.",
+      "targetDurationSeconds": 24,
+      "motion": "animated-diagram",
+      "transition": "morph",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-10",
+      "index": 9,
+      "beatId": "beat-4",
+      "narrativePurpose": "Show guardrails: sandbox limits and operational loops as states.",
+      "visualType": "state-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "sandbox/resource limits",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "operational loops",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "guardrails and loops",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-sandbox-limits"
+      ],
+      "narrationRef": "narr-s10",
+      "narrationBrief": "Walk the guardrails and loops that keep execution safe.",
+      "targetDurationSeconds": 24,
+      "motion": "animated-diagram",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-11",
+      "index": 10,
+      "beatId": "beat-4",
+      "narrativePurpose": "Metaphor for orchestration: agents as lantern-passing machines in a corridor.",
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "claimIds": [
+        "claim-multi-agent-orchestration"
+      ],
+      "narrationRef": "narr-s11",
+      "narrationBrief": "Give the architecture an intuitive image before moving on.",
+      "targetDurationSeconds": 24,
+      "motion": "pan",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink",
+      "visualBrief": "Hand-drawn ink linework on graphite paper with cyan/teal emphasis, per the reference scene atlas. A long technical corridor where small machines pass lanterns between stations."
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-12",
+      "index": 11,
+      "beatId": "beat-5",
+      "narrativePurpose": "Trace integration into deployment as an exact-labeled flow.",
+      "visualType": "process-flow",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "provider integrations",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "deployment pipelines",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "integration to deployment",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-provider-integrations"
+      ],
+      "narrationRef": "narr-s12",
+      "narrationBrief": "Follow provider integrations into deployment pipelines.",
+      "targetDurationSeconds": 30,
+      "motion": "animated-diagram",
+      "transition": "morph",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-13",
+      "index": 12,
+      "beatId": "beat-5",
+      "narrativePurpose": "Close the loop: execution workflows and operational loops.",
+      "visualType": "process-flow",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "execution workflows",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "operational loops",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "the operational loop",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-deployment-pipelines"
+      ],
+      "narrationRef": "narr-s13",
+      "narrationBrief": "Show the operational loop that keeps the system running.",
+      "targetDurationSeconds": 30,
+      "motion": "animated-diagram",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink"
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-14",
+      "index": 13,
+      "beatId": "beat-6",
+      "narrativePurpose": "Pay off the opening: the cluttered desk, now neatly mapped.",
+      "visualType": "hero-illustration",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "role": "label",
+          "value": "semantic organization",
+          "exact": true
+        },
+        {
+          "role": "label",
+          "value": "source-grounded planning",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "narrationRef": "narr-s14",
+      "narrationBrief": "Return to the opening image and show it resolved.",
+      "targetDurationSeconds": 30,
+      "motion": "zoom",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink",
+      "visualBrief": "Hand-drawn ink linework on graphite paper with cyan/teal emphasis, per the reference scene atlas. The cluttered desk from the opening scene, now resolved into one clean diagram sheet."
+    },
+    {
+      "recordType": "VideoScene",
+      "contractVersion": "1.0.0",
+      "id": "scene-15",
+      "index": 14,
+      "beatId": "beat-6",
+      "narrativePurpose": "Close the artifact with the through-line.",
+      "visualType": "title-card",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "role": "title",
+          "value": "Mapped, end to end",
+          "exact": true
+        },
+        {
+          "role": "caption",
+          "value": "source-grounded overview",
+          "exact": true
+        }
+      ],
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "narrationRef": "narr-s15",
+      "narrationBrief": "Land the closing thought: source-grounded, end to end.",
+      "targetDurationSeconds": 30,
+      "motion": "static",
+      "transition": "crossfade",
+      "styleBibleId": "style-bible--reference-ink"
+    }
+  ],
+  "generator": {
+    "name": "fixture-builder",
+    "version": "1.0.0",
+    "seed": "wflx-canonical-video-explainer-7min",
+    "deterministic": true
+  },
+  "createdAt": "2026-09-26T00:00:00Z",
+  "notes": "Canonical Explainer plan fixture (~7 min). The ~7 min family matches the reference artifact duration 415.66 s (DOCUMENTED, docs/reference/reference-artifact-manifest.json)."
+}

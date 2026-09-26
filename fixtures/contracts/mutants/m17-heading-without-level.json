@@ -1,0 +1,30 @@
+{
+  "recordType": "SourceArtifact",
+  "contractVersion": "1.0.0",
+  "id": "source-minimal",
+  "title": "Minimal note",
+  "provenance": {
+    "kind": "plain-text",
+    "label": "minimal.txt",
+    "authorization": "user-provided"
+  },
+  "fingerprint": {
+    "contentSha256": "4823bc01c4e8f5615c14bb59e554147346eaf41b42ccfa46833075fcfa81bf85",
+    "rawSha256": "4823bc01c4e8f5615c14bb59e554147346eaf41b42ccfa46833075fcfa81bf85",
+    "textLength": 34
+  },
+  "text": "Alpha tools need scheduled audits.",
+  "blocks": [
+    {
+      "id": "b1",
+      "kind": "heading",
+      "text": "Alpha tools need scheduled audits.",
+      "start": 0,
+      "end": 34
+    }
+  ],
+  "language": "en",
+  "wordCount": 5,
+  "createdAt": "2026-09-26T00:00:00Z",
+  "normalizer": "fixture-builder@1.0.0"
+}
