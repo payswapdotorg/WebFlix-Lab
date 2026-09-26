@@ -2,343 +2,201 @@
 
 ## Mission
 
-Build an isolated R&D implementation in `payswapdotorg/WebFlix-Lab` for:
+Build an isolated R&D reconstruction of the observable Audio Overview and Video Overview behaviors of Gemini Notebook / NotebookLM.
 
-1. Audio Overview — source-grounded multi-speaker conversational synthesis.
-2. Video Overview — source-grounded narrated visual synthesis.
+Reverse-engineer through public documentation, direct black-box observation of the real product, supplied reference artifacts, controlled mutations, ablation experiments, and reproducible lab implementation.
 
-Target observable behavior/quality of Gemini Notebook / NotebookLM, not Google's private internals, branding or proprietary assets.
+Do not claim knowledge of Google's private internals.
 
-## Primary reference
+~~~text
+OBSERVED -> HYPOTHESIS -> EXPERIMENT -> REPRODUCTION -> COMPARISON
+                                           |
+                                           v
+                                      VALIDATED
+~~~
 
-Use the user-supplied reference MP4 from the originating task.
+## Required reference access
 
-Observed properties:
-- ~6m56s
-- 1280x720
-- 30fps
-- AAC mono
-- coherent hand-drawn technical illustration language
-- architecture/process diagrams
-- visual metaphors
-- source-driven technical visuals
+The real Gemini Notebook product is a required black-box instrument.
 
-The first target is **Explainer-style Video Overview**, not Cinematic.
+Follow docs/reference/gemini-notebook-access.md.
 
-## Why this lab matters
+The human operator establishes a dedicated reference notebook and authenticates manually. Workers use the authorized browser session or official sharing. No passwords, cookies, OAuth tokens, recovery codes, or browser archives enter git.
 
-A public Substack/article/Markdown/text source could become:
-- Audio Overview
-- Video Overview
-- semantic-search source
-- visual explainer
-- future podcast/briefing/clips
+The notebook should contain only authorized material, including the source used for the supplied artifact when permitted and controlled mutation sources.
 
-## Ground truth
+## Golden artifact
 
-Repository is source of truth.
+Reference:
+Orchestrating_Agentic_Development__Deconstructing_a_Multi-Agent.mp4
 
-Do not claim NotebookLM parity from a single demo, a screenshot, fixture-only generation, or an LLM's self-assessment.
+Metadata:
+- duration 415.660408 s
+- H.264 1280x720 30 fps
+- AAC mono 44.1 kHz
+- SHA-256 36485eb804de5c69aadf9c0a9d4998dfa85ce4e3ed9a4f502bbd45fc170cdce2
 
-Every artifact records:
-- source hash
-- generation config
-- model/provider
-- cost
-- latency
-- QA result
-- reproducibility record
+The original 65 MB binary is fingerprinted but not yet committed. See reference/video/ORIGINAL-ARTIFACT.md for the one-time import and Git LFS procedure.
 
-Behavioral reverse engineering may use public documentation and supplied artifacts.
-
-Do not access private Google endpoints, bypass access controls, extract private prompts, scrape private notebook data, or copy proprietary visual assets.
+The supplied artifact is the visual golden reference. Worker 3 must inspect it directly and annotate it before optimizing the implementation.
 
 ## Frozen architecture
 
-```text
-Text / article / PDF / audio / video
-              |
-              v
-       Source Adapter Layer
-              |
-              v
-       Source Artifact IR
-              |
-              v
-     Source / Media Intelligence
-              |
-              v
-       Overview Director
-          /          \
-         v            v
-   Audio Script   Video Storyboard
-         |            |
-         v            v
-   Voice Engine   Visual Engine
-         |            |
-         +-----+------+
-               v
-          Compositor
-               |
-               v
-         Artifact Store
-               |
-               v
-          QA / Refinement
-```
+~~~text
+Authorized Source
+      |
+      v
+Source Adapter
+      |
+      v
+SourceArtifact
+      |
+      v
+Source Intelligence
+  structure / topics / entities / claims / relationships / evidence
+      |
+      v
+Overview Director
+  objective / audience / duration / coverage / narrative / style
+      |
+      +----------------------+
+      |                      |
+      v                      v
+Audio Dialogue Graph   Video Storyboard
+      |                      |
+      v                      v
+AudioTurn[]             VideoScene[]
+      |                      |
+      v                      v
+Speech Providers       Visual Providers
+      |                      |
+      +----------+-----------+
+                 v
+           Timeline Composer
+                 |
+                 v
+            Artifact Store
+                 |
+                 v
+           QA / Evaluator
+                 |
+                 v
+       smallest-unit refinement
+~~~
 
-## Shared intermediate representation
+## Shared contracts
 
-### SourceArtifact
-- id
-- type
-- canonical URL/location
-- title
-- author
-- date
-- cleaned content
-- source blocks
-- provenance
-- extraction method
-- content hash
-- authorization state
+Worker 1 freezes:
+- SourceArtifact
+- ClaimRecord
+- EntityRecord
+- TopicRecord
+- RelationshipRecord
+- OverviewPlan
+- AudioTurn
+- VideoScene
+- GeneratedArtifact
+- ExperimentRecord
 
-### ClaimRecord
-- id
-- normalized claim
-- source block ids
-- entities
-- evidence
-- importance
-- confidence
+Provider-specific request/response structures stay inside adapters.
 
-### OverviewPlan
-- objective
-- audience
-- language
-- target duration
-- selected themes
-- narrative arc
-- source coverage
-- excluded material
-- style
-- sequence
-
-### AudioTurn
-- segment id
-- speaker
-- text
-- supporting claims/source blocks
-- style
-- pronunciation
-- target duration
-
-### VideoScene
-- scene id
-- narrative purpose
-- duration
-- narration ids
-- visual type
-- source-supported facts
-- exact labels
-- visual prompt
-- style reference
-- motion
-- transition
-
-### GeneratedArtifact
-- id
-- type
-- source ids
-- plan id
-- model/provider
-- generation version
-- assets
-- duration
-- resolution
-- hash
-- QA state
-
-# Worker 1 — Source Intelligence + Overview Director
+## Worker 1
 
 Own:
-- SourceArtifact
-- public article/Substack adapter
+- source adapters
+- public article/Substack ingestion
 - normalization
-- topic/entity/claim graph
+- semantic graph
 - retrieval
 - OverviewPlan
 - narrative compiler
-- coverage evaluator
-- shared contracts/tests
+- grounding/coverage evaluator
+- shared contracts and tests
 
-Experiments:
-1. messy note -> semantic graph
-2. semantic graph -> coherent OverviewPlan
-3. narration claim -> source evidence mapping
-4. same source -> Brief / Deep Dive / Critique / Debate
-5. important omissions and duplicates
+First gate: canonical OverviewPlan fixtures are checked in and contracts are frozen.
 
-Allowed paths:
-- `src/source/**`
-- `src/director/**`
-- `src/contracts/**`
-- `tests/source/**`
-- `tests/director/**`
-
-# Worker 2 — Audio Overview
+## Worker 2
 
 Own:
 - AudioTurn compiler
-- multi-speaker dialogue generation
-- Gemini TTS provider adapter
-- open TTS provider adapter
-- timing
+- multi-speaker dialogue graph
+- Gemini TTS adapter
+- open/local TTS adapter
+- timing/alignment
 - mixing/mastering
-- audio artifact
 - audio QA
 
-Target:
-- two stable hosts
-- natural turn-taking
-- cross-source connections
-- examples
-- source-grounded explanations
-- non-robotic pacing
-
-Measure:
+Test:
+- mode changes
+- prompt mutations
+- language changes
+- duration changes
 - speaker consistency
-- naturalness
-- factual support
+- natural turn-taking
+- groundedness
 - pronunciation
-- pauses
-- clipping
-- duration
-- provider cost
-- generation latency
+- pacing
 
-Allowed paths:
-- `src/audio/**`
-- `src/providers/audio/**`
-- `tests/audio/**`
+Do not implement dialogue as mechanical speaker alternation.
 
-# Worker 3 — Video Overview + Composition
+## Worker 3
 
 Own:
-- VideoScene compiler
+- reference scene annotation
 - StyleBible
-- visual generation adapters
-- SVG/diagram renderer
-- image-generation adapter
-- optional video-generation adapter
+- VideoScene compiler
+- deterministic SVG/diagram renderer
+- illustration adapters
+- optional video-generation adapters
 - Remotion composition
-- final MP4
 - video QA
 
-Target first: narrated illustrated Explainer.
+First visual target: Explainer / narrated illustration.
 
-Reference visual language:
-- hand-drawn/ink treatment
-- coherent palette
-- technical diagrams
+Observed reference characteristics:
+- hand-drawn / ink technical illustration
+- graphite/slate background
+- cyan/teal/green emphasis
+- architecture and state/process diagrams
+- code-like technical panels
 - visual metaphors
 - recurring motifs
-- deliberate motion
-- scene timing coupled to narration
+- deliberate camera motion and scene transitions
+- little reliance on stock photography
 
-Do not require full video diffusion for every scene.
+Use deterministic graphics for exact labels, numbers and relationships. Use generative media for illustration and metaphor. Use generated video only where motion adds explanatory value.
 
-Allowed paths:
-- `src/video/**`
-- `src/providers/visual/**`
-- `src/providers/video/**`
-- `src/compositor/**`
-- `tests/video/**`
+## Controlled experiments
 
-# Concurrency
+Required initial experiments are in docs/experiments/matrix.md.
 
-Worker 1 freezes SourceArtifact, ClaimRecord, OverviewPlan and the evaluation protocol.
+Core questions:
+- How do format modes change editorial structure?
+- Which changes are local when one claim/entity/source changes?
+- How does target duration change narration density and scene count?
+- Which layers respond to custom instructions?
+- What remains invariant across languages?
+- How stable are speakers, visuals and structure across regeneration?
+- Does a staged compiler materially outperform one-shot generation?
+- Does local refinement preserve unaffected units?
 
-Then Workers 2 and 3 work concurrently against fixed fixture OverviewPlans.
+Every experiment follows docs/experiments/protocol.md.
 
-```text
-                 Worker 1
-           Source + Director
-              /         \
-             /           \
-         Worker 2      Worker 3
-          Audio          Video
-             \           /
-              \         /
-                TL #2
-                  |
-             Integration
-                  |
-               QA / Lab
-```
+## Acceptance
 
-# Reverse-engineering experiments
+No parity claim is accepted from unit tests alone, fixture-only artifacts, screenshots alone, LLM self-assessment, or one successful run.
 
-## LAB-01 — Messy source normalization
-Use a redacted version of the supplied source. Verify concepts, themes, entities, important facts and secret exclusion.
+Promotion requires:
+1. reproducible implementation evidence
+2. real reference-product comparison evidence
+3. artifact hashes and provenance
+4. cost and latency measurements
+5. failure-mode documentation
+6. security and authorization review
+7. WebFlix integration design
 
-## LAB-02 — Audio overview
-Generate Deep Dive, Brief, Critique and Debate. Verify that mode changes editorial structure, not merely the opening sentence.
+## Production boundary
 
-## LAB-03 — Explainer video
-Generate 5–8 minutes from the same source. Require coherent narrative, visual storytelling, diagrams for structure, metaphor illustrations for abstractions, synchronized narration and coherent style.
+Do not modify payswapdotorg/WebFlix from this repository.
 
-## LAB-04 — Reference reconstruction
-Annotate the supplied MP4 by scene boundaries, visual type, narrative purpose, approximate duration, motion, recurring motifs and transitions. Do not copy exact assets.
-
-## LAB-05 — Ablation
-Compare A: one-shot prompt -> video; B: graph -> script -> generated images -> compositor; C: graph -> director -> storyboard -> generation -> compositor -> evaluator. Determine which stages materially improve output.
-
-## LAB-06 — Self-refinement
-Generate v1, identify weak units, regenerate only defective units and compare v1/v2.
-
-# Required text-source adapter
-
-Public article/Substack:
-
-```text
-URL
- -> fetch
- -> canonicalize
- -> article extraction
- -> SourceArtifact
-```
-
-Preserve canonical URL, title, author, publication date, extracted text and provenance.
-
-Paywalled/private content requires an authorized connector or user-provided content.
-
-# Quality gates
-
-Grounding: every substantive narration statement maps to source evidence.
-
-Visual grounding: exact numbers and labels come from structured data, not hallucinated image text.
-
-Visual consistency: style, palette, line language, recurring motifs, typography and diagram language.
-
-Audio: identity consistency, intelligibility, turn-taking, pronunciation, clipping and pacing.
-
-Temporal: scene duration matches narration; visual changes support spoken points; transitions do not interrupt meaning.
-
-Artifact: MP4/audio decodes, seeks, plays end-to-end, exposes correct duration and preserves provenance.
-
-# Production promotion boundary
-
-This repository is a lab. Do not directly modify `payswapdotorg/WebFlix`.
-
-Final TL #2 output is a production promotion handoff with contracts, proven pipeline, model/provider matrix, benchmark evidence, example artifacts, cost/latency, failure modes and integration plan.
-
-# Security
-
-The original source contained credential-like values. Never store them here. Use the redacted fixture. Rotate exposed credentials separately.
-
-# Final success criterion
-
-The lab succeeds only if it can reliably transform messy authorized text into genuinely useful Audio and Video Overviews through a reproducible, provider-neutral compilation pipeline.
-
-The objective is to reproduce the editorial intelligence + visual storytelling + voice performance + composition loop that makes the reference result compelling.
+The final deliverable is a promotion handoff, not a production change.
