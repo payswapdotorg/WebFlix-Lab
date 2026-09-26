@@ -1,39 +1,85 @@
 # WebFlix-Lab
 
-Research laboratory for reproducing and extending source-to-multimedia synthesis inspired by Gemini Notebook / NotebookLM.
+Research and reconstruction laboratory for source-to-multimedia synthesis inspired by Gemini Notebook / NotebookLM.
 
 ## Mission
 
-Build and benchmark:
-- Audio Overview
-- Video Overview
-- public text/article/Substack ingestion
-- source-grounded narrative and visual compilation
+Reproduce the observable behavior and quality loop of Audio Overview, Video Overview, authorized public text/article/Substack ingestion, and source-grounded narrative plus visual compilation.
 
-## Canonical documents
+This repository is self-contained for TL #2 and three workers. The team should not need the originating chat for mission, architecture, references, access procedure, experiment protocol, work split, or acceptance gates.
 
-- `docs/notebooklm-overviews-research.md`
-- `docs/tl2-overview-studio-handoff.md`
-- `docs/overview-studio-architecture.md`
-- `fixtures/reference-messy-note-redacted.md`
+## Start here
 
-## Execution
+1. AGENTS.md — immutable lab rules.
+2. docs/tl2-overview-studio-handoff.md — canonical takeover.
+3. docs/reference/gemini-notebook-access.md — real-product access runbook.
+4. docs/reference/reference-artifact-manifest.json — exact reference artifact identity.
+5. docs/reference/reference-video-scene-atlas.md — observed visual evidence.
+6. docs/experiments/protocol.md — black-box experiment protocol.
+7. docs/experiments/matrix.md — initial experiments.
+8. docs/work-items/tl2-work-order.md — dependency graph and three-worker scope.
 
-TL #2 coordinates three concurrent workers:
-1. Source Intelligence + Overview Director
-2. Audio Overview
-3. Video Overview + Composition
+## Canonical rule
 
-Worker 1 freezes shared IR/contracts before Workers 2 and 3 diverge.
+The repository is the source of truth.
 
-## Evidence
+Do not rely on the originating chat, unverified agent summaries, fixture-only demos, screenshots without provenance, a single generated artifact, or guesses about Google's private implementation.
 
-The originating task includes a user-supplied reference MP4. Workers must use the artifact itself for visual comparison.
+Classify claims as OBSERVED, DOCUMENTED, HYPOTHESIS, REPRODUCED, or UNRESOLVED.
 
-## Repository boundary
+## Reference environment
 
-This is an isolated R&D lab. Do not directly modify `payswapdotorg/WebFlix` from this repository.
+Workers should use a dedicated Gemini Notebook containing only authorized material. Human authentication is manual. Credentials, cookies, browser state, and secrets stay outside git.
 
-## Security
+The exact supplied reference video is fingerprinted in docs/reference/reference-artifact-manifest.json. The binary is not yet in git because the available repository connector cannot upload the 65 MB original directly. The repo therefore freezes its hash, metadata, import procedure, and scene annotations; the operator can import and verify the original and commit it through Git LFS.
 
-The original source included credential-like secrets. They are deliberately excluded from fixtures and documentation. Rotate any credentials that may have been exposed.
+## Architecture
+
+~~~text
+Source / media
+      |
+      v
+Source Adapter -> SourceArtifact -> Source Intelligence
+                                      |
+                                      v
+                                Overview Director
+                                  /           \
+                                 v             v
+                         Audio Dialogue    Video Storyboard
+                                 |             |
+                                 v             v
+                            Speech Engine   Visual Engine
+                                 |             |
+                                 +------ + ------+
+                                        v
+                                  Timeline Composer
+                                        |
+                                        v
+                                     Artifact
+                                        |
+                                        v
+                                  QA / Refinement
+                                        |
+                                        v
+                                     Publish
+~~~
+
+The core abstraction is an Overview Compiler, not a monolithic prompt.
+
+## Team
+
+TL #2 owns shared contracts, reference environment, evidence integrity, integration, and acceptance.
+
+Worker 1 owns source intelligence and the Overview Director.
+
+Worker 2 owns Audio Overview.
+
+Worker 3 owns Video Overview and composition.
+
+Workers 2 and 3 proceed concurrently after Worker 1 freezes the shared contracts.
+
+## Safety and security
+
+Only process content the experiment is authorized to use. Do not bypass paywalls, login barriers, CAPTCHA, DRM, access controls, anti-bot measures, geo restrictions, or rate limits. Do not attempt to extract private Google prompts or private endpoints.
+
+Credential-like values from the originating source are intentionally excluded. Never copy or commit them.
