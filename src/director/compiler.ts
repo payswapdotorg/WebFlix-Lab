@@ -1,0 +1,766 @@
+/**
+ * Overview Director (WFLX-W1, Stage 2) — the OverviewPlan compiler.
+ *
+ * SourceArtifact(s) + SemanticGraph + target parameters -> grounded
+ * narrative plan (beats, coverage map, plan-level AudioTurn[] or
+ * VideoScene[]).
+ *
+ * Deterministic and seeded: identical inputs + seed produce byte-identical
+ * plans. The seed affects (only) tie-breaking among equal-salience claims
+ * and motion/transition pattern offsets — never the grounding rules.
+ *
+ * Editorial invariants (HYPOTHESIS-labeled lab policies, testable against
+ * the real product via the experiment matrix):
+ * - Claim selection is budget-driven (duration / secondsPerClaim) and
+ *   salience-ranked; custom instructions NEVER change claim coverage
+ *   (EXP-V-03 falsifier anchor: they only affect style fields).
+ * - Every selected or skipped claim is editorially accounted for in the
+ *   coverage map (covered with role, or omitted with reason).
+ * - Exact labels for deterministic scenes come from grounded entity names.
+ *
+ * The Director owns editorial decisions only — no speech, images or video
+ * generation (AGENTS.md architecture rule).
+ */
+
+import {
+  CONTRACTS_VERSION,
+  OverviewPlanSchema,
+  validateOverviewPlan,
+  type AudioTurn,
+  type AudioTurnPurpose,
+  type AudienceLevel,
+  type ClaimRecord,
+  type EntityRecord,
+  type Id,
+  type NarrativeBeat,
+  type OverviewMode,
+  type OverviewModality,
+  type OverviewPlan,
+  type RelationshipRecord,
+  type SceneTextItem,
+  type SemanticGraph,
+  type SourceArtifact,
+  type SpeakerRole,
+  type UtcTimestamp,
+  type VideoScene,
+} from '../contracts';
+import { GraphIndex } from '../source/graph/retrieval';
+
+export const DIRECTOR_ID = 'OverviewDirector@0.1.0';
+
+/** Editorial prior: seconds of overview per claim at full coverage (HYPOTHESIS). */
+export const DEFAULT_SECONDS_PER_CLAIM = 27;
+
+export interface DirectorRequest {
+  sources: readonly SourceArtifact[];
+  graph: SemanticGraph;
+  modality: OverviewModality;
+  /** Defaults: audio -> deep-dive, video -> explainer. */
+  mode?: OverviewMode;
+  /** Default 'technical'. */
+  audience?: AudienceLevel;
+  /** Default 'en'. */
+  language?: string;
+  targetDurationSeconds: number;
+  /** Custom instructions affect style fields only, never claim coverage. */
+  customInstructions?: string;
+  /** Deterministic seed; required. */
+  seed: string;
+  /** Plan createdAt. Supply a fixed value for reproducibility. */
+  now?: UtcTimestamp;
+  styleBibleId?: Id;
+  /** Plan id override; derived deterministically when omitted. */
+  planId?: string;
+  /** Editorial prior override (seconds per claim). */
+  secondsPerClaim?: number;
+}
+
+export class DirectorError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'DirectorError';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Seeded determinism
+// ---------------------------------------------------------------------------
+
+function hashSeed(seed: string): number {
+  let h = 2166136261;
+  for (const ch of seed) {
+    h ^= ch.codePointAt(0) ?? 0;
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function mulberry32(a: number): () => number {
+  let state = a;
+  return () => {
+    state = (state + 0x6d2b79f5) | 0;
+    let t = Math.imul(state ^ (state >>> 15), 1 | state);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** Stable rank: salience desc; equal-salience groups are seed-shuffled. */
+function rankedClaimIds(graph: SemanticGraph, rand: () => number): Id[] {
+  const groups = new Map<number, ClaimRecord[]>();
+  for (const claim of graph.claims) {
+    const list = groups.get(claim.salience) ?? [];
+    list.push(claim);
+    groups.set(claim.salience, list);
+  }
+  const out: Id[] = [];
+  for (const salience of [...groups.keys()].sort((a, b) => b - a)) {
+    const group = (groups.get(salience) as ClaimRecord[]).slice();
+    // Fisher-Yates with the seeded PRNG.
+    for (let i = group.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(rand() * (i + 1));
+      const tmp = group[i] as ClaimRecord;
+      group[i] = group[j] as ClaimRecord;
+      group[j] = tmp;
+    }
+    out.push(...group.map((c) => c.id));
+  }
+  return out;
+}
+
+/** Split a total into integer shares by weights (largest-remainder method). */
+function splitInteger(total: number, weights: number[], minimum: number): number[] {
+  if (weights.length === 0) return [];
+  const sum = weights.reduce((a, b) => a + b, 0);
+  const w = sum === 0 ? weights.map(() => 1) : weights;
+  const wSum = w.reduce((a, b) => a + b, 0);
+  const raw = w.map((x) => (total * x) / wSum);
+  const base = raw.map((x) => Math.max(minimum, Math.floor(x)));
+  // If minimums overdraw the budget, take back from the largest buckets.
+  let over = base.reduce((a, b) => a + b, 0) - total;
+  while (over > 0) {
+    let maxIdx = 0;
+    for (let i = 1; i < base.length; i += 1) {
+      if ((base[i] as number) > (base[maxIdx] as number)) maxIdx = i;
+    }
+    if ((base[maxIdx] as number) <= minimum) break;
+    base[maxIdx] = (base[maxIdx] as number) - 1;
+    over -= 1;
+  }
+  let remainder = total - base.reduce((a, b) => a + b, 0);
+  // Redistribute any remainder to the largest fractional parts.
+  const order = raw
+    .map((x, i) => ({ i, frac: x - Math.floor(x) }))
+    .sort((a, b) => b.frac - a.frac);
+  let k = 0;
+  while (remainder > 0 && order.length > 0) {
+    const target = order[k % order.length] as { i: number };
+    base[target.i] = (base[target.i] as number) + 1;
+    remainder -= 1;
+    k += 1;
+  }
+  return base;
+}
+
+// ---------------------------------------------------------------------------
+// Mode profiles (HYPOTHESIS: speaker counts and purpose patterns per mode)
+// ---------------------------------------------------------------------------
+
+interface TurnSlot {
+  role: SpeakerRole;
+  purpose: AudioTurnPurpose;
+}
+
+interface ModeProfile {
+  speakers: number;
+  tone: string;
+  opening: TurnSlot[];
+  perBeat: TurnSlot[];
+  closing: TurnSlot[];
+}
+
+const A: TurnSlot = { role: 'host-a', purpose: 'framing' };
+const B_EXPLAIN: TurnSlot = { role: 'host-b', purpose: 'explanation' };
+
+const MODE_PROFILES: Record<string, ModeProfile> = {
+  'deep-dive': {
+    speakers: 2,
+    tone: 'curious, expert, conversational',
+    opening: [A, B_EXPLAIN],
+    perBeat: [
+      A,
+      B_EXPLAIN,
+      { role: 'host-a', purpose: 'question' },
+      { role: 'host-b', purpose: 'example' },
+    ],
+    closing: [
+      { role: 'host-a', purpose: 'synthesis' },
+      B_EXPLAIN,
+      { role: 'host-a', purpose: 'conclusion' },
+    ],
+  },
+  brief: {
+    speakers: 2,
+    tone: 'crisp, high-signal',
+    opening: [A],
+    perBeat: [A, B_EXPLAIN],
+    closing: [{ role: 'host-a', purpose: 'conclusion' }],
+  },
+  critique: {
+    speakers: 2,
+    tone: 'rigorous, fair, constructively critical',
+    opening: [A, B_EXPLAIN],
+    perBeat: [
+      A,
+      B_EXPLAIN,
+      { role: 'host-a', purpose: 'question' },
+      { role: 'host-b', purpose: 'clarification' },
+    ],
+    closing: [
+      { role: 'host-a', purpose: 'synthesis' },
+      { role: 'host-b', purpose: 'conclusion' },
+    ],
+  },
+  debate: {
+    speakers: 2,
+    tone: 'spiky but good-faith, contrast-driven',
+    opening: [A, B_EXPLAIN],
+    perBeat: [
+      A,
+      { role: 'host-b', purpose: 'question' },
+      B_EXPLAIN,
+      { role: 'host-a', purpose: 'clarification' },
+    ],
+    closing: [
+      { role: 'host-a', purpose: 'synthesis' },
+      { role: 'host-b', purpose: 'conclusion' },
+    ],
+  },
+  explainer: {
+    speakers: 1,
+    tone: 'clear, technical, quietly enthusiastic',
+    opening: [A],
+    perBeat: [A, B_EXPLAIN],
+    closing: [A],
+  },
+  short: {
+    speakers: 1,
+    tone: 'punchy, immediate',
+    opening: [A],
+    perBeat: [A],
+    closing: [A],
+  },
+  cinematic: {
+    speakers: 1,
+    tone: 'cinematic, deliberate',
+    opening: [A],
+    perBeat: [A, B_EXPLAIN],
+    closing: [A],
+  },
+};
+
+const PURPOSE_DELIVERY: Record<AudioTurnPurpose, string> = {
+  framing: 'warm, orienting',
+  question: 'curious, conversational',
+  explanation: 'clear, expert, unhurried',
+  example: 'energetic, concrete',
+  connection: 'recollected, linking',
+  clarification: 'patient, precise',
+  interjection: 'light, engaged',
+  transition: 'light, forward-moving',
+  synthesis: 'reflective, tying together',
+  conclusion: 'resolved, landing',
+};
+
+const PURPOSE_LEAD: Record<AudioTurnPurpose, string> = {
+  framing: 'Open the segment and orient the listener.',
+  question: "Put the listener's question.",
+  explanation: 'Explain, grounded in the source.',
+  example: 'Give a concrete example from the source.',
+  connection: 'Connect back to the earlier segments.',
+  clarification: 'Clarify the likely confusion precisely.',
+  interjection: 'React briefly.',
+  transition: 'Bridge to the next segment.',
+  synthesis: 'Synthesize the thread so far.',
+  conclusion: 'Land the closing takeaway.',
+};
+
+// ---------------------------------------------------------------------------
+// Scene typing rules (reference scene atlas)
+// ---------------------------------------------------------------------------
+
+const DETERMINISTIC_TYPES = new Set([
+  'title-card',
+  'table',
+  'callout',
+  'quote-panel',
+  'architecture-diagram',
+  'state-diagram',
+  'process-flow',
+  'data-chart',
+  'code-panel',
+]);
+
+const MOTION_BY_TYPE: Record<string, VideoScene['motion']> = {
+  'title-card': 'static',
+  table: 'pan',
+  callout: 'static',
+  'quote-panel': 'static',
+  'architecture-diagram': 'animated-diagram',
+  'state-diagram': 'animated-diagram',
+  'process-flow': 'animated-diagram',
+  'data-chart': 'animated-diagram',
+  'code-panel': 'static',
+  'hero-illustration': 'zoom',
+  'metaphor-illustration': 'pan',
+  'workstation-scene': 'pan',
+  montage: 'pan',
+};
+
+// ---------------------------------------------------------------------------
+// Compilation
+// ---------------------------------------------------------------------------
+
+function statementsOf(index: GraphIndex, claimIds: readonly Id[], cap = 900): string {
+  const picked = claimIds
+    .map((id) => index.getClaim(id)?.statement)
+    .filter((s): s is string => s !== undefined);
+  const joined = picked.length > 0 ? picked.join(' ') : 'the source as a whole.';
+  return joined.length > cap ? `${joined.slice(0, cap - 3)}...` : joined;
+}
+
+function entityNamesOf(index: GraphIndex, claimIds: readonly Id[], cap: number): string[] {
+  const names: string[] = [];
+  for (const claimId of claimIds) {
+    for (const entity of index.entitiesInClaim(claimId)) {
+      if (!names.includes(entity.name)) names.push(entity.name);
+    }
+  }
+  return names.slice(0, cap);
+}
+
+function roleOf(salience: number): 'primary' | 'supporting' | 'mention' {
+  if (salience >= 0.8) return 'primary';
+  if (salience >= 0.5) return 'supporting';
+  return 'mention';
+}
+
+export function compileOverviewPlan(request: DirectorRequest): OverviewPlan {
+  const {
+    sources,
+    graph,
+    modality,
+    targetDurationSeconds,
+    seed,
+  } = request;
+  if (sources.length === 0) throw new DirectorError('Director requires at least one source');
+  if (!Number.isFinite(targetDurationSeconds) || targetDurationSeconds <= 0) {
+    throw new DirectorError('targetDurationSeconds must be positive');
+  }
+  const index = new GraphIndex(graph, sources);
+  if (graph.claims.length === 0) throw new DirectorError('graph has no claims to plan from');
+
+  const mode: OverviewMode =
+    request.mode ?? (modality === 'audio' ? 'deep-dive' : 'explainer');
+  const profile = MODE_PROFILES[mode];
+  if (profile === undefined) throw new DirectorError(`no mode profile for ${mode}`);
+  const isAudioMode = ['deep-dive', 'brief', 'critique', 'debate'].includes(mode);
+  if (modality === 'audio' && !isAudioMode) {
+    throw new DirectorError(`mode ${mode} is not an audio mode`);
+  }
+  if (modality === 'video' && isAudioMode) {
+    throw new DirectorError(`mode ${mode} is not a video mode`);
+  }
+
+  const rand = mulberry32(hashSeed(seed));
+  const now: UtcTimestamp =
+    request.now ?? new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+  const secondsPerClaim = request.secondsPerClaim ?? DEFAULT_SECONDS_PER_CLAIM;
+  const audience: AudienceLevel = request.audience ?? 'technical';
+  const language = request.language ?? 'en';
+  const primarySource = sources[0] as SourceArtifact;
+  const sourceTitle = primarySource.title;
+
+  // --- claim selection (budget-driven; custom instructions never affect it)
+  const rankedIds = rankedClaimIds(graph, rand);
+  const capacity = Math.max(1, Math.min(graph.claims.length, Math.ceil(targetDurationSeconds / secondsPerClaim)));
+  const selectedIds = rankedIds.slice(0, capacity);
+  const selectedSet = new Set(selectedIds);
+
+  // --- grouping by topic
+  const topics = [...graph.topics].sort((a, b) =>
+    b.salience - a.salience !== 0 ? b.salience - a.salience : a.id.localeCompare(b.id),
+  );
+  const claimsByTopic = new Map<Id, Id[]>();
+  for (const claimId of selectedIds) {
+    const claim = index.getClaim(claimId);
+    const topicId = claim?.topicIds[0];
+    if (topicId === undefined) continue; // covered via the unit fallback below
+    const list = claimsByTopic.get(topicId) ?? [];
+    list.push(claimId);
+    claimsByTopic.set(topicId, list);
+  }
+  const topicBeats = topics.filter((t) => (claimsByTopic.get(t.id) ?? []).length > 0);
+
+  const goalClaim =
+    graph.claims.find((c) => c.kind === 'goal') ?? index.getClaim(selectedIds[0] as Id);
+  if (goalClaim === undefined) throw new DirectorError('no anchor claim available');
+
+  // --- beats and budget
+  interface BeatDraft {
+    key: string;
+    title: string;
+    purpose: string;
+    claimIds: Id[];
+    topicIds: readonly Id[];
+    weightHint: number;
+    slots: TurnSlot[];
+  }
+  const beatDrafts: BeatDraft[] = [];
+  beatDrafts.push({
+    key: 'opening',
+    title: 'Opening',
+    purpose: `Frame the overview and orient the ${audience} audience on ${sourceTitle}.`,
+    claimIds: [goalClaim.id],
+    topicIds: goalClaim.topicIds,
+    weightHint: 1,
+    slots: profile.opening,
+  });
+  for (const topic of topicBeats) {
+    const claimIds = claimsByTopic.get(topic.id) ?? [];
+    beatDrafts.push({
+      key: `topic-${topic.id}`,
+      title: topic.title,
+      purpose: `Cover the ${topic.title} material selected for this plan.`,
+      claimIds,
+      topicIds: [topic.id],
+      weightHint: claimIds.length,
+      slots: profile.perBeat,
+    });
+  }
+  beatDrafts.push({
+    key: 'closing',
+    title: 'Takeaways',
+    purpose: 'Synthesize the covered claims into closing takeaways.',
+    claimIds: [goalClaim.id],
+    topicIds: goalClaim.topicIds,
+    weightHint: 1,
+    slots: profile.closing,
+  });
+
+  // Opening/closing get 10% each (absolute); topic beats share the rest
+  // proportionally to claim mass.
+  const openingClosing = Math.max(2, Math.round(targetDurationSeconds * 0.1));
+  const topicPool = Math.max(1, targetDurationSeconds - 2 * openingClosing);
+  const topicBudgets = splitInteger(
+    topicPool,
+    beatDrafts.filter((b) => b.key.startsWith('topic-')).map((b) => b.weightHint),
+    2,
+  );
+  let topicBudgetIdx = 0;
+  const budgets = beatDrafts.map((draft) => {
+    if (draft.key === 'opening' || draft.key === 'closing') return openingClosing;
+    const budget = topicBudgets[topicBudgetIdx] as number | undefined;
+    topicBudgetIdx += 1;
+    return budget ?? topicPool;
+  });
+
+  const beats: NarrativeBeat[] = beatDrafts.map((draft, i) => ({
+    id: `beat-${i + 1}`,
+    index: i,
+    title: draft.title,
+    purpose: draft.purpose,
+    brief: `${draft.purpose} Stay grounded on: ${statementsOf(index, draft.claimIds)}`,
+    claimIds: draft.claimIds,
+    topicIds: draft.topicIds,
+    weight: Math.round(((budgets[i] as number) / targetDurationSeconds) * 10000) / 10000,
+  }));
+
+  // --- audio turns
+  const audioTurns: AudioTurn[] = [];
+  if (modality === 'audio') {
+    let turnNo = 0;
+    beatDrafts.forEach((draft, beatIndex) => {
+      const beat = beats[beatIndex];
+      if (beat === undefined) throw new DirectorError('missing beat');
+      const budget = budgets[beatIndex] as number;
+      const maxTurns = Math.max(1, Math.floor(budget / 2));
+      const slots = draft.slots.slice(0, Math.min(draft.slots.length, maxTurns));
+      const durations = splitInteger(budget, slots.map(() => 1), 2);
+      const carriers = slots.filter((s) => s.purpose !== 'transition' && s.purpose !== 'framing');
+      const carrierCount = Math.max(1, carriers.length);
+      const assignment = new Map<number, Id[]>();
+      draft.claimIds.forEach((claimId, i) => {
+        const slotIdx = slots.indexOf(carriers[i % carrierCount] as TurnSlot);
+        const list = assignment.get(slotIdx) ?? [];
+        list.push(claimId);
+        assignment.set(slotIdx, list);
+      });
+      slots.forEach((slot, localIdx) => {
+        turnNo += 1;
+        const assigned =
+          slot.purpose === 'framing'
+            ? [draft.claimIds[0] as Id]
+            : assignment.get(localIdx) ?? [draft.claimIds[0] as Id];
+        const evidence = assigned
+          .map((id) => index.getClaim(id)?.evidence[0])
+          .filter((s): s is NonNullable<typeof s> => s !== undefined)
+          .slice(0, 2);
+        const names = entityNamesOf(index, assigned, 3).join(', ');
+        audioTurns.push({
+          recordType: 'AudioTurn',
+          contractVersion: CONTRACTS_VERSION,
+          id: `turn-${turnNo}`,
+          index: turnNo - 1,
+          speaker: slot.role === 'host-a' ? 'Host A' : 'Host B',
+          speakerRole: slot.role,
+          purpose: slot.purpose,
+          brief:
+            `${PURPOSE_LEAD[slot.purpose]} ` +
+            (slot.purpose === 'question' ? `Focus on ${names || 'the details'}. ` : '') +
+            `Anchors: ${statementsOf(index, assigned, 500)}`,
+          claimIds: assigned,
+          evidence,
+          beatId: beat.id,
+          style: {
+            delivery: PURPOSE_DELIVERY[slot.purpose],
+            ...(slot.purpose === 'explanation' && names !== ''
+              ? { emphasis: `say entity names crisply: ${names}` }
+              : {}),
+          },
+          targetDurationSeconds: (durations[localIdx] as number) || 2,
+        });
+      });
+    });
+  }
+
+  // --- video scenes
+  const videoScenes: VideoScene[] = [];
+  if (modality === 'video') {
+    const transitionOffset = Math.floor(rand() * 3);
+    const transitions: VideoScene['transition'][] = ['cut', 'crossfade', 'morph'];
+    let sceneNo = 0;
+    beatDrafts.forEach((draft, beatIndex) => {
+      const beat = beats[beatIndex];
+      if (beat === undefined) throw new DirectorError('missing beat');
+      const budget = budgets[beatIndex] as number;
+      const maxScenes = Math.max(1, Math.min(3, Math.floor(budget / 12)));
+
+      const beatEntities: EntityRecord[] = [];
+      const seen = new Set<Id>();
+      for (const claimId of draft.claimIds) {
+        for (const entity of index.entitiesInClaim(claimId)) {
+          if (!seen.has(entity.id)) {
+            seen.add(entity.id);
+            beatEntities.push(entity);
+          }
+        }
+      }
+      const beatRels: RelationshipRecord[] = graph.relationships.filter((rel) =>
+        draft.claimIds.some(
+          (claimId) =>
+            index.getClaim(claimId)?.entityIds.includes(rel.subjectId) === true ||
+            index.getClaim(claimId)?.entityIds.includes(rel.objectId) === true,
+        ),
+      );
+      const hasProcess = beatEntities.some((e) => e.kind === 'process' || e.kind === 'workflow');
+
+      interface SceneDraft {
+        visualType: VideoScene['visualType'];
+        exactTexts: SceneTextItem[];
+        claimIds: Id[];
+        visualBrief?: string;
+      }
+      const sceneDrafts: SceneDraft[] = [];
+      if (draft.key === 'opening') {
+        sceneDrafts.push({
+          visualType: 'title-card',
+          exactTexts: [
+            { role: 'title', value: sourceTitle.slice(0, 60), exact: true },
+            { role: 'caption', value: `a ${mode} overview`, exact: true },
+          ],
+          claimIds: [draft.claimIds[0] as Id],
+        });
+        sceneDrafts.push({
+          visualType: 'hero-illustration',
+          exactTexts: [],
+          claimIds: [draft.claimIds[0] as Id],
+          visualBrief: 'Hand-drawn ink hero composition on graphite paper with cyan/teal emphasis, per the reference scene atlas.',
+        });
+      } else if (draft.key === 'closing') {
+        sceneDrafts.push({
+          visualType: 'hero-illustration',
+          exactTexts: entityNamesOf(index, draft.claimIds, 2).map((name) => ({
+            role: 'label' as const,
+            value: name,
+            exact: true,
+          })),
+          claimIds: [draft.claimIds[0] as Id],
+          visualBrief: 'The opening motif resolved into one clean diagram sheet; ink linework, graphite background.',
+        });
+        sceneDrafts.push({
+          visualType: 'title-card',
+          exactTexts: [
+            { role: 'title', value: 'Takeaways', exact: true },
+            { role: 'caption', value: statementsOf(index, draft.claimIds, 60).replace(/\.$/, ''), exact: true },
+          ],
+          claimIds: [draft.claimIds[0] as Id],
+        });
+      } else {
+        if (beatRels.length > 0 && sceneDrafts.length < maxScenes - 1) {
+          const labels: SceneTextItem[] = [];
+          for (const rel of beatRels.slice(0, 3)) {
+            for (const entityId of [rel.subjectId, rel.objectId]) {
+              const name = index.getEntity(entityId)?.name;
+              if (name !== undefined && !labels.some((l) => l.value === name)) {
+                labels.push({ role: 'label', value: name, exact: true });
+              }
+            }
+          }
+          sceneDrafts.push({
+            visualType: 'architecture-diagram',
+            exactTexts: labels.slice(0, 6),
+            claimIds: draft.claimIds.slice(0, 1),
+          });
+        }
+        if (beatEntities.length >= 5 && sceneDrafts.length < maxScenes - 1) {
+          sceneDrafts.push({
+            visualType: 'table',
+            exactTexts: beatEntities.slice(0, 5).map((e) => ({
+              role: 'label' as const,
+              value: e.name,
+              exact: true,
+            })),
+            claimIds: draft.claimIds.slice(0, 1),
+          });
+        }
+        if (hasProcess && sceneDrafts.length < maxScenes - 1) {
+          sceneDrafts.push({
+            visualType: 'process-flow',
+            exactTexts: beatEntities
+              .filter((e) => e.kind === 'process' || e.kind === 'workflow')
+              .slice(0, 3)
+              .map((e) => ({ role: 'label' as const, value: e.name, exact: true })),
+            claimIds: draft.claimIds.slice(-1),
+          });
+        }
+        sceneDrafts.push({
+          visualType: 'metaphor-illustration',
+          exactTexts: [],
+          claimIds: draft.claimIds.slice(-1),
+          visualBrief: 'A visual metaphor for this segment; hand-drawn ink linework on graphite paper with cyan/teal emphasis.',
+        });
+      }
+
+      const capped = sceneDrafts.slice(0, Math.max(1, maxScenes));
+      const durations = splitInteger(budget, capped.map(() => 1), 5);
+      capped.forEach((sceneDraft, localIdx) => {
+        sceneNo += 1;
+        const renderingClass = DETERMINISTIC_TYPES.has(sceneDraft.visualType)
+          ? 'deterministic'
+          : sceneDraft.visualType === 'hero-illustration' && sceneDraft.exactTexts.length > 0
+            ? 'hybrid'
+            : 'generative';
+        videoScenes.push({
+          recordType: 'VideoScene',
+          contractVersion: CONTRACTS_VERSION,
+          id: `scene-${sceneNo}`,
+          index: sceneNo - 1,
+          beatId: beat.id,
+          narrativePurpose: `${draft.title}: ${statementsOf(index, sceneDraft.claimIds, 140)}`,
+          visualType: sceneDraft.visualType,
+          renderingClass,
+          exactTexts: sceneDraft.exactTexts,
+          claimIds: sceneDraft.claimIds,
+          narrationRef: `narr-s${sceneNo}`,
+          narrationBrief: `Narrate the ${draft.title} segment; anchors: ${statementsOf(index, sceneDraft.claimIds, 200)}`,
+          targetDurationSeconds: (durations[localIdx] as number) || 5,
+          motion: MOTION_BY_TYPE[sceneDraft.visualType] ?? 'static',
+          transition: transitions[(sceneNo - 1 + transitionOffset) % 3] as VideoScene['transition'],
+          ...(request.styleBibleId !== undefined ? { styleBibleId: request.styleBibleId } : {}),
+          ...(sceneDraft.visualBrief !== undefined ? { visualBrief: sceneDraft.visualBrief } : {}),
+        });
+      });
+    });
+  }
+
+  // --- coverage map: every graph claim accounted for
+  const unitIdsFor = (claimId: Id): string[] => {
+    const units = new Set<string>();
+    for (const beat of beats) {
+      if (beat.claimIds.includes(claimId)) units.add(beat.id);
+    }
+    for (const turn of audioTurns) {
+      if (turn.claimIds.includes(claimId)) units.add(turn.id);
+    }
+    for (const scene of videoScenes) {
+      if (scene.claimIds.includes(claimId)) units.add(scene.id);
+    }
+    return [...units];
+  };
+  const covered = selectedIds
+    .map((claimId) => {
+      const claim = index.getClaim(claimId);
+      if (claim === undefined) throw new DirectorError(`unknown claim ${claimId}`);
+      const units = unitIdsFor(claimId);
+      return {
+        claimId,
+        role: roleOf(claim.salience),
+        unitIds: units.length > 0 ? units : [`beat-${beats.length}`],
+      };
+    });
+  const omitted = rankedIds
+    .filter((id) => !selectedSet.has(id))
+    .map((claimId, i) => ({
+      claimId,
+      reason: `salience rank ${capacity + i + 1} exceeds capacity ${capacity} at ${targetDurationSeconds}s (secondsPerClaim=${secondsPerClaim})`,
+    }));
+
+  const planId =
+    request.planId ??
+    `plan-${primarySource.id}-${mode}-${Math.round(targetDurationSeconds)}s`;
+
+  const plan: OverviewPlan = {
+    recordType: 'OverviewPlan',
+    contractVersion: CONTRACTS_VERSION,
+    id: planId,
+    sourceIds: [...graph.sourceIds],
+    modality,
+    mode,
+    objective: `A ${Math.round(targetDurationSeconds)}s ${mode} overview of ${sourceTitle} for a ${audience} audience, grounded in ${selectedIds.length} of ${graph.claims.length} ranked claims.`,
+    audience,
+    language,
+    targetDurationSeconds,
+    style: {
+      tone: profile.tone,
+      register: 'plain-technical',
+      pacing: 'measured',
+      ...(modality === 'audio' ? { speakerCount: profile.speakers } : {}),
+      ...(request.styleBibleId !== undefined ? { styleBibleId: request.styleBibleId } : {}),
+    },
+    ...(request.customInstructions !== undefined ? { customInstructions: request.customInstructions } : {}),
+    coverage: { covered, omitted },
+    beats,
+    audioTurns,
+    videoScenes,
+    generator: {
+      name: DIRECTOR_ID,
+      version: '0.1.0',
+      seed,
+      deterministic: true,
+    },
+    createdAt: now,
+    notes:
+      'Compiled by the deterministic Overview Director. Claim coverage is budget- and salience-driven; custom instructions never change coverage.',
+  };
+
+  const guard = OverviewPlanSchema.safeParse(plan);
+  if (!guard.success) {
+    throw new DirectorError(`compiled plan fails its guard: ${JSON.stringify(guard.error.issues)}`);
+  }
+  const deep = validateOverviewPlan(plan, graph, sources);
+  if (!deep.valid) {
+    throw new DirectorError(`compiled plan fails deep validation: ${JSON.stringify(deep.issues)}`);
+  }
+  return plan;
+}
