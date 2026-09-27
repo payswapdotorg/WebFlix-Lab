@@ -1,0 +1,69 @@
+# Phase 3 — TL Integration Checklist (pre-staged)
+
+Status: DRAFT, pre-staged by TL #2 while W2 Stage 2 / W3 Phase 2B are in
+flight. This document defines the integration-station procedure that runs
+when each worker PR lands. Nothing here is final until the corresponding
+deliverable exists.
+
+## 1. PR review gate (per worker PR, before merge)
+
+Run at the TL integration station (`/home/z/WebFlix-Lab`, fresh clone of
+the PR branch):
+
+1. Scope compliance (AGENTS.md drift controls):
+   - W2 PRs touch only `src/audio/`, `src/providers/audio/`, `tests/audio/`
+     (+ `docs/` evidence). W3 PRs touch only `src/video/`,
+     `src/providers/visual/`, `src/providers/video/`, `src/compositor/`,
+     `tests/video/`, `reference/` annotations (+ `docs/`).
+   - Zero changes under `src/contracts/` unless accompanied by a HANDOFF
+     entry in the worker report (then TL adjudicates separately).
+2. Gates: `bun run typecheck` (0 errors), `bun run lint` (clean),
+   `bun test` (all pass; baseline count must not regress — 128 at
+   main c7abf4f freeze time).
+3. Determinism proof: worker must include a same-seed byte-identical run
+   (hash pair) in the PR description or report; re-run locally if cheap.
+4. Evidence discipline: report claims carry OBSERVED / DOCUMENTED /
+   HYPOTHESIS / REPRODUCED / UNRESOLVED labels; no silent HYPOTHESIS→FACT
+   promotion.
+5. Merge policy: normal merge via PR (never force-push, never rewrite
+   merged history). After merge: append an EV-xxx record to
+   `docs/evidence/registry.jsonl` with integration-check output.
+
+## 2. Integration tasks (after both W2 Stage 2 and W3 land)
+
+From `docs/work-items/tl2-work-order.md` Phase 3:
+
+- [ ] Cross-modal IR compliance: one fixture source compiled through BOTH
+      the audio pipeline and the video pipeline; both consume the SAME
+      frozen `OverviewPlan` instance (shared IR contract is the point of
+      the architecture).
+- [ ] Unify artifact manifests: `GeneratedArtifact` + provenance sidecars
+      from both surfaces in one registry shape.
+- [ ] Reproducibility metadata: seeds, versions (`CONTRACTS_VERSION`,
+      StyleBible version), provider identity, tool versions in every
+      artifact manifest.
+- [ ] Experiment result registry: extend `docs/evidence/registry.jsonl` /
+      experiment records so EXP-A/EXP-V runs land as structured records.
+- [ ] Same-source dual-modality comparison: render audio-only vs
+      video output for one fixture; tabulate deterministic QA metrics.
+- [ ] Ablation runs: seeded component ablations (per EXP-A-04 mutation
+      locality and friends from the experiment matrix).
+- [ ] Local refinement tests: plan → compile → measure loop.
+- [ ] Provider matrix doc: stub vs optional real adapters, capability
+      and determinism columns.
+
+## 3. Black-box experiment series (requires reference access)
+
+Blocked on operator Google login for notebook.google.com (geography
+requires the VPN egress already configured in the replay browser). Series
+per `docs/experiments/matrix.md` (LAB-01..06 + EXP-A/V). Every run records
+the experiment-protocol fields (id, timestamp, source fingerprint,
+configuration, mode, prompt, selection, artifact id, observed behavior,
+changed variable, invariants, hypothesis).
+
+## 4. Promotion gate (Phase 4) inputs
+
+Collected throughout: real-reference comparison evidence, implementation
+artifacts, benchmark results, costs, latency, failure modes, security and
+authorization posture, unresolved gaps, WebFlix integration design.
+No production promotion without TL #2 evidence sign-off.
