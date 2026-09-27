@@ -10,7 +10,9 @@ Provider adapter boundary for the audio pipeline. Ownership: Worker 2, per
 | `port.ts` | 1 | Provider-neutral `SpeechProvider` port: multi-speaker TTS with per-speaker voice profiles, pronunciation hints, capabilities, constructor-injected credentials |
 | `gemini-multi-speaker.ts` | 1 | Adapter interface for a Gemini-style native multi-speaker TTS (whole-conversation request, per-speaker voice config, style instruction, turn-aligned response) |
 | `open-local-tts.ts` | 1 | Adapter interface for an open/local single-speaker TTS with voice conditioning (Chatterbox-style): one call per turn, stitching happens in mixing |
-| `deterministic-offline.ts` | 2 | `DeterministicOfflineTtsAdapter` — pure-TS WAV/silence with exact per-turn durations; canonical test path (no network, no credentials) |
+| `deterministic-offline.ts` | 2 | `DeterministicOfflineTtsAdapter` — seeded layered-sine placeholder WAV (pcm_s16le 44.1 kHz mono) with exact per-turn durations; canonical test path (no network, no credentials) |
+| `gemini-multi-speaker-adapter.ts` | 2 | Thin real adapter behind the env flag: pure request/response mappings (offline-testable), constructor/env-injected `GEMINI_API_KEY` (name only declared), typed errors on missing credentials, refuses to guess whole-dialogue turn alignment |
+| `factory.ts` | 2 | `WFLX_AUDIO_SPEECH_PROVIDER=offline (default) \| gemini` selection; default never touches the network |
 
 ## Rules (binding)
 
@@ -44,3 +46,13 @@ Against `work/wflx-w1-contracts` @ `78be437` the port needs no changes:
 ...); `SpeechTurnRequest.text` carries the W2-filled `AudioTurn.text`;
 pronunciation hints derive from `EvidenceSpan` quotes; `GeneratedArtifact`'s
 `ProviderUsage`/`QaIssue` fields cover the provenance sidecar W2 emits.
+
+## Stage 2 status
+
+All adapters are implemented. The offline deterministic adapter is the only
+provider the test suite depends on (rule 4); the Gemini adapter's pure
+mappings are unit-tested offline and its live transport requires TL-side
+credential wiring — its real-endpoint behavior is UNRESOLVED until a
+TL-operated run records evidence. Whole-dialogue synthesis throws a typed
+`alignment-mismatch` (generateContent returns no per-turn timestamps); use
+per-turn `synthesizeTurn` (smallest regenerable unit).

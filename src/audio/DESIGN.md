@@ -1,7 +1,12 @@
 # Audio Overview Pipeline — Dialogue Compiler Architecture (W2)
 
-Status: DESIGN (Stage 1). Interfaces and documents only; implementation lands in
-Stage 2 after Worker 1 freezes the shared contracts (`src/contracts/`).
+Status: DESIGN (Stage 1) — IMPLEMENTED (Stage 2). Interfaces and documents
+only at Stage 1; Stage 2 implemented the pipeline per §16 (branch
+`work/wflx-w2-stage2`; see src/audio/README.md for the module map,
+tests/audio/ for the suite, artifacts/audio/ for benchmarks). Sections 3–5
+and 15 are superseded by §16 where they conflict, exactly as repositioned
+there: the plan's `audioTurns` are authoritative; W2 validates, realizes,
+times, synthesizes, mixes and measures.
 
 > **Post-freeze alignment (authoritative):** Worker 1's contract freeze exists
 > on branch `work/wflx-w1-contracts` @ `78be437` (not yet merged to main at the
