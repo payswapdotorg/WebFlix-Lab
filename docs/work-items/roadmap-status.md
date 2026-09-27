@@ -1,6 +1,6 @@
 # TL #2 Roadmap Status — live position
 
-Updated: 2026-09-27 19:15 UTC by TL #2 (operator deadline: midnight UTC tonight).
+Updated: 2026-09-27 18:45 UTC by TL #2 (operator deadline: midnight UTC tonight).
 
 This file is the operator-visible progress surface for the work order in
 `tl2-work-order.md`. It is updated by the TL between merges; the commit
@@ -22,7 +22,7 @@ history plus `docs/evidence/registry.jsonl` remain the durable record.
 A platform-side generation outage (not fixable from this side — VPN verified
 dual-route, send path + title generation + all GET APIs healthy; the
 assistant-generation layer itself is wedged). **Cross-model probe evidence
-(18:00-18:10 UTC): GLM-5.3, GLM-5.2 AND GLM-5.3-Flash all accept prompts
+(18:00-18:14 UTC): GLM-5.3, GLM-5.2 AND GLM-5.3-Flash all accept prompts
 and never start replies — the outage spans every model, confirming it is
 platform-side, not model- or account-specific.** Doctrine per prior incidents:
 no session churn during the outage window (the platform reaps queued
