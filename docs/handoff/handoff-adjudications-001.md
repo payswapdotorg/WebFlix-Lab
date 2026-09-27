@@ -54,6 +54,10 @@ through turns, must treat it as a coverage gap. Action (TL, Phase 3):
 document this boundary in `src/contracts/README.md` alongside the v2 wave;
 no code change to W1 validation.
 
+**Status: action COMPLETE 2026-09-27 — the boundary is documented in
+`src/contracts/README.md` ("Coverage boundary semantics", commit with the
+H-2 wave); remains a v2 candidate as planned.**
+
 ## H-5 (new, informational) — AudioTurn.evidence per-claim coverage unenforced
 
 **Ruling: DOCUMENTED as a known approximation.**

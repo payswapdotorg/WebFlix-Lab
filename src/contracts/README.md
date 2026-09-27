@@ -32,8 +32,14 @@ changing worker's report (AGENTS.md drift controls); version the bundle via
   draft-2020-12 JSON Schemas for cross-worker interop
   (`bun run contracts:emit`; tests enforce byte-identical emission).
 - `fixtures/contracts/` — canonical fixtures (regenerate deterministically
-  with `bun run fixtures:gen`; tests enforce byte-identical regeneration).
-- `tests/contracts/` — red/green contract tests (58 tests).
+  with `bun run fixtures:gen`; tests enforce byte-identical regeneration):
+  hand-built ground truth (reference-messy-note source/graph, deep-dive and
+  explainer plans, minimal pair, examples) PLUS Director-emitted canonical
+  per-mode plans (`plan-audio-brief-2min` / `plan-audio-critique-5min` /
+  `plan-audio-debate-5min`, compiled by `compileOverviewPlan` with fixed
+  seeds — Phase 3 H-2; pinned fingerprints in tests/contracts/fixtures.test.ts
+  and EV-005).
+- `tests/contracts/` — red/green contract tests.
 
 ## Design decisions (justified)
 
@@ -75,6 +81,27 @@ changing worker's report (AGENTS.md drift controls); version the bundle via
 (audio: Deep Dive, Brief, Critique, Debate; video: Explainer, Short,
 Cinematic) per docs/notebooklm-overviews-research.md. The modality/mode
 correlation is enforced by the TypeScript guard.
+
+## Coverage boundary semantics (adjudication H-4, 2026-09-27)
+
+`CoverageEntry.unitIds` may cite a beat that has no grounding turn in the
+plan's `audioTurns` — **beat-only coverage is legal at the plan layer**. A
+claim covered only by a beat is expressible in a valid plan (e.g.
+video-pending or agenda-only material), and W1's plan validation accepts it
+by design.
+
+The **audio surface** — which speaks through turns — must treat beat-only
+coverage as a coverage gap: the audio QA `coverage-gap` error at the
+audio/plan boundary is correct behavior, not a defect. Surfaces interpret
+coverage through their own units; the plan layer does not force every claim
+into every modality.
+
+This boundary is documented here (doc-only ruling, no code change to W1
+validation). It is one of the consolidated v2 contract-change candidates
+(H-4 in docs/handoff/handoff-adjudications-001.md) to be revisited as a
+wave after W3 lands, alongside per-claim evidence enforcement (H-5, if the
+cross-modal QA fallback rate proves material) and stance/contestedness
+signals (H-1).
 
 ## Fixture-only success is not product parity
 
