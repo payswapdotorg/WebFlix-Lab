@@ -26,19 +26,34 @@ REPRODUCED / UNRESOLVED).
 
 - Audio determinism benchmark: present (W2 stage 2, hash-pinned). [PRESENT]
 - Video determinism benchmark: TBD (W3 delivery).
-- Cross-modal ablation series (EXP-A/EXP-V): TBD (p3b).
+- Audio-surface ablation series EXP-A-01..06: EXECUTED 2026-09-27 (EV-006;
+  9 deterministic arms + byte-identical spot-check; records in
+  docs/experiments/records/, structured twin artifacts/audio/exp-a/). [PRESENT]
+- Video-surface ablations EXP-V: TBD (W3).
+- Cross-modal (EXP-X): TBD (p3b / v2 wave).
 
 ## 4. Costs + latency
 
-- TBD (provider matrix + experiment records from p3b; stub-adapter costs
-  are deterministic and zero-value — real-adapter rows only where an
-  optional real adapter was exercised).
+- Provider matrix: DOCUMENTED (docs/reference/provider-matrix.md, EV-006)
+  — capability + determinism columns for every audio provider lane; video
+  lanes PENDING W3. [PRESENT]
+- Costs: all lab paths to date run the offline deterministic provider
+  (zero-cost, honestly labeled — not product-parity evidence); real-adapter
+  cost rows land only if/where an optional real adapter is exercised
+  (Gemini TTS live dispatch remains UNRESOLVED pending TL credential
+  wiring). Latency: run-specific measurements are recorded honestly in
+  benchmark-run.json (W2) — not byte-reproducible by design.
 
 ## 5. Failure modes
 
 - Known + documented so far: turn-over-budget Director allocation
-  (EV-005 — fix pre-staged as p3a); keyword-heuristic canonical gap
-  (EV-005, H-1 documented); planHash notes sensitivity (EV-005).
+  (EV-005 — fix pre-staged as p3a; COMPOUNDING evidence from EXP-A-05:
+  over-budget errors rise 4 -> 11 under 180 s compression, EV-006);
+  keyword-heuristic canonical gap (EV-005, H-1 documented); planHash notes
+  sensitivity (EV-005); seeded-surface non-locality under source mutation
+  (EXP-A-04 / EV-006: structure perfectly local, surfaces globally
+  reshuffled via the plan-global planHash key — v2 wave candidate C-5,
+  blocks true smallest-unit regeneration / EXP-X-02).
   TBD: video-surface failure modes (W3), integration failure modes (p3b).
 
 ## 6. Security and authorization posture
