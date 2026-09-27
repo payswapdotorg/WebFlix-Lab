@@ -37,9 +37,12 @@ Doctrine per prior incidents: no session churn during the outage window
 completion gate.
 
 While the outage holds, TL-owned Phase 3 work continues (no platform
-dependency): EXP-A done (EV-006); next TL items during continued outage:
-local-refinement loop design notes for EXP-X-02 informed by the EXP-A-04
-planHash-keying finding.
+dependency): EXP-A done (EV-006); EXP-X-02 local-refinement loop DESIGN
+NOTE done 22:55 UTC (`docs/experiments/design-exp-x-02.md` — five-step
+protocol, control/treatment arms over C-5 keying, four falsifiers).
+The TL-owned executable backlog is now EXHAUSTED: everything remaining
+is W3-gated (EXP-V, cross-modal IR, dual-modality, p3b, EXP-X-02 run) or
+operator-gated (LAB series, reference access).
 
 ## Deadline plan (midnight UTC)
 

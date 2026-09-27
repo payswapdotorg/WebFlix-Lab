@@ -68,6 +68,11 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
       the text layer by the plan-global planHash seed key (v2 contract wave
       candidate: per-turn content-keyed seeding) — the loop lands as EXP-X-02
       with the v2 wave decision, after W3.
+      DESIGN NOTE DONE 2026-09-27 22:55 UTC:
+      `docs/experiments/design-exp-x-02.md` — five-step protocol, control
+      (v1 keying) vs treatment (C-5 keying) arms, four falsifiers, station
+      quality bar (0 over-budget + non-target turns byte-identical); video
+      arm pending the W3 keying probe.
 - [x] Provider matrix doc: stub vs optional real adapters, capability
       and determinism columns — DONE (docs/reference/provider-matrix.md,
       EV-006); video lanes marked PENDING W3.
