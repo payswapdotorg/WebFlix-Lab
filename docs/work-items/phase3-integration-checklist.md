@@ -39,9 +39,15 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
       the architecture).
 - [ ] Unify artifact manifests: `GeneratedArtifact` + provenance sidecars
       from both surfaces in one registry shape.
-- [ ] Reproducibility metadata: seeds, versions (`CONTRACTS_VERSION`,
+- [x] Reproducibility metadata: seeds, versions (`CONTRACTS_VERSION`,
       StyleBible version), provider identity, tool versions in every
-      artifact manifest.
+      artifact manifest. AUDITED for the audio surface 2026-09-27:
+      `GeneratedArtifact` carries contractVersion, fixed createdAt,
+      compiler generator (name/version/seed/reproducible), per-stage
+      provider identities + versions + cost (script/speech/composition/
+      evaluation), and media sha256/size/duration; the plan sidecar carries
+      the Director generator seed — chain verified on the EXP-A artifacts.
+      Remaining: StyleBible version is video-side (PENDING W3).
 - [ ] Same-source dual-modality comparison: render audio-only vs
       video output for one fixture; tabulate deterministic QA metrics.
       (BLOCKED on W3 — video surface.)
