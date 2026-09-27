@@ -12,8 +12,8 @@ import { classifyBoundary, gapMsFor, scaledGapBounds } from '../../src/audio/tim
 import { modeProfileFor } from '../../src/audio/modes';
 import { compileAudioOverview } from '../../src/audio';
 import {
-  buildBriefPlan,
   buildShortBenchmarkPlan,
+  CANONICAL_BRIEF_PLAN,
   CANONICAL_GRAPH,
   CANONICAL_PLAN,
   CANONICAL_SOURCE,
@@ -132,7 +132,7 @@ describe('timing in the compiled pipeline', () => {
 
   test('brief gaps are visibly shorter than deep-dive gaps (H-A-01 pacing)', async () => {
     const brief = await compileAudioOverview({
-      plan: buildBriefPlan(),
+      plan: CANONICAL_BRIEF_PLAN,
       graph: CANONICAL_GRAPH,
       sources: CANONICAL_SOURCE,
       options: { seed: FIXED_SEED, now: FIXED_NOW, mastering: 'pure-ts' },

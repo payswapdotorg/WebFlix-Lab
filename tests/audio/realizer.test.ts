@@ -17,9 +17,9 @@ import { languagePackFor } from '../../src/audio/modes/language-packs';
 import { compileAudioOverview } from '../../src/audio';
 import { AudioTurnSchema } from '../../src/contracts';
 import {
-  buildBriefPlan,
-  buildCritiquePlan,
-  buildDebatePlan,
+  buildBriefStandinPlan,
+  buildCritiqueStandinPlan,
+  buildDebateStandinPlan,
   buildShortBenchmarkPlan,
   CANONICAL_GRAPH,
   CANONICAL_PLAN,
@@ -114,7 +114,7 @@ describe('realizer — canonical deep dive', () => {
 
 describe('realizer — mode registers (H-A-01/02/03 lab predicates)', () => {
   test('brief: compact headline register (H-A-01)', async () => {
-    const plan = buildBriefPlan();
+    const plan = buildBriefStandinPlan();
     const result = await compileAudioOverview({
       plan,
       graph: CANONICAL_GRAPH,
@@ -136,7 +136,7 @@ describe('realizer — mode registers (H-A-01/02/03 lab predicates)', () => {
   }, 30000);
 
   test('critique: evaluative register + verdict closing (H-A-02)', async () => {
-    const plan = buildCritiquePlan();
+    const plan = buildCritiqueStandinPlan();
     const result = await compileAudioOverview({
       plan,
       graph: CANONICAL_GRAPH,
@@ -166,7 +166,7 @@ describe('realizer — mode registers (H-A-01/02/03 lab predicates)', () => {
   }, 30000);
 
   test('debate: adversarial register with grounded positions (H-A-03)', async () => {
-    const plan = buildDebatePlan();
+    const plan = buildDebateStandinPlan();
     const result = await compileAudioOverview({
       plan,
       graph: CANONICAL_GRAPH,

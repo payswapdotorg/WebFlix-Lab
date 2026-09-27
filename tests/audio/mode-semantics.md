@@ -49,9 +49,24 @@ as collected in docs/notebooklm-overviews-research.md.
 > on the wire they map to frozen purposes per DESIGN.md §16.2 item 5, and the
 > frozen purpose always passes through unchanged. Structural mode
 > differences materialize in the PLAN (W1's Director); W2 validates, realizes
-> and flags. Canonical fixtures per mode are a HANDOFF (DESIGN.md §16.4
-> item 2) — until they exist, mode-predicate tests run against audio-local
-> stand-in plans labeled non-canonical.
+> and flags.
+>
+> **Post-H-2 update (2026-09-27, Phase 3 integration):** canonical per-mode
+> plans now exist — Director-emitted fixtures `plan-audio-brief-2min.json`,
+> `plan-audio-critique-5min.json`, `plan-audio-debate-5min.json` (frozen,
+> byte-identical regeneration, pinned fingerprints, EV-005). PLAN-STRUCTURAL
+> predicates (turn skeletons, purpose distributions, coverage compression,
+> speaker-purpose pairing, end-to-end validation) run against the canonical
+> plans. The ENRICHED-TAG predicates below still run against the labeled
+> audio-local stand-ins: the keyword heuristics (assessment/limitation/
+> verdict/position/rebuttal patterns over brief text) cannot fire on
+> Director-emitted plans because the Director's briefs are mode-agnostic —
+> the canonical critique/debate compiles honestly raise
+> `mode-semantics-missing` QA warnings documenting exactly this gap
+> (asserted in tests/audio/modes.test.ts). Plan-level stance/contestedness
+> signals remain a HANDOFF (DESIGN.md §16.4 item 1; consolidated v2 wave
+> per adjudication H-1). Stand-ins stay non-canonical and are not
+> product-parity evidence.
 
 Each hypothesis has: a product-level statement, the lab structural predicate
 (what `tests/audio` asserts on `DialogueGraph` / `AudioTurn[]` from fixture

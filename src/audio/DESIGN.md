@@ -697,6 +697,18 @@ policy remains the W2-owned tuning surface (UNRESOLVED vs product, §6).
    canonical brief/critique/debate plans over the same source graph. Until
    they exist, W2 uses audio-local stand-in fixtures labeled non-canonical
    (not product parity evidence, per tests/README.md).
+   **RESOLVED 2026-09-27 (Phase 3, adjudication H-2):**
+   `plan-audio-brief-2min.json`, `plan-audio-critique-5min.json` and
+   `plan-audio-debate-5min.json` are now canonical — Director-emitted
+   (compileOverviewPlan, fixed seeds, byte-identical regeneration enforced,
+   pinned fingerprints in tests/contracts/fixtures.test.ts, EV-005).
+   Structural mode predicates (turn skeletons, purpose distributions,
+   coverage compression, speaker-purpose pairing) run on the canonical
+   plans (tests/contracts + tests/audio/canonical-modes.test.ts); the
+   keyword-heuristic enriched-tag predicates stay on the labeled stand-ins
+   because the Director emits mode-agnostic briefs — see item 1 (H-1, v2
+   wave). Integration finding recorded there: Director tail-beat turns are
+   anchor-over-budget (tests/audio/canonical-modes.test.ts).
 3. **Interjection/backchannel turns** are absent from the canonical plan.
    If natural-conversation tissue should be audible as separate turns, the
    Director must plan them; W2 will flag their absence as an

@@ -1,0 +1,477 @@
+{
+  "recordType": "OverviewPlan",
+  "contractVersion": "1.0.0",
+  "id": "plan-messy-note-audio-brief-2min",
+  "sourceIds": [
+    "source-messy-note-redacted"
+  ],
+  "modality": "audio",
+  "mode": "brief",
+  "objective": "A 120s brief overview of Reference Fixture — Redacted Messy Note for a technical audience, grounded in 5 of 11 ranked claims.",
+  "audience": "technical",
+  "language": "en",
+  "targetDurationSeconds": 120,
+  "style": {
+    "tone": "crisp, high-signal",
+    "register": "plain-technical",
+    "pacing": "measured",
+    "speakerCount": 2
+  },
+  "coverage": {
+    "covered": [
+      {
+        "claimId": "claim-tool-catalog",
+        "role": "primary",
+        "unitIds": [
+          "beat-2",
+          "turn-2",
+          "turn-3"
+        ]
+      },
+      {
+        "claimId": "claim-infra-stack",
+        "role": "primary",
+        "unitIds": [
+          "beat-3",
+          "turn-4",
+          "turn-5"
+        ]
+      },
+      {
+        "claimId": "claim-purpose",
+        "role": "primary",
+        "unitIds": [
+          "beat-1",
+          "beat-5",
+          "beat-6",
+          "turn-1",
+          "turn-8",
+          "turn-9",
+          "turn-10"
+        ]
+      },
+      {
+        "claimId": "claim-multi-agent-orchestration",
+        "role": "primary",
+        "unitIds": [
+          "beat-4",
+          "turn-6",
+          "turn-7"
+        ]
+      },
+      {
+        "claimId": "claim-oss-runtimes",
+        "role": "supporting",
+        "unitIds": [
+          "beat-2",
+          "turn-3"
+        ]
+      }
+    ],
+    "omitted": [
+      {
+        "claimId": "claim-forecasting-projects",
+        "reason": "salience rank 6 exceeds capacity 5 at 120s (secondsPerClaim=27)"
+      },
+      {
+        "claimId": "claim-deployment-pipelines",
+        "reason": "salience rank 7 exceeds capacity 5 at 120s (secondsPerClaim=27)"
+      },
+      {
+        "claimId": "claim-audits",
+        "reason": "salience rank 8 exceeds capacity 5 at 120s (secondsPerClaim=27)"
+      },
+      {
+        "claimId": "claim-provider-integrations",
+        "reason": "salience rank 9 exceeds capacity 5 at 120s (secondsPerClaim=27)"
+      },
+      {
+        "claimId": "claim-sandbox-limits",
+        "reason": "salience rank 10 exceeds capacity 5 at 120s (secondsPerClaim=27)"
+      },
+      {
+        "claimId": "claim-credentials-redacted",
+        "reason": "salience rank 11 exceeds capacity 5 at 120s (secondsPerClaim=27)"
+      }
+    ]
+  },
+  "beats": [
+    {
+      "id": "beat-1",
+      "index": 0,
+      "title": "Opening",
+      "purpose": "Frame the overview and orient the technical audience on Reference Fixture — Redacted Messy Note.",
+      "brief": "Frame the overview and orient the technical audience on Reference Fixture — Redacted Messy Note. Stay grounded on: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "topicIds": [
+        "topic-purpose"
+      ],
+      "weight": 0.1
+    },
+    {
+      "id": "beat-2",
+      "index": 1,
+      "title": "AI tools, models and repositories",
+      "purpose": "Cover the AI tools, models and repositories material selected for this plan.",
+      "brief": "Cover the AI tools, models and repositories material selected for this plan. Stay grounded on: The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems. The catalog also includes open-source media projects, local model runtimes and model catalogs.",
+      "claimIds": [
+        "claim-tool-catalog",
+        "claim-oss-runtimes"
+      ],
+      "topicIds": [
+        "topic-tool-catalog"
+      ],
+      "weight": 0.325
+    },
+    {
+      "id": "beat-3",
+      "index": 2,
+      "title": "Infrastructure",
+      "purpose": "Cover the Infrastructure material selected for this plan.",
+      "brief": "Cover the Infrastructure material selected for this plan. Stay grounded on: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
+      "claimIds": [
+        "claim-infra-stack"
+      ],
+      "topicIds": [
+        "topic-infrastructure"
+      ],
+      "weight": 0.1583
+    },
+    {
+      "id": "beat-4",
+      "index": 3,
+      "title": "Architecture and workflows",
+      "purpose": "Cover the Architecture and workflows material selected for this plan.",
+      "brief": "Cover the Architecture and workflows material selected for this plan. Stay grounded on: The architecture section discusses multi-agent orchestration.",
+      "claimIds": [
+        "claim-multi-agent-orchestration"
+      ],
+      "topicIds": [
+        "topic-architecture-workflows"
+      ],
+      "weight": 0.1583
+    },
+    {
+      "id": "beat-5",
+      "index": 4,
+      "title": "Purpose of the note",
+      "purpose": "Cover the Purpose of the note material selected for this plan.",
+      "brief": "Cover the Purpose of the note material selected for this plan. Stay grounded on: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "topicIds": [
+        "topic-purpose"
+      ],
+      "weight": 0.1583
+    },
+    {
+      "id": "beat-6",
+      "index": 5,
+      "title": "Takeaways",
+      "purpose": "Synthesize the covered claims into closing takeaways.",
+      "brief": "Synthesize the covered claims into closing takeaways. Stay grounded on: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "topicIds": [
+        "topic-purpose"
+      ],
+      "weight": 0.1
+    }
+  ],
+  "audioTurns": [
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-1",
+      "index": 0,
+      "speaker": "Host A",
+      "speakerRole": "host-a",
+      "purpose": "framing",
+      "brief": "Open the segment and orient the listener. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b41",
+          "start": 1065,
+          "end": 1205,
+          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
+        }
+      ],
+      "beatId": "beat-1",
+      "style": {
+        "delivery": "warm, orienting"
+      },
+      "targetDurationSeconds": 12
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-2",
+      "index": 1,
+      "speaker": "Host A",
+      "speakerRole": "host-a",
+      "purpose": "framing",
+      "brief": "Open the segment and orient the listener. Anchors: The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems.",
+      "claimIds": [
+        "claim-tool-catalog"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b5",
+          "start": 252,
+          "end": 291,
+          "quote": "The source contains a mixed catalog of:"
+        }
+      ],
+      "beatId": "beat-2",
+      "style": {
+        "delivery": "warm, orienting"
+      },
+      "targetDurationSeconds": 20
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-3",
+      "index": 2,
+      "speaker": "Host B",
+      "speakerRole": "host-b",
+      "purpose": "explanation",
+      "brief": "Explain, grounded in the source. Anchors: The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems. The catalog also includes open-source media projects, local model runtimes and model catalogs.",
+      "claimIds": [
+        "claim-tool-catalog",
+        "claim-oss-runtimes"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b5",
+          "start": 252,
+          "end": 291,
+          "quote": "The source contains a mixed catalog of:"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b13",
+          "start": 426,
+          "end": 452,
+          "quote": "open-source media projects"
+        }
+      ],
+      "beatId": "beat-2",
+      "style": {
+        "delivery": "clear, expert, unhurried",
+        "emphasis": "say entity names crisply: AI video tools, voice generation, agent tool systems"
+      },
+      "targetDurationSeconds": 19
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-4",
+      "index": 3,
+      "speaker": "Host A",
+      "speakerRole": "host-a",
+      "purpose": "framing",
+      "brief": "Open the segment and orient the listener. Anchors: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
+      "claimIds": [
+        "claim-nonexistent"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b20",
+          "start": 615,
+          "end": 640,
+          "quote": "Cloudflare/object storage"
+        }
+      ],
+      "beatId": "beat-3",
+      "style": {
+        "delivery": "warm, orienting"
+      },
+      "targetDurationSeconds": 10
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-5",
+      "index": 4,
+      "speaker": "Host B",
+      "speakerRole": "host-b",
+      "purpose": "explanation",
+      "brief": "Explain, grounded in the source. Anchors: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
+      "claimIds": [
+        "claim-infra-stack"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b20",
+          "start": 615,
+          "end": 640,
+          "quote": "Cloudflare/object storage"
+        }
+      ],
+      "beatId": "beat-3",
+      "style": {
+        "delivery": "clear, expert, unhurried",
+        "emphasis": "say entity names crisply: Cloudflare, Postgres, Neon"
+      },
+      "targetDurationSeconds": 9
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-6",
+      "index": 5,
+      "speaker": "Host A",
+      "speakerRole": "host-a",
+      "purpose": "framing",
+      "brief": "Open the segment and orient the listener. Anchors: The architecture section discusses multi-agent orchestration.",
+      "claimIds": [
+        "claim-multi-agent-orchestration"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33",
+          "start": 883,
+          "end": 908,
+          "quote": "multi-agent orchestration"
+        }
+      ],
+      "beatId": "beat-4",
+      "style": {
+        "delivery": "warm, orienting"
+      },
+      "targetDurationSeconds": 10
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-7",
+      "index": 6,
+      "speaker": "Host B",
+      "speakerRole": "host-b",
+      "purpose": "explanation",
+      "brief": "Explain, grounded in the source. Anchors: The architecture section discusses multi-agent orchestration.",
+      "claimIds": [
+        "claim-multi-agent-orchestration"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33",
+          "start": 883,
+          "end": 908,
+          "quote": "multi-agent orchestration"
+        }
+      ],
+      "beatId": "beat-4",
+      "style": {
+        "delivery": "clear, expert, unhurried",
+        "emphasis": "say entity names crisply: multi-agent orchestration"
+      },
+      "targetDurationSeconds": 9
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-8",
+      "index": 7,
+      "speaker": "Host A",
+      "speakerRole": "host-a",
+      "purpose": "framing",
+      "brief": "Open the segment and orient the listener. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b41",
+          "start": 1065,
+          "end": 1205,
+          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
+        }
+      ],
+      "beatId": "beat-5",
+      "style": {
+        "delivery": "warm, orienting"
+      },
+      "targetDurationSeconds": 10
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-9",
+      "index": 8,
+      "speaker": "Host B",
+      "speakerRole": "host-b",
+      "purpose": "explanation",
+      "brief": "Explain, grounded in the source. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b41",
+          "start": 1065,
+          "end": 1205,
+          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
+        }
+      ],
+      "beatId": "beat-5",
+      "style": {
+        "delivery": "clear, expert, unhurried"
+      },
+      "targetDurationSeconds": 9
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-10",
+      "index": 9,
+      "speaker": "Host A",
+      "speakerRole": "host-a",
+      "purpose": "conclusion",
+      "brief": "Land the closing takeaway. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
+      "claimIds": [
+        "claim-purpose"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b41",
+          "start": 1065,
+          "end": 1205,
+          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
+        }
+      ],
+      "beatId": "beat-6",
+      "style": {
+        "delivery": "resolved, landing"
+      },
+      "targetDurationSeconds": 12
+    }
+  ],
+  "videoScenes": [],
+  "generator": {
+    "name": "OverviewDirector@0.1.0",
+    "version": "0.1.0",
+    "seed": "wflx-canonical-audio-brief-2min",
+    "deterministic": true
+  },
+  "createdAt": "2026-09-26T00:00:00Z",
+  "notes": "Compiled by the deterministic Overview Director. Claim coverage is budget- and salience-driven; custom instructions never change coverage."
+}

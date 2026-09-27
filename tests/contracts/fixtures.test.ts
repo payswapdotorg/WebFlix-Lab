@@ -12,6 +12,7 @@ import { describe, expect, test } from 'bun:test';
 import { readdirSync } from 'node:fs';
 import { buildAllFixtures } from './genfixtures';
 import { loadJson, validateWithJsonSchema } from './helpers';
+import { compileOverviewPlan } from '../../src/director/compiler';
 import {
   countWords,
   hasEvidenceLabel,
@@ -44,6 +45,9 @@ describe('canonical fixtures', () => {
       'generated-artifact.example.json',
       'minimal.semantic-graph.json',
       'minimal.source-artifact.json',
+      'plan-audio-brief-2min.json',
+      'plan-audio-critique-5min.json',
+      'plan-audio-debate-5min.json',
       'plan-audio-deep-dive-5min.json',
       'plan-video-explainer-7min.json',
       'reference-messy-note.semantic-graph.json',
@@ -98,6 +102,113 @@ describe('canonical fixtures', () => {
     const video = loadJson(`${FIXTURE_DIR}/plan-video-explainer-7min.json`) as OverviewPlan;
     expect(validateOverviewPlan(audio, graph, source).valid).toBe(true);
     expect(validateOverviewPlan(video, graph, source).valid).toBe(true);
+  });
+});
+
+describe('canonical per-mode plan fixtures (Director-emitted, H-2)', () => {
+  const graph = loadJson(`${FIXTURE_DIR}/reference-messy-note.semantic-graph.json`) as SemanticGraph;
+  const source = loadJson(`${FIXTURE_DIR}/reference-messy-note.source-artifact.json`) as SourceArtifact;
+  const deepDive = loadJson(`${FIXTURE_DIR}/plan-audio-deep-dive-5min.json`) as OverviewPlan;
+  const brief = loadJson(`${FIXTURE_DIR}/plan-audio-brief-2min.json`) as OverviewPlan;
+  const critique = loadJson(`${FIXTURE_DIR}/plan-audio-critique-5min.json`) as OverviewPlan;
+  const debate = loadJson(`${FIXTURE_DIR}/plan-audio-debate-5min.json`) as OverviewPlan;
+
+  /** Pinned content fingerprints (tamper-evidence; also EV-005). */
+  const FINGERPRINTS: Record<string, string> = {
+    'plan-audio-brief-2min.json': 'fb2f6133a032589f894ba7116b1a0ff5d4ad0fba164f08637e4541ab530ba462',
+    'plan-audio-critique-5min.json': '1c450ae50ce80d834bbc22fd4cb31e75c94c1b00739fac6d304188fff692763e',
+    'plan-audio-debate-5min.json': 'c2b22eb1b37b84198f65cdff1ae9e9bf988e3448b5ebaaf5b085489afb82eecb',
+  };
+
+  test('pinned fingerprints match the checked-in fixtures', async () => {
+    for (const [file, expected] of Object.entries(FINGERPRINTS)) {
+      const content = await Bun.file(`${FIXTURE_DIR}/${file}`).text();
+      expect(sha256Hex(content)).toBe(expected);
+    }
+  });
+
+  test('Director parity: recompiling each plan reproduces the fixture byte-identically', async () => {
+    const specs = [
+      { file: 'plan-audio-brief-2min.json', mode: 'brief' as const, dur: 120 },
+      { file: 'plan-audio-critique-5min.json', mode: 'critique' as const, dur: 300 },
+      { file: 'plan-audio-debate-5min.json', mode: 'debate' as const, dur: 300 },
+    ];
+    for (const spec of specs) {
+      const compiled = compileOverviewPlan({
+        sources: [source],
+        graph,
+        modality: 'audio',
+        mode: spec.mode,
+        audience: 'technical',
+        language: 'en',
+        targetDurationSeconds: spec.dur,
+        seed: `wflx-canonical-audio-${spec.mode}-${Math.round(spec.dur / 60)}min`,
+        now: '2026-09-26T00:00:00Z',
+        planId: `plan-messy-note-audio-${spec.mode}-${Math.round(spec.dur / 60)}min`,
+      });
+      const onDisk = await Bun.file(`${FIXTURE_DIR}/${spec.file}`).text();
+      expect(`${JSON.stringify(compiled, null, 2)}\n`).toBe(onDisk);
+    }
+  });
+
+  test('all three Director-emitted plans pass guard and deep validation', () => {
+    for (const plan of [brief, critique, debate]) {
+      expect(OverviewPlanSchema.safeParse(plan).success).toBe(true);
+      expect(validateOverviewPlan(plan, graph, source).valid).toBe(true);
+      expect(plan.generator.name).toBe('OverviewDirector@0.1.0');
+      expect(plan.generator.deterministic).toBe(true);
+    }
+  });
+
+  test('H-A-01 (plan level): brief compresses coverage and the turn skeleton', () => {
+    // Turn skeleton: brief uses only framing/explanation/conclusion purposes.
+    const briefPurposes = new Set(brief.audioTurns.map((t) => t.purpose));
+    for (const p of briefPurposes) {
+      expect(['framing', 'explanation', 'conclusion']).toContain(p);
+    }
+    // Deep dive carries the exploration purposes brief drops.
+    const deepPurposes = new Set(deepDive.audioTurns.map((t) => t.purpose));
+    for (const p of ['example', 'connection', 'question'] as const) {
+      expect(deepPurposes.has(p)).toBe(true);
+      expect(briefPurposes.has(p)).toBe(false);
+    }
+    // Turn count: deep dive > brief for the same source graph.
+    expect(deepDive.audioTurns.length).toBeGreaterThan(brief.audioTurns.length);
+    // Coverage: brief is a strict subset; dropped claims carry reasons.
+    const deepCovered = new Set(deepDive.coverage.covered.map((c) => c.claimId));
+    const briefCovered = new Set(brief.coverage.covered.map((c) => c.claimId));
+    expect(briefCovered.size).toBeLessThan(deepCovered.size);
+    for (const claimId of briefCovered) {
+      expect(deepCovered.has(claimId)).toBe(true);
+    }
+    expect(brief.coverage.omitted.length).toBe(deepCovered.size - briefCovered.size);
+    for (const omitted of brief.coverage.omitted) {
+      expect(omitted.reason.length).toBeGreaterThan(0);
+      expect(briefCovered.has(omitted.claimId)).toBe(false);
+    }
+  });
+
+  test('H-A-02/03 (plan level): critique and debate keep full coverage with distinct skeletons', () => {
+    for (const plan of [critique, debate]) {
+      const covered = new Set(plan.coverage.covered.map((c) => c.claimId));
+      expect(covered.size).toBe(11);
+      expect(plan.coverage.omitted.length).toBe(0);
+    }
+    // Critique and debate share the purpose multiset but invert the
+    // speaker-purpose pairing: critique's questions come from host-a with
+    // host-b clarifying; debate mirrors it (host-b interrogates, host-a
+    // clarifies). This is the structural mode difference the Director encodes.
+    const signature = (plan: OverviewPlan): string =>
+      plan.audioTurns.map((t) => `${t.speakerRole}:${t.purpose}`).join(' ');
+    expect(signature(critique)).not.toBe(signature(debate));
+    const questionSpeakers = (plan: OverviewPlan): Set<string> =>
+      new Set(plan.audioTurns.filter((t) => t.purpose === 'question').map((t) => t.speakerRole));
+    expect(questionSpeakers(critique)).toEqual(new Set(['host-a']));
+    expect(questionSpeakers(debate)).toEqual(new Set(['host-b']));
+    const clarificationSpeakers = (plan: OverviewPlan): Set<string> =>
+      new Set(plan.audioTurns.filter((t) => t.purpose === 'clarification').map((t) => t.speakerRole));
+    expect(clarificationSpeakers(critique)).toEqual(new Set(['host-b']));
+    expect(clarificationSpeakers(debate)).toEqual(new Set(['host-a']));
   });
 });
 

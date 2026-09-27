@@ -1,12 +1,21 @@
 /**
- * Audio test fixtures and stand-in plan builders (WFLX-W2, Stage 2).
+ * Audio test fixtures and stand-in plan builders (WFLX-W2, Stage 2;
+ * partially retired by the H-2 Phase 3 integration, 2026-09-27).
  *
  * Canonical inputs: the W1-frozen fixtures (plan-audio-deep-dive-5min over
- * the reference-messy-note graph). Mode stand-ins (brief / critique / debate)
- * are AUDIO-LOCAL and NON-CANONICAL: canonical per-mode plans are a HANDOFF
- * (DESIGN.md §16.4 item 2), so these stand-ins are lab scaffolding for the
- * mode-semantics predicates — NOT product-parity evidence (tests/README.md,
- * tests/audio/mode-semantics.md §0).
+ * the reference-messy-note graph) PLUS the Director-emitted canonical
+ * per-mode fixtures (plan-audio-brief-2min / plan-audio-critique-5min /
+ * plan-audio-debate-5min, compiled by compileOverviewPlan with fixed seeds —
+ * adjudication H-2, DESIGN.md §16.4 item 2 RESOLVED). Structural
+ * mode-semantics predicates run against the CANONICAL per-mode plans.
+ *
+ * The audio-local stand-in builders below (buildBriefStandinPlan etc.) remain
+ * ONLY as scaffolding for the keyword-heuristic enriched-tag predicates
+ * (assessment/limitation/verdict/position/rebuttal): those heuristics key on
+ * brief trigger words the Director does not emit, so they cannot fire on
+ * canonical plans — the gap is documented (DESIGN.md §16.4 item 1) and feeds
+ * the consolidated v2 contract wave (H-1). Stand-ins are NOT product-parity
+ * evidence (tests/README.md, tests/audio/mode-semantics.md §0).
  *
  * Stand-ins reuse the canonical graph's claims and their evidence spans, so
  * every grounding invariant holds. Mutants deliberately violate one rule at
@@ -41,6 +50,17 @@ export const CANONICAL_GRAPH: SemanticGraph = JSON.parse(
 export const CANONICAL_SOURCE: SourceArtifact = JSON.parse(
   readFileSync('fixtures/contracts/reference-messy-note.source-artifact.json', 'utf8'),
 ) as SourceArtifact;
+
+/** Canonical per-mode plans (Director-emitted, H-2): structural predicates. */
+export const CANONICAL_BRIEF_PLAN: OverviewPlan = JSON.parse(
+  readFileSync('fixtures/contracts/plan-audio-brief-2min.json', 'utf8'),
+) as OverviewPlan;
+export const CANONICAL_CRITIQUE_PLAN: OverviewPlan = JSON.parse(
+  readFileSync('fixtures/contracts/plan-audio-critique-5min.json', 'utf8'),
+) as OverviewPlan;
+export const CANONICAL_DEBATE_PLAN: OverviewPlan = JSON.parse(
+  readFileSync('fixtures/contracts/plan-audio-debate-5min.json', 'utf8'),
+) as OverviewPlan;
 
 export const FIXED_SEED = 'wflx-w2-audio-test-seed';
 export const FIXED_SEED_ALT = 'wflx-w2-audio-test-seed-alt';
@@ -192,10 +212,12 @@ export function buildStandinPlan(spec: StandinPlanSpec): OverviewPlan {
 }
 
 // ---------------------------------------------------------------------------
-// Brief stand-in (H-A-01): compact headline structure, top-k claims only.
+// Brief stand-in (H-A-01 keyword-heuristic register): compact headline
+// structure, top-k claims only. Structural predicates moved to
+// CANONICAL_BRIEF_PLAN; this builder feeds the register/enrichment tests.
 // ---------------------------------------------------------------------------
 
-export function buildBriefPlan(): OverviewPlan {
+export function buildBriefStandinPlan(): OverviewPlan {
   return buildStandinPlan({
     id: 'plan-messy-note-audio-brief-90s-standin',
     mode: 'brief',
@@ -244,10 +266,12 @@ export function buildBriefPlan(): OverviewPlan {
 }
 
 // ---------------------------------------------------------------------------
-// Critique stand-in (H-A-02): assessment/limitation/verdict structure.
+// Critique stand-in (H-A-02 keyword-heuristic register): assessment/
+// limitation/verdict structure. Structural predicates moved to
+// CANONICAL_CRITIQUE_PLAN; this builder feeds the enrichment/register tests.
 // ---------------------------------------------------------------------------
 
-export function buildCritiquePlan(): OverviewPlan {
+export function buildCritiqueStandinPlan(): OverviewPlan {
   return buildStandinPlan({
     id: 'plan-messy-note-audio-critique-300s-standin',
     mode: 'critique',
@@ -281,7 +305,10 @@ export function buildCritiquePlan(): OverviewPlan {
 }
 
 // ---------------------------------------------------------------------------
-// Debate stand-in (H-A-03): positions, rebuttals, cross-examination.
+// Debate stand-in (H-A-03 keyword-heuristic register): positions,
+// rebuttals, cross-examination. Structural predicates moved to
+// CANONICAL_DEBATE_PLAN; this builder feeds the enrichment/register tests
+// (and the red rebuttal-restatement mutant).
 // ---------------------------------------------------------------------------
 
 export interface DebateBuildOptions {
@@ -289,7 +316,7 @@ export interface DebateBuildOptions {
   readonly rebuttalRestates?: boolean;
 }
 
-export function buildDebatePlan(options: DebateBuildOptions = {}): OverviewPlan {
+export function buildDebateStandinPlan(options: DebateBuildOptions = {}): OverviewPlan {
   const restates = options.rebuttalRestates === true;
   // Grounded positions over genuinely differing claim pairs:
   //   pro  = the catalog leans open/forward-looking (oss-runtimes + forecasting)
@@ -393,7 +420,7 @@ export function mutantUngroundedFactualTurn(): OverviewPlan {
 
 /** RED: rebuttal restates the position (debate). */
 export function mutantDebateRebuttalRestatement(): OverviewPlan {
-  return buildDebatePlan({ rebuttalRestates: true });
+  return buildDebateStandinPlan({ rebuttalRestates: true });
 }
 
 /**

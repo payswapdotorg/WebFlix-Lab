@@ -52,6 +52,9 @@ const DEEP_VALIDATOR: Record<string, 'source' | 'graph' | 'plan'> = {
   's12-mention-text-mismatch.json': 'graph',
   's13-dangling-beat-ref.json': 'plan',
   's14-block-slice-mismatch.json': 'source',
+  's15-brief-unknown-claim-ref.json': 'plan',
+  's16-critique-beat-weights-not-summing.json': 'plan',
+  's17-debate-unaccounted-claims.json': 'plan',
 };
 
 function guardFor(recordType: string) {
@@ -102,7 +105,7 @@ describe('semantic mutants (deep red)', () => {
     .sort();
 
   test('the full semantic mutant corpus is present', () => {
-    expect(files.length).toBe(14);
+    expect(files.length).toBe(17);
   });
 
   const messySource = loadJson(`${FIXTURE_DIR}/reference-messy-note.source-artifact.json`) as SourceArtifact;

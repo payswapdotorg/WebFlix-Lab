@@ -23,6 +23,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { z } from 'zod';
+import { compileOverviewPlan } from '../../src/director/compiler';
 import {
   CONTRACTS_VERSION,
   countWords,
@@ -1398,6 +1399,53 @@ const experimentRecordExample: ExperimentRecord = {
 };
 
 // ---------------------------------------------------------------------------
+// Director-emitted canonical per-mode plans (H-2, adjudication
+// handoff-adjudications-001.md; DESIGN.md §16.4 item 2 resolved).
+//
+// Unlike the hand-built deep-dive/explainer fixtures above, these three are
+// compiled by the REAL Overview Director (compileOverviewPlan) over the same
+// canonical reference-messy-note source + graph, with fixed seed / now /
+// planId so regeneration is byte-identical. Structural mode semantics
+// (turn skeletons, purpose distributions, coverage compression, speaker
+// pairing) are asserted against these in tests/contracts/fixtures.test.ts and
+// tests/audio/canonical-modes.test.ts. W2's keyword-heuristic enriched-tag
+// predicates stay on the labeled stand-ins until the v2 stance wave (H-1).
+// ---------------------------------------------------------------------------
+
+interface DirectorModeSpec {
+  file: string;
+  mode: 'brief' | 'critique' | 'debate';
+  targetDurationSeconds: number;
+}
+
+const DIRECTOR_MODE_SPECS: DirectorModeSpec[] = [
+  { file: 'plan-audio-brief-2min.json', mode: 'brief', targetDurationSeconds: 120 },
+  { file: 'plan-audio-critique-5min.json', mode: 'critique', targetDurationSeconds: 300 },
+  { file: 'plan-audio-debate-5min.json', mode: 'debate', targetDurationSeconds: 300 },
+];
+
+function compileDirectorModePlan(spec: DirectorModeSpec): OverviewPlan {
+  const minutes = Math.round(spec.targetDurationSeconds / 60);
+  return compileOverviewPlan({
+    sources: [messySource],
+    graph: messyGraph,
+    modality: 'audio',
+    mode: spec.mode,
+    audience: 'technical',
+    language: 'en',
+    targetDurationSeconds: spec.targetDurationSeconds,
+    seed: `wflx-canonical-audio-${spec.mode}-${minutes}min`,
+    now: FIXED_TS,
+    planId: `plan-messy-note-audio-${spec.mode}-${minutes}min`,
+  });
+}
+
+const directorModePlans: OverviewPlan[] = DIRECTOR_MODE_SPECS.map(compileDirectorModePlan);
+const briefPlan = directorModePlans[0] as OverviewPlan;
+const critiquePlan = directorModePlans[1] as OverviewPlan;
+const debatePlan = directorModePlans[2] as OverviewPlan;
+
+// ---------------------------------------------------------------------------
 // Mutants (exactly one mutation each; red/green contract tests)
 // ---------------------------------------------------------------------------
 
@@ -1488,6 +1536,12 @@ const DEEP_MUTANTS: DeepMutantSpec[] = [
   { file: 's12-mention-text-mismatch.json', base: messyGraph, path: 'entities.13.mentions.0.text', value: 'redis', validator: 'graph', description: 'entity mention text differs from the source slice' },
   { file: 's13-dangling-beat-ref.json', base: audioPlan, path: 'audioTurns.5.beatId', value: 'beat-nonexistent', validator: 'plan', description: 'turn references a beat that does not exist' },
   { file: 's14-block-slice-mismatch.json', base: minimalSource, path: 'blocks.0.text', value: 'Alpha tools need scheduled audits', validator: 'source', description: 'block text differs from text.slice(start, end)' },
+  // Per-mode canonical-plan mutants (H-2): one rule violation on each
+  // Director-emitted plan — the guard+deep pair must reject on the
+  // compiler-emitted shapes exactly as it does on the hand-built ones.
+  { file: 's15-brief-unknown-claim-ref.json', base: briefPlan, path: 'audioTurns.3.claimIds', value: ['claim-nonexistent'], validator: 'plan', description: 'brief turn references a claim not in the graph' },
+  { file: 's16-critique-beat-weights-not-summing.json', base: critiquePlan, path: 'beats.1.weight', value: 0.05, validator: 'plan', description: 'critique beat weights no longer sum to 1' },
+  { file: 's17-debate-unaccounted-claims.json', base: debatePlan, path: 'coverage.covered.4', mode: 'delete', validator: 'plan', description: 'a graph claim is neither covered nor omitted (debate)' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -1522,7 +1576,8 @@ function assertDeepFails(name: string, result: { valid: boolean; issues: unknown
 
 function schemaForBase(base: unknown): z.ZodType {
   if (base === messyGraph || base === minimalGraph) return SemanticGraphSchema;
-  if (base === audioPlan || base === videoPlan) return OverviewPlanSchema;
+  if (base === audioPlan || base === videoPlan
+    || base === briefPlan || base === critiquePlan || base === debatePlan) return OverviewPlanSchema;
   if (base === generatedArtifactExample) return GeneratedArtifactSchema;
   if (base === experimentRecordExample) return ExperimentRecordSchema;
   return SourceArtifactSchema;
@@ -1535,6 +1590,9 @@ assertZod('messyGraph', SemanticGraphSchema, messyGraph);
 assertZod('minimalGraph', SemanticGraphSchema, minimalGraph);
 assertZod('audioPlan', OverviewPlanSchema, audioPlan);
 assertZod('videoPlan', OverviewPlanSchema, videoPlan);
+for (const [i, spec] of DIRECTOR_MODE_SPECS.entries()) {
+  assertZod(`directorModePlans[${i}] (${spec.mode})`, OverviewPlanSchema, directorModePlans[i]);
+}
 assertZod('generatedArtifactExample', GeneratedArtifactSchema, generatedArtifactExample);
 assertZod('experimentRecordExample', ExperimentRecordSchema, experimentRecordExample);
 assertDeep('messySource', validateSourceArtifact(messySource));
@@ -1543,6 +1601,12 @@ assertDeep('messyGraph', validateSemanticGraph(messyGraph, messySource));
 assertDeep('minimalGraph', validateSemanticGraph(minimalGraph, minimalSource));
 assertDeep('audioPlan', validateOverviewPlan(audioPlan, messyGraph, messySource));
 assertDeep('videoPlan', validateOverviewPlan(videoPlan, messyGraph, messySource));
+for (const [i, spec] of DIRECTOR_MODE_SPECS.entries()) {
+  assertDeep(
+    `directorModePlans[${i}] (${spec.mode})`,
+    validateOverviewPlan(directorModePlans[i] as OverviewPlan, messyGraph, messySource),
+  );
+}
 
 // Mutants must be guard-invalid (structural) or deep-invalid (semantic).
 for (const spec of STRUCTURAL_MUTANTS) {
@@ -1569,6 +1633,9 @@ export function buildAllFixtures(): Record<string, string> {
     'reference-messy-note.semantic-graph.json': messyGraph,
     'plan-audio-deep-dive-5min.json': audioPlan,
     'plan-video-explainer-7min.json': videoPlan,
+    'plan-audio-brief-2min.json': briefPlan,
+    'plan-audio-critique-5min.json': critiquePlan,
+    'plan-audio-debate-5min.json': debatePlan,
     'minimal.source-artifact.json': minimalSource,
     'minimal.semantic-graph.json': minimalGraph,
     'generated-artifact.example.json': generatedArtifactExample,
