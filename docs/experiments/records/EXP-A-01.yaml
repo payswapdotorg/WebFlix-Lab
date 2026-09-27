@@ -1,0 +1,45 @@
+id: EXP-A-01
+timestamp_utc: "2026-09-27T18:55:00Z"
+operator: tl2
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "brief vs deep-dive"
+language: "en"
+length: "120 s (brief, canonical) vs 300 s (deep-dive) + 300 s brief de-confounder arm"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-a.ts"
+  audio_seed: "wflx-exp-a-audio-seed"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-27T00:00:00Z"
+  mastering: "pure-ts"
+baseline_artifact: "artifact-exp-a-deepdive-5min-baseline"
+mutation: "output mode deep-dive -> brief (mode is a structure+duration bundle; a 300 s brief de-confounder arm separates the two)"
+artifact_under_test: "artifact-exp-a-brief-2min (canonical plan) + artifact-exp-a-brief-5min-deconfound (Director 300 s brief)"
+artifact_hash: "f35f624c0d76... (brief-2min, full sha256 in artifacts/audio/exp-a/brief-2min-canonical/artifact.json); 221637e9540d... (brief-5min)"
+observations:
+  - "Brief mode compresses by OMITTING claims, not by restructuring: 10 turns vs deep-dive 21, but the SAME 6 narrative beats; 5/11 claims covered, 6 omitted with explicit editorial reasons (REPRODUCED)."
+  - "The 300 s brief de-confounder arm isolates mode from duration: turn count stays 10 at 300 s (mode fixes the turn skeleton), coverage returns to 11/11, and speaking rate falls to 1.19 wps (turns grow longer, none added) (REPRODUCED)."
+  - "Deep-dive Director baseline (21 turns) reproduces the standing EV-005 Director turn-budget defect: 4 turn-over-budget QA errors, qa.status failed; the brief arms realize fully in budget (passed-with-issues) (REPRODUCED)."
+  - "Mode mutation reshuffles every realized turn surface (0/10 text-identical vs baseline) - expected under planHash-keyed seeded surfaces (EV-005 determinism trap); structure, not surface text, is the comparable layer (DOCUMENTED)."
+invariants:
+  - "Same source+graph, same audio seed, same fixed now across arms; determinism spot-check byte-identical (c91e72f6...)"
+  - "Beat count identical (6) across all four arms"
+differences:
+  - "turnCount 21 -> 10 (mode-driven); coverage 11/11 -> 5/11 at 120 s (duration-driven, restored to 11/11 at 300 s)"
+  - "wps 1.71 -> 2.03 (120 s brief) -> 1.19 (300 s brief)"
+  - "gaps 6655 ms -> 2276 ms (brief paces tighter)"
+hypothesis: "The brief format is a fixed low-turn-count editorial skeleton that adapts to duration by claim omission (short) or slower pacing (long), never by adding turns."
+confidence: high
+falsifier: "A brief arm (at any duration) adds turns to chase coverage, or a deep-dive arm at 120 s keeps full coverage."
+next_experiment: "EXP-A-02 (critique: does critical framing restructure or re-pair?)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a/summary.json"
+  - "artifacts/audio/exp-a/deepdive-5min-baseline/"
+  - "artifacts/audio/exp-a/brief-2min-canonical/"
+  - "artifacts/audio/exp-a/brief-5min-deconfound/"
+  - "experiments/run-exp-a.ts"

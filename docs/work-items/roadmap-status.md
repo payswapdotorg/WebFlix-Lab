@@ -1,6 +1,6 @@
 # TL #2 Roadmap Status — live position
 
-Updated: 2026-09-27 14:05 UTC by TL #2 (operator deadline: midnight UTC tonight).
+Updated: 2026-09-27 19:15 UTC by TL #2 (operator deadline: midnight UTC tonight).
 
 This file is the operator-visible progress surface for the work order in
 `tl2-work-order.md`. It is updated by the TL between merges; the commit
@@ -14,16 +14,24 @@ history plus `docs/evidence/registry.jsonl` remain the durable record.
 | 1 — W1 contracts + director | COMPLETE | PR #2 (ed6ffec), PR #4 (50e8161); station gates 128/128; EV-003 |
 | 2A — W2 audio | COMPLETE | PR #3 design (eaa1eea), PR #5 stage-2 implementation (c90bd48); gates 237/237; EV-004; HANDOFFs adjudicated (1444e10) |
 | 2B — W3 video | IN FLIGHT — queued | W3 prompt (5,570 chars) landed server-side (session b0109aaa, tab CF47FC77); held by platform-side generation outage since ~09:20 UTC (probe verdicts DOWN at 11:44, 12:15, 12:46, 13:17, 13:48, 13:57 — prompts land, assistant replies never start) |
-| 3 — TL integration | PREP + FIRST ITEMS DONE | Checklist staged (20cd14d); H-2 canonical per-mode fixtures merged (9128369, 251/251 gates, EV-005); H-4 coverage-boundary docs (e6a9b17); Director turn-budget fix pre-staged for immediate dispatch at platform recovery (EV-005 finding) |
+| 3 — TL integration | PREP + FIRST ITEMS DONE | Checklist staged (20cd14d); H-2 canonical per-mode fixtures merged (9128369, 251/251 gates, EV-005); H-4 coverage-boundary docs (e6a9b17); Director turn-budget fix pre-staged for immediate dispatch at platform recovery (EV-005 finding); **EXP-A ablation series EXECUTED on the audio surface (EV-006): 9 deterministic arms, mode/duration/language/mutation-locality answers recorded (EXP-A-01..06), experiment result registry live (docs/experiments/records/), provider matrix documented (docs/reference/provider-matrix.md)** |
 | 4 — promotion gate | PENDING | Inputs collected throughout; no promotion without TL evidence sign-off |
 
 ## Current blocker (honest state)
 
 A platform-side generation outage (not fixable from this side — VPN verified
 dual-route, send path + title generation + all GET APIs healthy; the
-assistant-generation layer itself is wedged). Doctrine per prior incidents:
+assistant-generation layer itself is wedged). **Cross-model probe evidence
+(18:00-18:10 UTC): GLM-5.3, GLM-5.2 AND GLM-5.3-Flash all accept prompts
+and never start replies — the outage spans every model, confirming it is
+platform-side, not model- or account-specific.** Doctrine per prior incidents:
 no session churn during the outage window (the platform reaps queued
 sessions under churn). W3's queued session is parked safely server-side.
+
+While the outage holds, TL-owned Phase 3 work continues (no platform
+dependency): EXP-A done (EV-006); next TL items during continued outage:
+local-refinement loop design notes for EXP-X-02 informed by the EXP-A-04
+planHash-keying finding.
 
 ## Deadline plan (midnight UTC)
 

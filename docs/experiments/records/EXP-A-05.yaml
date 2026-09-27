@@ -1,0 +1,41 @@
+id: EXP-A-05
+timestamp_utc: "2026-09-27T18:55:00Z"
+operator: tl2
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "deep-dive (fixed)"
+language: "en"
+length: "300 s -> 180 s"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-a.ts"
+  audio_seed: "wflx-exp-a-audio-seed"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-27T00:00:00Z"
+  mastering: "pure-ts"
+baseline_artifact: "artifact-exp-a-deepdive-5min-baseline"
+mutation: "target duration 300 s -> 180 s (single variable)"
+artifact_under_test: "artifact-exp-a-deepdive-3min"
+artifact_hash: "3ff928ac84df... (full sha256 in artifacts/audio/exp-a/deepdive-3min-duration/artifact.json)"
+observations:
+  - "Compression does NOT shrink the skeleton: turn count stays 21, beat count stays 6, speakers stay 2 - the Director re-weights durations per turn instead of dropping turns (REPRODUCED; 18/21 turns change structure signature purely via targetDurationSeconds)."
+  - "Compression sacrifices COVERAGE by salience: 11/11 -> 7/11 claims covered; the 4 omitted (credentials-redacted, deployment-pipelines, provider-integrations, sandbox-limits) carry explicit editorial reasons - omission is the compression mechanism, exactly as EXP-A-01's brief-at-120s showed (REPRODUCED)."
+  - "Speaking rate rises 1.71 -> 2.56 wps (+50%): remaining turns voice more words per second to hold their (shorter) slots (REPRODUCED)."
+  - "The Director turn-budget defect COMPOUNDS under compression: turn-over-budget errors rise 4 -> 11 (shorter slots cannot voice unchanged mandatory anchors); qa.status failed. Strongest evidence yet for the P3A turn-budget allocation fix (REPRODUCED, feeds EV-006)."
+invariants:
+  - "Same source+graph, same seeds, same fixed now; determinism spot-check byte-identical"
+  - "Turn/beat/speaker counts unchanged; no coverage additions"
+differences:
+  - "coverage 11/11 -> 7/11 (4 salience-driven omissions); wps 1.71 -> 2.56; over-budget turns 4 -> 11; gaps 6655 -> 6017 ms"
+hypothesis: "Duration adaptation is three-lever in fixed order: keep the skeleton, omit lowest-salience claims, raise speaking rate - and the anchor mass never shrinks (which is exactly the P3A defect)."
+confidence: high
+falsifier: "A shorter duration drops turns/beats instead of claims, or lowers speaking rate, or the over-budget count stays flat."
+next_experiment: "EXP-A-06 (language: what is preserved across languages?)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a/summary.json"
+  - "artifacts/audio/exp-a/deepdive-3min-duration/"
+  - "experiments/run-exp-a.ts"

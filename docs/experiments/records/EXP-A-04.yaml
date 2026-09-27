@@ -1,0 +1,48 @@
+id: EXP-A-04
+timestamp_utc: "2026-09-27T18:55:00Z"
+operator: tl2
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control arm; mutation arm fingerprint differs by the b30 edit)"
+selected_sources: ["source-messy-note-redacted"]
+format: "deep-dive (fixed)"
+language: "en"
+length: "300 s both arms"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-a.ts"
+  mutation_block: "b30"
+  mutation_original: "All credentials are `[REDACTED]`."
+  mutation_mutated: "All credentials are `[REDACTED]` and are rotated quarterly by the platform team."
+  chain: "MarkdownNoteAdapter -> DeterministicExtractor -> Director -> compileAudioOverview (BOTH arms; the extractor is not gold-graph-identical, so the canonical fixtures are not the control)"
+  director_seed: "wflx-exp-a-director-seed"
+  audio_seed: "wflx-exp-a-audio-seed"
+  fixed_now: "2026-09-27T00:00:00Z"
+  mastering: "pure-ts"
+baseline_artifact: "artifact-exp-a04-control-deepdive-5min"
+mutation: "one paragraph changed (block b30, feeding exactly one extractor claim)"
+artifact_under_test: "artifact-exp-a04-mut-b30-deepdive-5min"
+artifact_hash: "9255b7fc42b0... (control) vs c3cfa23dbd32... (mutated; full sha256 in artifacts/audio/exp-a/a04-*/artifact.json)"
+observations:
+  - "GRAPH LAYER - perfectly local: exactly ONE claim changed (claim-b30 statement gains the rotation policy), zero claims added/removed, zero entity/topic changes (REPRODUCED)."
+  - "PLAN LAYER - perfectly local: 0/25 turns change structure (speaker, role, purpose, claim anchors, beat assignment, target durations all identical); turn count, beat count, coverage set and total duration identical (REPRODUCED)."
+  - "TEXT LAYER - globally reshuffled: only 4/25 turns keep byte-identical realized text. The 4 stable turns are the template-only surfaces; every seeded surface choice reshuffles because the realizer keys seeded choices by (seed | planHash | turnId | slot) and ANY plan content change (here: turn briefs citing the mutated claim) changes planHash (REPRODUCED; mechanism DOCUMENTED in EV-005 determinism trap)."
+  - "The extractor-derived graph has 36 claims (vs 11 hand-grounded gold); the Director covers 12 and omits 24 with reasons at 300 s - consistent with EXP-A-05's salience-driven omission under claim abundance (DOCUMENTED)."
+  - "ARCHITECTURE FINDING for EXP-X-02: the 'regenerate the smallest failed unit' principle (AGENTS.md) is DEFEATED at the text layer by the plan-global planHash key - a one-paragraph source change invalidates every turn's surface even though structure is perfectly local. v2 contract wave candidate: per-turn content-keyed seeding (turn-local hash) to enable smallest-unit regeneration (HYPOTHESIS - v2 wave decision)."
+invariants:
+  - "Both arms identical ids/seeds/now/planId; only the b30 paragraph text differs"
+  - "Structure identical at graph and plan layers (see observations)"
+differences:
+  - "1 claim statement changed; 21/25 realized turn texts changed (seeded reshuffle); wps delta -0.017; gaps 7840 -> 7638 ms"
+hypothesis: "Source mutation impact is local at the semantic layers (graph, plan structure) and global ONLY at the seeded surface layer by construction - the construction is the v2 contract problem, not an editorial property."
+confidence: high
+falsifier: "A one-paragraph change that alters turn structure, beat count or coverage (would mean editorial impact is NOT local); or unchanged realized text across turns citing the mutated claim (would mean anchors do not propagate)."
+next_experiment: "EXP-A-05 (duration compression: what does the Director sacrifice first?)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a/summary.json"
+  - "artifacts/audio/exp-a/exp-a04-graph-diff.json"
+  - "artifacts/audio/exp-a/a04-control-deepdive-5min/"
+  - "artifacts/audio/exp-a/a04-mut-b30-deepdive-5min/"
+  - "experiments/run-exp-a.ts"

@@ -10,7 +10,8 @@
     "test": "bun test",
     "contracts:emit": "bun run src/contracts/emit-schemas.ts",
     "fixtures:gen": "bun run tests/contracts/genfixtures.ts",
-    "audio:benchmark": "bun run tests/audio/generate-benchmark.ts"
+    "audio:benchmark": "bun run tests/audio/generate-benchmark.ts",
+    "exp:a": "bun run experiments/run-exp-a.ts"
   },
   "dependencies": {
     "zod": "^4.6.5"

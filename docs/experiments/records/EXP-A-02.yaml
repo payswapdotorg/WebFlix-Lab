@@ -1,0 +1,42 @@
+id: EXP-A-02
+timestamp_utc: "2026-09-27T18:55:00Z"
+operator: tl2
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "critique vs deep-dive"
+language: "en"
+length: "300 s both"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-a.ts"
+  audio_seed: "wflx-exp-a-audio-seed"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-27T00:00:00Z"
+  mastering: "pure-ts"
+baseline_artifact: "artifact-exp-a-deepdive-5min-baseline"
+mutation: "output mode deep-dive -> critique (duration fixed 300 s; single variable)"
+artifact_under_test: "artifact-exp-a-critique-5min"
+artifact_hash: "d67082514b74... (full sha256 in artifacts/audio/exp-a/critique-5min-canonical/artifact.json)"
+observations:
+  - "Critique keeps the deep-dive's SCALE and coverage: 20 turns vs 21, same 6 beats, 11/11 claims covered, same 2 speakers (REPRODUCED)."
+  - "The structural difference is the speaker-purpose pairing, not the skeleton: 8/20 turns change structure (purpose assignments shift to the critique pairing host-a:question / host-b:critique), 12/20 keep the deep-dive structure signature (REPRODUCED)."
+  - "No argument-graph machinery beyond the pairing shift fires at plan level; W2's enriched-tag keyword heuristics cannot fire on the Director's mode-agnostic briefs (the documented H-1 gap, EV-005) so mode intent is carried by the plan skeleton alone (DOCUMENTED)."
+  - "Same Director turn-budget defect as the baseline: 4 turn-over-budget QA errors, qa.status failed (REPRODUCED; compounding evidence for the P3A fix)."
+invariants:
+  - "Same source+graph, same seeds, same fixed now; determinism spot-check byte-identical"
+  - "Coverage set identical (11/11, no additions/removals); beat count identical (6)"
+differences:
+  - "turnCount 21 -> 20; 8/20 turns re-purposed toward the critique pairing"
+  - "wps 1.71 -> 1.66; gaps 6655 -> 6197 ms (critique paces marginally tighter)"
+hypothesis: "Critical framing is a re-pairing of the SAME editorial skeleton (interrogation stance), not a different graph - structural distinctness shows up in debate, not critique."
+confidence: high
+falsifier: "A critique plan reorders beats, changes beat count, or drops/adds claims vs deep-dive."
+next_experiment: "EXP-A-03 (debate: does mode create a real argument graph?)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a/summary.json"
+  - "artifacts/audio/exp-a/critique-5min-canonical/"
+  - "experiments/run-exp-a.ts"

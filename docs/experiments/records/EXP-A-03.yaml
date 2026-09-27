@@ -1,0 +1,42 @@
+id: EXP-A-03
+timestamp_utc: "2026-09-27T18:55:00Z"
+operator: tl2
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "debate vs deep-dive"
+language: "en"
+length: "300 s both"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-a.ts"
+  audio_seed: "wflx-exp-a-audio-seed"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-27T00:00:00Z"
+  mastering: "pure-ts"
+baseline_artifact: "artifact-exp-a-deepdive-5min-baseline"
+mutation: "output mode deep-dive -> debate (duration fixed 300 s; single variable)"
+artifact_under_test: "artifact-exp-a-debate-5min"
+artifact_hash: "9e2045994d1a... (full sha256 in artifacts/audio/exp-a/debate-5min-canonical/artifact.json)"
+observations:
+  - "Debate is the STRONGEST structural mutation of the three modes: 14/20 turns change structure vs only 8/20 for critique, same 20-turn scale, same 6 beats, 11/11 coverage (REPRODUCED)."
+  - "The changed turns carry the debate pairing (host-b:question / host-a:position, plus rebuttal-purpose turns) - a plan-level argument graph exists as purpose assignments, not as extra turns (REPRODUCED)."
+  - "Same Director turn-budget defect: 4 turn-over-budget QA errors, qa.status failed (REPRODUCED)."
+  - "Mode-level purpose histogram (summary.json) shows the question/position/rebuttal families concentrated in debate vs deep-dive's exposition families (REPRODUCED)."
+invariants:
+  - "Same source+graph, same seeds, same fixed now; determinism spot-check byte-identical"
+  - "Coverage set identical (11/11); beat count identical (6); speaker count identical (2)"
+differences:
+  - "turnCount 21 -> 20; 14/20 turns structurally distinct from the deep-dive alignment"
+  - "wps 1.71 -> 1.65; gaps 6655 -> 5918 ms"
+hypothesis: "Debate mode creates a genuine argument graph by re-purposing the shared skeleton into position/rebuttal pairs - the graph is encoded in purpose assignments and speaker pairing, at fixed scale and coverage."
+confidence: high
+falsifier: "Debate turns show no rebuttal/question purposes beyond the deep-dive multiset, or debate changes beat/turn scale."
+next_experiment: "EXP-A-04 (mutation locality: does one source paragraph ripple or stay local?)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a/summary.json"
+  - "artifacts/audio/exp-a/debate-5min-canonical/"
+  - "experiments/run-exp-a.ts"

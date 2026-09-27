@@ -42,15 +42,29 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
 - [ ] Reproducibility metadata: seeds, versions (`CONTRACTS_VERSION`,
       StyleBible version), provider identity, tool versions in every
       artifact manifest.
-- [ ] Experiment result registry: extend `docs/evidence/registry.jsonl` /
-      experiment records so EXP-A/EXP-V runs land as structured records.
 - [ ] Same-source dual-modality comparison: render audio-only vs
       video output for one fixture; tabulate deterministic QA metrics.
-- [ ] Ablation runs: seeded component ablations (per EXP-A-04 mutation
-      locality and friends from the experiment matrix).
-- [ ] Local refinement tests: plan → compile → measure loop.
-- [ ] Provider matrix doc: stub vs optional real adapters, capability
-      and determinism columns.
+      (BLOCKED on W3 — video surface.)
+- [x] Experiment result registry: extend `docs/evidence/registry.jsonl` /
+      experiment records so EXP-A/EXP-V runs land as structured records.
+      DONE for the audio surface (EV-006): `docs/experiments/records/EXP-A-01..06.yaml`
+      + `experiments/run-exp-a.ts` + `artifacts/audio/exp-a/summary.json`; EXP-V
+      records land with W3.
+- [x] Ablation runs (audio surface): EXP-A-01..06 EXECUTED 2026-09-27 (EV-006)
+      — mode structure (brief/critique/debate vs deep-dive + de-confounder),
+      one-paragraph mutation locality (structure local, seeded surfaces global
+      via planHash keying — v2 wave candidate), duration compression
+      (skeleton invariant, salience omission + rate rise, P3A evidence),
+      language invariance (structure fully invariant, surface fully
+      language-specific). EXP-V ablations land with W3.
+- [ ] Local refinement tests: plan → compile → measure loop. Audio-side
+      design informed by EXP-A-04: smallest-unit regeneration is defeated at
+      the text layer by the plan-global planHash seed key (v2 contract wave
+      candidate: per-turn content-keyed seeding) — the loop lands as EXP-X-02
+      with the v2 wave decision, after W3.
+- [x] Provider matrix doc: stub vs optional real adapters, capability
+      and determinism columns — DONE (docs/reference/provider-matrix.md,
+      EV-006); video lanes marked PENDING W3.
 
 ## 3. Black-box experiment series (requires reference access)
 

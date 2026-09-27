@@ -1,0 +1,42 @@
+id: EXP-A-06
+timestamp_utc: "2026-09-27T18:55:00Z"
+operator: tl2
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "deep-dive (fixed)"
+language: "en -> es"
+length: "300 s both"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-a.ts"
+  audio_seed: "wflx-exp-a-audio-seed"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-27T00:00:00Z"
+  mastering: "pure-ts"
+baseline_artifact: "artifact-exp-a-deepdive-5min-baseline"
+mutation: "language en -> es (single variable; DirectorRequest.language and the audio pipeline's language packs)"
+artifact_under_test: "artifact-exp-a-deepdive-5min-es"
+artifact_hash: "839498495f55... (full sha256 in artifacts/audio/exp-a/deepdive-5min-es/artifact.json)"
+observations:
+  - "STRUCTURE IS FULLY LANGUAGE-INVARIANT: 0/21 turns change structure, beat count 6, coverage 11/11, speaker set and target durations identical (REPRODUCED) - the strongest invariance measured anywhere in the EXP-A series."
+  - "SURFACE IS FULLY LANGUAGE-SPECIFIC: 0/21 turns keep identical text; the ES language pack (openers/closers/connectors) fires end-to-end (REPRODUCED)."
+  - "Pacing shifts slightly: wps 1.71 -> 1.62 (the ES pack's rate constants), gaps 6655 -> 5969 ms; total duration preserved (REPRODUCED)."
+  - "Claim anchors remain ENGLISH claim statements inside ES surfaces (the graph is language-bound at extraction time; the realizer voices anchors as-is). Language-bound graphs are a v2 wave candidate: extraction per language vs translated anchors (DOCUMENTED boundary, HYPOTHESIS for the v2 decision)."
+  - "Same Director turn-budget defect: 4 over-budget turns, qa.status failed (REPRODUCED)."
+invariants:
+  - "Same source+graph, same seeds, same fixed now; determinism spot-check byte-identical"
+  - "Turn/beat/coverage/speaker structure identical; total duration identical"
+differences:
+  - "All realized text (21/21); wps -0.09; gaps -686 ms"
+hypothesis: "Language is a pure surface-layer variable in this architecture: editorial structure (skeleton, coverage, timing) is computed language-independently and only the realization layer is language-aware."
+confidence: high
+falsifier: "An ES arm that changes turn count, beat structure, coverage, or target durations; or EN text leaking into majority-ES surfaces beyond claim anchors."
+next_experiment: "EXP-V series (video surface, blocked on W3) - test whether scene structure shows the same mode/duration/language invariance pattern"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a/summary.json"
+  - "artifacts/audio/exp-a/deepdive-5min-es/"
+  - "experiments/run-exp-a.ts"
