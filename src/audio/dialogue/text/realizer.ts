@@ -159,14 +159,16 @@ function budgetFor(ctx: RealizerContext, turn: DialogueTurn): { budget: number; 
   return { budget, min, max };
 }
 
-/** Compose the core utterance (anchors + glue) for a turn family. */
+/** Compose the core utterance (anchors + glue) for a turn family.
+ * Returns both the opener-bearing core and the BARE anchor block (the last
+ * rung of the over-budget ladder — glue drops before anchors, never after). */
 function composeCore(
   ctx: RealizerContext,
   turn: DialogueTurn,
   family: TagFamily,
   anchors: readonly string[],
   pack: SurfacePack,
-): { core: string; isQuestion: boolean } {
+): { core: string; bare: string; isQuestion: boolean } {
   const key = (slot: string) => `${ctx.graph.meta.seed}|${ctx.graph.meta.planHash}|${turn.id}|${slot}`;
   const openerOptions = pack.openers[family];
   const opener = openerOptions !== undefined && openerOptions.length > 0 ? pickFor(key('opener'), openerOptions) : '';
@@ -178,9 +180,10 @@ function composeCore(
     // Short backchannels: opener only (plus a compact anchor when grounded).
     const backchannel = opener !== '' ? opener : 'Right.';
     if (anchors.length === 0) {
-      return { core: backchannel, isQuestion: false };
+      return { core: backchannel, bare: backchannel, isQuestion: false };
     }
-    return { core: `${backchannel} ${openerKeepsCapital ? asStatement(anchors[0] ?? '') : asEmbeddedFragment(anchors[0] ?? '')}`, isQuestion: false };
+    const anchored = `${backchannel} ${asEmbeddedFragment(anchors[0] ?? '')}`;
+    return { core: anchored, bare: asStatement(anchors[0] ?? ''), isQuestion: false };
   }
 
   if (family === 'question') {
@@ -193,6 +196,7 @@ function composeCore(
     const anchorBlock = `${joined} — ${tail}`;
     return {
       core: opener === '' ? sentenceCase(anchorBlock) : `${opener} ${lowerFirst(anchorBlock)}`,
+      bare: sentenceCase(anchorBlock),
       isQuestion: true,
     };
   }
@@ -206,13 +210,19 @@ function composeCore(
 
   if (family === 'transition') {
     // Transitions lean on the topical basis: "Next up: <beat title>."
-    return { core: `${opener} ${topicalBasis(ctx, turn)}.`.replace(/\s+/g, ' ').trim(), isQuestion: false };
+    const bare = `${topicalBasis(ctx, turn)}.`;
+    return {
+      core: opener === '' ? bare : `${opener} ${lowerFirst(bare)}`.replace(/\s+/g, ' ').trim(),
+      bare,
+      isQuestion: false,
+    };
   }
 
   return {
     core: opener === ''
       ? anchorBlock
       : `${opener} ${openerKeepsCapital ? anchorBlock : lowerFirst(anchorBlock)}`,
+    bare: anchorBlock,
     isQuestion: false,
   };
 }
@@ -271,7 +281,7 @@ export function realizeTurn(ctx: RealizerContext, turn: DialogueTurn, previous: 
   const { budget, min, max } = budgetFor(ctx, turn);
   const anchors = anchorStatements(ctx, turn);
 
-  const { core, isQuestion } = composeCore(ctx, turn, family, anchors, pack);
+  const { core, bare, isQuestion } = composeCore(ctx, turn, family, anchors, pack);
   const prefix = conversationalPrefix(ctx, turn, previous, pack);
   const closerOptions = pack.closers[family] ?? [];
   const evidence = evidenceQuote(ctx, turn);
@@ -281,18 +291,18 @@ export function realizeTurn(ctx: RealizerContext, turn: DialogueTurn, previous: 
       ? pickFor(key('closer'), closerOptions)
       : '';
 
-  // Fullest-first candidate levels for the over-budget ladder:
-  //   v0 = prefix + core + closer
-  //   v1 = core + closer
-  //   v2 = core (anchors + opener only; question tails stay — interrogative meaning)
-  const base = core;
-  const withCloser = closer !== '' ? `${base} ${closer}` : base;
+  // Fullest-first candidate levels for the over-budget ladder (glue drops
+  // before anchors; question tails stay — they carry interrogative meaning):
+  //   v0 = prefix + core(+closer)   v1 = core(+closer)
+  //   v2 = core                     v3 = bare anchors
+  const withCloser = closer !== '' ? `${core} ${closer}` : core;
   const v0 = prefix === '' ? withCloser : `${prefix} ${lowerFirst(withCloser)}`;
   const v1 = withCloser;
-  const v2 = base;
+  const v2 = core;
+  const v3 = bare;
 
   const wc = (text: string): number => countWords(text);
-  const candidates = [v0, v1, v2];
+  const candidates = [v0, v1, v2, v3];
   let chosen = candidates.find((cand) => wc(cand) <= max);
   let overBudget = false;
   if (chosen === undefined) {
