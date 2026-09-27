@@ -233,12 +233,12 @@ export function buildBriefPlan(): OverviewPlan {
     ],
     turns: [
       { id: 'b-turn-1', speakerRole: 'host-a', purpose: 'framing', brief: 'Frame the brief around the headline claim. Anchors: The source contains a mixed catalog of AI tools covering video, image, voice and music generation.', claimIds: ['claim-tool-catalog'], beatId: 'beat-open', targetDurationSeconds: 12 },
-      { id: 'b-turn-2', speakerRole: 'host-b', purpose: 'explanation', brief: 'State the purpose claim compactly. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning.', claimIds: ['claim-purpose'], beatId: 'beat-core', targetDurationSeconds: 15 },
+      { id: 'b-turn-2', speakerRole: 'host-b', purpose: 'explanation', brief: 'State the purpose claim compactly. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning.', claimIds: ['claim-purpose'], beatId: 'beat-core', targetDurationSeconds: 11 },
       { id: 'b-turn-3', speakerRole: 'host-a', purpose: 'question', brief: 'One compact clarifying question on infrastructure. Anchors: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers.', claimIds: ['claim-infra-stack'], beatId: 'beat-core', targetDurationSeconds: 12 },
       { id: 'b-turn-4', speakerRole: 'host-b', purpose: 'explanation', brief: 'Answer with the infrastructure claim. Anchors: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers.', claimIds: ['claim-infra-stack'], beatId: 'beat-core', targetDurationSeconds: 15 },
       { id: 'b-turn-5', speakerRole: 'host-a', purpose: 'explanation', brief: 'State the multi-agent claim compactly. Anchors: The architecture section discusses multi-agent orchestration.', claimIds: ['claim-multi-agent-orchestration'], beatId: 'beat-core', targetDurationSeconds: 15 },
       { id: 'b-turn-6', speakerRole: 'host-b', purpose: 'explanation', brief: 'State the open-source claim compactly. Anchors: The catalog also includes open-source media projects, local model runtimes and model catalogs.', claimIds: ['claim-oss-runtimes'], beatId: 'beat-core', targetDurationSeconds: 15 },
-      { id: 'b-turn-7', speakerRole: 'host-a', purpose: 'conclusion', brief: 'One takeaway from the purpose claim. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning.', claimIds: ['claim-purpose'], beatId: 'beat-close', targetDurationSeconds: 6 },
+      { id: 'b-turn-7', speakerRole: 'host-a', purpose: 'conclusion', brief: 'One takeaway from the purpose claim. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning.', claimIds: ['claim-purpose'], beatId: 'beat-close', targetDurationSeconds: 10 },
     ],
   });
 }

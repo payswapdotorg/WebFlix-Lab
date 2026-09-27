@@ -123,7 +123,10 @@ export function buildDialogueGraph(input: BuildGraphInput): DialogueGraph {
   const partial = plan.audioTurns.map((turn) => {
     const enrichedTag = deriveEnrichedTag(profile, turn.purpose, turn.brief);
     const stance = audioPlan.mode === 'debate' ? deriveStance(profile, turn.brief) : 'neutral';
-    if (stance !== 'neutral') {
+    // First non-neutral signal in plan order wins (deterministic aggregation;
+    // later turns mentioning the OPPOSING side — e.g. a con host
+    // cross-examining "the pro side" — must not flip the persona stance).
+    if (stance !== 'neutral' && !stancesByRole.has(turn.speakerRole)) {
       stancesByRole.set(turn.speakerRole, stance);
     }
     const sectionRole = sectionRoleFor(turn.beatId, beatIndex, plan.beats.length);

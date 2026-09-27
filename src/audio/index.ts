@@ -100,6 +100,8 @@ export interface CompileAudioOptions {
 }
 
 export interface AudioOverviewResult {
+  /** The compiled plan (pass-through, for convenience). */
+  readonly plan: OverviewPlan;
   readonly graph: DialogueGraph;
   /** Script-level turns: plan turns with `text` filled (contract shape). */
   readonly turns: readonly AudioTurn[];
@@ -263,6 +265,7 @@ export async function compileAudioOverview(
   });
 
   return {
+    plan,
     graph: dialogueGraph,
     turns,
     realized,

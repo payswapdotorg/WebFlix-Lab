@@ -20,7 +20,9 @@ export const DEBATE_PROFILE: ModeProfile = {
   gapScale: 0.9,
   enrichedRules: [
     // Argument family (maps to framing / clarification / question per §16.2 item 5).
-    { tag: 'position_statement', purpose: 'framing', pattern: /\bposition|argue|motion|case for|case against\b/i },
+    // NOTE: the neutral MOTION statement (framing without a side) is not a
+    // position — 'motion' alone does not fire this rule.
+    { tag: 'position_statement', purpose: 'framing', pattern: /\bposition\b|\bargue\b|\bcase for\b|\bcase against\b/i },
     { tag: 'rebuttal', purpose: 'clarification', pattern: /\brebut|counter|push back|respond to the other side\b/i },
     { tag: 'concession', purpose: 'clarification', pattern: /\bconcede|grant the point|give them\b/i },
     { tag: 'cross_examination', purpose: 'question', pattern: /\bcross-examine|cross examine|press|challenge\b/i },

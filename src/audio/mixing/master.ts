@@ -159,7 +159,10 @@ export function masterSamples(
     out[i] = (samples[i] ?? 0) * gain;
   }
 
-  const finalLufs = measureIntegratedLufs(out, sampleRate);
+  // A pure linear gain (clip-guarded above) shifts integrated loudness by
+  // exactly the applied dB — no second measurement pass needed. Unmeasurable
+  // input stays unmeasurable.
+  const finalLufs = Number.isFinite(measuredLufs) ? measuredLufs + appliedGainDb : -Infinity;
   const finalPeakDb = samplePeakDb(out);
   if (
     Number.isFinite(finalLufs) &&

@@ -209,8 +209,10 @@ function composeCore(
       : statements.map((s, i) => (i === 0 ? s : asStatement(pickFor(key(`connector-${i}`), pack.anchorConnectors) + lowerFirst(s)))).join(' ');
 
   if (family === 'transition') {
-    // Transitions lean on the topical basis: "Next up: <beat title>."
-    const bare = `${topicalBasis(ctx, turn)}.`;
+    // Transitions lean on the topical basis — but a transition that CITES
+    // claims must voice them (grounding rule: cited claims are never silent).
+    const bare =
+      anchors.length > 0 ? anchorBlock : `${topicalBasis(ctx, turn)}.`;
     return {
       core: opener === '' ? bare : `${opener} ${lowerFirst(bare)}`.replace(/\s+/g, ' ').trim(),
       bare,

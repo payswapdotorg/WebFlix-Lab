@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "test": "bun test",
     "contracts:emit": "bun run src/contracts/emit-schemas.ts",
-    "fixtures:gen": "bun run tests/contracts/genfixtures.ts"
+    "fixtures:gen": "bun run tests/contracts/genfixtures.ts",
+    "audio:benchmark": "bun run tests/audio/generate-benchmark.ts"
   },
   "dependencies": {
     "zod": "^4.6.5"
