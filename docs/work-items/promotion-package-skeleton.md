@@ -12,20 +12,30 @@ REPRODUCED / UNRESOLVED).
 - Golden reference video: IN REPO (served variant, EV-002; original pin
   preserved in the manifest awaiting operator file). [PRESENT]
 - Dual-modality comparison vs reference: TBD (Phase 3 checklist §2 item 5).
-- LAB black-box notebook series: TBD — blocked on operator Google session
-  + notebook URL (wiped by the 2026-09-27 06:15 sandbox recycle).
+- LAB black-box notebook series: **EXECUTED 2026-09-28 20:35-22:11 UTC (EV-009;
+  six probes LAB-01..06 on the real Gemini Notebook — golden Deep Dive baseline
+  20:01, mode variants Brief/Critique/Debate, Short length compression 5:18,
+  español run 17:14, b30 mutation arm 23:52, twin determinism 22:02; six
+  artifacts + hashes under artifacts/reference/lab-0X/; records in
+  docs/experiments/records/LAB-*.yaml).** [PRESENT — operator Google login
+  + VPN egress in the replay browser; notebooks 25661cd9 + twin ed804a87]
 
 ## 2. Implementation artifacts
 
 - W1 contracts + director: merged (PR #2, PR #4; EV-003). [PRESENT]
 - W2 audio compiler: merged (PR #3, PR #5; EV-004). [PRESENT]
-- W3 video pipeline: TBD (Phase 2B in flight).
-- Phase 3 integration core: TBD (p3b work order pre-staged).
+- W3 video pipeline: merged (PR #6, ba60a36, EV-007; station gates 332/332).
+  [PRESENT]
+- Director turn-budget fix (P3A): merged (PR #7, 0ecd561, EV-008; station
+  gates 338/338). [PRESENT]
+- Phase 3 integration core (p3b): IN FLIGHT (session dispatched; agent-queue
+  capacity events causing session reaps — auto-recover armed).
 
 ## 3. Benchmark results
 
 - Audio determinism benchmark: present (W2 stage 2, hash-pinned). [PRESENT]
-- Video determinism benchmark: TBD (W3 delivery).
+- Video determinism benchmark: present (W3, PR #6, EV-007; artifacts +
+  canonical fingerprints). [PRESENT]
 - Audio-surface ablation series EXP-A-01..06: EXECUTED 2026-09-27 (EV-006;
   9 deterministic arms + byte-identical spot-check; records in
   docs/experiments/records/, structured twin artifacts/audio/exp-a/). [PRESENT]

@@ -1,11 +1,9 @@
 # TL #2 Roadmap Status — live position
 
-Updated: 2026-09-28 20:20 UTC by TL #2 — Phase 3 core fix P3A MERGED (PR
-#7, 0ecd561, EV-008): Director turn-budget allocation fixed (zero
-over-budget on canonical plans + compression arm); station gates 338/338.
-WFLX-P3B (cross-modal integration + experiment series) DISPATCHED 20:15 UTC
-(session be5d9368) and generating. LAB series UNBLOCKED — operator Google
-login present in the replay browser; LAB-01 probe starting.
+Updated: 2026-09-28 22:20 UTC by TL #2 — LAB SERIES COMPLETE (6/6 probes,
+EV-009; six real-product artifacts + hashes captured). P3A MERGED (PR #7,
+0ecd561, EV-008, gates 338/338). WFLX-P3B dispatch fighting through an
+agents-queue capacity event (reaps; auto-recover armed, 6 attempts).
 
 This file is the operator-visible progress surface for the work order in
 `tl2-work-order.md`. It is updated by the TL between merges; the commit
@@ -46,26 +44,35 @@ v2 contract wave: (1) shared rate-model/mass-budget contract surface,
 (2) EXP-A re-run under the fixed Director (artifacts reflect pre-fix
 behavior), (3) EXP-A-05 skeleton-invariant + speaking-rate re-baseline.
 
-Remaining platform-gated: none. Operator-gated: the LAB series (§3)
-required Google login at notebook.google.com — **LOGIN NOW PRESENT**
-(2026-09-28 ~19:55 UTC, operator confirmed in the replay browser); the six
-pre-staged probes (LAB-01..06 per docs/experiments/lab-series-runbook.md,
-priority LAB-01 > LAB-05 > LAB-02 > LAB-06 > LAB-04 > LAB-03) run as
-TL-driven browser work in parallel with the P3B worker wave.
+Remaining platform-gated: the agents-queue capacity event blocking P3B's
+generation start (reaps; auto-recover re-dispatches, counter-tracked).
+Operator-gated: NONE — the LAB series (§3) operator gate CLEARED 2026-09-28
+(Google login + VPN egress; six probes EXECUTED, EV-009; records in
+docs/experiments/records/LAB-*.yaml; artifacts under artifacts/reference/).
+Real-product reference evidence for Phase 4 is now PRESENT in the promotion
+package skeleton.
 
 ## Wave plan (standing directive: until roadmap complete, no early returns)
 
-1. WFLX-P3B (session be5d9368) is generating — the wave watch (90s cycles,
-   batch-truth + DOM + git signals) flags delivery; on stall the continue
-   protocol re-fires context-correcting continuations.
+1. WFLX-P3B is dispatch-cycling through an agents-queue capacity event —
+   the wave watch + reap auto-recover (one-shot counter) re-dispatch until
+   generation starts; then batch-truth + DOM + git signals flag delivery.
 2. On P3B delivery: harvest (server-side batch read) →
    `scripts/station-review.sh <branch> <pr>` → approve/require-changes →
    merge → EV record → TL-owned Phase 3 remainder (EXP-V records landing,
    EXP-X-02 run, cross-modal IR checks per checklist §2) as worker waves
    or TL-direct commits per ownership; P3A HANDOFFs adjudicated in the v2
    contract wave.
-3. LAB series (TL+operator browser work, parallel to the P3B wave):
-   LAB-01 golden Deep Dive Audio capture first, then the priority order —
-   each run lands a docs/experiments/records/LAB-XX.yaml per the protocol.
-4. Phase 4 promotion gated on LAB-series real-reference evidence +
-   TL evidence sign-off.
+3. ~~LAB series~~ COMPLETE (EV-009): golden Deep Dive 20:01; mode variants
+   Brief 1:33 / Critique 16:59 / Debate 17:29 (restructure-not-reskin);
+   Short 5:18 (3.78x depth compression, structure preserved); español
+   17:14 (native regeneration, skeleton invariant); b30 mutation 23:52
+   (global re-plan, mutation voiced); twin 22:02 (run-to-run stochasticity —
+   macro pattern is the only stable layer). Key product-truth deltas vs our
+   lab: real product is surface-stochastic (vs our byte-determinism),
+   globally re-plans on ANY change (vs our plan-local mutation), compresses
+   depth not coverage (vs our salience-omission) — feeds C-5 and the v2
+   seeding philosophy.
+4. Phase 4 promotion gated on: p3b delivery (integration core) + dual-modality
+   comparison + TL evidence sign-off against the promotion package (LAB
+   real-reference evidence now PRESENT).
