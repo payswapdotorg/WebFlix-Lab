@@ -64,7 +64,17 @@ REPRODUCED / UNRESOLVED).
   (EXP-A-04 / EV-006: structure perfectly local, surfaces globally
   reshuffled via the plan-global planHash key — v2 wave candidate C-5,
   blocks true smallest-unit regeneration / EXP-X-02).
-  TBD: video-surface failure modes (W3), integration failure modes (p3b).
+  Video-surface failure modes (W3, EV-007 — POST-W3 UPDATE): none observed
+  on the two benchmarks (QA pass, 0 issues, 13/13 + 15/15 scene claims);
+  documented deferrals instead of failures: real narration TTS (W2
+  voice-surface ownership), speaker-aware narration variants + per-scene
+  illustration quality tuning (need real reference-pipeline evidence);
+  planHash-keyed seeded surfaces reshuffle globally on any plan change
+  (same C-5 defect class as audio — storyboard keys on
+  seed|planHash|mode|sceneId; v2 wave candidate covers both surfaces).
+  The reference video itself shows PAT plaques in segments 11/17 (in-frame
+  credential warnings) — documented, treated as content, not a defect.
+  TBD: integration failure modes (p3b).
 
 ## 6. Security and authorization posture
 
