@@ -100,3 +100,94 @@ p3a work order (Director turn-budget allocation, pre-staged worker prompt).
 - The EXP-A runner (`experiments/run-exp-a.ts`) is the regression harness:
   its per-arm media hashes must be reproduced byte-identically after any
   candidate that claims diff-semantics-only changes (C-5).
+
+---
+
+# ADDENDUM 2026-09-28 (TL #2) — post-W3 / post-P3A / post-LAB decision inputs
+
+Status: W3 MERGED (PR #6, EV-007); P3A MERGED (PR #7, EV-008); EXP-A
+re-baselined under the fixed Director (836aead); LAB series EXECUTED
+(EV-009). The register below updates every open decision input and adds
+the new candidates from the merged surfaces + the real-product probes.
+
+## Resolved decision inputs
+
+- **C-5's "Decision inputs from W3" — RESOLVED: the video surface shares
+  the plan-global keying.** `src/video/storyboard/compiler.ts` keys every
+  stochastic choice on `${seed}|${planHash}|${mode}|${scene.id}` (line
+  480): the scene.id is unit-local, but the planHash is plan-global — a
+  one-claim change reshuffles every scene's seeded choices, exactly the
+  audio defect class. **C-5 must cover BOTH surfaces in the one wave**
+  (audio realizer key derivation + video storyboard key derivation), with
+  the EXP-A runner AND the video determinism benchmark as the regression
+  harnesses (byte-identical full-artifact hashes must reproduce).
+- **C-5 posture nuance from LAB-05/LAB-06 (EV-009): the real product has
+  NO turn-local stability either** — it globally re-plans on any change
+  (mutation or mere re-run: title/duration/hook all differ on identical
+  input). C-5's value is OUR lab's diff hygiene and the
+  smallest-unit-regeneration architecture rule (AGENTS.md), NOT product
+  parity. Keep INCLUDE posture; cite EV-009 alongside EV-006 in the wave
+  commit.
+- **C-4 input unchanged**: no W3 golden-reference turn-taking annotation
+  landed; LAB-01/02 ASR samplings show inter-host acknowledgment tokens
+  ('Exactly', 'Yeah') at high cadence — supports the candidate but is not
+  the annotation evidence the H-3 ruling requires. Stays out of v2.
+
+## New candidates
+
+### C-7 — shared turn-rate/mass-budget contract surface (from P3A handoff 1)
+
+- **What**: expose the turn rate model + anchor mass budgets in the shared
+  contracts so the Director and W2 consume ONE authoritative rate model
+  (today `TURN_PLANNING_RATE_WPS` and `FACTUAL_TURN_PURPOSES` in
+  src/director/compiler.ts are documented mirrors of W2-internal constants
+  in src/audio/modes/* and src/audio/dialogue/types.ts).
+- **Evidence**: EV-008 — the mirror is conservative today (2.5 wps vs the
+  tightest mode ceiling 2.87 wps), but a W2 retune could silently widen
+  the gap. LAB-03 adds product-truth: the real Length control scales
+  per-topic depth within rate ceilings — a shared rate model is the
+  contract-level surface for that behavior.
+- **Default posture**: INCLUDE (small, well-evidenced, one authority).
+
+### C-8 — video narration field + motion params + narration routing (from W3 handovers)
+
+- **What**: (a) VideoScene per-scene narration text (today narration lives
+  in W3's own IR keyed by narrationRef); (b) SceneMotion/SceneTransition
+  params vs StyleBible-held durations; (c) narration routing to the W2
+  voice surface.
+- **Evidence**: EV-007 handover items; (c) is the Phase 3 integration core
+  (p3b scope — its cross-modal IR compliance task will surface the real
+  shape).
+- **Default posture**: WAIT for p3b's cross-modal IR delivery; adjudicate
+  (a)/(b) with its HANDOFF entries in the same ruling.
+
+### C-9 — styleBibleVersion emission in video artifact manifests (from the post-W3 reproducibility audit)
+
+- **What**: src/video/artifacts.ts does not emit STYLE_BIBLE_VERSION in
+  the GeneratedArtifact manifest (reproducibility metadata checklist item).
+- **Evidence**: TL audit 2026-09-28 (e8ea606) — manifests carry
+  contractVersion + per-stage provider identities but not the style bible
+  version; STYLE_BIBLE_VERSION='1.0.0' exists in src/video/style-bible.ts.
+- **Default posture**: INCLUDE (mechanical, rides the version bump).
+
+### C-10 — brief-mode monologic restructure (from LAB-02 product truth)
+
+- **What**: the real Brief is a SINGLE narrator with enumerated structure
+  (First/Second/Finally, ~1.5 min); our brief skeleton is a fixed 10-turn
+  two-speaker dialog. Candidate: monologic brief mode (single speaker,
+  enumeration markers) in the v2 mode-semantics surface.
+- **Evidence**: EV-009 LAB-02 (93.92 s single-voice Brief on the same
+  source vs our 120 s 10-turn dialog).
+- **Default posture**: DOCUMENTED candidate — decide with the v2 wave
+  scope ruling (it changes canonical fixtures + brief mode semantics;
+  the strongest product-truth delta in the register).
+
+## Standing inputs (unchanged)
+
+- C-1 (stance flags): wait for p3b cross-modal scene-typing needs.
+- C-2 (evidence enforcement): wait for the p3b cross-modal QA measurement.
+- C-3 (doc-only): rides the bump as a version-stamped note.
+- C-6 (language-bound graphs): LAB-04 confirms the real product does
+  NATIVE regeneration (not anchor code-switching) — raises the editorial
+  priority if multi-language output becomes a research line; default
+  unchanged.
