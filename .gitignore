@@ -6,3 +6,5 @@ coverage/
 !.env.example
 .DS_Store
 dist/
+artifacts/reference/lab-01/Blueprint_for_a_Redacted_AI_City.m4a
+artifacts/reference/lab-05/The_Architecture_of_Autonomous_AI_Systems.m4a

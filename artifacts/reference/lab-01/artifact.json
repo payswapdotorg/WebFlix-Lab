@@ -1,0 +1,20 @@
+{
+  "id": "LAB-01",
+  "kind": "real-product Deep Dive Audio Overview (golden baseline)",
+  "source": "fixtures/reference-messy-note-redacted.md (sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47)",
+  "captured_utc": "2026-09-28T20:35:06Z",
+  "ready_utc": "~2026-09-28T20:42:00Z",
+  "file": "Blueprint_for_a_Redacted_AI_City.m4a",
+  "sha256": "eb544895237d7e1013fe4dc8e7c50dd54b24bf755c696f2daaf92c8508c032a0",
+  "bytes": 38680028,
+  "container": "m4a/mp4",
+  "audio": {"codec": "aac", "profile": "LC", "sample_rate": 44100, "channels": 2, "bit_rate": 256000},
+  "duration_seconds": 1201.82,
+  "title": "Blueprint for a Redacted AI City",
+  "format": "Deep Dive",
+  "length_setting": "Default",
+  "language": "English",
+  "hosts": 2,
+  "asr_sampling": "0:00-2:28, 9:30-12:00, 17:30-20:01 (z-ai ASR, 28 s chunks); transcripts in /tmp/lab01_chunks (ephemeral) summarized into docs/experiments/records/LAB-01.yaml observations",
+  "provenance": "operator Google session in replay browser, VPN egress; downloaded via player more-menu -> Download"
+}

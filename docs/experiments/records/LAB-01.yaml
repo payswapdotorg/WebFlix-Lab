@@ -1,0 +1,48 @@
+id: LAB-01
+timestamp_utc: "2026-09-28T20:35:06Z"
+operator: tl2+operator
+surface: audio
+reference_notebook: "WFLX-LAB-01 (dedicated; id 25661cd9)"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (fixtures/reference-messy-note-redacted.md, 1213 bytes)"
+selected_sources:
+  - "# Reference Fixture — Redacted Messy Note (ingested via in-app 'Copied text' paste channel; drop-only upload dialog accepts no synthetic/CDP file events — OBSERVED UI truth)"
+format: "Deep Dive (dialog default; all four formats exposed in one dialog: Deep Dive / Brief / Critique / Debate)"
+language: "English (dialog default; language selector present)"
+length: "Default (dialog exposes Short / Default / Long)"
+visual_style: ""
+custom_prompt: "" # focus field left empty (baseline)
+other_config:
+  notebook_url_env: "GEMINI_REFERENCE_NOTEBOOK_URL (local env only, never in git)"
+  account: "operator Google session in replay browser (PRO tier); VPN egress required — direct egress yields location=unsupported"
+  generation_start: "2026-09-28T20:35:06Z (Generate now clicked)"
+  generation_ready: "~2026-09-28T20:42Z (~7-8 min wall-clock for a 1-source 20-min artifact)"
+  player_ui: "waveform player, 1.0x/replay_10/forward_10, 'Interactive mode' chip present; download via player more-menu -> Download (.m4a)"
+baseline_artifact: ""
+mutation: ""
+artifact_under_test: "artifacts/reference/lab-01/Blueprint_for_a_Redacted_AI_City.m4a"
+artifact_hash: "sha256:eb544895237d7e1013fe4dc8e7c50dd54b24bf755c696f2daaf92c8508c032a0"
+observations:
+  - "OBSERVED: artifact is a single stereo AAC (.m4a) file, 256 kbps, 44.1 kHz, duration 1201.82 s (20:01) for the 1-source 1213-byte fixture at Default length."
+  - "OBSERVED: exactly TWO hosts in lively conversation; rapid back-and-forth banter with acknowledgment tokens ('Exactly', 'Yeah', questions) — matches the Deep Dive format description 'A lively conversation between two hosts, unpacking and connecting topics'."
+  - "OBSERVED: opening (~first 90 s) = hook ('Imagine a digital city...') + explicit source-title reference ('titled # Reference Fixture Redacted: Messy Note') + framing ('three distinct strata') roadmap."
+  - "OBSERVED: the episode follows the source's own three-section structure (creative tools -> infrastructure -> operational architecture) — the hosts name Section 3 explicitly and walk the sections in order."
+  - "OBSERVED: hosts re-interpret the redaction ('credentials blacked out... structural secrets left wide open') — the redaction is discussed AS CONTENT, i.e. source-level features surface as episode framing."
+  - "OBSERVED: middle segment (~9:30-12:00) is section-by-section deep dive with analogies ('robot middle managers'), rhetorical questions, and inter-host elaboration pairs."
+  - "OBSERVED: closing (~17:30-20:01) is a synthesis recap of the three strata + listener-facing takeaway ('the next time you use an AI tool...') — a conclusion beat, not a trailing cliff."
+  - "OBSERVED (ASR rough transcript, 3 x 150 s sampled at 0:00/9:30/17:30): alternation cadence roughly 2-6 host turns per topic beat; no single turn exceeds ~40 s in the sampled windows."
+  - "OBSERVED: UI exposes duration control (Short/Default/Long) and language selection in the SAME dialog as the four formats — duration/format mutation is UI-exposed, directly enabling LAB-02/LAB-03."
+  - "OBSERVED: generation latency ~7-8 min; artifact title is model-generated from content ('Blueprint for a Redacted AI City'), not the source filename."
+invariants:
+  - "Artifact is downloadable as a self-contained file (no DRM wrapper) with stable bytes (sha256 recorded)."
+  - "Format set exposed: Deep Dive / Brief / Critique / Debate — the SAME four-mode surface our EXP-A-01..03 axis models."
+differences: []
+hypothesis: "Real-product Deep Dive default length for a small single-source notebook is ~20 min with two hosts and a hook->sections->synthesis macro-structure; our canonical deep-dive skeleton (turn-taking + section walk + conclusion) is qualitatively aligned but shorter (5 min) and mechanically structured."
+confidence: medium
+falsifier: "A repeat Deep Dive on the same source (LAB-06 twin) that yields a different host count, wildly different duration, or a different macro-structure would falsify the structural-regularity reading."
+next_experiment: "LAB-05 (single source paragraph edit + regenerate) for mutation locality; LAB-02 Brief/Critique/Debate variants for mode-restructure vs re-skin."
+status: observed
+evidence_paths:
+  - artifacts/reference/lab-01/Blueprint_for_a_Redacted_AI_City.m4a
+  - artifacts/reference/lab-01/artifact.json
+  - fixtures/reference-messy-note-redacted.md
+  - docs/experiments/lab-series-runbook.md

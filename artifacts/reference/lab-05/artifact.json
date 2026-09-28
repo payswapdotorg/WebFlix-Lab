@@ -1,0 +1,20 @@
+{
+  "id": "LAB-05",
+  "kind": "real-product Deep Dive Audio Overview (b30 mutation arm)",
+  "source": "b30-mutated fixture (sha256:6f3754bc3b37f62863ffa269d577ba1641eaacd17fce632367dcb122ee0d830c)",
+  "captured_utc": "2026-09-28T20:53:36Z",
+  "ready_utc": "~2026-09-28T21:01:00Z",
+  "file": "The_Architecture_of_Autonomous_AI_Systems.m4a",
+  "sha256": "6431109e9fd670bc6595e39041b4ea6cb68f626c120aa98c12c1bba79ef00c70",
+  "bytes": 46096306,
+  "container": "m4a/mp4",
+  "audio": {"codec": "aac", "profile": "LC", "sample_rate": 44100, "channels": 2, "bit_rate": 256000},
+  "duration_seconds": 1432.25,
+  "title": "The Architecture of Autonomous AI Systems",
+  "format": "Deep Dive",
+  "length_setting": "Default",
+  "language": "English",
+  "hosts": 2,
+  "control": "LAB-01 (1201.82 s, 38.7 MB, 'Blueprint for a Redacted AI City') — delta +230.4 s (+19%), title changed, surface fully reshuffled, b30 content voiced in closing",
+  "provenance": "same notebook as LAB-01 (25661cd9), source remove+re-add (UI has no content edit for pasted sources), operator Google session, VPN egress"
+}
