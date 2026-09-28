@@ -11,16 +11,24 @@
     "contracts:emit": "bun run src/contracts/emit-schemas.ts",
     "fixtures:gen": "bun run tests/contracts/genfixtures.ts",
     "audio:benchmark": "bun run tests/audio/generate-benchmark.ts",
-    "exp:a": "bun run experiments/run-exp-a.ts"
+    "exp:a": "bun run experiments/run-exp-a.ts",
+    "video:benchmark": "bun run tests/video/generate-benchmark.ts"
   },
   "dependencies": {
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@remotion/bundler": "4.0.529",
+    "@remotion/renderer": "4.0.529",
     "@types/bun": "^1.4.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "eslint": "^10.11.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "remotion": "4.0.529",
     "typescript": "^5.9.0",
     "typescript-eslint": "^8.70.1"
   }
