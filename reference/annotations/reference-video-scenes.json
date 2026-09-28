@@ -1,0 +1,2640 @@
+{
+  "recordType": "ReferenceVideoAnnotation",
+  "annotationVersion": "1.0.0",
+  "artifactId": "reference-video-overview-001",
+  "variant": "served",
+  "sha256": "f1241c219a42906d35030eb01f51be490f5ec95ba0682d4b1c629ee88031768b",
+  "durationSeconds": 415.613968,
+  "video": {
+    "width": 1280,
+    "height": 720,
+    "frameRate": 30,
+    "frames": 12468
+  },
+  "audio": {
+    "codec": "aac",
+    "channels": 1,
+    "sampleRateHz": 44100
+  },
+  "method": {
+    "segmentation": "OBSERVED: ffmpeg 7.1.5 scdet-style scene filter on 320x180 downscale, threshold 0.2, full duration; 48 cut points, 49 segments, no gaps",
+    "frames": "midpoint frame per segment extracted at 640x360 (ffmpeg fast seek); vision-model descriptions (glm-4.5v via z-ai CLI) with hand curation and redaction",
+    "pixelMetrics": "PIL 11.3 median-cut 8-color quantization share + Rec.601 mean luma per midpoint frame",
+    "motion": "5 fps 160x90 grayscale consecutive-frame mean abs diff; interior mean per segment; cut classification by diff profile (spike vs ramp)",
+    "narration": "ASR transcription of the AAC mono track in 17 silence-aligned chunks (max 30 s each; service limit); narration pauses via ffmpeg silencedetect -38dB/0.45s",
+    "alignment": "distance from each scene-cut time to the nearest narration-pause boundary",
+    "caveats": "vision-model text transcription is instrument output, not ground truth; only clearly-legible designed/structured text is committed as exactTexts; credential-like in-video values are never transcribed (marked sensitive)"
+  },
+  "globalObservations": [
+    {
+      "label": "OBSERVED",
+      "finding": "Dark slate/graphite matte background dominates: #3e4346/#3f4447 shares of 0.33-0.37 in the darkest segments; lighter paper tones (#e3e1d6, #e9eaea) appear in early hero/paper scenes."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Cyan/teal is the primary accent system (connection lines, glows, outlines); orange/gold secondary (energy, rotation); red reserved for warnings/errors; purple/violet for LLM/AI nodes; blue in final branding."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Typography is clean sans-serif, white/light-grey; ALL-CAPS for headers and labels, sentence-case for descriptions; crisp vector-like rendering distinct from stylized text inside illustrations."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Text appears in two classes: designed/structured (crisp, layout-aligned: labels, titles, numbered steps, end-card) and inside-illustration (stylized pseudo-text, often code-like, not reliably legible)."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Recurring motifs: central knot/geometric controller logo, hexagonal nodes, glowing connection lines, isometric technical hardware, dashed circular pathways, split-screen comparisons."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Composition is center-weighted; radial/symmetric arrangements for networks and loops; negative space isolates the technical subject; split-screen for contrasts (User A/B, FLAT vs CLOUD)."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Transitions: 25 crossfades vs 18 hard cuts among 48 changes (52% crossfade); soft changes otherwise. Crossfade is the dominant scene transition."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Motion: 37 of 49 segments are visually static at 5 fps sampling (interior mean frame-diff < 0.5); 5 high-motion segments are concentrated at the opening hero and animated-diagram moments; motion is deliberate, not continuous."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Narration-led scene changes: 36/48 cuts (75%) fall within 0.25 s of a narration pause; median cut-to-pause distance 0.128 s; 81% within 0.5 s."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Narration pauses are short: 54 pauses, mean 0.74 s, max 3.41 s (-38 dB, min 0.45 s)."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Scene lengths: min 2.0 s, max 27.4 s, mean 8.5 s, median ≈ 7.47 s; scene density follows narration rather than a fixed cadence."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Visual-role distribution (midpoint sampling): metaphor-illustration 22, architecture-diagram 11, code-panel 5, hero-illustration 3, workstation-scene 3, callout 2, data-chart 2, process-flow 1, title-card 1 (roles overlap; classification is per-sample)."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Exact labels recur verbatim across scenes for the same concept (e.g., User A/User B, FLAT DATABASE/CLOUD CLUSTER), consistent with structured/deterministic label generation."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "Closing card is product branding: large clean white sans \"Gemini Notebook\" on charcoal with blue-violet gradient logo."
+    },
+    {
+      "label": "OBSERVED",
+      "finding": "A code-like credential-warning visual appears (segments 11 and 17: PERSONAL ACCESS TOKEN plaque, terminal with token-like value); values are not reproduced in this annotation."
+    }
+  ],
+  "coverage": {
+    "segments": 49,
+    "firstStart": 0.0,
+    "lastEnd": 415.613968,
+    "gaps": [],
+    "overlaps": [],
+    "fullDuration": true
+  },
+  "scenes": [
+    {
+      "index": 0,
+      "startSeconds": 0.0,
+      "endSeconds": 10.233,
+      "durationSeconds": 10.233,
+      "transitionIn": {
+        "type": "none (video start)",
+        "frameDiffAtCut": null
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 8.73,
+        "level": "high",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "hero-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "centered subject on a textured background with faint circular and arc markings",
+      "diagramPattern": "none",
+      "colorNotes": "Background is a neutral grayish tone (#A0A0B0 approx). The central object features metallic grays, glowing cyan (#00FFFF) and orange/yellow (#FFAA00) light effects.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#747a7a",
+          "share": 0.2109
+        },
+        {
+          "hex": "#737c7b",
+          "share": 0.1974
+        },
+        {
+          "hex": "#737b7a",
+          "share": 0.1936
+        },
+        {
+          "hex": "#707978",
+          "share": 0.1279
+        }
+      ],
+      "meanLuma601": 122.9,
+      "narrationCue": "Building a modern application through AI requires feeding a language model thousands of API keys, routing instructions and deployment tokens simultaneously. Engineering teams are m",
+      "narrationPauseDistanceSeconds": null,
+      "annotationNote": "Opening hero: metallic gyroscope/polyhedron \"agent brain\" with cyan and orange energy rings on grey sketch-lined ground; heavy motion (intro).",
+      "sensitive": false
+    },
+    {
+      "index": 1,
+      "startSeconds": 10.233,
+      "endSeconds": 16.633,
+      "durationSeconds": 6.4,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 85.2
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.15,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "Full-bleed perspective view of a server room, with the primary subject (a glowing server rack) positioned slightly right of center.",
+      "diagramPattern": "None",
+      "colorNotes": "Background is a warm off-white/cream paper tone. The illustration is primarily graphite gray with a vibrant cyan/turquoise glow (#00FFFF) on the central server rack.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#e3e1d6",
+          "share": 0.1908
+        },
+        {
+          "hex": "#e8e6dd",
+          "share": 0.1494
+        },
+        {
+          "hex": "#8ea199",
+          "share": 0.1341
+        },
+        {
+          "hex": "#6f7771",
+          "share": 0.1298
+        }
+      ],
+      "meanLuma601": 179.0,
+      "narrationCue": "Building a modern application through AI requires feeding a language model thousands of API keys, routing instructions and deployment tokens simultaneously. Engineering teams are m",
+      "narrationPauseDistanceSeconds": 0.218,
+      "annotationNote": "Paper-toned hero sheet with drawn UI constellation; light palette (#e3e1d6).",
+      "sensitive": false
+    },
+    {
+      "index": 2,
+      "startSeconds": 16.633,
+      "endSeconds": 20.967,
+      "durationSeconds": 4.334,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 124.6
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.12,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "workstation-scene",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "centered subject on a desk, slightly off-center right, with surrounding environmental context",
+      "diagramPattern": "code editor panel",
+      "colorNotes": "Dark, desaturated background (grays and browns). The monitor screen is a dark green (#1a3c2a) with bright green phosphor text (#4ade80). The computer casing is a textured off-white/gray.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#494942",
+          "share": 0.1364
+        },
+        {
+          "hex": "#292a24",
+          "share": 0.135
+        },
+        {
+          "hex": "#9b9d90",
+          "share": 0.1305
+        },
+        {
+          "hex": "#1e221b",
+          "share": 0.1247
+        }
+      ],
+      "meanLuma601": 61.8,
+      "narrationCue": "Building a modern application through AI requires feeding a language model thousands of API keys, routing instructions and deployment tokens simultaneously. Engineering teams are m",
+      "narrationPauseDistanceSeconds": 3.663,
+      "annotationNote": "Chaotic retro terminal windows (green monospace pseudo-text: DIR /P, AUTOEXEC.BAT) as clutter metaphor; pseudo-text inside illustration.",
+      "sensitive": false
+    },
+    {
+      "index": 3,
+      "startSeconds": 20.967,
+      "endSeconds": 24.167,
+      "durationSeconds": 3.2,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 57.3
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.1,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "code-panel",
+      "renderingClass": "hybrid",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "full-bleed, perspective-tilted code editor panel",
+      "diagramPattern": "code editor panel",
+      "colorNotes": "Background is a muted slate blue-grey (#6b7c85). Lines are dark charcoal/black ink. Syntax highlighting uses bright neon lime-green (#ccff00) and cyan (#00ffff).",
+      "dominantColorsObserved": [
+        {
+          "hex": "#677f86",
+          "share": 0.2522
+        },
+        {
+          "hex": "#617d83",
+          "share": 0.1603
+        },
+        {
+          "hex": "#3a4e51",
+          "share": 0.1179
+        },
+        {
+          "hex": "#65787f",
+          "share": 0.1169
+        }
+      ],
+      "meanLuma601": 104.7,
+      "narrationCue": "At the center of this transition is a specific artifact, a master system prompt engineered to force the LLM into the role of a hands-off tech lead. This tech lead is commanded to i",
+      "narrationPauseDistanceSeconds": 0.159,
+      "annotationNote": "Hand-drawn code editor with stylized pseudo-code; high dark-teal palette.",
+      "sensitive": false
+    },
+    {
+      "index": 4,
+      "startSeconds": 24.167,
+      "endSeconds": 30.233,
+      "durationSeconds": 6.066,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 59.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.17,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "hero-illustration",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "SYSTEM ORCHESTRATOR",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "STATUS",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "AUTONOMY: LOCKED",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "POWER DISTRIBUTION",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "full-bleed, centered technical dashboard interface",
+      "diagramPattern": "table/grid of UI panels and widgets (dashboard)",
+      "colorNotes": "Background is a light off-white/grey (#f0f0f0). The interface uses a palette of slate grey for panels, bright cyan/teal (#00e5ff) for active elements and highlights, and a vivid magenta/pink (#ff0055) for the main status alert. Text is primarily black or white.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#e9eaea",
+          "share": 0.1837
+        },
+        {
+          "hex": "#6e7b83",
+          "share": 0.1667
+        },
+        {
+          "hex": "#cad7da",
+          "share": 0.1451
+        },
+        {
+          "hex": "#252d34",
+          "share": 0.1222
+        }
+      ],
+      "meanLuma601": 156.8,
+      "narrationCue": "At the center of this transition is a specific artifact, a master system prompt engineered to force the LLM into the role of a hands-off tech lead. This tech lead is commanded to i",
+      "narrationPauseDistanceSeconds": 3.359,
+      "annotationNote": "Control-surface hero: drawn instrument dashboard with crisp stenciled labels (SYSTEM ORCHESTRATOR, STATUS, AUTONOMY: LOCKED, POWER DISTRIBUTION); red alert accents.",
+      "sensitive": false
+    },
+    {
+      "index": 5,
+      "startSeconds": 30.233,
+      "endSeconds": 39.833,
+      "durationSeconds": 9.6,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 90.7
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.24,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "centered, sparse composition with three distinct icon groups arranged in a loose triangle on a solid background",
+      "diagramPattern": "other - abstract symbolic arrangement of UI/tech icons (circular knot, vertical hexagons, server rack)",
+      "colorNotes": "dark slate gray background (#4a4f54 approx), icons in muted teal/cyan and dark charcoal with subtle highlights",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3f4447",
+          "share": 0.3632
+        },
+        {
+          "hex": "#3e4346",
+          "share": 0.3346
+        },
+        {
+          "hex": "#3f4346",
+          "share": 0.188
+        },
+        {
+          "hex": "#3a4345",
+          "share": 0.0376
+        }
+      ],
+      "meanLuma601": 67.5,
+      "narrationCue": "At the center of this transition is a specific artifact, a master system prompt engineered to force the LLM into the role of a hands-off tech lead. This tech lead is commanded to i",
+      "narrationPauseDistanceSeconds": 8.9,
+      "annotationNote": "Abstract circular arrangement of UI/tech icons on graphite (#3e4346).",
+      "sensitive": false
+    },
+    {
+      "index": 6,
+      "startSeconds": 39.833,
+      "endSeconds": 43.267,
+      "durationSeconds": 3.434,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 44.3
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.2,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "workstation-scene",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "centered, overlapping collage of terminal windows on a textured background",
+      "diagramPattern": "other - chaotic overlapping terminal windows with directional arrows indicating failure flow",
+      "colorNotes": "Background: muted slate blue-grey (#7a8b99). Lines/Ink: dark grey/black for terminals, vibrant magenta/red (#d6336c) for error highlights and arrows. Accents: orange/yellow for some arrow strokes.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#7d8b8f",
+          "share": 0.1735
+        },
+        {
+          "hex": "#78868b",
+          "share": 0.1649
+        },
+        {
+          "hex": "#7a898e",
+          "share": 0.1355
+        },
+        {
+          "hex": "#5c3440",
+          "share": 0.1251
+        }
+      ],
+      "meanLuma601": 108.1,
+      "narrationCue": "At the center of this transition is a specific artifact, a master system prompt engineered to force the LLM into the role of a hands-off tech lead. This tech lead is commanded to i",
+      "narrationPauseDistanceSeconds": 0.133,
+      "annotationNote": "Overlapping terminal windows with directional arrows; ERROR plaque; pseudo-command text.",
+      "sensitive": false
+    },
+    {
+      "index": 7,
+      "startSeconds": 43.267,
+      "endSeconds": 50.733,
+      "durationSeconds": 7.466,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 44.7
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.6,
+        "level": "subtle",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "ORCHESTRATOR",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered diagram on a dark, textured background",
+      "diagramPattern": "boxes-and-arrows architecture showing a central node branching to three peripheral nodes",
+      "colorNotes": "Dark slate/charcoal background (#4d5250), teal and orange accents on the central icon, muted blue-grey for the hexagonal nodes, yellow for the intermediate square nodes",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3e4346",
+          "share": 0.3629
+        },
+        {
+          "hex": "#3f4447",
+          "share": 0.3339
+        },
+        {
+          "hex": "#3f4346",
+          "share": 0.1781
+        },
+        {
+          "hex": "#434c4c",
+          "share": 0.0427
+        }
+      ],
+      "meanLuma601": 67.5,
+      "narrationCue": "The requirement for the tech lead to manage multiple downstream worker agents operating at the same time without logic collisions, At the same time, the system must enforce strict ",
+      "narrationPauseDistanceSeconds": 0.123,
+      "annotationNote": "Central controller node with hexagonal downstream nodes, cyan wiring on dark slate.",
+      "sensitive": false
+    },
+    {
+      "index": 8,
+      "startSeconds": 50.733,
+      "endSeconds": 54.967,
+      "durationSeconds": 4.234,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 50.5
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.09,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "User A",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "User B",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "READ",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "WRITE",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered illustration of a CRT monitor on a solid background",
+      "diagramPattern": "table/grid (split-screen comparison with checkmarks/crosses)",
+      "colorNotes": "Background: slate gray (#708090). Monitor: metallic gray with white highlights. Text: 'User A' in blue/purple, 'User B' in green/orange. Checkmarks in black ink.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#61737d",
+          "share": 0.154
+        },
+        {
+          "hex": "#677d87",
+          "share": 0.1508
+        },
+        {
+          "hex": "#788993",
+          "share": 0.1476
+        },
+        {
+          "hex": "#6e808a",
+          "share": 0.1307
+        }
+      ],
+      "meanLuma601": 116.4,
+      "narrationCue": "The requirement for the tech lead to manage multiple downstream worker agents operating at the same time without logic collisions, At the same time, the system must enforce strict ",
+      "narrationPauseDistanceSeconds": 0.177,
+      "annotationNote": "Split-screen data-isolation metaphor: User A vs User B cards with READ/WRITE and check/cross marks; hand-drawn serif titles.",
+      "sensitive": false
+    },
+    {
+      "index": 9,
+      "startSeconds": 54.967,
+      "endSeconds": 82.4,
+      "durationSeconds": 27.433,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 51.7
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.5,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "centered diagram on a dark background with a timeline ruler at the bottom",
+      "diagramPattern": "boxes-and-arrows architecture",
+      "colorNotes": "Dark slate gray background (#3b4245), cyan/teal lines and accents (#4fd1c5), orange inner detail on the central node (#ed8936)",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3e4346",
+          "share": 0.368
+        },
+        {
+          "hex": "#3f4447",
+          "share": 0.3517
+        },
+        {
+          "hex": "#3f4346",
+          "share": 0.1752
+        },
+        {
+          "hex": "#434e50",
+          "share": 0.0422
+        }
+      ],
+      "meanLuma601": 68.0,
+      "narrationCue": "It highlights the primary engineering difficulty: preventing the orchestrator from prematurely terminating its own execution loop. If the orchestrator loses context or stops pollin",
+      "narrationPauseDistanceSeconds": 4.057,
+      "annotationNote": "Central knot-patterned controller wired to three hexagonal nodes; segmented timeline ruler at bottom; cyan lines on slate (#3b4245).",
+      "sensitive": false
+    },
+    {
+      "index": 10,
+      "startSeconds": 82.4,
+      "endSeconds": 93.367,
+      "durationSeconds": 10.967,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 48.7
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.14,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "RIGID STATE MACHINE ASSEMBLY",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "CIRCUIT # 22.2 B",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "HEAVY DUTY CHASSIS",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "LOCKED",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered technical blueprint with symmetrical side panels and a central hexagonal core",
+      "diagramPattern": "boxes-and-arrows architecture (technical schematic/blueprint style)",
+      "colorNotes": "Background: slate blue-grey (#6b7c8c); Lines/Ink: dark grey/black; Accents: neon cyan (#00ffff) and neon lime green (#adff2f) for circuit pathways; Core: metallic silver/grey with green internal traces.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#758790",
+          "share": 0.1954
+        },
+        {
+          "hex": "#34434b",
+          "share": 0.1701
+        },
+        {
+          "hex": "#72848e",
+          "share": 0.1659
+        },
+        {
+          "hex": "#71828c",
+          "share": 0.1309
+        }
+      ],
+      "meanLuma601": 116.1,
+      "narrationCue": "It highlights the primary engineering difficulty: preventing the orchestrator from prematurely terminating its own execution loop. If the orchestrator loses context or stops pollin",
+      "narrationPauseDistanceSeconds": 0.013,
+      "annotationNote": "Blueprint/schematic style with stenciled uppercase labels; boxes-and-arrows.",
+      "sensitive": false
+    },
+    {
+      "index": 11,
+      "startSeconds": 93.367,
+      "endSeconds": 96.167,
+      "durationSeconds": 2.8,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 60.2
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.08,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "code-panel",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "SYSTEM",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "STATUS: OK",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered hero illustration on a solid background",
+      "diagramPattern": "code editor panel (simulated on a device screen)",
+      "colorNotes": "Dark slate blue/gray background (#3b4d5c), metallic gray device with green (#7cfc00) glowing screen accents and line art.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#324046",
+          "share": 0.1784
+        },
+        {
+          "hex": "#273536",
+          "share": 0.1624
+        },
+        {
+          "hex": "#2a363c",
+          "share": 0.1546
+        },
+        {
+          "hex": "#384747",
+          "share": 0.1517
+        }
+      ],
+      "meanLuma601": 63.0,
+      "narrationCue": "The first phase of the prompt setup bridges the gap between the LLMs' text-only environment and live physical infrastructure. This is achieved by injecting model context protocol i",
+      "narrationPauseDistanceSeconds": 0.147,
+      "annotationNote": "Device-embedded terminal (green monospace) with credential-like value visible in-video; value NOT transcribed (sensitive).",
+      "sensitive": true
+    },
+    {
+      "index": 12,
+      "startSeconds": 96.167,
+      "endSeconds": 100.8,
+      "durationSeconds": 4.633,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 49.1
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.15,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "hero-illustration",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "CONTROLLER",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "DATA",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "Full-bleed, centered perspective view of a server room",
+      "diagramPattern": "None (illustrative scene)",
+      "colorNotes": "Background is a cool slate gray (#7a8b99). Lines are dark charcoal (#2c3e50). Accent colors are vibrant cyan/teal (#00e5ff) and golden yellow/orange (#ffb300) for the glowing cables.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#72848d",
+          "share": 0.2839
+        },
+        {
+          "hex": "#394548",
+          "share": 0.1294
+        },
+        {
+          "hex": "#4d6267",
+          "share": 0.1199
+        },
+        {
+          "hex": "#161f22",
+          "share": 0.1124
+        }
+      ],
+      "meanLuma601": 104.4,
+      "narrationCue": "The first phase of the prompt setup bridges the gap between the LLMs' text-only environment and live physical infrastructure. This is achieved by injecting model context protocol i",
+      "narrationPauseDistanceSeconds": 2.947,
+      "annotationNote": "Isometric hardware hero: controller unit with labeled ports (T1 labels); cyan conduits.",
+      "sensitive": false
+    },
+    {
+      "index": 13,
+      "startSeconds": 100.8,
+      "endSeconds": 109.6,
+      "durationSeconds": 8.8,
+      "transitionIn": {
+        "type": "cut",
+        "frameDiffAtCut": 24.9
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.12,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "centered isometric illustration on a solid background",
+      "diagramPattern": "other - isometric hardware illustration with connecting conduits",
+      "colorNotes": "Background: #7a858e (slate gray). Illustration: #4b5259 (dark gray) for main structures, #c8ff00 (neon green) and #00f0ff (cyan) for glowing accents in pipes and server lights.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#707e85",
+          "share": 0.2323
+        },
+        {
+          "hex": "#565f66",
+          "share": 0.1732
+        },
+        {
+          "hex": "#394244",
+          "share": 0.1176
+        },
+        {
+          "hex": "#151c20",
+          "share": 0.1144
+        }
+      ],
+      "meanLuma601": 93.7,
+      "narrationCue": "The first phase of the prompt setup bridges the gap between the LLMs' text-only environment and live physical infrastructure. This is achieved by injecting model context protocol i",
+      "narrationPauseDistanceSeconds": 7.58,
+      "annotationNote": "Isometric hardware cluster with connecting conduits; no legible text.",
+      "sensitive": false
+    },
+    {
+      "index": 14,
+      "startSeconds": 109.6,
+      "endSeconds": 129.467,
+      "durationSeconds": 19.867,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 32.2
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.74,
+        "level": "subtle",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "callout",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "Redis",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Composio",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Modal",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "Split composition with a central circular icon on the left and a vertical stack of three rounded rectangular buttons on the right",
+      "diagramPattern": "Callout card",
+      "colorNotes": "Dark gray background (#4a4f54), red button (#c23b3b), blue button (#3b5fc2), green button (#3bc26a). The central logo features a cyan/teal interlocking pattern (#00e5ff) on a dark metallic circular base.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3e4346",
+          "share": 0.2781
+        },
+        {
+          "hex": "#3f4447",
+          "share": 0.2504
+        },
+        {
+          "hex": "#3f4346",
+          "share": 0.1821
+        },
+        {
+          "hex": "#3e4646",
+          "share": 0.1538
+        }
+      ],
+      "meanLuma601": 70.1,
+      "narrationCue": "The first phase of the prompt setup bridges the gap between the LLMs' text-only environment and live physical infrastructure. This is achieved by injecting model context protocol i",
+      "narrationPauseDistanceSeconds": 0.023,
+      "annotationNote": "Callout cards naming tools: Redis, Composio, Modal; white sans labels centered on dark cards.",
+      "sensitive": false
+    },
+    {
+      "index": 15,
+      "startSeconds": 129.467,
+      "endSeconds": 136.6,
+      "durationSeconds": 7.133,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 51.5
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.1,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "CRITICAL: HIGH-LEVEL ACCESS",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "SYSTEM STATUS",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered, full-bleed background with a large central dashboard-style panel",
+      "diagramPattern": "boxes-and-arrows architecture (dashboard with gauges, bar charts, and flow diagrams)",
+      "colorNotes": "Background is a muted slate blue-grey (#6b7f8c). The main panel uses a dark grey border with red and black hazard stripes at the top. Accents include bright green for active indicators and white for text.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#81949b",
+          "share": 0.259
+        },
+        {
+          "hex": "#7f9399",
+          "share": 0.1696
+        },
+        {
+          "hex": "#584c57",
+          "share": 0.1265
+        },
+        {
+          "hex": "#3a202a",
+          "share": 0.1072
+        }
+      ],
+      "meanLuma601": 119.1,
+      "narrationCue": "These protocols expand the agent's baseline capabilities to include full read and write access across the cloud environment. Because the agent has high-level access, the prompt inc",
+      "narrationPauseDistanceSeconds": 0.002,
+      "annotationNote": "Digital dashboard with gauges and bar charts; stencil-style CRITICAL label.",
+      "sensitive": false
+    },
+    {
+      "index": 16,
+      "startSeconds": 136.6,
+      "endSeconds": 145.633,
+      "durationSeconds": 9.033,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 35.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 3.14,
+        "level": "moderate",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "centered illustration on a textured gray background",
+      "diagramPattern": "metaphor-illustration",
+      "colorNotes": "gray textured background (#8a9199), dark charcoal ink (#2c313a), bright red/pink accent glow (#ff4d6d)",
+      "dominantColorsObserved": [
+        {
+          "hex": "#7d7e81",
+          "share": 0.1959
+        },
+        {
+          "hex": "#79787b",
+          "share": 0.1349
+        },
+        {
+          "hex": "#6d6b6f",
+          "share": 0.1277
+        },
+        {
+          "hex": "#624c53",
+          "share": 0.1199
+        }
+      ],
+      "meanLuma601": 110.2,
+      "narrationCue": "These protocols expand the agent's baseline capabilities to include full read and write access across the cloud environment. Because the agent has high-level access, the prompt inc",
+      "narrationPauseDistanceSeconds": 0.14,
+      "annotationNote": "rm -f metaphor over config files; hand-drawn monospace pseudo-commands inside illustration.",
+      "sensitive": false
+    },
+    {
+      "index": 17,
+      "startSeconds": 145.633,
+      "endSeconds": 152.2,
+      "durationSeconds": 6.567,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 28.2
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.13,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "code-panel",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "WARNING: DO NOT LOG",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "PERSONAL ACCESS TOKEN",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "full-bleed background with centered code editor panel and a prominent overlapping warning callout",
+      "diagramPattern": "code editor panel with an overlaid warning callout card",
+      "colorNotes": "Background is a textured slate gray (#7a8b99). Code and lines are dark charcoal/black. The warning text and the token line are bright red (#ff2a2a). The warning plaque is light off-white/gray with metallic silver bolt details.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#5a6971",
+          "share": 0.1906
+        },
+        {
+          "hex": "#64747d",
+          "share": 0.1894
+        },
+        {
+          "hex": "#606f78",
+          "share": 0.1478
+        },
+        {
+          "hex": "#5c6d75",
+          "share": 0.1257
+        }
+      ],
+      "meanLuma601": 99.0,
+      "narrationCue": "The prompt explicitly prohibits the agent from persisting these credentials to the local git configuration or any system logs. The power of an autonomous agent is defined and limit",
+      "narrationPauseDistanceSeconds": 0.098,
+      "annotationNote": "Hand-drawn code editor with steampunk warning plaque about personal access tokens; credential-like value visible in-video but NOT transcribed (sensitive; treat as redacted).",
+      "sensitive": true
+    },
+    {
+      "index": 18,
+      "startSeconds": 152.2,
+      "endSeconds": 160.6,
+      "durationSeconds": 8.4,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 55.6
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.12,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "CONFIGURATION FILE",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "CONTROLLER",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "CODE",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered isometric illustration on a dark background with faint technical blueprints",
+      "diagramPattern": "callout card",
+      "colorNotes": "Dark slate grey background (#2d3436), bright cyan/teal glow (#00f0ff) for the main platform, white and light grey for the document illustration, dark ink lines",
+      "dominantColorsObserved": [
+        {
+          "hex": "#2b3941",
+          "share": 0.1565
+        },
+        {
+          "hex": "#44f3eb",
+          "share": 0.1469
+        },
+        {
+          "hex": "#303f47",
+          "share": 0.1377
+        },
+        {
+          "hex": "#2e3a42",
+          "share": 0.1358
+        }
+      ],
+      "meanLuma601": 98.4,
+      "narrationCue": "The prompt explicitly prohibits the agent from persisting these credentials to the local git configuration or any system logs. The power of an autonomous agent is defined and limit",
+      "narrationPauseDistanceSeconds": 0.067,
+      "annotationNote": "Labeled bins/files arrangement: CONFIGURATION FILE, CONTROLLER, CODE (KEYS); hand-drawn sans labels.",
+      "sensitive": false
+    },
+    {
+      "index": 19,
+      "startSeconds": 160.6,
+      "endSeconds": 163.0,
+      "durationSeconds": 2.4,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 78.5
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.25,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "PROJECT BOUNDARIES",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "ACCESS CONTROL",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "OPERATIONAL LIMITS",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "SECURITY PROTOCOLS",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered, isometric perspective of a 2x3 grid of technical panels connected by a network of pipes",
+      "diagramPattern": "boxes-and-arrows architecture with a grid/table layout and process flow elements",
+      "colorNotes": "Background: off-white/cream (#F5F5F0). Ink: dark charcoal/black. Accents: bright cyan/turquoise (#00E5FF) for pipes and highlights; magenta/pink (#FF4081) for secondary pipes and UI accents.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#d3d4d0",
+          "share": 0.1481
+        },
+        {
+          "hex": "#e5e6e4",
+          "share": 0.1318
+        },
+        {
+          "hex": "#7c898c",
+          "share": 0.1285
+        },
+        {
+          "hex": "#dcdcd9",
+          "share": 0.126
+        }
+      ],
+      "meanLuma601": 163.8,
+      "narrationCue": "The prompt explicitly prohibits the agent from persisting these credentials to the local git configuration or any system logs. The power of an autonomous agent is defined and limit",
+      "narrationPauseDistanceSeconds": 0.053,
+      "annotationNote": "Quadrant grid of boundary topics with crisp uppercase labels; grid + pictograms.",
+      "sensitive": false
+    },
+    {
+      "index": 20,
+      "startSeconds": 163.0,
+      "endSeconds": 165.8,
+      "durationSeconds": 2.8,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 68.2
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.11,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "Orchestrator Role",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Worker Agent",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered hierarchical diagram with a top-level hub and branching connections to lower-level nodes",
+      "diagramPattern": "boxes-and-arrows architecture (hierarchical tree structure)",
+      "colorNotes": "Background is a cool slate grey (#7a8b99). Lines and accents are bright cyan (#00e5ff). Mechanical components are metallic silver/grey with orange/amber inner rings.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#677d87",
+          "share": 0.1841
+        },
+        {
+          "hex": "#61737e",
+          "share": 0.142
+        },
+        {
+          "hex": "#5b707b",
+          "share": 0.1409
+        },
+        {
+          "hex": "#617882",
+          "share": 0.1288
+        }
+      ],
+      "meanLuma601": 108.7,
+      "narrationCue": "The prompt explicitly prohibits the agent from persisting these credentials to the local git configuration or any system logs. The power of an autonomous agent is defined and limit",
+      "narrationPauseDistanceSeconds": 2.276,
+      "annotationNote": "Hierarchical tree: Orchestrator Role over Worker Agent nodes; labels partly crisp, partly drawn.",
+      "sensitive": false
+    },
+    {
+      "index": 21,
+      "startSeconds": 165.8,
+      "endSeconds": 172.267,
+      "durationSeconds": 6.467,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 23.6
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.12,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "Full-bleed horizontal composition with three distinct visual elements arranged left-to-right: a small cube, a large central monolith, and a complex mechanical assembly on the right.",
+      "diagramPattern": "Other - Metaphorical technical illustration showing a progression from a contained 'seed' or core (cube) through an interface/portal (monolith) to an active mechanical system (gears and robotic arm).",
+      "colorNotes": "Background is a muted slate blue-grey (#6b7c8e). Illustration lines are dark charcoal/black ink. Accent color is a bright, glowing electric cyan (#4deeea) used for energy effects and surface patterns.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#586c76",
+          "share": 0.1743
+        },
+        {
+          "hex": "#6e848f",
+          "share": 0.1539
+        },
+        {
+          "hex": "#6f808c",
+          "share": 0.1494
+        },
+        {
+          "hex": "#19272d",
+          "share": 0.1132
+        }
+      ],
+      "meanLuma601": 106.3,
+      "narrationCue": "The prompt explicitly prohibits the agent from persisting these credentials to the local git configuration or any system logs. The power of an autonomous agent is defined and limit",
+      "narrationPauseDistanceSeconds": 0.087,
+      "annotationNote": "Glowing key/credential metaphor (stylized, not transcribable); progression motif.",
+      "sensitive": false
+    },
+    {
+      "index": 22,
+      "startSeconds": 172.267,
+      "endSeconds": 179.0,
+      "durationSeconds": 6.733,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 61.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.13,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "centered full-bleed illustration",
+      "diagramPattern": "none",
+      "colorNotes": "Background: textured off-white paper (#E8E4DE). Ink: dark charcoal/black. Accents: glowing cyan/teal (#4FE3C1) and warm orange/gold (#F5A623) highlights on the mechanical units.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#e6e5df",
+          "share": 0.1849
+        },
+        {
+          "hex": "#4c4d49",
+          "share": 0.1338
+        },
+        {
+          "hex": "#383734",
+          "share": 0.1288
+        },
+        {
+          "hex": "#6a6e69",
+          "share": 0.1273
+        }
+      ],
+      "meanLuma601": 113.2,
+      "narrationCue": "Its role is limited to managing a worker dispatch system with a cap of three concurrent agents active at any one time. Each worker is configured to run on the G L M five point thre",
+      "narrationPauseDistanceSeconds": 0.154,
+      "annotationNote": "Pure illustration segment; no legible text.",
+      "sensitive": false
+    },
+    {
+      "index": 23,
+      "startSeconds": 179.0,
+      "endSeconds": 185.967,
+      "durationSeconds": 6.967,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 71.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.1,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "centered hero illustration with full-bleed background",
+      "diagramPattern": "other - holographic UI overlay with code symbols and interface panels",
+      "colorNotes": "Background: desaturated blue-gray (#6b7c8c). Line/ink: dark charcoal/black. Accents: neon cyan (#00ffff) and lime green (#aaff00) for glowing UI elements. Object: metallic gray with cyan highlights.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#60717b",
+          "share": 0.2548
+        },
+        {
+          "hex": "#61727c",
+          "share": 0.1874
+        },
+        {
+          "hex": "#5ab8ac",
+          "share": 0.1228
+        },
+        {
+          "hex": "#5a8687",
+          "share": 0.1201
+        }
+      ],
+      "meanLuma601": 121.6,
+      "narrationCue": "Its role is limited to managing a worker dispatch system with a cap of three concurrent agents active at any one time. Each worker is configured to run on the G L M five point thre",
+      "narrationPauseDistanceSeconds": 0.111,
+      "annotationNote": "Holographic UI overlay with code-symbol pseudo-text; KΛ glyph.",
+      "sensitive": false
+    },
+    {
+      "index": 24,
+      "startSeconds": 185.967,
+      "endSeconds": 202.833,
+      "durationSeconds": 16.866,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 56.6
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.47,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "callout",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "BLOCKED - CAPACITY REACHED",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Stale Session",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Tech Lead Orchestrator",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered panel with a main status card at the top and a single icon/label pair centered below",
+      "diagramPattern": "callout card",
+      "colorNotes": "Dark gray background (#4a4e52), dark charcoal card background (#1f2124), red/pink border (#d65c5c), yellow crosshair (#f0c040), teal and orange logo accents (#40c9b8, #f0883e)",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3e4346",
+          "share": 0.2746
+        },
+        {
+          "hex": "#23292e",
+          "share": 0.213
+        },
+        {
+          "hex": "#3f4346",
+          "share": 0.196
+        },
+        {
+          "hex": "#3f4447",
+          "share": 0.1604
+        }
+      ],
+      "meanLuma601": 63.3,
+      "narrationCue": "Its role is limited to managing a worker dispatch system with a cap of three concurrent agents active at any one time. Each worker is configured to run on the G L M five point thre",
+      "narrationPauseDistanceSeconds": 0.003,
+      "annotationNote": "Callout: BLOCKED - CAPACITY REACHED with Stale Session; crisp white sans on dark card.",
+      "sensitive": false
+    },
+    {
+      "index": 25,
+      "startSeconds": 202.833,
+      "endSeconds": 209.867,
+      "durationSeconds": 7.034,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 46.7
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.07,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "code-panel",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "centered, full-bleed background with a central monitor/terminal illustration",
+      "diagramPattern": "code editor panel (split screen showing errors vs. repair logic)",
+      "colorNotes": "Background is a muted slate blue-grey (#6b7c8c). The terminal screen has a dark grey/black interior. Text on the left is bright red (#e74c3c), and text on the right is neon green (#2ecc71). Lines and outlines are a dark charcoal/grey.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#6c7d85",
+          "share": 0.2726
+        },
+        {
+          "hex": "#6d7e86",
+          "share": 0.2543
+        },
+        {
+          "hex": "#526766",
+          "share": 0.2106
+        },
+        {
+          "hex": "#2d383d",
+          "share": 0.0784
+        }
+      ],
+      "meanLuma601": 107.8,
+      "narrationCue": "To recover, the tech lead must actively identify and release stale sessions, manually freeing compute slots to keep the pipeline moving. Autonomous orchestration requires forcing t",
+      "narrationPauseDistanceSeconds": 0.037,
+      "annotationNote": "Split code panel: FATAL ERROR / core dump pseudo-text (red, hand-drawn) vs repair log; pseudo-text inside illustration.",
+      "sensitive": false
+    },
+    {
+      "index": 26,
+      "startSeconds": 209.867,
+      "endSeconds": 215.533,
+      "durationSeconds": 5.666,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 47.9
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.11,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "Full-bleed, one-point perspective view of a server room corridor",
+      "diagramPattern": "None",
+      "colorNotes": "Monochromatic grayscale; background is a light off-white (#F0F2F5), lines and shading are in various shades of gray and charcoal (#4A5568, #2D3748)",
+      "dominantColorsObserved": [
+        {
+          "hex": "#eeefeb",
+          "share": 0.1842
+        },
+        {
+          "hex": "#4d535f",
+          "share": 0.1383
+        },
+        {
+          "hex": "#606671",
+          "share": 0.1361
+        },
+        {
+          "hex": "#a1a5ab",
+          "share": 0.136
+        }
+      ],
+      "meanLuma601": 139.9,
+      "narrationCue": "To recover, the tech lead must actively identify and release stale sessions, manually freeing compute slots to keep the pipeline moving. Autonomous orchestration requires forcing t",
+      "narrationPauseDistanceSeconds": 0.085,
+      "annotationNote": "Pure illustration segment; no legible text.",
+      "sensitive": false
+    },
+    {
+      "index": 27,
+      "startSeconds": 215.533,
+      "endSeconds": 238.733,
+      "durationSeconds": 23.2,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 74.0
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.64,
+        "level": "subtle",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "process-flow",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "1. Monitor",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "2. Harvest",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "3. Review",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "4. Feedback",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "5. Dispatch",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered circular diagram on a solid background",
+      "diagramPattern": "numbered process flow (circular)",
+      "colorNotes": "Dark slate gray background (#4a535a), light blue dashed lines, yellow/gold dots, blue/gray hexagonal icons, white text",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3e4346",
+          "share": 0.3656
+        },
+        {
+          "hex": "#3f4447",
+          "share": 0.3306
+        },
+        {
+          "hex": "#404246",
+          "share": 0.1288
+        },
+        {
+          "hex": "#3f4346",
+          "share": 0.0745
+        }
+      ],
+      "meanLuma601": 68.1,
+      "narrationCue": "This state machine diagram shows the explicit five-step loop the tech lead follows: monitoring workers, harvesting code, reviewing work, approving or requiring changes, and dispatc",
+      "narrationPauseDistanceSeconds": 0.077,
+      "annotationNote": "Circular five-step operational loop around a roadmap icon; crisp white sans numbered labels; narrated as the explicit five-step loop.",
+      "sensitive": false
+    },
+    {
+      "index": 28,
+      "startSeconds": 238.733,
+      "endSeconds": 240.733,
+      "durationSeconds": 2.0,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 35.7
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.2,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [
+        {
+          "value": "ERROR: CONNECTION LOST",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered hero illustration",
+      "diagramPattern": "none",
+      "colorNotes": "Background is a muted slate blue-grey (#5a6b7c). The illustration uses grey ink for the monitor and a vibrant, slightly textured red (#d64545) for the text.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3e4955",
+          "share": 0.2464
+        },
+        {
+          "hex": "#3e4a56",
+          "share": 0.2045
+        },
+        {
+          "hex": "#979ea5",
+          "share": 0.1582
+        },
+        {
+          "hex": "#111218",
+          "share": 0.1109
+        }
+      ],
+      "meanLuma601": 84.0,
+      "narrationCue": "This state machine diagram shows the explicit five-step loop the tech lead follows: monitoring workers, harvesting code, reviewing work, approving or requiring changes, and dispatc",
+      "narrationPauseDistanceSeconds": 1.803,
+      "annotationNote": "Large red hand-drawn ERROR / CONNECTION / LOST serif plaque; stylized text inside illustration.",
+      "sensitive": false
+    },
+    {
+      "index": 29,
+      "startSeconds": 240.733,
+      "endSeconds": 243.3,
+      "durationSeconds": 2.567,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 47.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.19,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "centered, full-bleed illustration with overlapping central elements",
+      "diagramPattern": "other - metaphorical illustration of overlapping warning signs and error states",
+      "colorNotes": "Background is a muted slate blue-grey (#7a8b99). Lines and text are rendered in a dark reddish-pink ink (#c94b5a) with black sketchy outlines and shading. Accent color for the warning icon is the same reddish-pink.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#6f8290",
+          "share": 0.1903
+        },
+        {
+          "hex": "#6b808d",
+          "share": 0.1774
+        },
+        {
+          "hex": "#0d0a0f",
+          "share": 0.1328
+        },
+        {
+          "hex": "#768491",
+          "share": 0.1222
+        }
+      ],
+      "meanLuma601": 95.4,
+      "narrationCue": "This state machine diagram shows the explicit five-step loop the tech lead follows: monitoring workers, harvesting code, reviewing work, approving or requiring changes, and dispatc",
+      "narrationPauseDistanceSeconds": 2.285,
+      "annotationNote": "Overlapping warning signs: API RATE LIMIT, BOTTLENECK, TRAFFIC JAM (hand-drawn, stylized).",
+      "sensitive": false
+    },
+    {
+      "index": 30,
+      "startSeconds": 243.3,
+      "endSeconds": 251.933,
+      "durationSeconds": 8.633,
+      "transitionIn": {
+        "type": "soft-change",
+        "frameDiffAtCut": 0.0
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.12,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "Full-bleed illustration with the main subject (robotic arm) positioned in the center-left, leading toward a glowing tunnel on the right.",
+      "diagramPattern": "Metaphor-illustration with environmental UI elements (warning signs and window-like frames)",
+      "colorNotes": "Background is a muted slate grey (#7a8b93). The illustration uses dark charcoal ink for line work. Accents are a vibrant neon cyan/teal (#00ffcc) for the robot's internal lights, the floor path, and the tunnel glow. Warning icons have a pale yellowish-green glow (#d4e157).",
+      "dominantColorsObserved": [
+        {
+          "hex": "#718487",
+          "share": 0.2357
+        },
+        {
+          "hex": "#708185",
+          "share": 0.1712
+        },
+        {
+          "hex": "#708387",
+          "share": 0.1356
+        },
+        {
+          "hex": "#4f6262",
+          "share": 0.1058
+        }
+      ],
+      "meanLuma601": 121.2,
+      "narrationCue": "The recovery mandate requires the agent to bypass these obstacles, dismissing rate limit warnings and peak hour notifications automatically. Instead of terminating when a tool time",
+      "narrationPauseDistanceSeconds": 0.194,
+      "annotationNote": "Warning-sign environment with exclamation marks; stylized.",
+      "sensitive": false
+    },
+    {
+      "index": 31,
+      "startSeconds": 251.933,
+      "endSeconds": 260.733,
+      "durationSeconds": 8.8,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 82.2
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 12.8,
+        "level": "high",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "Full-bleed illustration with a central vertical fracture line separating a textured dark mass on the right from an empty light space on the left.",
+      "diagramPattern": "None",
+      "colorNotes": "Background is a pale cream or off-white (#F5F5DC). The main subject consists of dark charcoal and slate grey tones (#2C3E50, #4A4A4A) with fine black ink hatching. Small accent shards of bright cyan/teal (#00CED1) are scattered throughout the composition.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#f3f1db",
+          "share": 0.1657
+        },
+        {
+          "hex": "#f6f3de",
+          "share": 0.1635
+        },
+        {
+          "hex": "#5d6566",
+          "share": 0.149
+        },
+        {
+          "hex": "#41494a",
+          "share": 0.1377
+        }
+      ],
+      "meanLuma601": 128.9,
+      "narrationCue": "The recovery mandate requires the agent to bypass these obstacles, dismissing rate limit warnings and peak hour notifications automatically. Instead of terminating when a tool time",
+      "narrationPauseDistanceSeconds": 0.3,
+      "annotationNote": "Pure illustration segment; no legible text.",
+      "sensitive": false
+    },
+    {
+      "index": 32,
+      "startSeconds": 260.733,
+      "endSeconds": 268.5,
+      "durationSeconds": 7.767,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 85.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.19,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "code-panel",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "EXECUTE_SEQUENCE: BYPASS_SUC",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "[ERROR 0x04F: FLOW_INTERRUPT",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "[CRITICAL FAIL: OVERRIDE DEN",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "Full-bleed background with a central vertical column of monospace text, flanked by technical border illustrations and red error callouts",
+      "diagramPattern": "Code editor panel with inline error annotations",
+      "colorNotes": "Background is an off-white/cream paper tone (#F5F5F0). Lines and borders are dark grey/black ink (#333). Accent color is a bright, slightly desaturated red (#D32F2F) used for the heartbeat lines and error text.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#eae9e9",
+          "share": 0.1679
+        },
+        {
+          "hex": "#e8e7e7",
+          "share": 0.1576
+        },
+        {
+          "hex": "#e3e2e1",
+          "share": 0.1286
+        },
+        {
+          "hex": "#352429",
+          "share": 0.1218
+        }
+      ],
+      "meanLuma601": 194.6,
+      "narrationCue": "The recovery mandate requires the agent to bypass these obstacles, dismissing rate limit warnings and peak hour notifications automatically. Instead of terminating when a tool time",
+      "narrationPauseDistanceSeconds": 0.329,
+      "annotationNote": "Code panel with inline red error annotations; monospace, structured alignment.",
+      "sensitive": false
+    },
+    {
+      "index": 33,
+      "startSeconds": 268.5,
+      "endSeconds": 283.4,
+      "durationSeconds": 14.9,
+      "transitionIn": {
+        "type": "soft-change",
+        "frameDiffAtCut": 0.0
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.37,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "FLAT DATABASE",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "CLOUD CLUSTER",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "Split-screen comparison with two vertical panels, each containing a title at the top, a central technical illustration, and a label at the bottom.",
+      "diagramPattern": "Boxes-and-arrows architecture (left: hierarchical tree; right: networked node cluster)",
+      "colorNotes": "Background is a neutral grayish-brown (approx. #8c857d). Illustrations are rendered in glowing cyan/teal ink (approx. #5fd3d3) with dark gray shading and outlines.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#777872",
+          "share": 0.3239
+        },
+        {
+          "hex": "#787973",
+          "share": 0.2654
+        },
+        {
+          "hex": "#3d4443",
+          "share": 0.1103
+        },
+        {
+          "hex": "#747671",
+          "share": 0.0998
+        }
+      ],
+      "meanLuma601": 112.3,
+      "narrationCue": "In the fourth phase, the tech lead forces its workers to build the actual software requirements. This begins with a database migration, moving the platform from a basic SQLite impl",
+      "narrationPauseDistanceSeconds": 0.19,
+      "annotationNote": "Split-screen comparison: FLAT DATABASE vs CLOUD CLUSTER; crisp uppercase labels on both panels.",
+      "sensitive": false
+    },
+    {
+      "index": 34,
+      "startSeconds": 283.4,
+      "endSeconds": 299.567,
+      "durationSeconds": 16.167,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 46.0
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.59,
+        "level": "subtle",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "User A",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "User B",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Ledger",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Execution Audits",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered illustration with symmetrical left and right labels",
+      "diagramPattern": "boxes-and-arrows architecture with a central database metaphor and security overlay",
+      "colorNotes": "Dark grey background (#4a4f54), metallic silver/blue database cylinders, bright cyan vertical divider line, red padlock accent, yellow connection dot, teal user icon borders (#4ecdc4)",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3e4346",
+          "share": 0.2858
+        },
+        {
+          "hex": "#3f4447",
+          "share": 0.2311
+        },
+        {
+          "hex": "#3f4346",
+          "share": 0.1643
+        },
+        {
+          "hex": "#6b7b81",
+          "share": 0.1599
+        }
+      ],
+      "meanLuma601": 76.5,
+      "narrationCue": "These policies ensure that user A is cryptographically prevented from reading or mutating the ledger and execution audits belonging to user B. Beyond back end security, the prompt ",
+      "narrationPauseDistanceSeconds": 0.029,
+      "annotationNote": "Central database cylinder with User A / User B isolation lanes and Ledger / Execution Audits stores; crisp labels.",
+      "sensitive": false
+    },
+    {
+      "index": 35,
+      "startSeconds": 299.567,
+      "endSeconds": 306.433,
+      "durationSeconds": 6.866,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 27.7
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.07,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "data-chart",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "USER RETENTION",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "DAU GROWTH",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "Full-bleed dashboard layout with a 2x3 grid of data visualization panels, featuring a compass rose in the top-left corner.",
+      "diagramPattern": "Data chart (multiple line graphs and a heatmap)",
+      "colorNotes": "Dark slate blue/gray background (#4a5a6a), orange and red ink for lines and heat map (#ff6b35, #d62828), white grid lines.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#5a686d",
+          "share": 0.2535
+        },
+        {
+          "hex": "#48555a",
+          "share": 0.1996
+        },
+        {
+          "hex": "#526066",
+          "share": 0.1354
+        },
+        {
+          "hex": "#56656b",
+          "share": 0.1204
+        }
+      ],
+      "meanLuma601": 89.5,
+      "narrationCue": "These policies ensure that user A is cryptographically prevented from reading or mutating the ledger and execution audits belonging to user B. Beyond back end security, the prompt ",
+      "narrationPauseDistanceSeconds": 0.098,
+      "annotationNote": "Hand-drawn multi-line graphs + heatmap panel with titles USER RETENTION, DAU GROWTH; drawn chart bodies with structured titles.",
+      "sensitive": false
+    },
+    {
+      "index": 36,
+      "startSeconds": 306.433,
+      "endSeconds": 314.667,
+      "durationSeconds": 8.234,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 42.4
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 7.52,
+        "level": "high",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [
+        {
+          "value": "+1024",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered vertical composition with a smartphone screen as the primary focal point",
+      "diagramPattern": "none",
+      "colorNotes": "Background is a muted slate blue-grey (#8B9DAF). Illustration uses a palette of bright lime green (#A4D65E) for shields, ribbons, and stars; golden orange (#D49B3C) for coins; white (#FFFFFF) for the box; and dark charcoal grey/black for outlines and text.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#6b818b",
+          "share": 0.2014
+        },
+        {
+          "hex": "#afc9a6",
+          "share": 0.1828
+        },
+        {
+          "hex": "#687d87",
+          "share": 0.1527
+        },
+        {
+          "hex": "#71838c",
+          "share": 0.1326
+        }
+      ],
+      "meanLuma601": 129.7,
+      "narrationCue": "These policies ensure that user A is cryptographically prevented from reading or mutating the ledger and execution audits belonging to user B. Beyond back end security, the prompt ",
+      "narrationPauseDistanceSeconds": 0.128,
+      "annotationNote": "Gamification metaphor: scoreboard with +1024 points and 0:41 timer; stylized numerals.",
+      "sensitive": false
+    },
+    {
+      "index": 37,
+      "startSeconds": 314.667,
+      "endSeconds": 322.6,
+      "durationSeconds": 7.933,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 37.6
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.13,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "data-chart",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "22063",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "30000",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "23002",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "23312",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered, full-bleed perspective view of a sketchbook page",
+      "diagramPattern": "table/grid with directional indicators",
+      "colorNotes": "Background is a desaturated blue-grey (#6b7c8c). Lines are dark charcoal/black ink. Accents are bright neon green (#aaff00) for up arrows and bright magenta/pink (#ff007f) for down arrows.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#75848a",
+          "share": 0.2163
+        },
+        {
+          "hex": "#596669",
+          "share": 0.1401
+        },
+        {
+          "hex": "#647176",
+          "share": 0.1323
+        },
+        {
+          "hex": "#6b7a80",
+          "share": 0.1235
+        }
+      ],
+      "meanLuma601": 105.3,
+      "narrationCue": "An invisible scoreboard utilizes local and regional leaderboards to leverage loss aversion, keeping users within the engagement loop. The prompt requires the orchestrator to simult",
+      "narrationPauseDistanceSeconds": 0.088,
+      "annotationNote": "Leaderboard table with big hand-drawn serif numerals; structured grid.",
+      "sensitive": false
+    },
+    {
+      "index": 38,
+      "startSeconds": 322.6,
+      "endSeconds": 331.4,
+      "durationSeconds": 8.8,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 29.2
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.16,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "workstation-scene",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "SECURITY FIREWALL",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "USER ENGAGEMENT",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "TREND LINE",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "RETENTION HEATMAP",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered workstation scene with two monitors on a desk, slightly off-center to the left",
+      "diagramPattern": "mixed (UI dashboard panels on left monitor, data charts on right monitor)",
+      "colorNotes": "desaturated blue-grey background (#6b7c8a), dark ink lines, glowing green and orange accents on the right monitor charts",
+      "dominantColorsObserved": [
+        {
+          "hex": "#6f8187",
+          "share": 0.1682
+        },
+        {
+          "hex": "#334244",
+          "share": 0.1364
+        },
+        {
+          "hex": "#7a8d8e",
+          "share": 0.1246
+        },
+        {
+          "hex": "#5b6b6f",
+          "share": 0.1234
+        }
+      ],
+      "meanLuma601": 101.9,
+      "narrationCue": "An invisible scoreboard utilizes local and regional leaderboards to leverage loss aversion, keeping users within the engagement loop. The prompt requires the orchestrator to simult",
+      "narrationPauseDistanceSeconds": 0.188,
+      "annotationNote": "Dual-monitor workstation: left security dashboard, right engagement charts; crisp UI headers over drawn screens.",
+      "sensitive": false
+    },
+    {
+      "index": 39,
+      "startSeconds": 331.4,
+      "endSeconds": 336.9,
+      "durationSeconds": 5.5,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 37.2
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.12,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "centered, isometric 3D view of a tablet device on a flat background",
+      "diagramPattern": "other - isometric illustration of a tablet with a grid of image thumbnails and projecting light beams",
+      "colorNotes": "Background: slate gray (#7a8b99). Device: light gray (#c0c8cf) with dark ink outlines. Beams: bright cyan (#00e5ff) and lime green (#ccff00). Prisms: dark gray/black with white highlights.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#798a95",
+          "share": 0.1811
+        },
+        {
+          "hex": "#6d7f89",
+          "share": 0.1719
+        },
+        {
+          "hex": "#758792",
+          "share": 0.1548
+        },
+        {
+          "hex": "#71818c",
+          "share": 0.1228
+        }
+      ],
+      "meanLuma601": 123.4,
+      "narrationCue": "An invisible scoreboard utilizes local and regional leaderboards to leverage loss aversion, keeping users within the engagement loop. The prompt requires the orchestrator to simult",
+      "narrationPauseDistanceSeconds": 0.178,
+      "annotationNote": "Isometric tablet with grid of images (media ingest metaphor).",
+      "sensitive": false
+    },
+    {
+      "index": 40,
+      "startSeconds": 336.9,
+      "endSeconds": 344.833,
+      "durationSeconds": 7.933,
+      "transitionIn": {
+        "type": "soft-change",
+        "frameDiffAtCut": 0.0
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.14,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "HOSTING PIPELINE UI",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "SOURCE",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "commit",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "BUILD",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "Two-panel split-screen layout: a vertical linear process flow on the left and a complex network graph on the right, both set against a muted blue-grey background.",
+      "diagramPattern": "Mixed: Numbered process flow (left) and boxes-and-arrows architecture/network graph (right)",
+      "colorNotes": "Background is a desaturated slate blue (#7a8b99). Lines and text are dark charcoal/black. Accents include glowing cyan/teal for data flows and warm orange/yellow for node highlights.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#7f8f96",
+          "share": 0.2837
+        },
+        {
+          "hex": "#5f757e",
+          "share": 0.2315
+        },
+        {
+          "hex": "#353230",
+          "share": 0.1011
+        },
+        {
+          "hex": "#8d8a83",
+          "share": 0.0919
+        }
+      ],
+      "meanLuma601": 119.8,
+      "narrationCue": "The WebFlix architecture uses an AI native media protocol to replace traditional static video hosting models. It uses a multi-source ingest system to synchronize distributed conten",
+      "narrationPauseDistanceSeconds": 0.007,
+      "annotationNote": "Hosting pipeline: numbered flow (SOURCE -> commit -> BUILD ...) plus architecture panel; crisp labels.",
+      "sensitive": false
+    },
+    {
+      "index": 41,
+      "startSeconds": 344.833,
+      "endSeconds": 353.7,
+      "durationSeconds": 8.867,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 21.0
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.07,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "centered hero illustration with surrounding icons",
+      "diagramPattern": "other - metaphorical data flow illustration with central hub and peripheral nodes",
+      "colorNotes": "slate gray background (#6b7c8e), black ink lines, bright cyan and lime green flowing ribbons (#00d2ff, #a8ff00)",
+      "dominantColorsObserved": [
+        {
+          "hex": "#667d88",
+          "share": 0.2122
+        },
+        {
+          "hex": "#697e89",
+          "share": 0.1713
+        },
+        {
+          "hex": "#6c828c",
+          "share": 0.1405
+        },
+        {
+          "hex": "#697f8a",
+          "share": 0.1337
+        }
+      ],
+      "meanLuma601": 121.2,
+      "narrationCue": "The WebFlix architecture uses an AI native media protocol to replace traditional static video hosting models. It uses a multi-source ingest system to synchronize distributed conten",
+      "narrationPauseDistanceSeconds": 0.101,
+      "annotationNote": "Central hub data-flow metaphor; no legible text.",
+      "sensitive": false
+    },
+    {
+      "index": 42,
+      "startSeconds": 353.7,
+      "endSeconds": 374.033,
+      "durationSeconds": 20.333,
+      "transitionIn": {
+        "type": "soft-change",
+        "frameDiffAtCut": 0.0
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.68,
+        "level": "subtle",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "LLM Endpoints",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Dynamic Curation",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Cloudflare R2",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "Object Storage",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered hub-and-spoke architecture diagram on a dark background",
+      "diagramPattern": "boxes-and-arrows architecture (hub-and-spoke topology)",
+      "colorNotes": "Dark charcoal background (#3a3f47 approx), bright cyan/teal connecting lines (#4ecdc4), white text, purple/pink brain icons",
+      "dominantColorsObserved": [
+        {
+          "hex": "#3f4447",
+          "share": 0.344
+        },
+        {
+          "hex": "#3e4346",
+          "share": 0.3101
+        },
+        {
+          "hex": "#3f4146",
+          "share": 0.1319
+        },
+        {
+          "hex": "#4a575a",
+          "share": 0.0728
+        }
+      ],
+      "meanLuma601": 70.4,
+      "narrationCue": "The WebFlix architecture uses an AI native media protocol to replace traditional static video hosting models. It uses a multi-source ingest system to synchronize distributed conten",
+      "narrationPauseDistanceSeconds": 0.119,
+      "annotationNote": "Hub-and-spoke topology with crisp labels: LLM Endpoints, Dynamic Curation, Cloudflare R2, Object Storage.",
+      "sensitive": false
+    },
+    {
+      "index": 43,
+      "startSeconds": 374.033,
+      "endSeconds": 381.9,
+      "durationSeconds": 7.867,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 43.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 8.52,
+        "level": "high",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "full-bleed",
+      "diagramPattern": "none",
+      "colorNotes": "Background is a muted slate blue-grey (#7a8b94). The main subject is a vibrant cyan/turquoise (#00e5ff) with dark grey/black ink outlines. Secondary elements are light grey with dark outlines.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#677684",
+          "share": 0.2756
+        },
+        {
+          "hex": "#62717e",
+          "share": 0.1964
+        },
+        {
+          "hex": "#40d4c7",
+          "share": 0.1235
+        },
+        {
+          "hex": "#556975",
+          "share": 0.1098
+        }
+      ],
+      "meanLuma601": 113.7,
+      "narrationCue": "Localized language models are embedded in this flow to dynamically curate and personalize the video feeds as they arrive. While the WebFlix architecture is complex, the media app i",
+      "narrationPauseDistanceSeconds": 0.109,
+      "annotationNote": "Pure illustration segment; no legible text.",
+      "sensitive": false
+    },
+    {
+      "index": 44,
+      "startSeconds": 381.9,
+      "endSeconds": 387.733,
+      "durationSeconds": 5.833,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 46.3
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.06,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "workstation-scene",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": false,
+      "layout": "centered, top-down perspective of a workstation",
+      "diagramPattern": "none",
+      "colorNotes": "Background: #6b7280 (cool gray). Illustration: #d1d5db (light gray) with dark gray/black ink lines and cross-hatching for shading.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#ebece6",
+          "share": 0.2055
+        },
+        {
+          "hex": "#737d85",
+          "share": 0.1557
+        },
+        {
+          "hex": "#737c84",
+          "share": 0.1351
+        },
+        {
+          "hex": "#444749",
+          "share": 0.1281
+        }
+      ],
+      "meanLuma601": 144.0,
+      "narrationCue": "Localized language models are embedded in this flow to dynamically curate and personalize the video feeds as they arrive. While the WebFlix architecture is complex, the media app i",
+      "narrationPauseDistanceSeconds": 0.03,
+      "annotationNote": "Workstation scene, no legible text at midpoint sample.",
+      "sensitive": false
+    },
+    {
+      "index": 45,
+      "startSeconds": 387.733,
+      "endSeconds": 395.9,
+      "durationSeconds": 8.167,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 47.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 20.09,
+        "level": "high",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "metaphor-illustration",
+      "renderingClass": "generative",
+      "exactTexts": [],
+      "stylizedTextPresent": true,
+      "layout": "Full-bleed, dynamic perspective view with a central focal point and radial motion lines",
+      "diagramPattern": "Other - A central circular interface or portal with radial architectural elements",
+      "colorNotes": "Background: Off-white/cream paper texture (#F0EDE5). Line/ink tone: Dark charcoal/black (#2C2C2C). Accent color: Vibrant red/magenta (#FF3366) on the right-hand structure.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#b0aea7",
+          "share": 0.1565
+        },
+        {
+          "hex": "#b7b5ad",
+          "share": 0.1288
+        },
+        {
+          "hex": "#2e3035",
+          "share": 0.1281
+        },
+        {
+          "hex": "#847579",
+          "share": 0.1269
+        }
+      ],
+      "meanLuma601": 126.0,
+      "narrationCue": "Localized language models are embedded in this flow to dynamically curate and personalize the video feeds as they arrive. While the WebFlix architecture is complex, the media app i",
+      "narrationPauseDistanceSeconds": 0.082,
+      "annotationNote": "Central circular portal interface with radial arms; inscribed circular glyphs.",
+      "sensitive": false
+    },
+    {
+      "index": 46,
+      "startSeconds": 395.9,
+      "endSeconds": 401.967,
+      "durationSeconds": 6.067,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 53.8
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.06,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "code-panel",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "STRUCTURAL LIMITS.CONF",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "CPU_QUOTA = 50% FIXED",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered monitor screen with a thick red border on a textured gray background",
+      "diagramPattern": "code editor panel",
+      "colorNotes": "Background is a muted blue-gray (#8a9ba8), the monitor border is a bright crimson red (#e6194b), and the text/lines are dark charcoal/black ink.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#7b888f",
+          "share": 0.1642
+        },
+        {
+          "hex": "#7f8c92",
+          "share": 0.1553
+        },
+        {
+          "hex": "#78888e",
+          "share": 0.1531
+        },
+        {
+          "hex": "#76848b",
+          "share": 0.1499
+        }
+      ],
+      "meanLuma601": 111.0,
+      "narrationCue": "Rigid, well defined boundaries are what allow an AI to safely write and deploy code autonomously. Scaling software through multi agent orchestration requires engineering the exact ",
+      "narrationPauseDistanceSeconds": 0.001,
+      "annotationNote": "Hand-drawn config file: STRUCTURAL LIMITS.CONF with CPU_QUOTA = 50% FIXED and monospace comments.",
+      "sensitive": false
+    },
+    {
+      "index": 47,
+      "startSeconds": 401.967,
+      "endSeconds": 412.6,
+      "durationSeconds": 10.633,
+      "transitionIn": {
+        "type": "crossfade",
+        "frameDiffAtCut": 29.0
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.1,
+        "level": "static",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "architecture-diagram",
+      "renderingClass": "hybrid",
+      "exactTexts": [
+        {
+          "value": "OPERATIONAL LOOPS",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "LLM",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "FEEDBACK ANALYZER",
+          "rendering": "designed-structured"
+        },
+        {
+          "value": "DECISION ENGINE",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": true,
+      "layout": "centered isometric illustration",
+      "diagramPattern": "boxes-and-arrows architecture (isometric)",
+      "colorNotes": "Background: muted slate blue-grey (#7a8b94). Lines/Ink: dark grey/black with bright cyan/teal (#4deeea) glowing accents on the outer frame and inner channels.",
+      "dominantColorsObserved": [
+        {
+          "hex": "#68828b",
+          "share": 0.2304
+        },
+        {
+          "hex": "#648089",
+          "share": 0.201
+        },
+        {
+          "hex": "#8ab5b8",
+          "share": 0.1274
+        },
+        {
+          "hex": "#4a6169",
+          "share": 0.113
+        }
+      ],
+      "meanLuma601": 117.7,
+      "narrationCue": "Rigid, well defined boundaries are what allow an AI to safely write and deploy code autonomously. Scaling software through multi agent orchestration requires engineering the exact ",
+      "narrationPauseDistanceSeconds": 0.048,
+      "annotationNote": "Isometric operational-loops diagram: LLM, FEEDBACK ANALYZER, DECISION ENGINE nodes; bold title OPERATIONAL LOOPS.",
+      "sensitive": false
+    },
+    {
+      "index": 48,
+      "startSeconds": 412.6,
+      "endSeconds": 415.614,
+      "durationSeconds": 3.014,
+      "transitionIn": {
+        "type": "hard-cut",
+        "frameDiffAtCut": 83.7
+      },
+      "motion": {
+        "interiorMeanFrameDiff": 0.72,
+        "level": "subtle",
+        "evidence": "OBSERVED via 5 fps 160x90 grayscale frame-diff series (interior of segment, boundaries excluded)"
+      },
+      "visualType": "title-card",
+      "renderingClass": "deterministic",
+      "exactTexts": [
+        {
+          "value": "Gemini Notebook",
+          "rendering": "designed-structured"
+        }
+      ],
+      "stylizedTextPresent": false,
+      "layout": "centered logo and text on a full-bleed dark background",
+      "diagramPattern": "none",
+      "colorNotes": "Dark charcoal background (#1E1E1E), white text, blue gradient logo icon (#4285F4 to #9B72CB)",
+      "dominantColorsObserved": [
+        {
+          "hex": "#212226",
+          "share": 0.955
+        },
+        {
+          "hex": "#c9ceda",
+          "share": 0.0132
+        },
+        {
+          "hex": "#212227",
+          "share": 0.0088
+        },
+        {
+          "hex": "#1d1e23",
+          "share": 0.0078
+        }
+      ],
+      "meanLuma601": 36.6,
+      "narrationCue": "Rigid, well defined boundaries are what allow an AI to safely write and deploy code autonomously. Scaling software through multi agent orchestration requires engineering the exact ",
+      "narrationPauseDistanceSeconds": 0.391,
+      "annotationNote": "End card: Gemini Notebook branding, large clean white sans on charcoal with blue-violet gradient logo.",
+      "sensitive": false
+    }
+  ]
+}
