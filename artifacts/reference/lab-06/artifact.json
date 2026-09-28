@@ -1,0 +1,20 @@
+{
+  "id": "LAB-06",
+  "kind": "real-product Deep Dive Audio Overview (twin-notebook determinism probe)",
+  "source": "control fixture (sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 — identical to LAB-01)",
+  "captured_utc": "2026-09-28T21:41:28Z",
+  "ready_utc": "~2026-09-28T21:51:00Z",
+  "file": "Blueprint_for_an_AI_Explanation_Engine.m4a",
+  "sha256": "77b1b01228df89d5278e3732a966a0beeb8c3044f6e5cb0033449e8ece2b029b",
+  "bytes": 42574985,
+  "container": "m4a/mp4",
+  "audio": {"codec": "aac", "profile": "LC", "sample_rate": 44100, "channels": 2, "bit_rate": 256000},
+  "duration_seconds": 1322.84,
+  "title": "Blueprint for an AI Explanation Engine",
+  "format": "Deep Dive",
+  "length_setting": "Default",
+  "language": "English",
+  "hosts": 2,
+  "control": "LAB-01 (identical source, different notebook): 1201.82 s, 'Blueprint for a Redacted AI City' — delta +120.9 s (+10.2%), title changed, hook changed, surface fully reshuffled -> run-to-run stochasticity confirmed; macro discourse pattern stable",
+  "provenance": "fresh twin notebook (ed804a87), operator Google session, VPN egress"
+}
