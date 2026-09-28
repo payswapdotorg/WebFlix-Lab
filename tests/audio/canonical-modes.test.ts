@@ -17,6 +17,7 @@
 
 import { describe, expect, test } from 'bun:test';
 import { compileAudioOverview } from '../../src/audio';
+import { compileOverviewPlan } from '../../src/director/compiler';
 import {
   CANONICAL_BRIEF_PLAN,
   CANONICAL_CRITIQUE_PLAN,
@@ -53,29 +54,70 @@ describe('canonical per-mode plans through the audio pipeline (H-2)', () => {
     }
   }, 90000);
 
-  test('INTEGRATION FINDING (W1 feedback): Director tail-beat turns are over-budget', async () => {
-    // The canonical fixtures exposed a real Director defect the hand-built
-    // deep-dive fixture never could: compileOverviewPlan assigns up to two
-    // full claim statements (~25-35 words) as anchors to EVERY turn
-    // regardless of its duration, and the minimum-weight topic beat's turns
-    // come out 5-6s — too short to voice their mandatory anchors within the
-    // mode rate ceiling. The realizer honestly flags them turn-over-budget
-    // (error severity per DESIGN.md §16.2 item 3: coverage is Director
-    // authority, the error feeds back to the Director). Fix belongs in the
-    // Director's turn-budget allocation (anchor mass vs slot duration),
-    // tracked as a Phase 3 integration item — NOT silently absorbed here.
-    // Mode-independent: a Director-compiled deep-dive fails identically.
-    for (const { label, plan } of CANONICAL_MODE_PLANS.filter((m) => m.label !== 'brief')) {
+  test('WFLX-P3A fix (EV-005): canonical per-mode plans compile IN budget', async () => {
+    // HONEST-GAP TEST FLIP (work order WFLX-P3A, 2026-09-27): until this
+    // change, this test asserted the DOCUMENTED integration finding — the
+    // Director assigned up to two full claim statements to every turn
+    // regardless of duration, the minimum-weight topic beat's turns came
+    // out 5-6 s, and canonical critique/debate compiles raised 4
+    // turn-over-budget errors each (qa.status failed; EV-005, W1 feedback
+    // per DESIGN.md §16.2 item 3). The Director's turn-budget allocation is
+    // now anchor-mass-aware (src/director/compiler.ts), so the intended
+    // red->green transition of this work order is: zero turn-over-budget
+    // errors and non-failed status on ALL THREE canonical plans. This is
+    // the explicit flip, not a silent absorption; the over-budget LADDER
+    // itself is still enforced by the audio-local mutant test
+    // (qa-metrics.test.ts) — a plan with impossible anchors still fails.
+    for (const { label, plan } of CANONICAL_MODE_PLANS) {
       const result = await compileCanonical(plan);
       const over = result.qa.issues.filter((issue) => issue.code === 'turn-over-budget');
-      expect(over.length, label).toBeGreaterThanOrEqual(4);
-      expect(result.qa.status, label).toBe('failed');
+      expect(over, label).toEqual([]);
+      expect(result.qa.status, label).not.toBe('failed');
     }
-    // The canonical brief (fewer, longer-relative turns) realizes in budget:
-    // warning/info issues only, status passed-with-issues.
-    const brief = await compileCanonical(CANONICAL_BRIEF_PLAN);
-    expect(brief.qa.issues.filter((issue) => issue.code === 'turn-over-budget')).toEqual([]);
-    expect(brief.qa.status).not.toBe('failed');
+  }, 90000);
+
+  test('WFLX-P3A compression case (EXP-A-05 mechanism): a 180 s Director deep-dive compiles with zero over-budget turns', async () => {
+    // EV-006 EXP-A-05 sharpened the EV-005 finding: under duration
+    // compression (300 s -> 180 s, same source/graph/seed) the pre-fix
+    // defect COMPOUNDED — over-budget errors rose 4 -> 11 while coverage
+    // dropped 11/11 -> 7/11 by salience omission. Post-fix, the same
+    // compression arm (Director seed wflx-exp-a-director-seed, audio seed
+    // wflx-exp-a-audio-seed — the EXP-A conventions) must hold the
+    // over-budget count at ZERO while keeping the honest salience-driven
+    // omission with reasons.
+    const plan = compileOverviewPlan({
+      sources: [CANONICAL_SOURCE],
+      graph: CANONICAL_GRAPH,
+      modality: 'audio',
+      mode: 'deep-dive',
+      targetDurationSeconds: 180,
+      seed: 'wflx-exp-a-director-seed',
+      now: '2026-09-27T00:00:00Z',
+    });
+    // Compression still omits low-salience claims, with reasons.
+    expect(plan.coverage.covered.length).toBe(7);
+    expect(plan.coverage.omitted.length).toBe(4);
+    for (const omitted of plan.coverage.omitted) {
+      expect(omitted.reason.length).toBeGreaterThan(0);
+    }
+    const result = await compileAudioOverview({
+      plan,
+      graph: CANONICAL_GRAPH,
+      sources: CANONICAL_SOURCE,
+      options: {
+        seed: 'wflx-exp-a-audio-seed',
+        now: '2026-09-27T00:00:00Z',
+        mastering: 'pure-ts',
+      },
+    });
+    expect(result.qa.issues.filter((issue) => issue.code === 'turn-over-budget')).toEqual([]);
+    expect(result.qa.status).not.toBe('failed');
+    // Every covered claim is still voiced (no silent coverage under
+    // compression).
+    const voiced = new Set(plan.audioTurns.flatMap((turn) => [...turn.claimIds]));
+    for (const entry of plan.coverage.covered) {
+      expect(voiced.has(entry.claimId), `covered claim ${entry.claimId} voiced by no turn`).toBe(true);
+    }
   }, 90000);
 
   test('plan turn skeletons pass through the DialogueGraph unchanged', async () => {

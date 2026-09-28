@@ -25,7 +25,8 @@
         "unitIds": [
           "beat-2",
           "turn-3",
-          "turn-4"
+          "turn-4",
+          "turn-5"
         ]
       },
       {
@@ -37,12 +38,9 @@
           "beat-6",
           "turn-1",
           "turn-2",
-          "turn-15",
           "turn-16",
-          "turn-17",
           "turn-18",
-          "turn-19",
-          "turn-20"
+          "turn-19"
         ]
       },
       {
@@ -52,7 +50,7 @@
           "beat-3",
           "turn-7",
           "turn-8",
-          "turn-10"
+          "turn-9"
         ]
       },
       {
@@ -61,7 +59,8 @@
         "unitIds": [
           "beat-4",
           "turn-11",
-          "turn-12"
+          "turn-13",
+          "turn-14"
         ]
       },
       {
@@ -69,7 +68,7 @@
         "role": "supporting",
         "unitIds": [
           "beat-2",
-          "turn-5"
+          "turn-6"
         ]
       },
       {
@@ -85,7 +84,7 @@
         "role": "supporting",
         "unitIds": [
           "beat-4",
-          "turn-13"
+          "turn-12"
         ]
       },
       {
@@ -101,7 +100,7 @@
         "role": "supporting",
         "unitIds": [
           "beat-4",
-          "turn-12"
+          "turn-14"
         ]
       },
       {
@@ -109,7 +108,7 @@
         "role": "mention",
         "unitIds": [
           "beat-4",
-          "turn-13"
+          "turn-12"
         ]
       },
       {
@@ -117,7 +116,7 @@
         "role": "mention",
         "unitIds": [
           "beat-3",
-          "turn-9"
+          "turn-10"
         ]
       }
     ],
@@ -242,7 +241,7 @@
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 15
+      "targetDurationSeconds": 9
     },
     {
       "recordType": "AudioTurn",
@@ -269,7 +268,7 @@
       "style": {
         "delivery": "clear, expert, unhurried"
       },
-      "targetDurationSeconds": 15
+      "targetDurationSeconds": 21
     },
     {
       "recordType": "AudioTurn",
@@ -296,7 +295,7 @@
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 17
+      "targetDurationSeconds": 11
     },
     {
       "recordType": "AudioTurn",
@@ -324,7 +323,7 @@
         "delivery": "clear, expert, unhurried",
         "emphasis": "say entity names crisply: AI video tools, voice generation, agent tool systems"
       },
-      "targetDurationSeconds": 16
+      "targetDurationSeconds": 18
     },
     {
       "recordType": "AudioTurn",
@@ -334,17 +333,17 @@
       "speaker": "Host A",
       "speakerRole": "host-a",
       "purpose": "question",
-      "brief": "Put the listener's question. Focus on local model runtimes, model catalogs. Anchors: The catalog also includes open-source media projects, local model runtimes and model catalogs.",
+      "brief": "Put the listener's question. Focus on AI video tools, voice generation, agent tool systems. Anchors: The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems.",
       "claimIds": [
-        "claim-oss-runtimes"
+        "claim-tool-catalog"
       ],
       "evidence": [
         {
           "sourceId": "source-messy-note-redacted",
-          "blockId": "b13",
-          "start": 426,
-          "end": 452,
-          "quote": "open-source media projects"
+          "blockId": "b5",
+          "start": 252,
+          "end": 291,
+          "quote": "The source contains a mixed catalog of:"
         }
       ],
       "beatId": "beat-2",
@@ -361,11 +360,19 @@
       "speaker": "Host B",
       "speakerRole": "host-b",
       "purpose": "clarification",
-      "brief": "Clarify the likely confusion precisely. Anchors: The catalog extends to forecasting and digital-twin/world-monitoring projects.",
+      "brief": "Clarify the likely confusion precisely. Anchors: The catalog also includes open-source media projects, local model runtimes and model catalogs. The catalog extends to forecasting and digital-twin/world-monitoring projects.",
       "claimIds": [
+        "claim-oss-runtimes",
         "claim-forecasting-projects"
       ],
       "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b13",
+          "start": 426,
+          "end": 452,
+          "quote": "open-source media projects"
+        },
         {
           "sourceId": "source-messy-note-redacted",
           "blockId": "b16",
@@ -378,7 +385,7 @@
       "style": {
         "delivery": "patient, precise"
       },
-      "targetDurationSeconds": 16
+      "targetDurationSeconds": 20
     },
     {
       "recordType": "AudioTurn",
@@ -405,7 +412,7 @@
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 11
+      "targetDurationSeconds": 8
     },
     {
       "recordType": "AudioTurn",
@@ -433,7 +440,7 @@
         "delivery": "clear, expert, unhurried",
         "emphasis": "say entity names crisply: Cloudflare, Postgres, Neon"
       },
-      "targetDurationSeconds": 11
+      "targetDurationSeconds": 16
     },
     {
       "recordType": "AudioTurn",
@@ -443,34 +450,7 @@
       "speaker": "Host A",
       "speakerRole": "host-a",
       "purpose": "question",
-      "brief": "Put the listener's question. Focus on the details. Anchors: All credentials in the source are redacted.",
-      "claimIds": [
-        "claim-credentials-redacted"
-      ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b30",
-          "start": 781,
-          "end": 814,
-          "quote": "All credentials are `[REDACTED]`."
-        }
-      ],
-      "beatId": "beat-3",
-      "style": {
-        "delivery": "curious, conversational"
-      },
-      "targetDurationSeconds": 11
-    },
-    {
-      "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-10",
-      "index": 9,
-      "speaker": "Host B",
-      "speakerRole": "host-b",
-      "purpose": "clarification",
-      "brief": "Clarify the likely confusion precisely. Anchors: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
+      "brief": "Put the listener's question. Focus on Cloudflare, Postgres, Neon. Anchors: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
       "claimIds": [
         "claim-infra-stack"
       ],
@@ -485,9 +465,36 @@
       ],
       "beatId": "beat-3",
       "style": {
+        "delivery": "curious, conversational"
+      },
+      "targetDurationSeconds": 14
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-10",
+      "index": 9,
+      "speaker": "Host B",
+      "speakerRole": "host-b",
+      "purpose": "clarification",
+      "brief": "Clarify the likely confusion precisely. Anchors: All credentials in the source are redacted.",
+      "claimIds": [
+        "claim-credentials-redacted"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b30",
+          "start": 781,
+          "end": 814,
+          "quote": "All credentials are `[REDACTED]`."
+        }
+      ],
+      "beatId": "beat-3",
+      "style": {
         "delivery": "patient, precise"
       },
-      "targetDurationSeconds": 11
+      "targetDurationSeconds": 6
     },
     {
       "recordType": "AudioTurn",
@@ -514,7 +521,7 @@
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 28
+      "targetDurationSeconds": 14
     },
     {
       "recordType": "AudioTurn",
@@ -524,43 +531,7 @@
       "speaker": "Host B",
       "speakerRole": "host-b",
       "purpose": "explanation",
-      "brief": "Explain, grounded in the source. Anchors: The architecture section discusses multi-agent orchestration. Provider integrations are part of the discussed architecture and workflows.",
-      "claimIds": [
-        "claim-multi-agent-orchestration",
-        "claim-provider-integrations"
-      ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b33",
-          "start": 883,
-          "end": 908,
-          "quote": "multi-agent orchestration"
-        },
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b35",
-          "start": 939,
-          "end": 960,
-          "quote": "provider integrations"
-        }
-      ],
-      "beatId": "beat-4",
-      "style": {
-        "delivery": "clear, expert, unhurried",
-        "emphasis": "say entity names crisply: multi-agent orchestration, provider integrations"
-      },
-      "targetDurationSeconds": 27
-    },
-    {
-      "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-13",
-      "index": 12,
-      "speaker": "Host A",
-      "speakerRole": "host-a",
-      "purpose": "question",
-      "brief": "Put the listener's question. Focus on deployment pipelines, sandbox/resource limits. Anchors: The source covers deployment pipelines, operational loops and execution workflows. Sandbox and resource limits are discussed as architectural guardrails.",
+      "brief": "Explain, grounded in the source. Anchors: The source covers deployment pipelines, operational loops and execution workflows. Sandbox and resource limits are discussed as architectural guardrails.",
       "claimIds": [
         "claim-deployment-pipelines",
         "claim-sandbox-limits"
@@ -583,9 +554,37 @@
       ],
       "beatId": "beat-4",
       "style": {
+        "delivery": "clear, expert, unhurried",
+        "emphasis": "say entity names crisply: deployment pipelines, sandbox/resource limits"
+      },
+      "targetDurationSeconds": 31
+    },
+    {
+      "recordType": "AudioTurn",
+      "contractVersion": "1.0.0",
+      "id": "turn-13",
+      "index": 12,
+      "speaker": "Host A",
+      "speakerRole": "host-a",
+      "purpose": "question",
+      "brief": "Put the listener's question. Focus on multi-agent orchestration. Anchors: The architecture section discusses multi-agent orchestration.",
+      "claimIds": [
+        "claim-multi-agent-orchestration"
+      ],
+      "evidence": [
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33",
+          "start": 883,
+          "end": 908,
+          "quote": "multi-agent orchestration"
+        }
+      ],
+      "beatId": "beat-4",
+      "style": {
         "delivery": "curious, conversational"
       },
-      "targetDurationSeconds": 27
+      "targetDurationSeconds": 24
     },
     {
       "recordType": "AudioTurn",
@@ -595,24 +594,33 @@
       "speaker": "Host B",
       "speakerRole": "host-b",
       "purpose": "clarification",
-      "brief": "Clarify the likely confusion precisely. Anchors: The workflows include security/integrity audits.",
+      "brief": "Clarify the likely confusion precisely. Anchors: Provider integrations are part of the discussed architecture and workflows. The architecture section discusses multi-agent orchestration. The workflows include security/integrity audits.",
       "claimIds": [
+        "claim-provider-integrations",
+        "claim-multi-agent-orchestration",
         "claim-audits"
       ],
       "evidence": [
         {
           "sourceId": "source-messy-note-redacted",
-          "blockId": "b34",
-          "start": 911,
-          "end": 936,
-          "quote": "security/integrity audits"
+          "blockId": "b35",
+          "start": 939,
+          "end": 960,
+          "quote": "provider integrations"
+        },
+        {
+          "sourceId": "source-messy-note-redacted",
+          "blockId": "b33",
+          "start": 883,
+          "end": 908,
+          "quote": "multi-agent orchestration"
         }
       ],
       "beatId": "beat-4",
       "style": {
         "delivery": "patient, precise"
       },
-      "targetDurationSeconds": 27
+      "targetDurationSeconds": 40
     },
     {
       "recordType": "AudioTurn",
@@ -622,24 +630,14 @@
       "speaker": "Host A",
       "speakerRole": "host-a",
       "purpose": "framing",
-      "brief": "Open the segment and orient the listener. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
-      "claimIds": [
-        "claim-purpose"
-      ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b41",
-          "start": 1065,
-          "end": 1205,
-          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
-        }
-      ],
+      "brief": "Open the segment and orient the listener. No claim anchors this turn; stay on the segment topic: Purpose of the note.",
+      "claimIds": [],
+      "evidence": [],
       "beatId": "beat-5",
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 6
+      "targetDurationSeconds": 5
     },
     {
       "recordType": "AudioTurn",
@@ -666,7 +664,7 @@
       "style": {
         "delivery": "clear, expert, unhurried"
       },
-      "targetDurationSeconds": 6
+      "targetDurationSeconds": 9
     },
     {
       "recordType": "AudioTurn",
@@ -676,57 +674,20 @@
       "speaker": "Host A",
       "speakerRole": "host-a",
       "purpose": "question",
-      "brief": "Put the listener's question. Focus on the details. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
-      "claimIds": [
-        "claim-purpose"
-      ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b41",
-          "start": 1065,
-          "end": 1205,
-          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
-        }
-      ],
+      "brief": "Put the listener's question. Focus on the details. No claim anchors this turn; stay on the segment topic: Purpose of the note.",
+      "claimIds": [],
+      "evidence": [],
       "beatId": "beat-5",
       "style": {
         "delivery": "curious, conversational"
       },
-      "targetDurationSeconds": 5
+      "targetDurationSeconds": 8
     },
     {
       "recordType": "AudioTurn",
       "contractVersion": "1.0.0",
       "id": "turn-18",
       "index": 17,
-      "speaker": "Host B",
-      "speakerRole": "host-b",
-      "purpose": "clarification",
-      "brief": "Clarify the likely confusion precisely. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
-      "claimIds": [
-        "claim-purpose"
-      ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b41",
-          "start": 1065,
-          "end": 1205,
-          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
-        }
-      ],
-      "beatId": "beat-5",
-      "style": {
-        "delivery": "patient, precise"
-      },
-      "targetDurationSeconds": 5
-    },
-    {
-      "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-19",
-      "index": 18,
       "speaker": "Host A",
       "speakerRole": "host-a",
       "purpose": "synthesis",
@@ -752,8 +713,8 @@
     {
       "recordType": "AudioTurn",
       "contractVersion": "1.0.0",
-      "id": "turn-20",
-      "index": 19,
+      "id": "turn-19",
+      "index": 18,
       "speaker": "Host B",
       "speakerRole": "host-b",
       "purpose": "conclusion",

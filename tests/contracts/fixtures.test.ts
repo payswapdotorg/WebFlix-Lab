@@ -113,11 +113,20 @@ describe('canonical per-mode plan fixtures (Director-emitted, H-2)', () => {
   const critique = loadJson(`${FIXTURE_DIR}/plan-audio-critique-5min.json`) as OverviewPlan;
   const debate = loadJson(`${FIXTURE_DIR}/plan-audio-debate-5min.json`) as OverviewPlan;
 
-  /** Pinned content fingerprints (tamper-evidence; also EV-005). */
+  /**
+   * Pinned content fingerprints (tamper-evidence; also EV-005 -> EV-008).
+   * WFLX-P3A transition (turn-budget allocation fix, 2026-09-28):
+   *   brief    fb2f6133a032589f894ba7116b1a0ff5d4ad0fba164f08637e4541ab530ba462 -> 2ccf7f2e892f8fcfff37aa7429e9e0fed59d8bf9260f8b858a5dcad6985b3b58
+   *   critique 1c450ae50ce80d834bbc22fd4cb31e75c94c1b00739fac6d304188fff692763e -> 59b37965895b7618f0362ce2a9a778f143a505b97fc5ba8b5c81243ddfc6cda1
+   *   debate   c2b22eb1b37b84198f65cdff1ae9e9bf988e3448b5ebaaf5b085489afb82eecb -> e2fab2a77778fa22f348dd2bd8d194a9da8c616372079cd9db39e878e2b5e4bc
+   * (same seeds / FIXED_TS / planIds; only the Director-emitted plans and
+   * their s15/s16/s17 mutants changed — the Stage-2 hand-built fixtures are
+   * byte-frozen and untouched).
+   */
   const FINGERPRINTS: Record<string, string> = {
-    'plan-audio-brief-2min.json': 'fb2f6133a032589f894ba7116b1a0ff5d4ad0fba164f08637e4541ab530ba462',
-    'plan-audio-critique-5min.json': '1c450ae50ce80d834bbc22fd4cb31e75c94c1b00739fac6d304188fff692763e',
-    'plan-audio-debate-5min.json': 'c2b22eb1b37b84198f65cdff1ae9e9bf988e3448b5ebaaf5b085489afb82eecb',
+    'plan-audio-brief-2min.json': '2ccf7f2e892f8fcfff37aa7429e9e0fed59d8bf9260f8b858a5dcad6985b3b58',
+    'plan-audio-critique-5min.json': '59b37965895b7618f0362ce2a9a778f143a505b97fc5ba8b5c81243ddfc6cda1',
+    'plan-audio-debate-5min.json': 'e2fab2a77778fa22f348dd2bd8d194a9da8c616372079cd9db39e878e2b5e4bc',
   };
 
   test('pinned fingerprints match the checked-in fixtures', async () => {
