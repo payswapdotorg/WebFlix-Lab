@@ -43,3 +43,14 @@ evidence_paths:
   - "artifacts/audio/exp-a/brief-2min-canonical/"
   - "artifacts/audio/exp-a/brief-5min-deconfound/"
   - "experiments/run-exp-a.ts"
+
+  # --- RE-BASELINE 2026-09-28 22:35 UTC (TL #2, post PR #7 / EV-008) ---
+  # The Director turn-budget fix (anchor-mass-aware allocation) landed on main
+  # after this record was written. A fresh `bun run exp:a` re-run under the
+  # fixed Director re-baselines this experiment's numbers (full series
+  # transition in artifacts/audio/exp-a/summary.json; pre-fix numbers above
+  # remain the historical EV-006 evidence and are preserved in git history):
+  #   over-budget turns 4 -> 0 (all dialogic 300 s arms); qa failed ->
+  #   passed-with-issues; canonical turn counts 20 -> 19 / 21 -> 20 (the
+  #   mass-aware skeleton drops one slot); the H-1 mode-semantics warnings and
+  #   the EXP-A-04 locality numbers are re-measured on the new baseline.

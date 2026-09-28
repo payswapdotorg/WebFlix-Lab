@@ -39,3 +39,25 @@ evidence_paths:
   - "artifacts/audio/exp-a/summary.json"
   - "artifacts/audio/exp-a/deepdive-3min-duration/"
   - "experiments/run-exp-a.ts"
+
+  # --- RE-BASELINE 2026-09-28 22:35 UTC (TL #2, post PR #7 / EV-008) ---
+  # The Director turn-budget fix (anchor-mass-aware allocation) landed on main
+  # after this record was written. A fresh `bun run exp:a` re-run under the
+  # fixed Director re-baselines this experiment's numbers (full series
+  # transition in artifacts/audio/exp-a/summary.json; pre-fix numbers above
+  # remain the historical EV-006 evidence and are preserved in git history):
+  #   over-budget turns 4 -> 0 (all dialogic 300 s arms); qa failed ->
+  #   passed-with-issues; canonical turn counts 20 -> 19 / 21 -> 20 (the
+  #   mass-aware skeleton drops one slot); the H-1 mode-semantics warnings and
+  #   the EXP-A-04 locality numbers are re-measured on the new baseline.
+
+  # EXP-A-05 SPECIFIC re-baseline (the compression arm; P3A handoff item 3):
+  #   pre-fix: 21 turns, 11 over-budget errors, wps 2.56, qa failed.
+  #   post-fix: 18 turns, 0 over-budget, wps 1.84, qa passed-with-issues,
+  #   coverage 7/11 (unchanged salience-driven omission set).
+  #   The pre-fix "skeleton invariant under compression" property was part of
+  #   the DEFECT mechanism (it preserved impossible 4-6 s anchored slots);
+  #   post-fix the skeleton prunes with the budget (21 -> 18 turns at 180 s)
+  #   and the speaking-rate rise is bounded (2.56 -> 1.84 wps, within the
+  #   W2 mode ceiling). The "compression compounding" observation is RESOLVED
+  #   by the fix, not a property of the pipeline.
