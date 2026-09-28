@@ -1,0 +1,46 @@
+{
+  "id": "LAB-02",
+  "kind": "real-product Audio Overview mode variants (Brief / Critique / Debate) on the control source",
+  "source": "control fixture (sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47)",
+  "artifacts": [
+    {
+      "format": "Brief",
+      "file": "Inside_the_Redacted_AI_Project_Blueprint.m4a",
+      "sha256": "4da66f188a7d17f057d56ed1becfbc3ff0e8d91622d39dab061ded05dbb118ed",
+      "bytes": 3023701,
+      "duration_seconds": 93.92,
+      "title": "Inside the Redacted AI Project Blueprint",
+      "started_utc": "2026-09-28T21:09:31Z",
+      "ready_utc": "~2026-09-28T21:14:00Z",
+      "voices": 1,
+      "notes": "single narrator, enumerated structure (First/Second/Finally)"
+    },
+    {
+      "format": "Critique",
+      "file": "Replacing_flat_AI_notes_with_vertical_stacks.m4a",
+      "sha256": "304228546316f96df78302c32fe0e907793a96873becddc9c280c0698897b43d",
+      "bytes": 32824893,
+      "duration_seconds": 1019.89,
+      "title": "Replacing flat AI notes with vertical stacks",
+      "started_utc": "2026-09-28T21:15:07Z",
+      "ready_utc": "~2026-09-28T21:22:00Z",
+      "voices": 2,
+      "notes": "evaluative review of the source itself; proposes improvements (dual view: glossary index vs systems view)"
+    },
+    {
+      "format": "Debate",
+      "file": "Autonomous_AI_or_enterprise_containment_grid.m4a",
+      "sha256": "b9e791da1e7086bb849468238dd1d84aaf2013831b8a6d10fc413b8d3c17c4b7",
+      "bytes": 33790414,
+      "duration_seconds": 1049.89,
+      "title": "Autonomous AI or enterprise containment grid",
+      "started_utc": "2026-09-28T21:25:02Z",
+      "ready_utc": "~2026-09-28T21:31:00Z",
+      "voices": 2,
+      "notes": "adversarial positions with rebuttals, counter-analogies, micro-scenario evidence"
+    }
+  ],
+  "audio": {"codec": "aac", "profile": "LC", "sample_rate": 44100, "channels": 2, "bit_rate": 256000},
+  "control": "LAB-01 Deep Dive (1201.82 s, two hosts, collaborative)",
+  "provenance": "same notebook as LAB-01 (25661cd9), control source, operator Google session, VPN egress"
+}

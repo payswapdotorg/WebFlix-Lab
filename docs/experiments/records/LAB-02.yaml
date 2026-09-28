@@ -1,0 +1,46 @@
+id: LAB-02
+timestamp_utc: "2026-09-28T21:09:31Z (Brief), 2026-09-28T21:15:07Z (Critique), 2026-09-28T21:25:02Z (Debate)"
+operator: tl2+operator
+surface: audio
+reference_notebook: "WFLX-LAB-01 (dedicated; id 25661cd9) — SAME notebook as LAB-01, CONTROL source restored (remove + re-add; pasted sources are content-immutable)"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — identical to LAB-01 baseline)"
+selected_sources:
+  - "# Reference Fixture — Redacted Messy Note (control content; re-added via 'Copied text')"
+format: "Brief, Critique, Debate (three generations, same dialog, format radio switched per run)"
+language: "English"
+length: "Default (all three)"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  generation_sequence: "Brief 21:09:31Z -> ready ~21:14 (~4.5 min); Critique 21:15:07Z -> ready ~21:22 (~7 min); Debate 21:25:02Z -> ready ~21:31 (~6 min)"
+  ai_usage_ui: "dialog shows an AI Usage meter ('Already used / Estimated use') — limits refresh every 5 h (PRO tier); five generations on this notebook so far without hitting a limit"
+baseline_artifact: "artifacts/reference/lab-01/Blueprint_for_a_Redacted_AI_City.m4a (Deep Dive control, 1201.82 s)"
+mutation: ""
+artifact_under_test: "three artifacts in artifacts/reference/lab-02/"
+artifact_hash: "Brief sha256:4da66f188a7d17f057d56ed1becfbc3ff0e8d91622d39dab061ded05dbb118ed | Critique sha256:304228546316f96df78302c32fe0e907793a96873becddc9c280c0698897b43d | Debate sha256:b9e791da1e7086bb849468238dd1d84aaf2013831b8a6d10fc413b8d3c17c4b7"
+observations:
+  - "OBSERVED (Brief, 93.92 s): SINGLE narrator voice, no second host — 'This is the brief on...'. Structure is explicitly enumerated ('First... Second... Finally...'), compressing the same three-part roadmap the Deep Dive walks conversationally. ~11x shorter than the Deep Dive control."
+  - "OBSERVED (Critique, 1019.89 s = 16:59): TWO hosts in an evaluative review stance — the episode reviews THE SOURCE ITSELF ('what if we looked at it from the perspective of a dual view approach?', 'conceptual friction'), proposing concrete improvements (glossary view vs systems view) rather than unpacking content. Suggests critique voices the document's weaknesses/design tradeoffs."
+  - "OBSERVED (Debate, 1049.89 s = 17:29): TWO hosts in adversarial positions with visible rebuttal moves — 'I am not convinced by that line of reasoning because...', counter-analogy (autonomous vehicle on a track with moving guardrails), micro-scenario evidence, concession-reframe ('That's an interesting point, though I would frame it differently')."
+  - "OBSERVED (restructure, not re-skin): the three formats differ in VOICE COUNT (1 vs 2), STANCE (neutral summary vs evaluative review vs adversarial debate), and DURATION (1:33 vs 17:00 vs 17:29) on the SAME source — a structural re-composition per mode, matching our EXP-A-01..03 axis qualitatively."
+  - "OBSERVED (duration band): Critique and Debate sit within ~90 s of each other and ~3 min below the Deep Dive control — a mid-length band distinct from both Brief and Deep Dive."
+  - "OBSERVED: all three generated titles are content-derived and mode-appropriate ('Inside the Redacted AI Project Blueprint' / 'Replacing flat AI notes with vertical stacks' / 'Autonomous AI or enterprise containment grid') — the Critique title literally names its proposed improvement."
+  - "OBSERVED: same codec envelope for all formats (AAC 256 kbps 44.1 kHz stereo) — mode differences are editorial, not technical."
+  - "OBSERVED: sequential generations on one notebook do not cross-contaminate — each artifact stands alone; the Studio list holds all five artifacts (2 Deep Dive + 3 modes) concurrently."
+invariants:
+  - "Brief is monologic + enumerated; Critique and Debate are dialogic — the voice-count split matches our brief-skeleton vs dialogic-mode contract semantics."
+  - "All formats consume the same single source and surface the same three-section content topology at their own depth."
+differences:
+  - "vs LAB-01 (Deep Dive control): every format restructures rather than reskins — duration spread 1:33 to 20:01, voice count 1-2, stance neutral/evaluative/adversarial."
+  - "vs our EXP-A-01..03: our brief is a fixed 10-turn skeleton; the real Brief is a single continuous narration (~1.5 min) with enumeration markers — our skeleton model over-structures the real Brief surface."
+hypothesis: "The real product's format axis is (voice count) x (stance) x (depth), with a stable three-band duration structure (brief ~1.5 min, critique/debate ~17 min, deep dive ~20 min); titles are content-derived per generation."
+confidence: medium
+falsifier: "A different source producing a multi-voice Brief or a monologic Critique would falsify the voice-count reading; durations far outside the bands would falsify the band hypothesis."
+next_experiment: "LAB-06 twin-notebook Deep Dive (determinism); LAB-04 second language; LAB-03 length variant (Short/Long)."
+status: observed
+evidence_paths:
+  - artifacts/reference/lab-02/Inside_the_Redacted_AI_Project_Blueprint.m4a
+  - artifacts/reference/lab-02/Replacing_flat_AI_notes_with_vertical_stacks.m4a
+  - artifacts/reference/lab-02/Autonomous_AI_or_enterprise_containment_grid.m4a
+  - artifacts/reference/lab-02/artifact.json
+  - docs/experiments/records/LAB-01.yaml
