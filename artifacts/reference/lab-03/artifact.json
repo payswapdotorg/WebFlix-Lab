@@ -1,0 +1,20 @@
+{
+  "id": "LAB-03",
+  "kind": "real-product Deep Dive Audio Overview (length variant: Short)",
+  "source": "control fixture (sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 — identical to LAB-01)",
+  "captured_utc": "2026-09-28T22:06:43Z",
+  "ready_utc": "~2026-09-28T22:11:00Z",
+  "file": "Blueprint_for_an_autonomous_AI_workforce.m4a",
+  "sha256": "4a16e9d300a1d39da8300214b4ba7aa5911b27aa5ab12fcadc70548efdb283f6",
+  "bytes": 10211230,
+  "container": "m4a/mp4",
+  "audio": {"codec": "aac", "profile": "LC", "sample_rate": 44100, "channels": 2, "bit_rate": 256000},
+  "duration_seconds": 318.21,
+  "title": "Blueprint for an autonomous AI workforce",
+  "format": "Deep Dive",
+  "length_setting": "Short",
+  "language": "English",
+  "hosts": 2,
+  "control": "LAB-01 Default Deep Dive (1201.82 s): Short = 3.78x compression; skeleton/sections/hosts preserved, per-topic depth reduced",
+  "provenance": "same notebook as LAB-01 (25661cd9), control source, operator Google session, VPN egress"
+}

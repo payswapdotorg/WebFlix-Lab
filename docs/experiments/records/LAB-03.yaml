@@ -1,0 +1,42 @@
+id: LAB-03
+timestamp_utc: "2026-09-28T22:06:43Z"
+operator: tl2+operator
+surface: audio
+reference_notebook: "WFLX-LAB-01 (dedicated; id 25661cd9) — same notebook, control source"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — identical to LAB-01)"
+selected_sources:
+  - "# Reference Fixture — Redacted Messy Note (control content via 'Copied text')"
+format: "Deep Dive"
+language: "English"
+length: "Short (dialog Length control: Short / Default / Long — UI-exposed, answering the LAB-03 precondition)"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  generation_start: "2026-09-28T22:06:43Z"
+  generation_ready: "~2026-09-28T22:11:00Z (~4.5 min — faster than Default's ~7-8 min)"
+baseline_artifact: "artifacts/reference/lab-01/Blueprint_for_a_Redacted_AI_City.m4a (Default Deep Dive control, 1201.82 s)"
+mutation: ""
+artifact_under_test: "artifacts/reference/lab-03/Blueprint_for_an_autonomous_AI_workforce.m4a"
+artifact_hash: "sha256:4a16e9d300a1d39da8300214b4ba7aa5911b27aa5ab12fcadc70548efdb283f6"
+observations:
+  - "OBSERVED (duration control is real): Short setting produced a 318.21 s (5:18) episode vs the Default control's 1201.82 s (20:01) — a 3.78x compression on the same source and format."
+  - "OBSERVED (compression strategy = depth reduction, not structure removal): the Short episode keeps the two-host dialogic form, the hook->title->roadmap opening, the section walk (tools catalog -> infrastructure -> architecture), the banter register, and the redaction-as-framing move; every section is present but covered faster (infrastructure reached within ~2 min vs ~5+ min in Default)."
+  - "OBSERVED (compression vs our EXP-A-05 finding): our salience-omission + rate-rise mechanism (coverage falls 11/11 -> 7/11 while wps rises) has a real-product counterpart in duration compression, but the observable surface here preserves section coverage and host banter — the real product compresses per-topic depth rather than dropping topics outright (coverage observable only qualitatively from ASR sampling; claim-level coverage is not measurable black-box)."
+  - "OBSERVED (title): again content-derived and run-specific ('Blueprint for an autonomous AI workforce') — different from both the Default control title and every other run."
+  - "OBSERVED: generation latency scales with target length (~4.5 min for Short vs ~7-9.5 min for Default)."
+invariants:
+  - "Two hosts + discourse skeleton + section topology survive 4x duration compression."
+  - "Same codec envelope (AAC 256 kbps stereo 44.1 kHz) at every length."
+differences:
+  - "vs LAB-01: -883.6 s duration (-73.5%), faster section cadence, same skeleton — the Length control scales depth, not structure."
+  - "vs our EXP-A-05: our lab's compression drops claims by salience and raises speaking rate; the real product's observable compression preserves topic coverage and conversational pace (depth-per-topic shrinks)."
+hypothesis: "The real Length control is a target-duration knob that re-plans per-topic time budgets (compressing depth) while preserving section structure and voice form."
+confidence: medium
+falsifier: "A Short run that drops entire sections or switches to a single voice would falsify the depth-scaling reading (not observed in this run)."
+next_experiment: "LAB series complete (6/6); EV record + promotion-package inputs next."
+status: observed
+evidence_paths:
+  - artifacts/reference/lab-03/Blueprint_for_an_autonomous_AI_workforce.m4a
+  - artifacts/reference/lab-03/artifact.json
+  - docs/experiments/records/LAB-01.yaml
+  - docs/experiments/records/EXP-A-05.yaml
