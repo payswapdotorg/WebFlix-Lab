@@ -10,17 +10,52 @@
 
 import { describe, expect, test } from 'bun:test';
 import { readFileSync } from 'node:fs';
-import { compileOverviewPlan, DEFAULT_SECONDS_PER_CLAIM, type DirectorRequest } from '../../src/director/compiler';
+import {
+  compileOverviewPlan,
+  DEFAULT_SECONDS_PER_CLAIM,
+  TURN_PLANNING_RATE_WPS,
+  type DirectorRequest,
+} from '../../src/director/compiler';
 import { evaluateCoverage } from '../../src/director/evaluate';
 import { MarkdownNoteAdapter } from '../../src/source/markdown-note-adapter';
 import { DeterministicExtractor } from '../../src/source/graph/deterministic-extractor';
 import {
+  countWords,
   OverviewPlanSchema,
   validateOverviewPlan,
+  type AudioTurn,
+  type AudioTurnPurpose,
   type OverviewPlan,
   type SemanticGraph,
   type SourceArtifact,
 } from '../../src/contracts';
+
+/**
+ * Purposes the audio grounding rule (W2, src/audio/dialogue/types.ts
+ * ZERO_CLAIM_ALLOWED_PURPOSES) treats as factual carriers: such turns MUST
+ * cite >= 1 claim. Structural purposes may be claim-less topical tissue.
+ * Documented mirror, not an import (path ownership).
+ */
+const FACTUAL_TURN_PURPOSES: ReadonlySet<AudioTurnPurpose> = new Set([
+  'explanation',
+  'example',
+  'connection',
+  'clarification',
+]);
+
+/** Anchor-mass model mirroring the Director's allocation priors. */
+const QUESTION_TAIL_TOKENS = 8;
+const ANCHOR_CONNECTOR_TOKENS = 5;
+
+function mandatoryMass(turn: AudioTurn, graph: SemanticGraph): number {
+  const claimsById = new Map(graph.claims.map((c) => [c.id, c]));
+  const anchorTokens = turn.claimIds.reduce(
+    (acc, claimId, i) =>
+      acc + countWords(claimsById.get(claimId)?.statement ?? '') + (i > 0 ? ANCHOR_CONNECTOR_TOKENS : 0),
+    0,
+  );
+  return anchorTokens + (turn.purpose === 'question' ? QUESTION_TAIL_TOKENS : 0);
+}
 
 const SOURCE = JSON.parse(
   readFileSync('fixtures/contracts/reference-messy-note.source-artifact.json', 'utf8'),
@@ -49,7 +84,10 @@ describe('compileOverviewPlan — validity and determinism', () => {
     expect(validateOverviewPlan(plan, GRAPH, SOURCE).valid).toBe(true);
     expect(plan.mode).toBe('deep-dive');
     expect(plan.beats.length).toBe(6); // opening + 4 topics + closing
-    expect(plan.audioTurns.length).toBe(21); // 2 + 4*4 + 3
+    // EV-005 fix: the skeleton is anchor-mass-aware, so the single-claim
+    // "Purpose of the note" beat keeps 3 of its 4 pattern slots (two factual
+    // carriers cannot share one claim): 2 + 4 + 4 + 4 + 3 + 3.
+    expect(plan.audioTurns.length).toBe(20);
     expect(plan.videoScenes).toEqual([]);
     const durationSum = plan.audioTurns.reduce((acc, t) => acc + t.targetDurationSeconds, 0);
     expect(durationSum).toBe(300);
@@ -196,8 +234,12 @@ describe('compileOverviewPlan — editorial invariants', () => {
     expect(purposes.size).toBeGreaterThanOrEqual(5);
     for (const turn of plan.audioTurns) {
       expect(turn.brief.length).toBeGreaterThan(0);
-      if (turn.purpose === 'framing' || turn.purpose === 'transition') continue;
-      expect(turn.claimIds.length).toBeGreaterThanOrEqual(1);
+      // W2 grounding rule: factual carriers must cite claims; structural
+      // purposes (framing/question/transition/synthesis/conclusion) may be
+      // claim-less topical tissue (EV-005 fix: anchors only where they fit).
+      if (FACTUAL_TURN_PURPOSES.has(turn.purpose)) {
+        expect(turn.claimIds.length).toBeGreaterThanOrEqual(1);
+      }
     }
     // Grounded turns: evidence spans verify against the source.
     for (const turn of plan.audioTurns) {
@@ -216,6 +258,107 @@ describe('compileOverviewPlan — editorial invariants', () => {
         if (!item.exact || item.role === 'title' || item.role === 'caption') continue;
         expect(SOURCE.text.includes(item.value), `label not grounded: ${item.value}`).toBe(true);
       }
+    }
+  });
+});
+
+describe('compileOverviewPlan — turn-budget allocation (EV-005 fix, WFLX-P3A)', () => {
+  // The pre-fix Director assigned up to two full claim statements to EVERY
+  // turn regardless of duration, so the minimum-weight topic beat's 5-6 s
+  // turns could not voice their mandatory anchors within the mode rate
+  // ceiling (canonical critique/debate: 4 turn-over-budget errors each; a
+  // 180 s deep-dive compounded to 11 — EV-005/EV-006 EXP-A-05). The fix:
+  // anchor mass vs slot duration.
+
+  test('every turn slot can voice its mandatory anchor mass at the planning rate', () => {
+    // Mass-fit invariant: for every anchored turn, ceil(mass / planning
+    // rate) <= duration. The planning rate (2.5 wps) sits below every audio
+    // mode's effective rate ceiling (tightest 2.87 wps), so a fitting slot
+    // cannot be flagged turn-over-budget by the audio compiler.
+    for (const mode of ['deep-dive', 'brief', 'critique', 'debate'] as const) {
+      for (const duration of [120, 180, 300, 600]) {
+        const plan = compileOverviewPlan(baseRequest({ mode, targetDurationSeconds: duration }));
+        for (const turn of plan.audioTurns) {
+          if (turn.claimIds.length === 0) continue;
+          const need = Math.ceil(mandatoryMass(turn, GRAPH) / TURN_PLANNING_RATE_WPS);
+          expect(
+            turn.targetDurationSeconds,
+            `${mode}@${duration}s ${turn.id} (${turn.claimIds.join(',')}): ${need}s needed`,
+          ).toBeGreaterThanOrEqual(need);
+        }
+      }
+    }
+  });
+
+  test('every covered claim is voiced by at least one turn (no silent coverage)', () => {
+    for (const mode of ['deep-dive', 'brief', 'critique', 'debate'] as const) {
+      for (const duration of [120, 180, 300]) {
+        const plan = compileOverviewPlan(baseRequest({ mode, targetDurationSeconds: duration }));
+        const voiced = new Set(plan.audioTurns.flatMap((turn) => [...turn.claimIds]));
+        for (const entry of plan.coverage.covered) {
+          expect(
+            voiced.has(entry.claimId),
+            `${mode}@${duration}s: covered claim ${entry.claimId} is voiced by no turn`,
+          ).toBe(true);
+        }
+      }
+    }
+  });
+
+  test('the minimum-weight topic beat stays in budget: 1-claim beats cap factual carriers', () => {
+    // The EV-005 locus: the "Purpose of the note" topic beat carries a
+    // single 22-word claim. Pre-fix, all four pattern slots anchored it at
+    // 5-6 s each. Post-fix the beat keeps at most one factual carrier per
+    // claim and the carrier's duration covers the anchor mass.
+    const plan = compileOverviewPlan(baseRequest());
+    const purposeBeat = plan.beats.find((b) => b.title === 'Purpose of the note');
+    expect(purposeBeat).toBeDefined();
+    const beatTurns = plan.audioTurns.filter((t) => t.beatId === purposeBeat?.id);
+    expect(beatTurns.length).toBeGreaterThanOrEqual(1);
+    const carriers = beatTurns.filter((t) => FACTUAL_TURN_PURPOSES.has(t.purpose));
+    expect(carriers.length).toBeLessThanOrEqual(purposeBeat?.claimIds.length ?? 0);
+    for (const turn of carriers) {
+      const need = Math.ceil(mandatoryMass(turn, GRAPH) / TURN_PLANNING_RATE_WPS);
+      expect(turn.targetDurationSeconds).toBeGreaterThanOrEqual(need);
+    }
+    // Durations still sum to the beat budget exactly.
+    const beatWeight = purposeBeat?.weight ?? 0;
+    const beatBudget = Math.round(beatWeight * 300);
+    expect(beatTurns.reduce((acc, t) => acc + t.targetDurationSeconds, 0)).toBe(beatBudget);
+  });
+
+  test('claim-less turns are topical tissue on structural purposes only', () => {
+    for (const mode of ['deep-dive', 'brief', 'critique', 'debate'] as const) {
+      const plan = compileOverviewPlan(baseRequest({ mode }));
+      for (const turn of plan.audioTurns) {
+        if (turn.claimIds.length === 0) {
+          expect(FACTUAL_TURN_PURPOSES.has(turn.purpose), `${mode} ${turn.id}`).toBe(false);
+          // The brief must say so honestly (no "anchors: everything").
+          expect(turn.brief).toContain('No claim anchors this turn');
+        }
+      }
+    }
+  });
+
+  test('duration compression prunes the skeleton mass-aware, coverage drops by salience', () => {
+    // EXP-A-05 mechanism, post-fix: compression (300 s -> 180 s) drops
+    // low-salience claims with reasons instead of producing impossible
+    // anchor slots; every kept claim still fits its slot.
+    const wide = compileOverviewPlan(baseRequest({ targetDurationSeconds: 300 }));
+    const tight = compileOverviewPlan(baseRequest({ targetDurationSeconds: 180 }));
+    expect(tight.coverage.covered.length).toBeLessThan(wide.coverage.covered.length);
+    expect(tight.coverage.omitted.length).toBe(11 - tight.coverage.covered.length);
+    for (const omitted of tight.coverage.omitted) {
+      expect(omitted.reason).toContain('capacity');
+    }
+    const voiced = new Set(tight.audioTurns.flatMap((turn) => [...turn.claimIds]));
+    for (const entry of tight.coverage.covered) {
+      expect(voiced.has(entry.claimId)).toBe(true);
+    }
+    for (const turn of tight.audioTurns) {
+      if (turn.claimIds.length === 0) continue;
+      const need = Math.ceil(mandatoryMass(turn, GRAPH) / TURN_PLANNING_RATE_WPS);
+      expect(turn.targetDurationSeconds, `${turn.id}`).toBeGreaterThanOrEqual(need);
     }
   });
 });
