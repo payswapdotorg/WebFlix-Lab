@@ -17,6 +17,13 @@
  * - Every selected or skipped claim is editorially accounted for in the
  *   coverage map (covered with role, or omitted with reason).
  * - Exact labels for deterministic scenes come from grounded entity names.
+ * - Turn-budget allocation is anchor-mass-aware (EV-005 fix): a turn slot
+ *   only cites claims its duration can voice at TURN_PLANNING_RATE_WPS
+ *   (below every audio mode rate ceiling), factual carrier slots always
+ *   cite at least one claim, and every covered claim is voiced by at least
+ *   one turn. When a degenerate beat budget cannot voice its claims, the
+ *   plan-level duration budget wins and the audio compiler flags the
+ *   residual honestly (never a silent drop).
  *
  * The Director owns editorial decisions only — no speech, images or video
  * generation (AGENTS.md architecture rule).
@@ -24,6 +31,7 @@
 
 import {
   CONTRACTS_VERSION,
+  countWords,
   OverviewPlanSchema,
   validateOverviewPlan,
   type AudioTurn,
@@ -160,6 +168,109 @@ function splitInteger(total: number, weights: number[], minimum: number): number
     k += 1;
   }
   return base;
+}
+
+// ---------------------------------------------------------------------------
+// Turn-budget allocation (EV-005 fix, WFLX-P3A: anchor mass vs slot duration)
+// ---------------------------------------------------------------------------
+
+/**
+ * Planning rate (words/second) at which a turn slot can voice its anchor
+ * mass. A conservative editorial prior BELOW every audio mode's effective
+ * rate ceiling (tightest: deep-dive/critique 2.6 wps x 0.96 measured pacing
+ * x 1.15 ceiling multiplier = 2.87 wps), so a mass-fitting slot can never be
+ * flagged turn-over-budget by the audio compiler's check (DESIGN.md §16.2
+ * item 3: W2 fits text density; the Director must not hand it impossible
+ * slots). HYPOTHESIS lab policy, testable per the experiment matrix.
+ */
+export const TURN_PLANNING_RATE_WPS = 2.5;
+
+/**
+ * Purposes whose turns are factual carriers: the audio grounding rule
+ * (src/audio/dialogue/types.ts ZERO_CLAIM_ALLOWED_PURPOSES) requires them
+ * to cite at least one claim. Documented dependency, deliberately not an
+ * import (worker path ownership: src/audio is W2's tree).
+ */
+const FACTUAL_TURN_PURPOSES: ReadonlySet<AudioTurnPurpose> = new Set([
+  'explanation',
+  'example',
+  'connection',
+  'clarification',
+]);
+
+/**
+ * Worst-case mass (countWords tokens) the realizer's BARE anchor block adds:
+ * the longest question tail across the surface packs plus the em-dash
+ * separator ("is that actually supported by the evidence?" + "—").
+ */
+const QUESTION_TAIL_TOKENS = 8;
+
+/** Worst-case mass of one anchor connector between two anchors in one turn. */
+const ANCHOR_CONNECTOR_TOKENS = 5;
+
+/**
+ * Conversational-tissue allowance for topical (claim-less) turns: opener +
+ * a speaking pace's worth of orientation glue beyond the beat title.
+ */
+const TOPICAL_TISSUE_TOKENS = 8;
+
+/** Minimum turn duration (s). */
+const MIN_TURN_SECONDS = 2;
+
+/**
+ * Split an integer total across slots by proportional keys with per-slot
+ * minimum floors (largest-remainder method, deterministic index tie-break).
+ * When the floors overdraw the total, returns a plain key-proportional split
+ * with the uniform minimum instead — the plan-level budget invariant (turn
+ * durations sum to the target) outranks per-slot mass fit, and the audio
+ * compiler honestly flags any residual over-budget turn (pre-fix behavior at
+ * degenerate targets).
+ */
+function splitIntegerWithFloors(
+  total: number,
+  keys: readonly number[],
+  floors: readonly number[],
+  minimum: number,
+): number[] {
+  const floorSum = floors.reduce((a, b) => a + b, 0);
+  if (floorSum > total) {
+    return splitInteger(
+      total,
+      keys.map((k) => Math.max(1, k)),
+      minimum,
+    );
+  }
+  const base = floors.map((f) => Math.max(minimum, f));
+  let remaining = total - base.reduce((a, b) => a + b, 0);
+  const keySum = keys.reduce((a, b) => a + b, 0);
+  const raw = keys.map((k) => (keySum > 0 ? (remaining * k) / keySum : remaining / keys.length));
+  const ints = raw.map((x) => Math.floor(x));
+  ints.forEach((add, i) => {
+    base[i] = (base[i] as number) + add;
+  });
+  remaining -= ints.reduce((a, b) => a + b, 0);
+  const order = raw
+    .map((x, i) => ({ i, frac: x - Math.floor(x) }))
+    .sort((a, b) => b.frac - a.frac || a.i - b.i);
+  let k = 0;
+  while (remaining > 0 && order.length > 0) {
+    const target = order[k % order.length] as { i: number };
+    base[target.i] = (base[target.i] as number) + 1;
+    remaining -= 1;
+    k += 1;
+  }
+  return base;
+}
+
+interface TurnBudgetCandidate {
+  readonly slots: readonly TurnSlot[];
+  /** Claims each slot cites (factual carriers first; structural slots may be claim-less). */
+  readonly assigned: Id[][];
+  /** Minimum seconds each slot needs to voice its mandatory mass at the planning rate. */
+  readonly floors: number[];
+  /** Key-proportional split weights (anchor mass + tissue allowance). */
+  readonly keys: number[];
+  readonly floorSum: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -476,7 +587,8 @@ export function compileOverviewPlan(request: DirectorRequest): OverviewPlan {
     weight: Math.round(((budgets[i] as number) / targetDurationSeconds) * 10000) / 10000,
   }));
 
-  // --- audio turns
+  // --- audio turns (turn-budget allocation, EV-005 fix: anchor mass vs slot
+  // duration within the mode rate ceiling; see TURN_PLANNING_RATE_WPS)
   const audioTurns: AudioTurn[] = [];
   if (modality === 'audio') {
     let turnNo = 0;
@@ -484,29 +596,164 @@ export function compileOverviewPlan(request: DirectorRequest): OverviewPlan {
       const beat = beats[beatIndex];
       if (beat === undefined) throw new DirectorError('missing beat');
       const budget = budgets[beatIndex] as number;
-      const maxTurns = Math.max(1, Math.floor(budget / 2));
-      const slots = draft.slots.slice(0, Math.min(draft.slots.length, maxTurns));
-      const durations = splitInteger(budget, slots.map(() => 1), 2);
-      const carriers = slots.filter((s) => s.purpose !== 'transition' && s.purpose !== 'framing');
-      const carrierCount = Math.max(1, carriers.length);
-      const assignment = new Map<number, Id[]>();
-      draft.claimIds.forEach((claimId, i) => {
-        const slotIdx = slots.indexOf(carriers[i % carrierCount] as TurnSlot);
-        const list = assignment.get(slotIdx) ?? [];
-        list.push(claimId);
-        assignment.set(slotIdx, list);
+
+      const claimMass = new Map<Id, number>();
+      for (const claimId of draft.claimIds) {
+        claimMass.set(claimId, countWords(index.getClaim(claimId)?.statement ?? ''));
+      }
+      const titleTokens = countWords(draft.title);
+
+      /**
+       * Build the allocation candidate for one prefix of the mode pattern:
+       * claims are load-balanced (heaviest first onto the lightest factual
+       * carrier) so no carrier holds more mass than its siblings; factual
+       * slots must each carry >= 1 claim when the beat has claims (audio
+       * grounding rule), structural slots are claim-less topical tissue.
+       *
+       * `softStructural` relaxes structural-slot floors to the bare minimum
+       * (second-chance pass for squeezed beats): the factual carrier's
+       * anchor-mass floor stays hard, conversational tissue shrinks first.
+       */
+      const buildCandidate = (
+        slots: readonly TurnSlot[],
+        softStructural = false,
+      ): TurnBudgetCandidate | null => {
+        const factualIdx: number[] = [];
+        slots.forEach((slot, i) => {
+          if (FACTUAL_TURN_PURPOSES.has(slot.purpose)) factualIdx.push(i);
+        });
+        if (draft.claimIds.length > 0 && factualIdx.length === 0) return null;
+        if (factualIdx.length > draft.claimIds.length) return null;
+
+        const assigned: Id[][] = slots.map(() => []);
+        const loads = new Map<number, number>();
+        // Heaviest-claim-first (LPT) load balancing; deterministic id
+        // tie-break, no RNG.
+        const claimsByMass = [...draft.claimIds]
+          .sort(
+            (a, b) =>
+              (claimMass.get(b) ?? 0) - (claimMass.get(a) ?? 0) || a.localeCompare(b),
+          );
+        for (const claimId of claimsByMass) {
+          let target = factualIdx[0] as number;
+          let bestLoad = Number.POSITIVE_INFINITY;
+          for (const i of factualIdx) {
+            const load = loads.get(i) ?? 0;
+            if (load < bestLoad) {
+              bestLoad = load;
+              target = i;
+            }
+          }
+          const list = assigned[target] as Id[];
+          list.push(claimId);
+          loads.set(
+            target,
+            (loads.get(target) ?? 0) + (claimMass.get(claimId) ?? 0) + (list.length > 1 ? ANCHOR_CONNECTOR_TOKENS : 0),
+          );
+        }
+
+        const floors: number[] = [];
+        const keys: number[] = [];
+        slots.forEach((slot, i) => {
+          const isQuestion = slot.purpose === 'question';
+          const carried = assigned[i] as Id[];
+          const mass =
+            carried.length > 0
+              ? (loads.get(i) ?? 0) + (isQuestion ? QUESTION_TAIL_TOKENS : 0)
+              : titleTokens + TOPICAL_TISSUE_TOKENS + (isQuestion ? QUESTION_TAIL_TOKENS : 0);
+          const floor = Math.max(MIN_TURN_SECONDS, Math.ceil(mass / TURN_PLANNING_RATE_WPS));
+          const soft = softStructural && carried.length === 0;
+          floors.push(soft ? MIN_TURN_SECONDS : floor);
+          keys.push(Math.max(1, mass));
+        });
+        return {
+          slots,
+          assigned,
+          floors,
+          keys,
+          floorSum: floors.reduce((a, b) => a + b, 0),
+        };
+      };
+
+      /** Topical fallback: the pattern has no factual slot at any prefix
+       * length (single-structural-slot opening/closing patterns); the beat's
+       * claims stay beat-covered and are voiced by their topic beats. */
+      const buildTopicalCandidate = (slots: readonly TurnSlot[]): TurnBudgetCandidate => {
+        const floors: number[] = [];
+        const keys: number[] = [];
+        for (const slot of slots) {
+          const isQuestion = slot.purpose === 'question';
+          const mass = titleTokens + TOPICAL_TISSUE_TOKENS + (isQuestion ? QUESTION_TAIL_TOKENS : 0);
+          floors.push(Math.max(MIN_TURN_SECONDS, Math.ceil(mass / TURN_PLANNING_RATE_WPS)));
+          keys.push(Math.max(1, mass));
+        }
+        return {
+          slots,
+          assigned: slots.map(() => []),
+          floors,
+          keys,
+          floorSum: floors.reduce((a, b) => a + b, 0),
+        };
+      };
+
+      // Slot-count selection, three passes:
+      //   1. largest prefix whose hard floors (anchor mass + topical tissue)
+      //      fit the beat budget;
+      //   2. largest prefix that fits once structural floors relax to the
+      //      bare minimum — the factual carrier's anchor-mass floor stays
+      //      hard (conversational tissue shrinks before anchors);
+      //   3. last resort: largest structurally-valid prefix with a
+      //      key-proportional split — the plan-level budget invariant
+      //      outranks mass fit and the audio compiler flags any residual
+      //      honestly (degenerate targets only, never a silent drop).
+      let candidate: TurnBudgetCandidate | null = null;
+      let fallback: TurnBudgetCandidate | null = null;
+      for (let n = draft.slots.length; n >= 1 && candidate === null; n -= 1) {
+        const built = buildCandidate(draft.slots.slice(0, n));
+        if (built === null) continue;
+        if (fallback === null || built.slots.length > fallback.slots.length) fallback = built;
+        if (built.floorSum <= budget) candidate = built;
+      }
+      for (let n = draft.slots.length; n >= 1 && candidate === null; n -= 1) {
+        const built = buildCandidate(draft.slots.slice(0, n), true);
+        if (built === null) continue;
+        if (built.floorSum <= budget) candidate = built;
+      }
+      if (candidate === null) candidate = fallback ?? buildTopicalCandidate(draft.slots);
+
+      const slots = candidate.slots;
+      const durations = splitIntegerWithFloors(budget, candidate.keys, candidate.floors, MIN_TURN_SECONDS);
+
+      // Structural slots may anchor the beat's lead claim when their slot
+      // duration can voice it (the EV-005 defect was anchoring regardless of
+      // duration; the fix anchors only where it fits).
+      const lead = draft.claimIds[0];
+      const leadMass = lead !== undefined ? (claimMass.get(lead) ?? 0) : 0;
+      slots.forEach((slot, localIdx) => {
+        const carried = candidate.assigned[localIdx] as Id[];
+        if (carried.length > 0 || lead === undefined) return;
+        const need = Math.max(
+          MIN_TURN_SECONDS,
+          Math.ceil(
+            (leadMass + (slot.purpose === 'question' ? QUESTION_TAIL_TOKENS : 0)) /
+              TURN_PLANNING_RATE_WPS,
+          ),
+        );
+        if ((durations[localIdx] as number) >= need) carried.push(lead);
       });
+
       slots.forEach((slot, localIdx) => {
         turnNo += 1;
-        const assigned =
-          slot.purpose === 'framing'
-            ? [draft.claimIds[0] as Id]
-            : assignment.get(localIdx) ?? [draft.claimIds[0] as Id];
+        const assigned = candidate.assigned[localIdx] as Id[];
         const evidence = assigned
           .map((id) => index.getClaim(id)?.evidence[0])
           .filter((s): s is NonNullable<typeof s> => s !== undefined)
           .slice(0, 2);
         const names = entityNamesOf(index, assigned, 3).join(', ');
+        const anchorDirective =
+          assigned.length > 0
+            ? `Anchors: ${statementsOf(index, assigned, 500)}`
+            : `No claim anchors this turn; stay on the segment topic: ${draft.title}.`;
         audioTurns.push({
           recordType: 'AudioTurn',
           contractVersion: CONTRACTS_VERSION,
@@ -518,7 +765,7 @@ export function compileOverviewPlan(request: DirectorRequest): OverviewPlan {
           brief:
             `${PURPOSE_LEAD[slot.purpose]} ` +
             (slot.purpose === 'question' ? `Focus on ${names || 'the details'}. ` : '') +
-            `Anchors: ${statementsOf(index, assigned, 500)}`,
+            anchorDirective,
           claimIds: assigned,
           evidence,
           beatId: beat.id,
@@ -528,7 +775,7 @@ export function compileOverviewPlan(request: DirectorRequest): OverviewPlan {
               ? { emphasis: `say entity names crisply: ${names}` }
               : {}),
           },
-          targetDurationSeconds: (durations[localIdx] as number) || 2,
+          targetDurationSeconds: (durations[localIdx] as number) || MIN_TURN_SECONDS,
         });
       });
     });
