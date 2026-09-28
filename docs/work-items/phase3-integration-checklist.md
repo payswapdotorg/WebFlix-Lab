@@ -81,10 +81,14 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
 
 Blocked on operator Google login for notebook.google.com (geography
 requires the VPN egress already configured in the replay browser). Series
-per `docs/experiments/matrix.md` (LAB-01..06 + EXP-A/V). Every run records
-the experiment-protocol fields (id, timestamp, source fingerprint,
-configuration, mode, prompt, selection, artifact id, observed behavior,
-changed variable, invariants, hypothesis).
+per `docs/experiments/matrix.md` (LAB-01..06 + EXP-A/V) — the LAB series
+is DEFINED there (priority order included) with the full execution
+procedure in `docs/experiments/lab-series-runbook.md` (pre-staged
+2026-09-28: six probes, capture discipline, record landing, comparison
+targets — the moment login exists the series runs mechanically). Every
+run records the experiment-protocol fields (id, timestamp, source
+fingerprint, configuration, mode, prompt, selection, artifact id,
+observed behavior, changed variable, invariants, hypothesis).
 
 ## 4. Promotion gate (Phase 4) inputs
 
