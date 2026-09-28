@@ -1,0 +1,20 @@
+{
+  "id": "LAB-04",
+  "kind": "real-product Deep Dive Audio Overview (second-language probe: español)",
+  "source": "control fixture (sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 — English source, identical to LAB-01)",
+  "captured_utc": "~2026-09-28T21:57:00Z",
+  "ready_utc": "~2026-09-28T22:06:00Z",
+  "file": "Qué_esconde_la_nota_de_IA_censurada.m4a",
+  "sha256": "275e5c37673ebc9ed8bbe9f842d599fdbdd5a9033896dfebcbb20f00ac2b4170",
+  "bytes": 33550592,
+  "container": "m4a/mp4",
+  "audio": {"codec": "aac", "profile": "LC", "sample_rate": 44100, "channels": 2, "bit_rate": 256000},
+  "duration_seconds": 1034.84,
+  "title": "Qué esconde la nota de IA censurada",
+  "format": "Deep Dive",
+  "length_setting": "Default",
+  "language": "español",
+  "hosts": 2,
+  "control": "LAB-01 English Deep Dive (1201.82 s): Spanish run -167 s (-13.9%), native Spanish narration, structure skeleton preserved, language-specific metaphor inventory",
+  "provenance": "same notebook as LAB-01 (25661cd9), control source, operator Google session, VPN egress"
+}
