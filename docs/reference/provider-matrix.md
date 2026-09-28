@@ -20,13 +20,14 @@ plus EV-004/EV-005/EV-006 evidence. Video/visual providers are pending W3
 | `pure-ts` | explicit option | **byte-identical** — pinned by canonical benchmarks, determinism tests and the EXP-A series (EV-004, EV-006) |
 | `ffmpeg` (auto when on PATH) | default `auto` | environment-dependent encoders; **not** byte-portable across ffmpeg builds — provenance must record the encoder identity |
 
-## Visual / video providers (Phase 2B — PENDING W3)
+## Visual / video providers (Phase 2B — LANDED, PR #6 / EV-007)
 
-| Provider lane | Planned path | Status |
+| Provider lane | Path | Status |
 |---|---|---|
-| Deterministic SVG/diagram renderer | `src/compositor/` | PENDING W3 |
-| Illustration provider adapter | `src/providers/visual/` | PENDING W3 |
-| Optional motion/video provider adapter | `src/providers/video/` | PENDING W3 |
+| Deterministic SVG/diagram renderer | `src/video/render/` + `src/compositor/` | **LANDED** — pure functions, stable element order, fixed 2-decimal formatting; byte-identical regeneration pinned by committed benchmark fingerprints + mutation tests (EV-007) |
+| Illustration provider adapter | `src/providers/visual/` | **LANDED** — deterministic offline ink adapter default (seeded procedural: paper texture, construction grid, controller knot, hex satellites, dashed rings, isometric slab); env-gated `image-model` adapter (OpenAI-compatible) throws on missing config, never silently degrades |
+| Motion/video provider adapter | `src/providers/video/` | **LANDED** — parameterized camera planner (pan ≤ ±4%, zoom +3–8%, static default); remote motion adapter env-gated |
+| Compositor | `src/compositor/` | **LANDED** — Remotion 4.0.529 primary (Playwright headless-shell, `React.createElement`, TL tsconfig untouched) + sealed offline fallback (SVG frames + ffmpeg/librsvg capability detection) |
 
 ## Rules carried by this matrix (AGENTS.md binding)
 
