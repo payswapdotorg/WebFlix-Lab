@@ -33,7 +33,6 @@
         "role": "primary",
         "unitIds": [
           "beat-3",
-          "turn-4",
           "turn-5"
         ]
       },
@@ -45,7 +44,6 @@
           "beat-5",
           "beat-6",
           "turn-1",
-          "turn-8",
           "turn-9",
           "turn-10"
         ]
@@ -235,7 +233,7 @@
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 20
+      "targetDurationSeconds": 10
     },
     {
       "recordType": "AudioTurn",
@@ -271,7 +269,7 @@
         "delivery": "clear, expert, unhurried",
         "emphasis": "say entity names crisply: AI video tools, voice generation, agent tool systems"
       },
-      "targetDurationSeconds": 19
+      "targetDurationSeconds": 29
     },
     {
       "recordType": "AudioTurn",
@@ -281,24 +279,16 @@
       "speaker": "Host A",
       "speakerRole": "host-a",
       "purpose": "framing",
-      "brief": "Open the segment and orient the listener. Anchors: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
+      "brief": "Open the segment and orient the listener. No claim anchors this turn; stay on the segment topic: Infrastructure.",
       "claimIds": [
         "claim-nonexistent"
       ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b20",
-          "start": 615,
-          "end": 640,
-          "quote": "Cloudflare/object storage"
-        }
-      ],
+      "evidence": [],
       "beatId": "beat-3",
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 10
+      "targetDurationSeconds": 6
     },
     {
       "recordType": "AudioTurn",
@@ -326,7 +316,7 @@
         "delivery": "clear, expert, unhurried",
         "emphasis": "say entity names crisply: Cloudflare, Postgres, Neon"
       },
-      "targetDurationSeconds": 9
+      "targetDurationSeconds": 13
     },
     {
       "recordType": "AudioTurn",
@@ -353,7 +343,7 @@
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 10
+      "targetDurationSeconds": 12
     },
     {
       "recordType": "AudioTurn",
@@ -381,7 +371,7 @@
         "delivery": "clear, expert, unhurried",
         "emphasis": "say entity names crisply: multi-agent orchestration"
       },
-      "targetDurationSeconds": 9
+      "targetDurationSeconds": 7
     },
     {
       "recordType": "AudioTurn",
@@ -391,24 +381,14 @@
       "speaker": "Host A",
       "speakerRole": "host-a",
       "purpose": "framing",
-      "brief": "Open the segment and orient the listener. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
-      "claimIds": [
-        "claim-purpose"
-      ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b41",
-          "start": 1065,
-          "end": 1205,
-          "quote": "Test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition."
-        }
-      ],
+      "brief": "Open the segment and orient the listener. No claim anchors this turn; stay on the segment topic: Purpose of the note.",
+      "claimIds": [],
+      "evidence": [],
       "beatId": "beat-5",
       "style": {
         "delivery": "warm, orienting"
       },
-      "targetDurationSeconds": 10
+      "targetDurationSeconds": 7
     },
     {
       "recordType": "AudioTurn",
@@ -435,7 +415,7 @@
       "style": {
         "delivery": "clear, expert, unhurried"
       },
-      "targetDurationSeconds": 9
+      "targetDurationSeconds": 12
     },
     {
       "recordType": "AudioTurn",
