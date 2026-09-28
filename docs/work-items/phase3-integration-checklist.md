@@ -47,7 +47,14 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
       provider identities + versions + cost (script/speech/composition/
       evaluation), and media sha256/size/duration; the plan sidecar carries
       the Director generator seed — chain verified on the EXP-A artifacts.
-      Remaining: StyleBible version is video-side (PENDING W3).
+      Remaining: StyleBible version is video-side — POST-W3 AUDIT
+      (2026-09-28, TL #2): the video artifact manifests (benchmark-26s,
+      canonical-7min) carry contractVersion + per-stage provider identities
+      but do NOT emit styleBibleVersion (STYLE_BIBLE_VERSION='1.0.0' exists
+      in src/video/style-bible.ts; src/video/artifacts.ts does not reference
+      it). HANDOFF to the v2 contract wave: emit styleBibleVersion in the
+      video GeneratedArtifact manifest (worker-owned path — no TL-direct
+      edit per AGENTS.md drift controls).
 - [ ] Same-source dual-modality comparison: render audio-only vs
       video output for one fixture; tabulate deterministic QA metrics.
       (BLOCKED on W3 — video surface.)
