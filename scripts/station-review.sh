@@ -52,12 +52,25 @@ echo; echo "--- gates ---"
 FAIL=0
 bun run typecheck || FAIL=1
 bun run lint || FAIL=1
-if bun test 2>&1 | tail -5 | tee /tmp/station-test-tail.txt; then
-  TESTS=$(grep -oE '[0-9]+ pass' /tmp/station-test-tail.txt | head -1 || echo "0 pass")
-  echo "test summary: ${TESTS}"
-else
-  FAIL=1
-fi
+# 2026-09-29 station OOM lesson: the full suite in ONE bun process gets the
+# sandbox OOM-killed (P3B station run). Run chunked per surface group and
+# aggregate the counts — same coverage, bounded memory.
+TOTAL_PASS=0; TOTAL_FAIL=0
+for GROUP in "tests/contracts tests/source tests/director" "tests/audio" "tests/video" "tests/integration"; do
+  echo "  [chunk] bun test ${GROUP}"
+  if CHUNK_OUT=$(bun test ${GROUP} 2>&1 | tail -3); then
+    echo "${CHUNK_OUT}" | sed 's/^/    /'
+    P=$(echo "${CHUNK_OUT}" | awk '$2=="pass"{s+=$1} END{print s+0}')
+    F=$(echo "${CHUNK_OUT}" | awk '$2=="fail"{s+=$1} END{print s+0}')
+    TOTAL_PASS=$((TOTAL_PASS + P)); TOTAL_FAIL=$((TOTAL_FAIL + F))
+    [ "${F}" = "0" ] || FAIL=1
+  else
+    echo "${CHUNK_OUT}" | tail -3 | sed 's/^/    /'
+    echo "    [chunk FAILED — exit non-zero]"; FAIL=1
+  fi
+done
+echo "test summary: ${TOTAL_PASS} pass, ${TOTAL_FAIL} fail (chunked)"
+[ "${TOTAL_FAIL}" = "0" ] || FAIL=1
 
 echo; echo "--- verdict ---"
 if [ "${FAIL}" = "0" ] && [ -z "${VIOLATIONS}" ]; then
