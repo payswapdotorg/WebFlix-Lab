@@ -58,9 +58,9 @@ bun run lint || FAIL=1
 TOTAL_PASS=0; TOTAL_FAIL=0
 for GROUP in "tests/contracts tests/source tests/director" "tests/audio" "tests/video" "tests/integration"; do
   echo "  [chunk] bun test ${GROUP}"
-  if CHUNK_OUT=$(bun test ${GROUP} 2>&1 | tail -3); then
-    echo "${CHUNK_OUT}" | sed 's/^/    /'
-    P=$(echo "${CHUNK_OUT}" | awk '$2=="pass"{s+=$1} END{print s+0}')
+  if CHUNK_OUT=$(bun test ${GROUP} 2>&1 | tail -6); then
+    echo "${CHUNK_OUT}" | grep -E '(^ *[0-9]+ (pass|fail)|^Ran )' | sed 's/^/    /'
+    P=$(echo "${CHUNK_OUT}" | grep -oE 'Ran [0-9]+ tests' | grep -oE '[0-9]+' | head -1)
     F=$(echo "${CHUNK_OUT}" | awk '$2=="fail"{s+=$1} END{print s+0}')
     TOTAL_PASS=$((TOTAL_PASS + P)); TOTAL_FAIL=$((TOTAL_FAIL + F))
     [ "${F}" = "0" ] || FAIL=1
