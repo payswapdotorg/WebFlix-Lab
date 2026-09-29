@@ -1,0 +1,51 @@
+id: EXP-D-01
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: cross-modal
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-messy-note-redacted"]
+format: "deep-dive (audio) vs explainer (video) — each modality’s default mode"
+language: "en"
+length: "300 s both modalities (same editorial budget)"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: ""
+other_config:
+  audio_seed: "wflx-expint-dual-seed"
+  composition: "video arm composes through compileVideoOverview (Remotion primary); MP4 fingerprinted (sha256 in artifact.json), NOT committed (golden-media precedent)"
+  configs: "tools/experiments/configs.ts"
+  director_seed: "wflx-expint-dual-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  mastering: "pure-ts"
+  runner: "tools/experiments/runner.ts"
+  series_roots: ["artifacts/audio/exp-d", "artifacts/video/exp-d"]
+  shared_spine_note: "v1 OverviewPlan is modality-exclusive (PR #8 / EV-010 HANDOFF 1): the shared IR is the source, graph, seed, claim universe and coverage accounting — the comparison renders one Director plan per modality"
+  video_seed: "wflx-expint-dual-seed"
+baseline_artifact: "artifacts/audio/exp-d/dual-audio-deepdive-300s"
+mutation: "none — same source, same seed, same duration; the MODALITY is the comparison axis"
+artifact_under_test: "artifacts/video/exp-d/dual-video-explainer-300s"
+artifact_hash: "audio media sha256 a47f5756d9564128b7ed269d378213c6406d7aa702397d533bb45d6ec5a40152 (artifact-exp-d-audio-deepdive-300s) vs video composition content fingerprint 31c3e064087494bd430360aec79f175fefd003144b62f381b9f36a48dcb1fd23 (video-overview-a4b976a53dc0); scene-SVG combined sha256 1cbc8bec55b3b46f6e3ee2f6cc1263c2ca62eb8eeb3780d1b0f91a0a970489bc; full hashes in each arm's artifact sidecars"
+observations:
+  - "SHARED SPINE (REPRODUCED): same (source, graph, seed wflx-expint-dual-seed, 300 s) — audio covered claim set === video covered claim set (11 claims: claim-audits, claim-credentials-redacted, claim-deployment-pipelines, claim-forecasting-projects, claim-infra-stack, claim-multi-agent-orchestration, claim-oss-runtimes, claim-provider-integrations, claim-purpose, claim-sandbox-limits, claim-tool-catalog); accounted sets identical; audio turn-cited set !== video scene-cited set."
+  - "AUDIO SURFACE (REPRODUCED): dual-audio-deepdive-300s — mode deep-dive, 20 turns / 6 beats, speakers Host A, Host B, coverage 11/11 (100%), 0 over-budget turns, 300 turn-seconds, wps 1.5, qa passed-with-issues; deterministic QA metrics: duration_vs_target=total 305.71 s (turns 300.00 s + gaps 5.71 s) vs target 300 s, tolerance ±30.0 s; turn_duration_drift=max per-turn drift 0.0% across 20 turns (tolerance 15%); speaker_consistency=2 speakers (host-a, host-b); 0 with parameter variance; 0 for the deterministic offline path; pause_distribution=question-answer: n=3 avg=118ms [94..150] policy[80..150]; section: n=5 avg=555ms [465..605] policy[400..900]; cluster: n=11 avg=235ms [174..281] policy[150..300]; groundedness=16/20 turns evidence-bearing; grounding violations: 0 (hard-validated at compile); coverage=covered 11/11; omitted 0; turn_taking_naturalness=turns=20 shares[host-a 55%, host-b 45%] altRun=17 sameRun=2 qaLinks=4 backchannels=0; pronunciation_risk=27 risky tokens across 11/20 turns; loudness=integrated -16.00 LUFS, sample peak -6.80 dBFS (target -16 LUFS / -1.5 dB ceiling, UNRESOLVED vs product; backend pure-ts); defect_scan=clipped samples=0; longest silence=0.61 s; container duration 305.71 s == manifest; mode_semantics=deep-dive: expected-tag checks 3, discouraged-purpose checks 0; text_density_fit=449 words across 20 turns; over-budget turns: 0; language=language=en pack=en."
+  - "VIDEO SURFACE (REPRODUCED): dual-video-explainer-300s — mode explainer, 14 scenes / 6 beats, coverage 11/11 (100), 300 scene-seconds, 14 narration segments, scene-SVG determinism hashA===hashB (1cbc8bec55b3b46f…), MP4 content-fingerprinted (31c3e064087494bd…; raw MP4 bytes are encoder-nondeterministic across invocations — OBSERVED — and are not recorded), qa passed-with-issues; deterministic QA metrics: scene_narration_alignment=mean 0.000s / max 0.000s over 14 scenes (warn > 0.5s); style_consistency=14 frames checked against style-bible--reference-ink v1.0.0 (15 palette roles); visual_grounding=14/14 scenes carry claims; 32 exact texts verified placed; determinism=hash pair equal (1cbc8bec55b3b46f…); scene_structure=14 scenes, 300s @ 30fps (9000 frames); coverage_surface=7/11 covered claims visualized (64%)."
+  - "DETERMINISM (REPRODUCED): both surfaces compiled from pinned seeds and a fixed now; audio media sha256 a47f5756d9564128…, video composition content fingerprint 31c3e064087494bd… (media structure + scene-SVG hash + plan + seed; the raw MP4 byte hash is encoder-nondeterministic even on this environment — OBSERVED — so the pinned video layers are the scene-SVG hash, narration WAV hash, and the deterministic metric set). No wall-clock metric appears in this comparison."
+  - "The artifact side is supplied by the wave-1 unified manifest registry (tools/manifest): both arms land GeneratedArtifact sidecars under their surface roots and are picked up by `bun run manifest:build`."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "ONE fixture source, ONE seed (director + audio + video), ONE duration; only the modality differs; the comparison tabulates deterministic metrics only (no wall-clock)."
+differences:
+  - "audio vs video (same source/seed/duration): turns 20 vs scenes 14; covered claim sets identical; turn-cited vs scene-cited differ; qa passed-with-issues vs passed-with-issues."
+hypothesis: "Same (source, graph, seed, duration) yields the SAME editorial spine across modalities — identical accounted/covered claim sets — while each surface realizes it with its own deterministic QA profile (audio: turn/timing/loudness metrics; video: scene/alignment/grounding metrics); both surfaces compile clean (no failing QA) on the merged main pipelines."
+confidence: high
+falsifier: "Covered claim sets differing across modalities at identical (seed, duration) (the shared IR would be modality-coupled); or either surface failing QA on the canonical fixture."
+next_experiment: "EXP-X-02 treatment arm (v2 C-5 per-turn keying decision)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-d/dual-audio-deepdive-300s"
+  - "artifacts/video/exp-d/dual-video-explainer-300s"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"
+  - "artifacts/manifest/registry.json (wave-1 unified registry)"

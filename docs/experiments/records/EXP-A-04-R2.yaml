@@ -1,0 +1,54 @@
+id: EXP-A-04-R2
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-messy-note-redacted (fresh chain, both arms)"]
+format: "deep-dive (fixed)"
+language: "en"
+length: "300 s both arms"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  audio_seed: "wflx-exp-a-audio-seed"
+  chain: "MarkdownNoteAdapter -> DeterministicExtractor -> Director -> compileAudioOverview (BOTH arms; the extractor is not gold-graph-identical, so the canonical fixtures are not the control)"
+  configs: "tools/experiments/configs.ts"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  mastering: "pure-ts"
+  mirrors: "experiments/run-exp-a.ts EXP-A-04 arm pair (EV-006) under the EV-008 fixed Director"
+  mutation_block: "b30"
+  mutation_mutated: "All credentials are `[REDACTED]` and are rotated quarterly by the platform team."
+  mutation_original: "All credentials are `[REDACTED]`."
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/audio/exp-a-r2"
+baseline_artifact: "artifacts/audio/exp-a-r2/a04-control-deepdive-5min"
+mutation: "one paragraph changed (block b30: \"All credentials are `[REDACTED]`.\" -> \"All credentials are `[REDACTED]` and are rotated quarterly by the platform team.\")"
+artifact_under_test: "artifacts/audio/exp-a-r2/a04-mut-b30-deepdive-5min"
+artifact_hash: "009a18b9bc49a68de701e60a23fa445ced2d9d889f23aec9a020c394e2d37c0f (baseline artifact-exp-a-r2-a04-control-deepdive-5min) vs 824c49d63ed550f19e6d5d894986449e828bc82d2ba4bb2b5a17c1904da0a427 (variant artifact-exp-a-r2-a04-mut-b30-deepdive-5min); full sha256 in artifacts/audio/exp-a-r2/a04-control-deepdive-5min/artifact.json"
+observations:
+  - "BASELINE (REPRODUCED): a04-control-deepdive-5min — mode deep-dive, 24 turns / 7 beats, speakers Host A, Host B, coverage 12/36 (33.33%), 0 over-budget turns, wps 1.61, qa passed-with-issues (alternation-run-longx1, no-interjection-turnsx1, pronunciation-riskx1, mode-semantics-missingx1)."
+  - "VARIANT a04-mut-b30-deepdive-5min (REPRODUCED): 24 turns / 7 beats (delta +0 / +0), coverage 12/36 (added [none], removed [none]), 0 over-budget turns, qa passed-with-issues; top purposes explanationx7, framingx6, questionx5, examplex4."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 4/24 turns changed structure (speaker/role/purpose/anchors/beat/duration); 3/24 realized texts byte-identical; turn seconds 300 -> 300 (+0); wps delta +0.07."
+  - "GRAPH LAYER (REPRODUCED): claims changed [claim-b30], added [none], removed [none]; entities added [none] removed [none]; topics added [none] removed [none]."
+  - "R2 context (REPRODUCED): pre-fix baseline (EV-006, PRE-P3A Director) measured 0/25 turns with structure change and 4/25 byte-identical realized texts; the re-baseline addendum in docs/experiments/records/EXP-A-04.yaml carries the post-fix series transition. THIS record re-measures the locality pair under the EV-008 fixed Director on merged main, through the wave-2 integration runner."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "Both arms run the identical adapter -> extractor -> Director -> audio chain with identical ids/seeds/now/planId; only the b30 paragraph text differs (one variable)."
+differences:
+  - "a04-mut-b30-deepdive-5min vs a04-control-deepdive-5min: turns +0, beats +0, coverage added [none] removed [none], structure changed 4/24, texts identical 3/24, turn-seconds +0, wps +0.07."
+  - "graph: 1 claim statement(s) changed [claim-b30], 0 added, 0 removed."
+hypothesis: "Source mutation impact is local at the semantic layers (graph: exactly the b30-fed claim; plan: turn structure identical) and global ONLY at the seeded surface layer, because the realizer keys seeded choices by (seed | planHash | turnId | slot) and ANY plan content change (turn briefs citing the mutated claim) changes planHash. The construction — not an editorial property — is the v2 contract problem (C-5 / EXP-X-02)."
+confidence: high
+falsifier: "A one-paragraph change that alters turn structure, beat count or coverage (editorial impact NOT local); or unchanged realized text across turns citing the mutated claim (anchors do not propagate)."
+next_experiment: "EXP-A-05-R2 (duration compression)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a-r2/a04-control-deepdive-5min"
+  - "artifacts/audio/exp-a-r2/a04-mut-b30-deepdive-5min"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"
+  - "docs/experiments/records/EXP-A-04.yaml (pre-fix EV-006 predecessor)"

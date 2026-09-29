@@ -1,0 +1,42 @@
+id: EXP-V-05
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: video
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-note-a", "source-note-b (raw fixture split at the Section 2 marker)"]
+format: "explainer (fixed)"
+language: "en"
+length: "180 s (intended)"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: ""
+other_config:
+  configs: "tools/experiments/configs.ts"
+  fixed_now: "2026-09-30T00:00:00Z"
+  layer: "blocked at ingestion/extraction (see blocker)"
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/video/exp-v"
+  split_marker: "## Section 2 — Infrastructure"
+baseline_artifact: ""
+mutation: "source ordering: [A, B] -> [B, A] (same two sources, order swapped)"
+artifact_under_test: ""
+artifact_hash: ""
+observations:
+  - "BLOCKED ARM EVIDENCE (OBSERVED): multisource-order-ab, multisource-order-ba — the runner captured the deterministic ingestion failure; see blocker.json beside each run."
+  - "BLOCKED (OBSERVED, deterministically REPRODUCED): two-source ingestion through MarkdownNoteAdapter + DeterministicExtractor throws before the Director ever runs — the adapter numbers blocks b1..bn PER SOURCE while the contract validator indexes blocks by block id only (src/contracts/validation.ts BlockIndex: \"first definition wins\"), so the second source blocks are all \"unknown\". HANDOFF (W1 territory): source-scoped block ids or a (sourceId, blockId) validator key."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "Both arms split the SAME raw fixture at the SAME marker; only the ingestion order differs."
+differences:
+hypothesis: "UNTESTED (blocked): source order would surface through the primary-source selection (the Director titles/objective follow sources[0]) and possibly through equal-salience claim ranking, not through scene reordering per se."
+confidence: low
+falsifier: "Narrative order proving strictly independent of source order (beat/scene order identical across the swap) would weaken any ordering-coupling hypothesis."
+next_experiment: "W1 multi-source block-id fix (HANDOFF) — then re-run EXP-V-05/EXP-V-06 unchanged"
+status: blocked
+evidence_paths:
+  - "artifacts/video/exp-v/multisource-order-ab"
+  - "artifacts/video/exp-v/multisource-order-ba"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"

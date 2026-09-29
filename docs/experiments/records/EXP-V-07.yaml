@@ -1,0 +1,46 @@
+id: EXP-V-07
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: video
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-messy-note-redacted"]
+format: "explainer (fixed)"
+language: "en"
+length: "180 s -> 90 s"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: ""
+other_config:
+  configs: "tools/experiments/configs.ts"
+  director_seed: "wflx-exp-v-director-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  layer: "storyboard"
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/video/exp-v"
+  video_seed: "wflx-exp-v-video-seed"
+baseline_artifact: "artifacts/video/exp-v/duration-180s-baseline"
+mutation: "target duration: 180 s -> 90 s"
+artifact_under_test: "artifacts/video/exp-v/duration-90s"
+artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) edd4f17ae0be22564b1fde91e40b3226491c4718c92a65670f50d284fbb03bb9 (baseline) vs b57d223b818cee9a3eceab4e0c273bca8c47421eb47626d28a5d48cf7428ea43 (variant); MP4 not composed at this layer — see determinism.json per arm"
+observations:
+  - "BASELINE (REPRODUCED): duration-180s-baseline — mode explainer, 10 scenes / 6 beats, coverage 7/11 (63.64%), 180 scene-seconds, style bible style-bible--reference-ink, qa passed-with-issues (coverage-gapx1), in-arm SVG determinism hashA===hashB edd4f17ae0be2256…"
+  - "VARIANT duration-90s (REPRODUCED): 6 scenes / 6 beats (delta -4 / +0), coverage 4/11 (added [none], removed [claim-audits, claim-forecasting-projects, claim-oss-runtimes]), 90 scene-seconds (-90), qa passed."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 6/6 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 5/6 scene SVGs changed bytes; combined SVG hash CHANGED; plan fingerprint CHANGED."
+  - "First EXP-V landing on the merged W3 surface (REPRODUCED at the storyboard layer)."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "Same fixture/graph/seed/now/mode; only targetDurationSeconds differs."
+differences:
+  - "duration-90s vs duration-180s-baseline: scenes -4, beats +0, coverage added [none] removed [claim-audits, claim-forecasting-projects, claim-oss-runtimes], structure changed 6/6, scene SVGs changed 5/6, scene-seconds -90, plan fingerprint changed."
+hypothesis: "Video compression scales scene density with the budget (fewer scenes, fewer covered claims dropped by salience rank with coverage-map reasons) rather than shrinking scene durations below narratability; per-scene narration pacing stays in the StyleBible band."
+confidence: medium
+falsifier: "Scene COUNT staying fixed while durations collapse (density-invariant compression); or claims silently disappearing without coverage-map accounting."
+next_experiment: "EXP-V-08 (stochastic stability)"
+status: supported
+evidence_paths:
+  - "artifacts/video/exp-v/duration-180s-baseline"
+  - "artifacts/video/exp-v/duration-90s"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"

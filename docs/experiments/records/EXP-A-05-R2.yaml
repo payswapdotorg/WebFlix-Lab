@@ -1,0 +1,48 @@
+id: EXP-A-05-R2
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-messy-note-redacted"]
+format: "deep-dive (fixed)"
+language: "en"
+length: "300 s -> 180 s"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  audio_seed: "wflx-exp-a-audio-seed"
+  configs: "tools/experiments/configs.ts"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  mastering: "pure-ts"
+  mirrors: "experiments/run-exp-a.ts arm set (EV-006) under the EV-008 fixed Director"
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/audio/exp-a-r2"
+baseline_artifact: "artifacts/audio/exp-a-r2/deepdive-5min-baseline"
+mutation: "target duration: 300 s -> 180 s"
+artifact_under_test: "artifacts/audio/exp-a-r2/deepdive-3min-duration"
+artifact_hash: "56e69b05f8b5141aa122729007ec2059ffcab1785134daaa093124dface5328d (baseline artifact-exp-a-r2-deepdive-5min-baseline) vs ff7d77cde5ad8bfabb8dbc39680998dd61b0cc2436f26d306126e01c621379d9 (variant artifact-exp-a-r2-deepdive-3min); full sha256 in artifacts/audio/exp-a-r2/deepdive-5min-baseline/artifact.json"
+observations:
+  - "BASELINE (REPRODUCED): deepdive-5min-baseline — mode deep-dive, 20 turns / 6 beats, speakers Host A, Host B, coverage 11/11 (100%), 0 over-budget turns, wps 1.46, qa passed-with-issues (alternation-run-longx1, no-interjection-turnsx1, pronunciation-riskx1, mode-semantics-missingx1)."
+  - "VARIANT deepdive-3min-duration (REPRODUCED): 18 turns / 6 beats (delta -2 / +0), coverage 7/11 (added [none], removed [claim-credentials-redacted, claim-deployment-pipelines, claim-provider-integrations, claim-sandbox-limits]), 0 over-budget turns, qa passed-with-issues; top purposes explanationx6, framingx5, questionx3, examplex2."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 17/18 turns changed structure (speaker/role/purpose/anchors/beat/duration); 0/18 realized texts byte-identical; turn seconds 300 -> 180 (-120); wps delta +0.353."
+  - "R2 context (REPRODUCED): EV-008 fixed Director re-baseline of the EV-006 experiment."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "Same fixture/seed/now/mode; only targetDurationSeconds differs."
+differences:
+  - "deepdive-3min-duration vs deepdive-5min-baseline: turns -2, beats +0, coverage added [none] removed [claim-credentials-redacted, claim-deployment-pipelines, claim-provider-integrations, claim-sandbox-limits], structure changed 17/18, texts identical 0/18, turn-seconds -120, wps +0.353."
+hypothesis: "Compression is salience-driven omission first: the Director drops the lowest-salience covered claims (with reasons in the coverage map) rather than raising speaking rate beyond the mode ceiling; post-fix, the 180 s arm compiles with zero over-budget turns and a bounded wps rise (the pre-fix arm produced 11 turn-over-budget errors)."
+confidence: high
+falsifier: "Compression raising wordsPerSecondMean past the mode ceiling or producing over-budget turns (rate-driven compression); or claims omitted without coverage-map reasons (silent drop)."
+next_experiment: "EXP-A-06-R2 (language invariance)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a-r2/deepdive-5min-baseline"
+  - "artifacts/audio/exp-a-r2/deepdive-3min-duration"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"
+  - "docs/experiments/records/EXP-A-05.yaml (pre-fix EV-006 predecessor)"

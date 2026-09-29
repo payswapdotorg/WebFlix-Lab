@@ -1,0 +1,48 @@
+id: EXP-A-02-R2
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-messy-note-redacted"]
+format: "deep-dive (baseline) vs critique"
+language: "en"
+length: "300 s both arms"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  audio_seed: "wflx-exp-a-audio-seed"
+  configs: "tools/experiments/configs.ts"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  mastering: "pure-ts"
+  mirrors: "experiments/run-exp-a.ts arm set (EV-006) under the EV-008 fixed Director"
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/audio/exp-a-r2"
+baseline_artifact: "artifacts/audio/exp-a-r2/deepdive-5min-baseline"
+mutation: "output mode: deep-dive -> critique (canonical plan)"
+artifact_under_test: "artifacts/audio/exp-a-r2/critique-5min-canonical"
+artifact_hash: "56e69b05f8b5141aa122729007ec2059ffcab1785134daaa093124dface5328d (baseline artifact-exp-a-r2-deepdive-5min-baseline) vs 155551331afb08fb4a2fb6e1c62df1daf1fd4f539c6a2d3e69e455af4f6fa566 (variant artifact-exp-a-r2-critique-5min); full sha256 in artifacts/audio/exp-a-r2/deepdive-5min-baseline/artifact.json"
+observations:
+  - "BASELINE (REPRODUCED): deepdive-5min-baseline — mode deep-dive, 20 turns / 6 beats, speakers Host A, Host B, coverage 11/11 (100%), 0 over-budget turns, wps 1.46, qa passed-with-issues (alternation-run-longx1, no-interjection-turnsx1, pronunciation-riskx1, mode-semantics-missingx1)."
+  - "VARIANT critique-5min-canonical (REPRODUCED): 19 turns / 6 beats (delta -1 / +0), coverage 11/11 (added [none], removed [none]), 0 over-budget turns, qa passed-with-issues; top purposes explanationx5, framingx5, questionx4, clarificationx3."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 5/19 turns changed structure (speaker/role/purpose/anchors/beat/duration); 0/19 realized texts byte-identical; turn seconds 300 -> 300 (+0); wps delta +0.097."
+  - "R2 context (REPRODUCED): EV-008 fixed Director re-baseline of the EV-006 experiment."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "Same fixture/seed/now; only the mode (plan fixture) differs."
+differences:
+  - "critique-5min-canonical vs deepdive-5min-baseline: turns -1, beats +0, coverage added [none] removed [none], structure changed 5/19, texts identical 0/19, turn-seconds +0, wps +0.097."
+hypothesis: "Critique is a structurally distinct mode: it swaps per-beat carrier purposes toward question/clarification (interrogative tissue) while keeping budget-driven coverage and, post-fix, zero over-budget turns (the pre-fix critique arm was one of the 4-over-budget arms)."
+confidence: high
+falsifier: "critique producing the same purpose histogram as deep-dive (a re-skin, not a structure); or coverage differences vs the deep-dive baseline at the same duration."
+next_experiment: "EXP-A-03-R2 (debate framing)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a-r2/deepdive-5min-baseline"
+  - "artifacts/audio/exp-a-r2/critique-5min-canonical"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"
+  - "docs/experiments/records/EXP-A-02.yaml (pre-fix EV-006 predecessor)"

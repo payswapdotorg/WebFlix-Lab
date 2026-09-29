@@ -1,0 +1,41 @@
+id: EXP-V-06
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: video
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-note-a", "source-note-b (raw fixture split at the Section 2 marker)"]
+format: "explainer (fixed)"
+language: "en"
+length: "180 s (intended)"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: ""
+other_config:
+  configs: "tools/experiments/configs.ts"
+  fixed_now: "2026-09-30T00:00:00Z"
+  layer: "blocked at ingestion/extraction (see blocker)"
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/video/exp-v"
+  split_marker: "## Section 2 — Infrastructure"
+baseline_artifact: ""
+mutation: "one source removed: [A, B] -> [A]"
+artifact_under_test: ""
+artifact_hash: ""
+observations:
+  - "BLOCKED ARM EVIDENCE (OBSERVED): multisource-baseline-ab — the runner captured the deterministic ingestion failure; see blocker.json beside each run."
+  - "BLOCKED (OBSERVED, deterministically REPRODUCED): same W1 multi-source blocker as EXP-V-05 — the two-source baseline cannot be extracted, so the removal diff has no control arm."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "The ablation baseline requires the two-source chain; the single-source variant alone cannot answer the matrix question, so no partial run is claimed."
+differences:
+hypothesis: "UNTESTED (blocked): removing a source would drop that source’s claims from the graph and recombine or drop their scenes; the coverage map would re-account every removed claim."
+confidence: low
+falsifier: "Scenes surviving unchanged despite their anchor claims disappearing (stale grounding) would falsify plan-authoritative recombination."
+next_experiment: "W1 multi-source block-id fix (HANDOFF) — then re-run EXP-V-05/EXP-V-06 unchanged"
+status: blocked
+evidence_paths:
+  - "artifacts/video/exp-v/multisource-baseline-ab"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"

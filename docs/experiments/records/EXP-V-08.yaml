@@ -1,0 +1,53 @@
+id: EXP-V-08
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: video
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-messy-note-redacted"]
+format: "explainer (fixed)"
+language: "en"
+length: "180 s all arms"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: ""
+other_config:
+  configs: "tools/experiments/configs.ts"
+  director_seed: "wflx-exp-v-director-seed"
+  director_seed_b: "wflx-exp-v-director-seed-b"
+  fixed_now: "2026-09-30T00:00:00Z"
+  layer: "storyboard"
+  matrix_question_note: "matrix.md asks what stays stable across stochastic runs of unchanged input; the lab analog mutates the seed streams (the only stochastic axes) — one variable per variant arm"
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/video/exp-v"
+  video_seed: "wflx-exp-v-video-seed"
+  video_seed_b: "wflx-exp-v-video-seed-b"
+baseline_artifact: "artifacts/video/exp-v/seed-baseline-180s"
+mutation: "unchanged input, stochastic stream changed: (a) video surface seed only; (b) Director seed only"
+artifact_under_test: "artifacts/video/exp-v/seed-director-b-180s"
+artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) 2d8c407352971e28b25a3afeaa94e9e1706c0fae356fe95e188588f1541b1cbf (baseline) vs 7de51e49ca8e67730f6f4a83bb9374b70694be67dd7b8f233e75d9b8a477cee2 (variant); MP4 not composed at this layer — see determinism.json per arm"
+observations:
+  - "BASELINE (REPRODUCED): seed-baseline-180s — mode explainer, 10 scenes / 6 beats, coverage 7/11 (63.64%), 180 scene-seconds, style bible style-bible--reference-ink, qa passed-with-issues (coverage-gapx1), in-arm SVG determinism hashA===hashB 2d8c407352971e28…"
+  - "VARIANT seed-surface-b-180s (REPRODUCED): 10 scenes / 6 beats (delta +0 / +0), coverage 7/11 (added [none], removed [none]), 180 scene-seconds (+0), qa passed-with-issues."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 0/10 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 7/10 scene SVGs changed bytes; combined SVG hash CHANGED; plan fingerprint IDENTICAL."
+  - "VARIANT seed-director-b-180s (REPRODUCED): 10 scenes / 6 beats (delta +0 / +0), coverage 7/11 (added [claim-deployment-pipelines], removed [claim-audits]), 180 scene-seconds (+0), qa passed-with-issues."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 10/10 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 8/10 scene SVGs changed bytes; combined SVG hash CHANGED; plan fingerprint CHANGED."
+  - "First EXP-V landing on the merged W3 surface (REPRODUCED at the storyboard layer)."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "Same fixture/graph/now/duration/mode; variant (a) changes only the storyboard surface seed, variant (b) only the Director seed; all arms share the planId."
+differences:
+  - "seed-surface-b-180s vs seed-baseline-180s: scenes +0, beats +0, coverage added [none] removed [none], structure changed 0/10, scene SVGs changed 7/10, scene-seconds +0, plan fingerprint identical."
+  - "seed-director-b-180s vs seed-baseline-180s: scenes +0, beats +0, coverage added [claim-deployment-pipelines] removed [claim-audits], structure changed 10/10, scene SVGs changed 8/10, scene-seconds +0, plan fingerprint changed."
+hypothesis: "Lab analog of stochastic regeneration: the surface seed alone reshuffles rendered scene surfaces (seeded layout/ink choices) while the plan/storyboard structure stays byte-stable; the Director seed additionally reshuffles equal-salience claim ranking, so structure can move only where salience ties exist."
+confidence: medium
+falsifier: "Surface-seed-only change altering scene structure or coverage (surface randomness would be structure-coupled); or Director-seed change leaving every rendered byte identical (the seed would not participate anywhere)."
+next_experiment: "EXP-D-01 (same-source dual-modality comparison)"
+status: supported
+evidence_paths:
+  - "artifacts/video/exp-v/seed-baseline-180s"
+  - "artifacts/video/exp-v/seed-surface-b-180s"
+  - "artifacts/video/exp-v/seed-director-b-180s"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"
