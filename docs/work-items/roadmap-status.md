@@ -1,16 +1,25 @@
 # TL #2 Roadmap Status — live position
 
-Updated: 2026-09-29 04:0x UTC by TL #2 — P3B WAVE 1 MERGED (PR #8, 43b21df,
-EV-010, gates 352/352): cross-modal IR compliance (shared-spine
-interpretation, HANDOFF 1 adjudicated), unified artifact manifest registry
-(13 records, byte-identical station re-proof), reproducibility metadata,
-local refinement loop. EXECUTION PATH NOTE: after a 7h+ agents-queue
-capacity event (9 dispatches, zero provisioning; zombie purge + stale-pod
-release both ineffective), P3B wave 1 executed via LOCAL subagent on the
-same branch/PR/station-review chain — same repo, same gates, same review.
-Wave 2 (checklist §2 items 4/5/6/8: experiment runner + records,
-dual-modality comparison, EXP-A-04 + EXP-V ablations, provider matrix
-completion) dispatched next.
+Updated: 2026-09-29 08:25 UTC by TL #2 — P3B COMPLETE (both waves merged).
+Wave 1 (PR #8, 43b21df, EV-010): cross-modal IR compliance (shared-spine,
+HANDOFF 1 adjudicated), unified artifact manifest registry (13 records),
+reproducibility metadata, local refinement loop. Wave 2 (PR #9, 49306bc,
+EV-011): integration experiment runner + 15 records (EXP-A-01..06-R2 under
+the fixed Director, EXP-V-01..08 storyboard ablations, EXP-D-01 dual-
+modality comparison), provider-matrix cross-surface exercise log, packet
+determinism proof (identical digest pair bc95eb72…, 160 files). KEY FINDING
+(OBSERVED): compositor raw MP4 renders are encoder-nondeterministic across
+identical invocations — content-fingerprinted, excluded from the digest set
+by rule. V-05/V-06 multi-source arms BLOCKED honestly (Deterministic-
+Extractor inconsistent graph — HANDOFF to the source-surface wave). Gates on
+main: 352/352. Checklist §2 = ALL EIGHT ITEMS ticked.
+
+Next: v2 contract wave execution (C-5 per-turn content-keyed seeding on BOTH
+surfaces — run-evidence confirmed on video by EXP-V-04; C-7 shared rate
+model; C-8 dual-modality plan shape; C-9 styleBibleVersion emission; C-10
+monologic brief) + EXP-X-02 (control vs C-5 treatment arms per
+docs/experiments/design-exp-x-02.md) — then Phase 4 promotion assembly and
+TL evidence sign-off.
 
 This file is the operator-visible progress surface for the work order in
 `tl2-work-order.md`. It is updated by the TL between merges; the commit
@@ -24,7 +33,7 @@ history plus `docs/evidence/registry.jsonl` remain the durable record.
 | 1 — W1 contracts + director | COMPLETE | PR #2 (ed6ffec), PR #4 (50e8161); station gates 128/128; EV-003 |
 | 2A — W2 audio | COMPLETE | PR #3 design (eaa1eea), PR #5 stage-2 implementation (c90bd48); gates 237/237; EV-004; HANDOFFs adjudicated (1444e10) |
 | 2B — W3 video | **COMPLETE** | PR #6 merged (ba60a36, EV-007): StyleBible v1.0.0, storyboard compiler, deterministic SVG renderer, illustration/motion provider ports, compositor (Remotion primary + sealed offline fallback), QA pass 0 issues both benchmarks; station gates 332/332 (251 baseline + 81 video); determinism spot-check clean; credential sweep clean |
-| 3 — TL integration | IN FLIGHT (wave 1 of 2 merged) | Prep done (checklist 20cd14d; H-2 fixtures 9128369/EV-005; H-4 docs e6a9b17; EXP-A series EV-006; experiment registry + provider matrix live; v2 contract draft 9ec6521; station-review automation 95b0b9d). **P3A Director turn-budget fix MERGED (PR #7, 0ecd561, EV-008): anchor-mass-aware allocation, zero turn-over-budget on all canonical modes + the 180 s compression arm; canonical fingerprint transition documented (3 plans + s15/s16/s17 mutants re-pinned); station gates 338/338; determinism proven; credential sweep clean.** WFLX-P3B (cross-modal integration + experiment series, checklist §2) DISPATCHED 20:15 UTC (session be5d9368, GLM-5.3, Full-Stack). EXP-V + EXP-X-02 run + cross-modal IR tasks are p3b/TL scope |
+| 3 — TL integration | CORE COMPLETE (both p3b waves merged) | Prep done (checklist 20cd14d; H-2 fixtures 9128369/EV-005; H-4 docs e6a9b17; EXP-A series EV-006; experiment registry + provider matrix live; v2 contract draft 9ec6521; station-review automation 95b0b9d). **P3A Director turn-budget fix MERGED (PR #7, 0ecd561, EV-008): anchor-mass-aware allocation, zero turn-over-budget on all canonical modes + the 180 s compression arm; canonical fingerprint transition documented (3 plans + s15/s16/s17 mutants re-pinned); station gates 338/338; determinism proven; credential sweep clean.** WFLX-P3B (cross-modal integration + experiment series, checklist §2) DISPATCHED 20:15 UTC (session be5d9368, GLM-5.3, Full-Stack). EXP-V + EXP-X-02 run + cross-modal IR tasks are p3b/TL scope |
 | 4 — promotion gate | PENDING | Inputs collected throughout; no promotion without TL evidence sign-off |
 
 ## Current position (honest state)
