@@ -191,3 +191,84 @@ the new candidates from the merged surfaces + the real-product probes.
   NATIVE regeneration (not anchor code-switching) — raises the editorial
   priority if multi-language output becomes a research line; default
   unchanged.
+
+---
+
+# RULING 2026-09-29 (TL #2) — the v2 wave scope (all decision inputs in)
+
+Inputs now complete: P3B delivered (PR #8 EV-010 cross-modal IR + HANDOFF 1
+adjudication; PR #9 EV-011 EXP-V-04 run evidence + EXP-D-01 + provider
+matrix). Ruling per candidate:
+
+## IN the wave (one branch, one CONTRACTS_VERSION bump 1.0.0 → 2.0.0)
+
+- **C-5 — per-unit content-keyed seeding, BOTH surfaces.** Strongest
+  evidence in the register: EV-006 (EXP-A-04: 21/25 texts reshuffled on a
+  one-paragraph mutation), EV-011 (EXP-V-04: 9/12 scene SVGs reshuffled,
+  structure 0/12 — the same plan-global planHash defect class confirmed
+  WITH RUN EVIDENCE on the video surface), EV-009 (LAB-05/06: the real
+  product has no turn-local stability — C-5 is OUR lab's diff hygiene and
+  the AGENTS.md smallest-unit-regeneration rule, not product parity).
+  Scope: audio realizer keys (src/audio/dialogue/text/realizer.ts
+  `seed|planHash|turnId|slot`) + audio timing gap keys (src/audio/timing/
+  timing.ts `seed|planHash|gap-N|boundary`) + video storyboard keys
+  (src/video/storyboard/compiler.ts `seed|planHash|mode|sceneId`) — each
+  re-keyed on the OWNING unit's local content hash (turn brief + anchors /
+  gap-adjacent turn content / scene brief + anchors + exactTexts).
+  planHash STAYS in identification surfaces (graph meta, artifact ids,
+  manifests, plan fingerprints) — it is plan-global BY DESIGN there.
+- **C-7 — shared turn-rate/mass-budget contract surface** (EV-008, LAB-03):
+  the authoritative rate model moves into src/contracts/; Director + W2
+  consume ONE source. Additive module; values identical at landing
+  (2.5 wps mirror) so no output change from C-7 alone.
+- **C-9 — styleBibleVersion emission** in src/video/artifacts.ts
+  (mechanical; post-W3 audit e8ea606 + p3b wave-1 pinned the gap with a
+  test — the test flips to asserting PRESENCE after the emission lands).
+- **C-10 — monologic brief mode** (EV-009 LAB-02: the strongest
+  product-truth delta — 93.92 s single-voice enumerated Brief vs our
+  120 s 10-turn two-speaker dialog). Director brief skeleton + W2 brief
+  mode semantics + brief canonical fixtures regenerate together.
+- **C-3** rides the bump as the version-stamped note (doc-only, closed).
+
+## OUT of the wave (each with its recorded reason)
+
+- **C-8 (video narration field / motion params / dual-modality plan shape):
+  DEFERRED to the post-v2 line.** Its adjudication input — p3b's
+  cross-modal IR delivery — came back ruling the v1 modality-exclusive plan
+  DELIBERATE and compliant at the shared-spine level (HANDOFF 1, pinned by
+  tests); EXP-D-01 delivers the dual-modality comparison the roadmap needed
+  through the current shape. A dual-modality plan restructure has no
+  blocking evidence; it is the designated v3 candidate with EV-010/EV-011
+  as its standing inputs.
+- **C-1 (stance flags)**: p3b surfaced no scene-typing need (cross-modal
+  tests ground claims without them) — deferred again; structural path
+  proven sufficient.
+- **C-2 (evidence enforcement)**: the fallback-fire rate remains unmeasured
+  (EXP-A arms + cross-modal tests all clean on canonical fixtures) —
+  deferred unless a future measurement is material.
+- **C-4 (interjection)**: still no golden-reference annotation — out.
+- **C-6 (language-bound graphs)**: documented v1 boundary; priority rises
+  only if multi-language becomes a research line.
+
+## Corrected wave mechanics (honest correction of the C-5 draft note)
+
+The draft claimed "existing committed fingerprints stay valid (the key
+change is invisible to a full recompile of the same plan)". That is LOOSE:
+re-keying changes the PRNG stream for every draw, so same-plan outputs
+CHANGE ONCE at the wave boundary and committed fingerprints (audio
+benchmarks, EXP-A artifacts, video benchmark manifests, realized-text test
+pins) REGENERATE in the same change — exactly what the pre-agreed mechanics
+clause prescribes ("regenerating canonical fixtures + fingerprints + red
+mutants in the same change"). What C-5 preserves is determinism WITHIN a
+contract version (same plan + same seed → byte-identical outputs, verified
+by double-run) and the IMPROVED DIFF semantics across plan mutations
+(unchanged units keep their surfaces — verified by EXP-X-02's treatment
+arm: non-target turns byte-identical). EXP-X-02 (control v1 vs treatment
+C-5, per docs/experiments/design-exp-x-02.md) executes AFTER the wave lands
+on main, as its verification experiment.
+
+Wave landing shape: ONE branch (work/wflx-v2-contract-wave), sequential
+worker waves per ownership (audio surface → video surface → Director +
+fixtures), TL-direct contracts/version pieces interleaved, ONE station
+review, ONE merge, ONE version bump. Every included candidate cites its
+EV record in the wave commits.
