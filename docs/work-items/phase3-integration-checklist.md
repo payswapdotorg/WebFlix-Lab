@@ -76,14 +76,27 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
       it). HANDOFF to the v2 contract wave: emit styleBibleVersion in the
       video GeneratedArtifact manifest (worker-owned path — no TL-direct
       edit per AGENTS.md drift controls).
-- [ ] Same-source dual-modality comparison: render audio-only vs
+- [x] Same-source dual-modality comparison: render audio-only vs
       video output for one fixture; tabulate deterministic QA metrics.
-      (BLOCKED on W3 — video surface.)
+      DELIVERED 2026-09-29 (P3B wave 2 / EV-011): EXP-D-01 — audio deep-dive
+      300 s (20 turns, 11/11 claims voiced) vs video explainer 300 s
+      (14 scenes, 7/11 claims visualized, 4 coverage-gap warnings,
+      QA passed-with-issues); identical accounted/covered claim sets across
+      modalities (shared spine); deterministic QA metric table in the record;
+      composition content-fingerprinted (raw MP4 encoder-nondeterminism
+      OBSERVED and excluded from the digest set by rule).
 - [x] Experiment result registry: extend `docs/evidence/registry.jsonl` /
       experiment records so EXP-A/EXP-V runs land as structured records.
       DONE for the audio surface (EV-006): `docs/experiments/records/EXP-A-01..06.yaml`
       + `experiments/run-exp-a.ts` + `artifacts/audio/exp-a/summary.json`; EXP-V
       records land with W3.
+      INTEGRATION RUNNER DELIVERED 2026-09-29 (P3B wave 2 / EV-011):
+      `tools/experiments/` (wflx-integration-experiment-runner v0.1.0,
+      `package.json exp:integration`) — seeded configs → REAL merged
+      pipelines → protocol-complete records + evidence-registry-compatible
+      entries + machine-readable summary + output-set digest; 15 records
+      landed (EXP-A-01..06-R2, EXP-V-01..08, EXP-D-01); packet determinism
+      proof: two full invocations → identical digest (bc95eb72…, 160 files).
 - [x] Ablation runs (audio surface): EXP-A-01..06 EXECUTED 2026-09-27 (EV-006)
       — mode structure (brief/critique/debate vs deep-dive + de-confounder),
       one-paragraph mutation locality (structure local, seeded surfaces global
@@ -91,6 +104,18 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
       (skeleton invariant, salience omission + rate rise, P3A evidence),
       language invariance (structure fully invariant, surface fully
       language-specific). EXP-V ablations land with W3.
+      EXP-V SERIES DELIVERED 2026-09-29 (P3B wave 2 / EV-011): EXP-V-01..08
+      storyboard-layer ablations on the merged W3 surface — style mutation
+      GLOBAL across role-carrying scenes (V-02: 10/15 SVGs, structure 0/15);
+      custom-prompt layer reach (V-03); b30 claim mutation plan-global at the
+      rendered surface via the planHash seed key (V-04: 9/12 SVGs, structure
+      0/12 — C-5 defect class confirmed with run evidence on the video
+      surface); duration scene-density (V-07); seed sensitivity surface vs
+      director (V-08). V-05/V-06 multi-source arms BLOCKED honestly
+      (DeterministicExtractor produced an inconsistent graph on multi-source
+      chains — HANDOFF for source-surface adjudication). EXP-A-01..06-R2
+      re-runs under the EV-008-fixed Director landed alongside the pre-fix
+      EV-006 history (zero turn-over-budget end-to-end).
 - [x] Local refinement tests: plan → compile → measure loop. Audio-side
       design informed by EXP-A-04: smallest-unit regeneration is defeated at
       the text layer by the plan-global planHash seed key (v2 contract wave
@@ -112,7 +137,14 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
       arm pending the W3 keying probe.
 - [x] Provider matrix doc: stub vs optional real adapters, capability
       and determinism columns — DONE (docs/reference/provider-matrix.md,
-      EV-006); video lanes marked PENDING W3.
+      EV-006); video lanes marked PENDING W3. CROSS-SURFACE EXERCISE LOG
+      ADDED 2026-09-29 (P3B wave 2 / EV-011): every lane the integration
+      runner actually exercised, evidence-labeled per EXP record — speech/
+      mastering/SVG/narration REPRODUCED byte-identical; compositor Remotion
+      lane OBSERVED encoder-nondeterministic across invocations on the same
+      environment (content-fingerprinted; raw MP4 excluded from the digest
+      set by rule); fallback + remote-adapter lanes honestly UNRESOLVED
+      (no run evidence this wave).
 
 ## 3. Black-box experiment series (requires reference access)
 
