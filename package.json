@@ -13,7 +13,8 @@
     "audio:benchmark": "bun run tests/audio/generate-benchmark.ts",
     "exp:a": "bun run experiments/run-exp-a.ts",
     "video:benchmark": "bun run tests/video/generate-benchmark.ts",
-    "manifest:build": "bun run tools/manifest/build-registry.ts"
+    "manifest:build": "bun run tools/manifest/build-registry.ts",
+    "exp:integration": "bun run tools/experiments/runner.ts"
   },
   "dependencies": {
     "zod": "^4.6.5"
