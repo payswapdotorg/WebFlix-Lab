@@ -33,12 +33,33 @@ the PR branch):
 
 From `docs/work-items/tl2-work-order.md` Phase 3:
 
-- [ ] Cross-modal IR compliance: one fixture source compiled through BOTH
+- [x] Cross-modal IR compliance: one fixture source compiled through BOTH
       the audio pipeline and the video pipeline; both consume the SAME
       frozen `OverviewPlan` instance (shared IR contract is the point of
-      the architecture).
-- [ ] Unify artifact manifests: `GeneratedArtifact` + provenance sidecars
-      from both surfaces in one registry shape.
+      the architecture). DELIVERED 2026-09-29 (PR #8 / EV-010) under the
+      TL-ADJUDICATED shared-spine interpretation (HANDOFF 1): the frozen
+      v1 `OverviewPlan` is modality-exclusive BY CONSTRUCTION (audio plans
+      REQUIRE `audioTurns` and MUST NOT carry `videoScenes`; video the
+      inverse — `src/contracts/overview-plan.ts` cross-field checks), so a
+      single plan instance cannot be consumed by both surfaces in v1.
+      What the compliance test pins instead (tests/integration/
+      cross-modal-ir.test.ts, 5 tests): same (source, graph, seed) →
+      identical accounted/covered claim sets across modalities; every
+      turn/scene/beat claim id resolves in the SAME SemanticGraph; no
+      per-surface mutation (deep-equality + audio passes the SAME
+      instance through). True single-instance dual-modality consumption
+      is routed to the v2 contract wave under C-8 (dual-modality plan
+      shape) — the v1 shared IR is the SemanticGraph + claim universe +
+      coverage accounting + Director seeding, not the plan instance.
+- [x] Unify artifact manifests: `GeneratedArtifact` + provenance sidecars
+      from both surfaces in one registry shape. DELIVERED 2026-09-29
+      (PR #8 / EV-010): `tools/manifest/registry.ts` + `build-registry.ts`
+      + `package.json manifest:build` — emits ONE registry
+      (`artifacts/manifest/registry.json`, 13 records: 11 audio / 2 video)
+      validating every record against `GeneratedArtifactSchema`, with
+      per-record seeds, CONTRACTS_VERSION, styleBibleVersion (read from
+      STYLE_BIBLE_VERSION, gap documented), provider identities, tool
+      versions; station re-proof byte-identical (sha256 6a7aead3…).
 - [x] Reproducibility metadata: seeds, versions (`CONTRACTS_VERSION`,
       StyleBible version), provider identity, tool versions in every
       artifact manifest. AUDITED for the audio surface 2026-09-27:
@@ -70,11 +91,20 @@ From `docs/work-items/tl2-work-order.md` Phase 3:
       (skeleton invariant, salience omission + rate rise, P3A evidence),
       language invariance (structure fully invariant, surface fully
       language-specific). EXP-V ablations land with W3.
-- [ ] Local refinement tests: plan → compile → measure loop. Audio-side
+- [x] Local refinement tests: plan → compile → measure loop. Audio-side
       design informed by EXP-A-04: smallest-unit regeneration is defeated at
       the text layer by the plan-global planHash seed key (v2 contract wave
       candidate: per-turn content-keyed seeding) — the loop lands as EXP-X-02
       with the v2 wave decision, after W3.
+      LOOP TEST DELIVERED 2026-09-29 (PR #8 / EV-010):
+      `tests/integration/refinement-loop.test.ts` (3 tests, fixed seed
+      `wflx-p3b-loop-seed`, fixed now) — measure→detect→refine→re-measure
+      with over-budget escalation to the smallest regenerable unit and
+      Director re-plan resolution; same-seed metric-set byte-stability
+      across two identical in-process runs REPRODUCED. Scope note: the
+      refinement demonstrated is a GLOBAL re-plan (v1 control behavior
+      pinned); the per-turn content-keyed treatment arm remains EXP-X-02
+      with the v2 wave decision.
       DESIGN NOTE DONE 2026-09-27 22:55 UTC:
       `docs/experiments/design-exp-x-02.md` — five-step protocol, control
       (v1 keying) vs treatment (C-5 keying) arms, four falsifiers, station
