@@ -1,0 +1,48 @@
+id: EXP-V-03
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: video
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-messy-note-redacted"]
+format: "explainer (fixed)"
+language: "en"
+length: "120 s both arms"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: "Keep the delivery punchy and foreground infrastructure reliability."
+other_config:
+  configs: "tools/experiments/configs.ts"
+  custom_prompt: "Keep the delivery punchy and foreground infrastructure reliability."
+  director_prior: "custom instructions affect style fields only, never claim coverage (src/director/compiler.ts contract comment)"
+  director_seed: "wflx-exp-v-director-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  layer: "storyboard"
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/video/exp-v"
+  video_seed: "wflx-exp-v-video-seed"
+baseline_artifact: "artifacts/video/exp-v/ci-control-120s"
+mutation: "custom prompt: none -> style-scoped instruction"
+artifact_under_test: "artifacts/video/exp-v/ci-mutated-120s"
+artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) ef40586070b564dd54bc0990732556f075f14da5d399a1abb0b123311d69cef9 (baseline) vs 0c2f2a0f5d5f2789e6c13c069a62142e67e59d1bc09ddefec44cd56b66ffdf9a (variant); MP4 not composed at this layer — see determinism.json per arm"
+observations:
+  - "BASELINE (REPRODUCED): ci-control-120s — mode explainer, 8 scenes / 6 beats, coverage 5/11 (45.45%), 120 scene-seconds, style bible style-bible--reference-ink, qa passed, in-arm SVG determinism hashA===hashB ef40586070b564dd…"
+  - "VARIANT ci-mutated-120s (REPRODUCED): 8 scenes / 6 beats (delta +0 / +0), coverage 5/11 (added [none], removed [none]), 120 scene-seconds (+0), qa passed."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 0/8 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 6/8 scene SVGs changed bytes; combined SVG hash CHANGED; plan fingerprint CHANGED."
+  - "First EXP-V landing on the merged W3 surface (REPRODUCED at the storyboard layer)."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "Same fixture/graph/seed/now/duration/mode; only customInstructions differs; both arms share the planId so planHash isolation is attributable to the prompt field alone."
+differences:
+  - "ci-mutated-120s vs ci-control-120s: scenes +0, beats +0, coverage added [none] removed [none], structure changed 0/8, scene SVGs changed 6/8, scene-seconds +0, plan fingerprint changed."
+hypothesis: "Custom prompting reaches the PLAN layer only in this lab: the Director parks customInstructions in plan style fields and never in claim coverage (documented prior). Downstream, the storyboard keys seeded choices on planHash, so the surface layer still reshuffles (C-5 class keying) even though the editorial content is unchanged."
+confidence: high
+falsifier: "A style-only prompt reliably changing which source claims appear (coverage drift — the documented falsifier anchor); or plan style fields unchanged while coverage changes."
+next_experiment: "EXP-V-04 (claim mutation locality)"
+status: supported
+evidence_paths:
+  - "artifacts/video/exp-v/ci-control-120s"
+  - "artifacts/video/exp-v/ci-mutated-120s"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"

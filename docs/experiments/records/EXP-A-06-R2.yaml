@@ -1,0 +1,48 @@
+id: EXP-A-06-R2
+timestamp_utc: "2026-09-30T00:00:00Z"
+operator: wflx-p3b-exp
+surface: audio
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47
+selected_sources: ["source-messy-note-redacted"]
+format: "deep-dive (fixed)"
+language: "en -> es"
+length: "300 s both arms"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  audio_seed: "wflx-exp-a-audio-seed"
+  configs: "tools/experiments/configs.ts"
+  director_seed: "wflx-exp-a-director-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  mastering: "pure-ts"
+  mirrors: "experiments/run-exp-a.ts arm set (EV-006) under the EV-008 fixed Director"
+  runner: "tools/experiments/runner.ts"
+  series_root: "artifacts/audio/exp-a-r2"
+baseline_artifact: "artifacts/audio/exp-a-r2/deepdive-5min-baseline"
+mutation: "output language: en -> es"
+artifact_under_test: "artifacts/audio/exp-a-r2/deepdive-5min-es"
+artifact_hash: "56e69b05f8b5141aa122729007ec2059ffcab1785134daaa093124dface5328d (baseline artifact-exp-a-r2-deepdive-5min-baseline) vs 7d39bd4171a9d5cbc2354b10332a2b527fdaaed9047725cb31d82dfeee361b01 (variant artifact-exp-a-r2-deepdive-5min-es); full sha256 in artifacts/audio/exp-a-r2/deepdive-5min-baseline/artifact.json"
+observations:
+  - "BASELINE (REPRODUCED): deepdive-5min-baseline — mode deep-dive, 20 turns / 6 beats, speakers Host A, Host B, coverage 11/11 (100%), 0 over-budget turns, wps 1.46, qa passed-with-issues (alternation-run-longx1, no-interjection-turnsx1, pronunciation-riskx1, mode-semantics-missingx1)."
+  - "VARIANT deepdive-5min-es (REPRODUCED): 20 turns / 6 beats (delta +0 / +0), coverage 11/11 (added [none], removed [none]), 0 over-budget turns, qa passed-with-issues; top purposes explanationx6, framingx5, questionx4, examplex3."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 0/20 turns changed structure (speaker/role/purpose/anchors/beat/duration); 0/20 realized texts byte-identical; turn seconds 300 -> 300 (+0); wps delta -0.01."
+  - "R2 context (REPRODUCED): EV-008 fixed Director re-baseline of the EV-006 experiment."
+invariants:
+  - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
+  - "Same fixture/seed/now/mode/duration; only the output language differs."
+differences:
+  - "deepdive-5min-es vs deepdive-5min-baseline: turns +0, beats +0, coverage added [none] removed [none], structure changed 0/20, texts identical 0/20, turn-seconds +0, wps -0.01."
+hypothesis: "Structure is fully language-invariant (same turn skeleton, coverage and beat plan) while the realized surface is fully language-specific (Spanish connective/anchor packs)."
+confidence: high
+falsifier: "Turn structure, beat count or coverage changing with language (structure would be language-coupled); or byte-identical realized text across languages (surface would not be localized)."
+next_experiment: "EXP-V series (video-surface ablations, wave 2)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-a-r2/deepdive-5min-baseline"
+  - "artifacts/audio/exp-a-r2/deepdive-5min-es"
+  - "artifacts/experiments/summary.json"
+  - "artifacts/experiments/evidence-entries.jsonl"
+  - "tools/experiments/runner.ts"
+  - "tools/experiments/configs.ts"
+  - "docs/experiments/records/EXP-A-06.yaml (pre-fix EV-006 predecessor)"
