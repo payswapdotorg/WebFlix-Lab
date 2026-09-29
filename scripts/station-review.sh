@@ -36,7 +36,7 @@ echo "review head:   ${HEAD} ($(git log -1 --format=%s | head -c 80))"
 echo; echo "--- scope compliance (owned-path diff vs main) ---"
 CHANGED=$(git diff --name-only "main...${BRANCH}")
 echo "${CHANGED}" | sed 's/^/  /'
-VIOLATIONS=$(echo "${CHANGED}" | grep -Ev '^(src/audio/|src/providers/audio/|src/video/|src/providers/visual/|src/providers/video/|src/compositor/|tests/audio/|tests/video/|src/source/|src/director/|src/contracts/|tests/source/|tests/director/|tests/contracts/|docs/|artifacts/|fixtures/|reference/|experiments/|package\.json|tsconfig\.json|eslint\.config\.js|bun\.lock|scripts/|AGENTS\.md|README\.md|\.git.*|.*\.md$)' || true)
+VIOLATIONS=$(echo "${CHANGED}" | grep -Ev '^(src/audio/|src/providers/audio/|src/video/|src/providers/visual/|src/providers/video/|src/compositor/|tests/audio/|tests/video/|tests/integration/|src/source/|src/director/|src/contracts/|tests/source/|tests/director/|tests/contracts/|tools/|docs/|artifacts/|fixtures/|reference/|experiments/|package\.json|tsconfig\.json|eslint\.config\.js|bun\.lock|scripts/|AGENTS\.md|README\.md|\.git.*|.*\.md$)' || true)
 # contracts changes are allowed for TL-owned waves but NOT for worker PRs without HANDOFF entries:
 CONTRACT_CHANGES=$(echo "${CHANGED}" | grep -E '^src/contracts/' || true)
 if [ -n "${VIOLATIONS}" ]; then
