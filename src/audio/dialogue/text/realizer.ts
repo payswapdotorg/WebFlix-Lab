@@ -9,8 +9,13 @@
  *   The realizer never invents facts — discourse glue (openers, tails,
  *   connectors) carries no factual assertions (DESIGN.md §3.2).
  * - SEEDED: every stochastic choice (opener pick, connector pick, tail pick)
- *   is keyed by (seed, planHash, turnId, slot) — reordering cannot change a
- *   pick; regenerating one turn is stable (§10).
+ *   is keyed by (seed, turn-LOCAL content hash, turnId, slot) — the C-5 v2
+ *   re-keying (src/contracts/unit-content-hash.ts): the hash covers
+ *   [turn.brief, ...anchorStatements], so a one-claim change reshuffles
+ *   only the turns whose OWN content changed; reordering cannot change a
+ *   pick; regenerating one turn is stable (§10). planHash stays OUT of
+ *   stochastic keys (it is plan-global by design and lives in
+ *   identification surfaces only).
  * - BUDGETED: text density fits the turn's authoritative target duration via
  *   the rate model (§16.2 item 3). Compression drops glue first; anchors are
  *   never dropped. If mandatory anchors cannot fit within the mode rate
@@ -28,7 +33,7 @@
  * `anchors-not-localized`).
  */
 
-import { countWords, type Id, type OverviewPlan } from '../../../contracts';
+import { countWords, unitContentHash, type Id, type OverviewPlan } from '../../../contracts';
 import { pickFor } from '../../rng';
 import type { ModeProfile, SurfacePack, TagFamily } from '../../modes/common';
 import { TAG_FAMILY } from '../../modes/common';
@@ -136,6 +141,17 @@ function anchorStatements(ctx: RealizerContext, turn: DialogueTurn): string[] {
   return anchors;
 }
 
+/**
+ * Turn-LOCAL content hash for C-5 seeding (src/contracts/unit-content-hash.ts
+ * documents this composition as the audio-turn surface):
+ * unitContentHash([turn.brief, ...anchorStatements]). The turn id stays a
+ * PURE identifier — it never feeds the hash. One shared derivation serves
+ * the realizer keys AND the timing-gap keys (via the audio compiler).
+ */
+export function turnContentHash(ctx: RealizerContext, turn: DialogueTurn): string {
+  return unitContentHash([turn.brief, ...anchorStatements(ctx, turn)]);
+}
+
 function surfacePackFor(ctx: RealizerContext): SurfacePack {
   const { pack } = languagePackFor(ctx.plan.language);
   return overlayPack(pack, ctx.profile.surfaceOverlay);
@@ -169,7 +185,7 @@ function composeCore(
   anchors: readonly string[],
   pack: SurfacePack,
 ): { core: string; bare: string; isQuestion: boolean } {
-  const key = (slot: string) => `${ctx.graph.meta.seed}|${ctx.graph.meta.planHash}|${turn.id}|${slot}`;
+  const key = (slot: string) => `${ctx.graph.meta.seed}|${turnContentHash(ctx, turn)}|${turn.id}|${slot}`;
   const openerOptions = pack.openers[family];
   const opener = openerOptions !== undefined && openerOptions.length > 0 ? pickFor(key('opener'), openerOptions) : '';
   const openerKeepsCapital = opener.endsWith(':') || opener.endsWith('.') || opener === '';
@@ -237,7 +253,7 @@ function conversationalPrefix(
   pack: SurfacePack,
 ): string {
   if (previous === undefined) return '';
-  const key = `${ctx.graph.meta.seed}|${ctx.graph.meta.planHash}|${turn.id}|prefix`;
+  const key = `${ctx.graph.meta.seed}|${turnContentHash(ctx, turn)}|${turn.id}|prefix`;
   const answersPrevious =
     previous.speakerRole !== turn.speakerRole &&
     previous.purpose === 'question' &&
@@ -287,7 +303,7 @@ export function realizeTurn(ctx: RealizerContext, turn: DialogueTurn, previous: 
   const prefix = conversationalPrefix(ctx, turn, previous, pack);
   const closerOptions = pack.closers[family] ?? [];
   const evidence = evidenceQuote(ctx, turn);
-  const key = (slot: string) => `${ctx.graph.meta.seed}|${ctx.graph.meta.planHash}|${turn.id}|${slot}`;
+  const key = (slot: string) => `${ctx.graph.meta.seed}|${turnContentHash(ctx, turn)}|${turn.id}|${slot}`;
   const closer =
     closerOptions.length > 0 && !isQuestion && family !== 'interjection'
       ? pickFor(key('closer'), closerOptions)

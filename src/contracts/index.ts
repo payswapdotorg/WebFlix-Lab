@@ -18,6 +18,9 @@ export {
   TURN_PLANNING_RATE_WPS,
 } from './rate-model';
 
+// C-5 (v2 contract wave): the per-unit content-keyed seeding hash.
+export { unitContentHash } from './unit-content-hash';
+
 export {
   ContractVersionSchema,
   EvidenceSpanSchema,

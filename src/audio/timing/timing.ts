@@ -12,7 +12,11 @@
  *   | around backchannel   | 60–120     |
  *
  * Mode scaling: Brief shortens gaps (×0.5, DESIGN.md §4.2). Jitter within a
- * class range is seeded by (seed, planHash, gap index) — reproducible.
+ * class range is seeded by (seed, gap-adjacent turn content hashes, gap
+ * index) — reproducible; C-5 v2 re-keying (src/contracts/unit-content-hash.ts
+ * documents this composition as the audio timing-gap surface): the key is
+ * seed|unitContentHash([turnHashA, turnHashB])|gap-N|boundary, so a
+ * one-claim change reshuffles only the gaps adjacent to changed turns.
  *
  * §16.3: the plan is duration-authoritative; gaps are extra. The timing
  * engine checks total = Σ turns + Σ gaps against targetDurationSeconds and
@@ -20,6 +24,7 @@
  */
 
 import type { DialogueGraph } from '../dialogue/types';
+import { unitContentHash } from '../../contracts';
 import { intFor } from '../rng';
 
 /** Boundary classes in priority order (most specific first). */
@@ -36,7 +41,14 @@ export const GAP_POLICY: Readonly<Record<BoundaryClass, { readonly minMs: number
 
 export interface GapPolicyInput {
   readonly seed: string;
-  readonly planHash: string;
+  /**
+   * Turn-LOCAL content hashes (spoken order; src/audio/dialogue/text/
+   * realizer.ts turnContentHash) — the C-5 v2 re-keying input. The gap
+   * between turn i and turn i+1 keys on the hashes at i and i+1; the
+   * plan-global planHash is REMOVED from stochastic keys (it stays in
+   * identification surfaces only).
+   */
+  readonly turnContentHashes: readonly string[];
   /** Mode gap scale (DESIGN.md §4.2 Brief ×0.5; deep-dive/critique ×1.0; debate ×0.9). */
   readonly gapScale: number;
 }
@@ -89,12 +101,26 @@ export function classifyBoundary(
   return 'cluster';
 }
 
-/** Seeded gap (ms) for a boundary class, scaled by the mode factor. */
+/** Seeded gap (ms) for a boundary class, scaled by the mode factor.
+ * C-5: keyed on the gap-adjacent turns' content hashes (see the module
+ * docblock and src/contracts/unit-content-hash.ts). */
 export function gapMsFor(input: GapPolicyInput, boundary: BoundaryClass, gapIndex: number): number {
+  const hashA = input.turnContentHashes[gapIndex];
+  const hashB = input.turnContentHashes[gapIndex + 1];
+  if (hashA === undefined || hashB === undefined) {
+    throw new RangeError(
+      `gapMsFor: no gap-adjacent turn content hashes for gap ${gapIndex} ` +
+        `(have ${input.turnContentHashes.length} hashes)`,
+    );
+  }
   const policy = GAP_POLICY[boundary];
   const scaledMin = Math.round(policy.minMs * input.gapScale);
   const scaledMax = Math.round(policy.maxMs * input.gapScale);
-  return intFor(`${input.seed}|${input.planHash}|gap-${gapIndex}|${boundary}`, scaledMin, scaledMax);
+  return intFor(
+    `${input.seed}|${unitContentHash([hashA, hashB])}|gap-${gapIndex}|${boundary}`,
+    scaledMin,
+    scaledMax,
+  );
 }
 
 /** Scaled policy bounds for QA (pause_distribution checks against these). */
