@@ -50,7 +50,10 @@ MP4 + narration (placeholder) + QA + GeneratedArtifact sidecar
   never as text inside generated illustration (annotation rule 1).
 - Illustration/metaphor render generatively via the provider port; the
   offline deterministic ink adapter is the canonical no-network path.
-- Every stochastic choice keys on (seed, planHash, mode, sceneId, choice).
+- Every stochastic choice keys on (seed, scene-LOCAL content hash, mode,
+  sceneId, choice) — the C-5 v2 re-keying (src/contracts/unit-content-hash.ts);
+  planHash stays in identification surfaces only (storyboard meta, artifact
+  ids, QA reports).
 - Provider-specific shapes stay inside adapters; no credentials anywhere.
 - Placeholder narration and ink illustrations are NOT product parity
   evidence (AGENTS.md).

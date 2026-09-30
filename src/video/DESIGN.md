@@ -73,7 +73,9 @@ visual target per docs/notebooklm-overviews-research.md).
 
 - **Renderer** (the pinned layer): identical inputs → byte-identical SVG.
   Pure functions, stable element order, fixed 2-decimal formatting, seeded
-  per-choice PRNG keys `(seed, planHash, mode, sceneId, choice)`. Proven by
+  per-choice PRNG keys `(seed, scene-local content hash, mode, sceneId,
+  choice)` (C-5 v2 re-keying; planHash stays in identification surfaces).
+  Proven by
   the hash pair in `determinism.json` and by `tests/video`.
 - **Illustration provider**: the offline deterministic ink adapter is a
   seeded procedural composer (paper grain, construction grid, controller
