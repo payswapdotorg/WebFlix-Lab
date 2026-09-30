@@ -22,9 +22,9 @@ other_config:
 baseline_artifact: "artifacts/video/exp-v/canonical-420s-reference-ink"
 mutation: "visual style: StyleBible palette.ink.value #f2f4f5 -> #ffd9a0 (one role, all else byte-identical)"
 artifact_under_test: "artifacts/video/exp-v/canonical-420s-ink-variant"
-artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) f84bdfe077b0619fc4af7103dc26da846f883f5ba83329466da1955e8c75e7fd (baseline) vs 023d57a129aa48d9f90754f676aa3571812ef9ca2d6f244d7babc367f26fb837 (variant); MP4 not composed at this layer — see determinism.json per arm"
+artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) 978708fa51cf623be6beb55ac3f701420e5e190a7ae71e16c058f35be2bccaf7 (baseline) vs 36a9361d7df85b5ac5edc13ca535668cf0e96abcdb02d0993cd102d0f751a706 (variant); MP4 not composed at this layer — see determinism.json per arm"
 observations:
-  - "BASELINE (REPRODUCED): canonical-420s-reference-ink — mode explainer, 15 scenes / 6 beats, coverage 11/11 (100%), 420 scene-seconds, style bible style-bible--reference-ink, qa passed, in-arm SVG determinism hashA===hashB f84bdfe077b0619f…"
+  - "BASELINE (REPRODUCED): canonical-420s-reference-ink — mode explainer, 15 scenes / 6 beats, coverage 11/11 (100%), 420 scene-seconds, style bible style-bible--reference-ink, qa passed, in-arm SVG determinism hashA===hashB 978708fa51cf623b…"
   - "VARIANT canonical-420s-ink-variant (REPRODUCED): 15 scenes / 6 beats (delta +0 / +0), coverage 11/11 (added [none], removed [none]), 420 scene-seconds (+0), qa passed."
   - "STRUCTURE vs BASELINE (REPRODUCED): 0/15 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 10/15 scene SVGs changed bytes; combined SVG hash CHANGED; plan fingerprint IDENTICAL."
   - "Scope note (DOCUMENTED): compileVideoOverview does not expose a styleBible option, so this ablation runs at the storyboard layer through compileVideoScenes documented options.styleBible override; KNOWN_STYLE_BIBLES ships exactly one bible (style-bible--reference-ink)."

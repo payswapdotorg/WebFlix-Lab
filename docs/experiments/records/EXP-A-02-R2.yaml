@@ -22,17 +22,17 @@ other_config:
 baseline_artifact: "artifacts/audio/exp-a-r2/deepdive-5min-baseline"
 mutation: "output mode: deep-dive -> critique (canonical plan)"
 artifact_under_test: "artifacts/audio/exp-a-r2/critique-5min-canonical"
-artifact_hash: "56e69b05f8b5141aa122729007ec2059ffcab1785134daaa093124dface5328d (baseline artifact-exp-a-r2-deepdive-5min-baseline) vs 155551331afb08fb4a2fb6e1c62df1daf1fd4f539c6a2d3e69e455af4f6fa566 (variant artifact-exp-a-r2-critique-5min); full sha256 in artifacts/audio/exp-a-r2/deepdive-5min-baseline/artifact.json"
+artifact_hash: "61ed761bece6628d6e7791589161643890b2a389850386c6e756f1e7abdd3aa4 (baseline artifact-exp-a-r2-deepdive-5min-baseline) vs 79220d991b2e58271bc81bb072a094f9d2704319f5d7d2a31a1024714c7db188 (variant artifact-exp-a-r2-critique-5min); full sha256 in artifacts/audio/exp-a-r2/deepdive-5min-baseline/artifact.json"
 observations:
-  - "BASELINE (REPRODUCED): deepdive-5min-baseline — mode deep-dive, 20 turns / 6 beats, speakers Host A, Host B, coverage 11/11 (100%), 0 over-budget turns, wps 1.46, qa passed-with-issues (alternation-run-longx1, no-interjection-turnsx1, pronunciation-riskx1, mode-semantics-missingx1)."
+  - "BASELINE (REPRODUCED): deepdive-5min-baseline — mode deep-dive, 20 turns / 6 beats, speakers Host A, Host B, coverage 11/11 (100%), 0 over-budget turns, wps 1.44, qa passed-with-issues (alternation-run-longx1, no-interjection-turnsx1, pronunciation-riskx1, mode-semantics-missingx1)."
   - "VARIANT critique-5min-canonical (REPRODUCED): 19 turns / 6 beats (delta -1 / +0), coverage 11/11 (added [none], removed [none]), 0 over-budget turns, qa passed-with-issues; top purposes explanationx5, framingx5, questionx4, clarificationx3."
-  - "STRUCTURE vs BASELINE (REPRODUCED): 5/19 turns changed structure (speaker/role/purpose/anchors/beat/duration); 0/19 realized texts byte-identical; turn seconds 300 -> 300 (+0); wps delta +0.097."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 5/19 turns changed structure (speaker/role/purpose/anchors/beat/duration); 1/19 realized texts byte-identical; turn seconds 300 -> 300 (+0); wps delta +0.07."
   - "R2 context (REPRODUCED): EV-008 fixed Director re-baseline of the EV-006 experiment."
 invariants:
   - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
   - "Same fixture/seed/now; only the mode (plan fixture) differs."
 differences:
-  - "critique-5min-canonical vs deepdive-5min-baseline: turns -1, beats +0, coverage added [none] removed [none], structure changed 5/19, texts identical 0/19, turn-seconds +0, wps +0.097."
+  - "critique-5min-canonical vs deepdive-5min-baseline: turns -1, beats +0, coverage added [none] removed [none], structure changed 5/19, texts identical 1/19, turn-seconds +0, wps +0.07."
 hypothesis: "Critique is a structurally distinct mode: it swaps per-beat carrier purposes toward question/clarification (interrogative tissue) while keeping budget-driven coverage and, post-fix, zero over-budget turns (the pre-fix critique arm was one of the 4-over-budget arms)."
 confidence: high
 falsifier: "critique producing the same purpose histogram as deep-dive (a re-skin, not a structure); or coverage differences vs the deep-dive baseline at the same duration."

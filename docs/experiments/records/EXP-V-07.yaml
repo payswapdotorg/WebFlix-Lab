@@ -21,9 +21,9 @@ other_config:
 baseline_artifact: "artifacts/video/exp-v/duration-180s-baseline"
 mutation: "target duration: 180 s -> 90 s"
 artifact_under_test: "artifacts/video/exp-v/duration-90s"
-artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) edd4f17ae0be22564b1fde91e40b3226491c4718c92a65670f50d284fbb03bb9 (baseline) vs b57d223b818cee9a3eceab4e0c273bca8c47421eb47626d28a5d48cf7428ea43 (variant); MP4 not composed at this layer — see determinism.json per arm"
+artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) 1ec34ca6614668002a0130632337a7e30aa8bd9f827bf082ec0b65177c3b28b7 (baseline) vs 8585a2c409b4517a714c52b4c47dfdba1bef26109b60a592dcdbbe0843f1ca40 (variant); MP4 not composed at this layer — see determinism.json per arm"
 observations:
-  - "BASELINE (REPRODUCED): duration-180s-baseline — mode explainer, 10 scenes / 6 beats, coverage 7/11 (63.64%), 180 scene-seconds, style bible style-bible--reference-ink, qa passed-with-issues (coverage-gapx1), in-arm SVG determinism hashA===hashB edd4f17ae0be2256…"
+  - "BASELINE (REPRODUCED): duration-180s-baseline — mode explainer, 10 scenes / 6 beats, coverage 7/11 (63.64%), 180 scene-seconds, style bible style-bible--reference-ink, qa passed-with-issues (coverage-gapx1), in-arm SVG determinism hashA===hashB 1ec34ca661466800…"
   - "VARIANT duration-90s (REPRODUCED): 6 scenes / 6 beats (delta -4 / +0), coverage 4/11 (added [none], removed [claim-audits, claim-forecasting-projects, claim-oss-runtimes]), 90 scene-seconds (-90), qa passed."
   - "STRUCTURE vs BASELINE (REPRODUCED): 6/6 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 5/6 scene SVGs changed bytes; combined SVG hash CHANGED; plan fingerprint CHANGED."
   - "First EXP-V landing on the merged W3 surface (REPRODUCED at the storyboard layer)."

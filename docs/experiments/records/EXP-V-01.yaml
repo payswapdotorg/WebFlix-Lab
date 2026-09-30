@@ -22,9 +22,9 @@ other_config:
 baseline_artifact: "artifacts/video/exp-v/explainer-120s-baseline"
 mutation: "output mode: explainer -> short at fixed duration"
 artifact_under_test: "artifacts/video/exp-v/short-120s"
-artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) 216838ec0820cdc1f46abb7e8534e1c36c2dc15f3e42d8838ac148ee223c5eec (baseline) vs bf607dff3e3770432d7e873cc037468cc8ab1e1cd6607f3a01965d268251bccc (variant); MP4 not composed at this layer — see determinism.json per arm"
+artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) 37471c642f05565dad6cb694aea32af0aebe10a34f872ecc435a0f51fe58b87c (baseline) vs 7582defa9c3a52cb177efb8100c2bff8495e93d27e8d0c6189f735b152d19cae (variant); MP4 not composed at this layer — see determinism.json per arm"
 observations:
-  - "BASELINE (REPRODUCED): explainer-120s-baseline — mode explainer, 8 scenes / 6 beats, coverage 5/11 (45.45%), 120 scene-seconds, style bible style-bible--reference-ink, qa passed, in-arm SVG determinism hashA===hashB 216838ec0820cdc1…"
+  - "BASELINE (REPRODUCED): explainer-120s-baseline — mode explainer, 8 scenes / 6 beats, coverage 5/11 (45.45%), 120 scene-seconds, style bible style-bible--reference-ink, qa passed, in-arm SVG determinism hashA===hashB 37471c642f05565d…"
   - "VARIANT short-120s (REPRODUCED): 8 scenes / 6 beats (delta +0 / +0), coverage 5/11 (added [none], removed [none]), 120 scene-seconds (+0), qa passed."
   - "STRUCTURE vs BASELINE (REPRODUCED): 0/8 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 7/8 scene SVGs changed bytes; combined SVG hash CHANGED; plan fingerprint CHANGED."
   - "First EXP-V landing on the merged W3 surface (REPRODUCED at the storyboard layer; offline deterministic providers only — NOT product parity evidence)."
