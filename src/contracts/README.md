@@ -103,6 +103,13 @@ wave after W3 lands, alongside per-claim evidence enforcement (H-5, if the
 cross-modal QA fallback rate proves material) and stance/contestedness
 signals (H-1).
 
+> **C-3 closed at CONTRACTS_VERSION 2.0.0** (v2 contract wave, ruling
+> 2026-09-29): this beat-vs-turn coverage boundary ruling is CLOSED as
+> documented — it rides the v2 version bump as this version-stamped note
+> only, with no schema change and no code change to W1 validation. The
+> remaining v2 candidates (H-5, H-1) stay deferred with their recorded
+> reasons in docs/handoff/v2-contract-wave-draft.md.
+
 ## Fixture-only success is not product parity
 
 Contract and fixture tests establish conformance to the frozen IR only.

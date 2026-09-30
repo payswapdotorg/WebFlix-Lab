@@ -121,12 +121,21 @@ describe('canonical per-mode plan fixtures (Director-emitted, H-2)', () => {
    *   debate   c2b22eb1b37b84198f65cdff1ae9e9bf988e3448b5ebaaf5b085489afb82eecb -> e2fab2a77778fa22f348dd2bd8d194a9da8c616372079cd9db39e878e2b5e4bc
    * (same seeds / FIXED_TS / planIds; only the Director-emitted plans and
    * their s15/s16/s17 mutants changed — the Stage-2 hand-built fixtures are
-   * byte-frozen and untouched).
+   * byte-frozen and untouched.)
+   *
+   * v2 CONTRACT WAVE transition (CONTRACTS_VERSION 1.0.0 -> 2.0.0,
+   * 2026-09-30): every fixture's per-record contractVersion field re-stamps
+   * to 2.0.0 (the ONLY field that changes — plan structure is untouched;
+   * re-keying lands later in the same wave and does not reach plan compile):
+   *   brief    2ccf7f2e892f8fcfff37aa7429e9e0fed59d8bf9260f8b858a5dcad6985b3b58 -> 148049532bda00117dfc9ed482f4b8fef111069286f3fe10e46a2185de88458d
+   *   critique 59b37965895b7618f0362ce2a9a778f143a505b97fc5ba8b5c81243ddfc6cda1 -> f74e09e4eefb98e97c434c91423436ee0883555cd593889c22519f04a1790af9
+   *   debate   e2fab2a77778fa22f348dd2bd8d194a9da8c616372079cd9db39e878e2b5e4bc -> 258e96bd8b9a18bc55c2e465a5c43041c08d71ee1cb989274a32e3928085b25a
+   * Old values preserved as git history (never silently re-pinned).
    */
   const FINGERPRINTS: Record<string, string> = {
-    'plan-audio-brief-2min.json': '2ccf7f2e892f8fcfff37aa7429e9e0fed59d8bf9260f8b858a5dcad6985b3b58',
-    'plan-audio-critique-5min.json': '59b37965895b7618f0362ce2a9a778f143a505b97fc5ba8b5c81243ddfc6cda1',
-    'plan-audio-debate-5min.json': 'e2fab2a77778fa22f348dd2bd8d194a9da8c616372079cd9db39e878e2b5e4bc',
+    'plan-audio-brief-2min.json': '148049532bda00117dfc9ed482f4b8fef111069286f3fe10e46a2185de88458d',
+    'plan-audio-critique-5min.json': 'f74e09e4eefb98e97c434c91423436ee0883555cd593889c22519f04a1790af9',
+    'plan-audio-debate-5min.json': '258e96bd8b9a18bc55c2e465a5c43041c08d71ee1cb989274a32e3928085b25a',
   };
 
   test('pinned fingerprints match the checked-in fixtures', async () => {

@@ -1,6 +1,6 @@
 {
   "recordType": "SemanticGraph",
-  "contractVersion": "1.0.0",
+  "contractVersion": "2.0.0",
   "id": "graph-messy-note-redacted",
   "sourceIds": [
     "source-messy-note-redacted"
@@ -8,7 +8,7 @@
   "claims": [
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-tool-catalog",
       "statement": "The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems.",
       "kind": "fact",
@@ -54,7 +54,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-oss-runtimes",
       "statement": "The catalog also includes open-source media projects, local model runtimes and model catalogs.",
       "kind": "fact",
@@ -92,7 +92,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-forecasting-projects",
       "statement": "The catalog extends to forecasting and digital-twin/world-monitoring projects.",
       "kind": "fact",
@@ -123,7 +123,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-infra-stack",
       "statement": "The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
       "kind": "fact",
@@ -196,7 +196,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-credentials-redacted",
       "statement": "All credentials in the source are redacted.",
       "kind": "constraint",
@@ -217,7 +217,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-multi-agent-orchestration",
       "statement": "The architecture section discusses multi-agent orchestration.",
       "kind": "fact",
@@ -240,7 +240,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-audits",
       "statement": "The workflows include security/integrity audits.",
       "kind": "fact",
@@ -263,7 +263,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-provider-integrations",
       "statement": "Provider integrations are part of the discussed architecture and workflows.",
       "kind": "process",
@@ -286,7 +286,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-sandbox-limits",
       "statement": "Sandbox and resource limits are discussed as architectural guardrails.",
       "kind": "fact",
@@ -309,7 +309,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-deployment-pipelines",
       "statement": "The source covers deployment pipelines, operational loops and execution workflows.",
       "kind": "process",
@@ -346,7 +346,7 @@
     },
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-purpose",
       "statement": "The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
       "kind": "goal",
@@ -369,7 +369,7 @@
   "entities": [
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-ai-video-tools",
       "name": "AI video tools",
       "kind": "tool",
@@ -386,7 +386,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-voice-generation",
       "name": "voice generation",
       "kind": "technology",
@@ -403,7 +403,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-agent-tool-systems",
       "name": "agent tool systems",
       "kind": "technology",
@@ -420,7 +420,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-local-model-runtimes",
       "name": "local model runtimes",
       "kind": "technology",
@@ -437,7 +437,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-model-catalogs",
       "name": "model catalogs",
       "kind": "concept",
@@ -454,7 +454,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-forecasting",
       "name": "forecasting",
       "kind": "concept",
@@ -471,7 +471,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-digital-twin-projects",
       "name": "digital-twin/world-monitoring projects",
       "kind": "project",
@@ -488,7 +488,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-cloudflare",
       "name": "Cloudflare",
       "kind": "infrastructure",
@@ -505,7 +505,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-postgres",
       "name": "Postgres",
       "kind": "technology",
@@ -524,7 +524,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-neon",
       "name": "Neon",
       "kind": "service",
@@ -541,7 +541,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-llm-providers",
       "name": "LLM providers",
       "kind": "service",
@@ -558,7 +558,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-vercel",
       "name": "Vercel",
       "kind": "service",
@@ -575,7 +575,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-github",
       "name": "GitHub",
       "kind": "service",
@@ -592,7 +592,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-redis",
       "name": "Redis",
       "kind": "technology",
@@ -609,7 +609,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-browser-automation",
       "name": "browser automation",
       "kind": "technology",
@@ -626,7 +626,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-realtime-infrastructure",
       "name": "realtime infrastructure",
       "kind": "infrastructure",
@@ -643,7 +643,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-multi-agent-orchestration",
       "name": "multi-agent orchestration",
       "kind": "workflow",
@@ -660,7 +660,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-security-integrity-audits",
       "name": "security/integrity audits",
       "kind": "process",
@@ -677,7 +677,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-provider-integrations",
       "name": "provider integrations",
       "kind": "process",
@@ -694,7 +694,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-sandbox-resource-limits",
       "name": "sandbox/resource limits",
       "kind": "concept",
@@ -711,7 +711,7 @@
     },
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-deployment-pipelines",
       "name": "deployment pipelines",
       "kind": "process",
@@ -730,7 +730,7 @@
   "topics": [
     {
       "recordType": "TopicRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "topic-tool-catalog",
       "title": "AI tools, models and repositories",
       "summary": "A mixed catalog of AI tooling spanning generation, editing, scraping/API access, agent systems, open-source media, local runtimes, catalogs and monitoring projects.",
@@ -816,7 +816,7 @@
     },
     {
       "recordType": "TopicRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "topic-infrastructure",
       "title": "Infrastructure",
       "summary": "The infrastructure short list spans storage, databases, providers, hosting, messaging, payments, caching, compliance, automation and realtime services, with credentials redacted.",
@@ -899,7 +899,7 @@
     },
     {
       "recordType": "TopicRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "topic-architecture-workflows",
       "title": "Architecture and workflows",
       "summary": "Architecture and workflow concerns: multi-agent orchestration, security/integrity audits, provider integrations, sandbox limits, deployment pipelines and operational loops.",
@@ -966,7 +966,7 @@
     },
     {
       "recordType": "TopicRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "topic-purpose",
       "title": "Purpose of the note",
       "summary": "The note exists to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
@@ -994,7 +994,7 @@
   "relationships": [
     {
       "recordType": "RelationshipRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "rel-postgres-neon",
       "kind": "alternative-to",
       "subjectId": "entity-postgres",
@@ -1015,7 +1015,7 @@
     },
     {
       "recordType": "RelationshipRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "rel-vercel-github",
       "kind": "integrates-with",
       "subjectId": "entity-vercel",
@@ -1036,7 +1036,7 @@
     },
     {
       "recordType": "RelationshipRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "rel-provider-integrations-llm",
       "kind": "uses",
       "subjectId": "entity-provider-integrations",
@@ -1065,7 +1065,7 @@
     },
     {
       "recordType": "RelationshipRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "rel-orchestration-audits",
       "kind": "related-to",
       "subjectId": "entity-multi-agent-orchestration",
@@ -1094,7 +1094,7 @@
     },
     {
       "recordType": "RelationshipRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "rel-orchestration-agent-tools",
       "kind": "uses",
       "subjectId": "entity-multi-agent-orchestration",

@@ -15,8 +15,15 @@
 
 import { z } from 'zod';
 
-/** Version of the frozen contract bundle. Bump per AGENTS.md drift controls. */
-export const CONTRACTS_VERSION = '1.0.0' as const;
+/**
+ * Version of the frozen contract bundle. Bump per AGENTS.md drift controls.
+ * v2.0.0 (v2 contract wave, ruling 2026-09-29): one breaking wave — C-5
+ * per-unit content-keyed seeding (both surfaces), C-7 shared rate model,
+ * C-9 styleBibleVersion emission, C-3 doc-only note. Same-plan outputs
+ * change ONCE at this boundary and committed fingerprints regenerate in
+ * the same change (corrected wave mechanics).
+ */
+export const CONTRACTS_VERSION = '2.0.0' as const;
 
 const CONTRACTS_MAJOR = CONTRACTS_VERSION.split('.')[0] as string;
 

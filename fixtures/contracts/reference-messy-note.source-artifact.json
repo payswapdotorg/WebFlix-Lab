@@ -1,6 +1,6 @@
 {
   "recordType": "SourceArtifact",
-  "contractVersion": "1.0.0",
+  "contractVersion": "2.0.0",
   "id": "source-messy-note-redacted",
   "title": "Reference Fixture — Redacted Messy Note",
   "provenance": {
