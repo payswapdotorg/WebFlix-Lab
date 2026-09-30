@@ -130,10 +130,19 @@ describe('canonical per-mode plan fixtures (Director-emitted, H-2)', () => {
    *   brief    2ccf7f2e892f8fcfff37aa7429e9e0fed59d8bf9260f8b858a5dcad6985b3b58 -> 148049532bda00117dfc9ed482f4b8fef111069286f3fe10e46a2185de88458d
    *   critique 59b37965895b7618f0362ce2a9a778f143a505b97fc5ba8b5c81243ddfc6cda1 -> f74e09e4eefb98e97c434c91423436ee0883555cd593889c22519f04a1790af9
    *   debate   e2fab2a77778fa22f348dd2bd8d194a9da8c616372079cd9db39e878e2b5e4bc -> 258e96bd8b9a18bc55c2e465a5c43041c08d71ee1cb989274a32e3928085b25a
+   *
+   * C-10 monologic brief restructure (2026-09-30, same v2 wave; EV-009
+   * LAB-02 — the strongest product-truth delta in the register): the brief
+   * skeleton changes 10-turn two-speaker dialog -> 6-turn single-narrator
+   * (speakers 1, every turn SpeakerRole 'narrator', one explanation per
+   * topic beat + narrator framing/conclusion), so ONLY the brief plan and
+   * its s15 mutant regenerate — critique/debate stay byte-frozen at their
+   * v2-transition fingerprints above:
+   *   brief    148049532bda00117dfc9ed482f4b8fef111069286f3fe10e46a2185de88458d -> 97d2c6cfc2e61c9c3872a0afa9a72b5dbb2474cdfdc07ea097f8c42d4c9e15b0
    * Old values preserved as git history (never silently re-pinned).
    */
   const FINGERPRINTS: Record<string, string> = {
-    'plan-audio-brief-2min.json': '148049532bda00117dfc9ed482f4b8fef111069286f3fe10e46a2185de88458d',
+    'plan-audio-brief-2min.json': '97d2c6cfc2e61c9c3872a0afa9a72b5dbb2474cdfdc07ea097f8c42d4c9e15b0',
     'plan-audio-critique-5min.json': 'f74e09e4eefb98e97c434c91423436ee0883555cd593889c22519f04a1790af9',
     'plan-audio-debate-5min.json': '258e96bd8b9a18bc55c2e465a5c43041c08d71ee1cb989274a32e3928085b25a',
   };
@@ -204,6 +213,37 @@ describe('canonical per-mode plan fixtures (Director-emitted, H-2)', () => {
       expect(omitted.reason.length).toBeGreaterThan(0);
       expect(briefCovered.has(omitted.claimId)).toBe(false);
     }
+  });
+
+  test('C-10 (plan level): the canonical brief skeleton is monologic — single narrator, enumerated shape, every beat voiced (EV-009 LAB-02)', () => {
+    // LAB-02 (OBSERVED): the real Brief is a SINGLE narrator with
+    // enumerated structure (First/Second/Finally, 93.92 s) vs our v1 fixed
+    // 10-turn two-speaker dialog (120 s). Lab reproduction at the plan
+    // level (REPRODUCED; fixture-only success is not product parity):
+    expect(brief.style.speakerCount).toBe(1);
+    expect(new Set(brief.audioTurns.map((t) => t.speakerRole))).toEqual(new Set(['narrator']));
+    expect(new Set(brief.audioTurns.map((t) => t.speaker))).toEqual(new Set(['Narrator']));
+    // The 6-turn skeleton: narrator framing sign-on, ONE explanation turn
+    // per topic beat, narrator conclusion.
+    expect(brief.audioTurns.length).toBe(6);
+    expect(brief.audioTurns[0]?.purpose).toBe('framing');
+    expect(brief.audioTurns[brief.audioTurns.length - 1]?.purpose).toBe('conclusion');
+    const topicBeats = brief.beats.filter((b) => b.id !== 'beat-1' && b.id !== `beat-${brief.beats.length}`);
+    const explanationTurns = brief.audioTurns.filter((t) => t.purpose === 'explanation');
+    expect(explanationTurns.length).toBe(topicBeats.length);
+    // Beat coverage preserved (H-A-01): every beat still voiced by a turn.
+    for (const beat of brief.beats) {
+      expect(
+        brief.audioTurns.some((t) => t.beatId === beat.id),
+        `beat ${beat.id} voiced by no turn`,
+      ).toBe(true);
+    }
+    // No agenda, no connection tissue, no examples (H-A-01 register).
+    const purposes = brief.audioTurns.map((t) => t.purpose);
+    expect(purposes).not.toContain('connection');
+    expect(purposes).not.toContain('example');
+    expect(purposes).not.toContain('question');
+    expect(purposes).not.toContain('interjection');
   });
 
   test('H-A-02/03 (plan level): critique and debate keep full coverage with distinct skeletons', () => {

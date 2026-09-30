@@ -186,6 +186,29 @@ function metricTurnTaking(ctx: AudioQaContext): AudioQaMetric {
   const issues: QaIssue[] = [];
   const stats = analyzeTurnTaking(ctx.graph);
 
+  // C-10 (v2 contract wave, EV-009 LAB-02): brief is monologic BY DESIGN —
+  // the H-A-04 dialogic predicates (speaker parity, alternation runs,
+  // same-speaker runs, question->answer links, backchannel presence) apply
+  // to two-host modes; reporting them on a single-narrator skeleton would be
+  // false Director feedback. The one monologic-relevant check that stays:
+  // a monologic mode whose plan carries MULTIPLE speaker roles.
+  if (ctx.profile.monologic === true) {
+    const roles = Object.keys(stats.speakerShares);
+    if (roles.length > 1) {
+      issues.push(
+        qaIssue(
+          'warning',
+          'monologic-mode-multi-speaker',
+          `${ctx.profile.mode} declares a monologic skeleton but the plan carries ${roles.length} speaker roles (${roles.join(', ')}) — C-10 Director feedback (EV-009 LAB-02)`,
+        ),
+      );
+    }
+    const value =
+      `monologic mode (C-10, EV-009 LAB-02): turns=${stats.turnCount} single voice [${roles.join(', ')}]; ` +
+      'dialogic turn-taking predicates (parity/alternation/same-speaker runs/question-answer/backchannel) not applicable';
+    return { metric: 'turn_taking_naturalness', value, issues };
+  }
+
   if (!stats.parityBalanced && stats.turnCount >= 6) {
     const shares = Object.entries(stats.speakerShares)
       .map(([role, share]) => `${role} ${(share * 100).toFixed(0)}%`)

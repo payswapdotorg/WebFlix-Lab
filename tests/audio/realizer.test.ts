@@ -113,7 +113,7 @@ describe('realizer — canonical deep dive', () => {
 });
 
 describe('realizer — mode registers (H-A-01/02/03 lab predicates)', () => {
-  test('brief: compact headline register (H-A-01)', async () => {
+  test('brief: monologic enumerated register (H-A-01 + C-10, EV-009 LAB-02)', async () => {
     const plan = buildBriefStandinPlan();
     const result = await compileAudioOverview({
       plan,
@@ -122,17 +122,19 @@ describe('realizer — mode registers (H-A-01/02/03 lab predicates)', () => {
       options: { seed: FIXED_SEED, now: FIXED_NOW, mastering: 'pure-ts' },
     });
     expect(result.qa.status).not.toBe('failed');
-    // Brief statements open in the compact register.
-    const statementTexts = result.realized.filter((r) => {
-      const turn = result.graph.turns.find((t) => t.id === r.turnId);
-      return turn?.purpose === 'explanation';
+    // C-10: the stand-in's four explanation turns open on the enumeration
+    // spine (First/Second/Third/Finally, position-based — never a seeded
+    // pick). The v1 compact openers ('In short:'/'The headline:': …) are
+    // gone with the dialogic surfaces; the stand-in is audio-local and
+    // non-canonical (its dialogic question turn is honestly discouraged by
+    // the C-10 QA — asserted in modes.test.ts).
+    const statementTurns = result.graph.turns.filter((turn) => turn.enrichedTag === 'explanation');
+    expect(statementTurns.length).toBe(4);
+    const openers = statementTurns.map((turn) => {
+      const outcome = result.realized.find((r) => r.turnId === turn.id);
+      return outcome?.text.split(' ')[0] ?? '';
     });
-    expect(statementTexts.length).toBeGreaterThan(0);
-    const briefOpeners = ['In short:', 'The headline:', 'Core point:', 'Simply put:'];
-    const compact = statementTexts.filter((r) =>
-      briefOpeners.some((opener) => r.text.includes(opener)),
-    );
-    expect(compact.length).toBeGreaterThan(0);
+    expect(openers).toEqual(['First,', 'Second,', 'Third,', 'Finally,']);
   }, 30000);
 
   test('critique: evaluative register + verdict closing (H-A-02)', async () => {

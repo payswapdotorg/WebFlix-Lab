@@ -227,6 +227,40 @@ describe('compileOverviewPlan — editorial invariants', () => {
     }
   });
 
+  test('C-10: the brief skeleton is monologic — one narrator, one explanation per topic beat (EV-009 LAB-02)', () => {
+    // LAB-02 (OBSERVED): the real Brief is a SINGLE narrator with
+    // enumerated structure (First/Second/Finally, 93.92 s) vs our v1 fixed
+    // 10-turn two-speaker dialog. The Director reproduces the shape
+    // (REPRODUCED; fixture-only success is not product parity):
+    for (const duration of [120, 300] as const) {
+      const plan = compileOverviewPlan(baseRequest({ mode: 'brief', targetDurationSeconds: duration }));
+      expect(plan.style.speakerCount, `brief@${duration}s`).toBe(1);
+      for (const turn of plan.audioTurns) {
+        expect(turn.speakerRole, `brief@${duration}s ${turn.id}`).toBe('narrator');
+        expect(turn.speaker, `brief@${duration}s ${turn.id}`).toBe('Narrator');
+      }
+      // One explanation turn per topic beat + narrator framing/conclusion.
+      const topicBeats = plan.beats.filter((b) => b.index > 0 && b.index < plan.beats.length - 1);
+      const explanations = plan.audioTurns.filter((t) => t.purpose === 'explanation');
+      expect(explanations.length, `brief@${duration}s`).toBe(topicBeats.length);
+      expect(plan.audioTurns[0]?.purpose).toBe('framing');
+      expect(plan.audioTurns[plan.audioTurns.length - 1]?.purpose).toBe('conclusion');
+      // Beat coverage preserved (H-A-01): every beat still voiced.
+      for (const beat of plan.beats) {
+        expect(
+          plan.audioTurns.some((t) => t.beatId === beat.id),
+          `brief@${duration}s beat ${beat.id} voiced by no turn`,
+        ).toBe(true);
+      }
+      // The single per-beat carrier voices EVERY claim of its beat.
+      for (const turn of explanations) {
+        const beat = plan.beats.find((b) => b.id === turn.beatId);
+        expect(turn.claimIds.length, `brief@${duration}s ${turn.id}`).toBe(beat?.claimIds.length ?? 0);
+      }
+      expect(validateOverviewPlan(plan, GRAPH, SOURCE).valid).toBe(true);
+    }
+  });
+
   test('turn purposes and evidence stay grounded (no mechanical alternation)', () => {
     const plan = compileOverviewPlan(baseRequest());
     const purposes = new Set(plan.audioTurns.map((t) => t.purpose));

@@ -274,6 +274,18 @@ interface ModeProfile {
 const A: TurnSlot = { role: 'host-a', purpose: 'framing' };
 const B_EXPLAIN: TurnSlot = { role: 'host-b', purpose: 'explanation' };
 
+/**
+ * C-10 narrator slots (v2 contract wave, ruling 2026-09-29; EV-009 LAB-02):
+ * the real Brief is a SINGLE narrator with enumerated structure
+ * (First/Second/Finally; 93.92 s single-voice, OBSERVED on the same source
+ * vs our v1 fixed 10-turn two-speaker dialog at 120 s) — the strongest
+ * product-truth delta in the register. The SpeakerRole 'narrator' already
+ * exists in the v1 contracts enum; no contracts change for the role.
+ */
+const NARRATOR_FRAMING: TurnSlot = { role: 'narrator', purpose: 'framing' };
+const NARRATOR_EXPLANATION: TurnSlot = { role: 'narrator', purpose: 'explanation' };
+const NARRATOR_CONCLUSION: TurnSlot = { role: 'narrator', purpose: 'conclusion' };
+
 const MODE_PROFILES: Record<string, ModeProfile> = {
   'deep-dive': {
     speakers: 2,
@@ -292,11 +304,17 @@ const MODE_PROFILES: Record<string, ModeProfile> = {
     ],
   },
   brief: {
-    speakers: 2,
+    // C-10 (EV-009 LAB-02): monologic skeleton — 1 speaker, ALL turns
+    // SpeakerRole 'narrator'; narrator framing sign-on, ONE explanation turn
+    // per topic beat (the single carrier voices every beat claim), narrator
+    // conclusion. Beat coverage preserved (H-A-01): every beat still voiced.
+    // Brief register: no agenda, no connection tissue, no examples unless
+    // plan-essential.
+    speakers: 1,
     tone: 'crisp, high-signal',
-    opening: [A],
-    perBeat: [A, B_EXPLAIN],
-    closing: [{ role: 'host-a', purpose: 'conclusion' }],
+    opening: [NARRATOR_FRAMING],
+    perBeat: [NARRATOR_EXPLANATION],
+    closing: [NARRATOR_CONCLUSION],
   },
   critique: {
     speakers: 2,
@@ -349,6 +367,14 @@ const MODE_PROFILES: Record<string, ModeProfile> = {
     perBeat: [A, B_EXPLAIN],
     closing: [A],
   },
+};
+
+/** Display names per SpeakerRole (C-10: 'narrator' -> 'Narrator'). */
+const SPEAKER_NAMES: Readonly<Record<SpeakerRole, string>> = {
+  'host-a': 'Host A',
+  'host-b': 'Host B',
+  guest: 'Guest',
+  narrator: 'Narrator',
 };
 
 const PURPOSE_DELIVERY: Record<AudioTurnPurpose, string> = {
@@ -740,7 +766,7 @@ export function compileOverviewPlan(request: DirectorRequest): OverviewPlan {
           contractVersion: CONTRACTS_VERSION,
           id: `turn-${turnNo}`,
           index: turnNo - 1,
-          speaker: slot.role === 'host-a' ? 'Host A' : 'Host B',
+          speaker: SPEAKER_NAMES[slot.role],
           speakerRole: slot.role,
           purpose: slot.purpose,
           brief:

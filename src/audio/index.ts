@@ -50,7 +50,7 @@ export type { DialogueValidationIssue } from './errors';
 export { buildDialogueGraph, buildValidatedDialogueGraph, validateDialogueGraph, planHashOf, stableStringify } from './dialogue/engine';
 export type { DialogueGraph, DialogueTurn, EnrichedTurnTag, SpeakerPersona, SpeakerStance, DialogueLinks, DialogueSection } from './dialogue/types';
 export { ENRICHED_TAG_TO_PURPOSE, ZERO_CLAIM_ALLOWED_PURPOSES } from './dialogue/types';
-export { realizeDialogue, realizeTurn, attachText, turnContentHash } from './dialogue/text/realizer';
+export { realizeDialogue, realizeTurn, attachText, turnContentHash, enumerationOpenerFor } from './dialogue/text/realizer';
 export type { RealizedTurn, RealizerContext } from './dialogue/text/realizer';
 export { analyzeTurnTaking, TURN_TAKING_THRESHOLDS } from './dialogue/turn-taking';
 export type { TurnTakingStats } from './dialogue/turn-taking';

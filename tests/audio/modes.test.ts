@@ -18,6 +18,7 @@
 
 import { describe, expect, test } from 'bun:test';
 import { compileAudioOverview } from '../../src/audio';
+import { modeProfileFor } from '../../src/audio/modes';
 import { buildDialogueGraph } from '../../src/audio/dialogue/engine';
 import {
   buildBriefStandinPlan,
@@ -31,6 +32,7 @@ import {
   CANONICAL_SOURCE,
   FIXED_NOW,
   FIXED_SEED,
+  FIXED_SEED_ALT,
 } from './fixtures';
 
 async function compile(plan: typeof CANONICAL_PLAN) {
@@ -56,8 +58,12 @@ describe('H-A-01 — Deep Dive vs Brief (canonical plans)', () => {
     expect(deepDivePurposes).toContain('question');
   });
 
-  test('turn count: deep dive (22) > canonical brief (10) for the same source graph', () => {
+  test('turn count: deep dive (22) > canonical brief (6, C-10 monologic skeleton) for the same source graph', () => {
+    // C-10 (EV-009 LAB-02): the v1 10-turn two-speaker dialog became a
+    // 6-turn single-narrator enumerated skeleton — the product's ~120 s ->
+    // ~94 s Brief delta is turn-count reduction, not velocity (H-A-05).
     expect(CANONICAL_PLAN.audioTurns.length).toBeGreaterThan(CANONICAL_BRIEF_PLAN.audioTurns.length);
+    expect(CANONICAL_BRIEF_PLAN.audioTurns.length).toBe(6);
   });
 
   test('brief coverage is a salience-ranked subset; dropped claims are reported, never silent', async () => {
@@ -222,10 +228,12 @@ describe('mode-semantics QA expectations', () => {
 
   test('purpose distributions differ across modes for the same source graph', () => {
     // Honest post-H-2 form: brief is distributionally distinct (compression
-    // drops the exploration purposes); critique and critique-vs-debate share
-    // the purpose multiset and differ in the SPEAKER-PURPOSE SIGNATURE
-    // (host-a interrogates in critique, host-b in debate) — asserted on the
-    // canonical plans; the stand-ins remain distributionally distinct too.
+    // drops the exploration purposes; C-10 further collapses the skeleton to
+    // the monologic framing/explanation×4/conclusion shape); critique and
+    // critique-vs-debate share the purpose multiset and differ in the
+    // SPEAKER-PURPOSE SIGNATURE (host-a interrogates in critique, host-b in
+    // debate) — asserted on the canonical plans; the stand-ins remain
+    // distributionally distinct too.
     const dist = (plan: typeof CANONICAL_PLAN): string =>
       [...plan.audioTurns.map((turn) => turn.purpose)].sort().join(',');
     expect(dist(CANONICAL_BRIEF_PLAN)).not.toBe(dist(CANONICAL_PLAN));
@@ -242,4 +250,109 @@ describe('mode-semantics QA expectations', () => {
     ]);
     expect(standins.size).toBe(3);
   });
+});
+
+describe('C-10 — monologic brief surface (EV-009 LAB-02)', () => {
+  /**
+   * LAB-02 (OBSERVED): the real Brief is a SINGLE narrator with enumerated
+   * structure — First/Second/Finally, 93.92 s single-voice. The predicates
+   * below assert the lab reproduction (REPRODUCED at the structure/surface
+   * level; fixture-only success is not product parity, AGENTS.md).
+   */
+  test('enumeration markers are position-based and ordered First/Second/…/Finally — never a seeded pick', async () => {
+    const brief = await compile(CANONICAL_BRIEF_PLAN);
+    const statementTurns = brief.graph.turns.filter(
+      (turn) => turn.enrichedTag === 'explanation',
+    );
+    expect(statementTurns.length).toBe(4);
+    const openers = statementTurns.map((turn) => {
+      const outcome = brief.realized.find((r) => r.turnId === turn.id);
+      const first = outcome?.text.split(' ')[0];
+      return first === undefined ? '' : first;
+    });
+    // Position among spine turns (4 statement turns): First, Second, Third,
+    // Finally — the last spine turn always takes the final marker.
+    expect(openers).toEqual(['First,', 'Second,', 'Third,', 'Finally,']);
+    // Position-based means SEED-INDEPENDENT: a different seed reproduces the
+    // same markers (a seeded pick would reshuffle).
+    const alt = await compileAudioOverview({
+      plan: CANONICAL_BRIEF_PLAN,
+      graph: CANONICAL_GRAPH,
+      sources: CANONICAL_SOURCE,
+      options: { seed: FIXED_SEED_ALT, now: FIXED_NOW, mastering: 'pure-ts' },
+    });
+    const altOpeners = statementTurns.map((turn) => {
+      const outcome = alt.realized.find((r) => r.turnId === turn.id);
+      return outcome?.text.split(' ')[0] ?? '';
+    });
+    expect(altOpeners).toEqual(openers);
+  }, 30000);
+
+  test('narrator sign-on / sign-off; dialogic surfaces absent from the realized text', async () => {
+    const brief = await compile(CANONICAL_BRIEF_PLAN);
+    const first = brief.realized[0]?.text ?? '';
+    const last = brief.realized[brief.realized.length - 1]?.text ?? '';
+    expect(first.startsWith('Here is the brief:')).toBe(true);
+    expect(last.endsWith('That is the brief.')).toBe(true);
+    // No question tails, no acknowledgements, no conversational prefixes:
+    // the narrator asks nothing and acknowledges no co-host.
+    for (const outcome of brief.realized) {
+      expect(outcome.text.includes('?')).toBe(false);
+      expect(outcome.text.startsWith('Right —')).toBe(false);
+      expect(outcome.text.startsWith('And —')).toBe(false);
+      expect(outcome.text.startsWith('Plus —')).toBe(false);
+    }
+    // The profile declares the surfaces empty (C-10 removal, not a seed gap).
+    const profile = modeProfileFor('brief');
+    expect(profile.surfaceOverlay.questionTails).toEqual([]);
+    expect(profile.surfaceOverlay.acknowledgePrefixes).toEqual([]);
+    expect(profile.monologic).toBe(true);
+  }, 30000);
+
+  test('monologic QA: no dialogic turn-taking warnings; discouraged dialogic purposes flagged when present', async () => {
+    // Canonical monologic brief: the H-A-04 dialogic predicates (parity,
+    // same-speaker runs, question-answer pairs) do NOT fire — the metric
+    // reports the C-10 monologic note instead.
+    const brief = await compile(CANONICAL_BRIEF_PLAN);
+    for (const code of [
+      'parity-out-of-band',
+      'same-speaker-run-long',
+      'no-question-answer-pair',
+      'no-interjection-turns',
+    ]) {
+      expect(brief.qa.issues.some((issue) => issue.code === code)).toBe(false);
+    }
+    const turnTaking = brief.qa.metrics.find((m) => m.metric === 'turn_taking_naturalness');
+    expect(turnTaking?.value).toContain('monologic mode (C-10');
+    // The stand-in brief plan (audio-local, non-canonical) still carries a
+    // dialogic question turn — the C-10 QA honestly discourages it.
+    const standin = await compile(buildBriefStandinPlan());
+    const discouraged = standin.qa.issues.filter((issue) => issue.code === 'mode-semantics-discouraged');
+    expect(discouraged.some((issue) => issue.message.startsWith('question turns present'))).toBe(true);
+  }, 60000);
+
+  test('beat coverage preserved through the full pipeline (H-A-01 + C-10)', async () => {
+    const brief = await compile(CANONICAL_BRIEF_PLAN);
+    // Every plan beat is voiced by at least one realized turn.
+    const voicedBeats = new Set(
+      brief.graph.turns.map((turn) => turn.beatId).filter((id) => id !== undefined),
+    );
+    for (const beat of brief.plan.beats) {
+      expect(voicedBeats.has(beat.id), `beat ${beat.id} voiced by no realized turn`).toBe(true);
+    }
+    // Realization covers the full turn skeleton (no dropped turns).
+    expect(brief.realized.length).toBe(CANONICAL_BRIEF_PLAN.audioTurns.length);
+    // Every turn still voices its cited claim statements (grounding held
+    // through the restructure).
+    for (const turn of brief.graph.turns) {
+      const outcome = brief.realized.find((r) => r.turnId === turn.id);
+      if (turn.claimIds.length === 0) continue;
+      const voiced = turn.claimIds.some((claimId) => {
+        const claim = CANONICAL_GRAPH.claims.find((c) => c.id === claimId);
+        const fragment = claim?.statement.replace(/\s+/g, ' ').trim().slice(0, 20).toLowerCase();
+        return fragment !== undefined && outcome?.text.toLowerCase().includes(fragment);
+      });
+      expect(voiced, `${turn.id} does not voice its anchors`).toBe(true);
+    }
+  }, 30000);
 });
