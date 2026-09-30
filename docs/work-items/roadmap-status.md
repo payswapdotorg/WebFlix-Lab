@@ -34,9 +34,45 @@ history plus `docs/evidence/registry.jsonl` remain the durable record.
 | 2A — W2 audio | COMPLETE | PR #3 design (eaa1eea), PR #5 stage-2 implementation (c90bd48); gates 237/237; EV-004; HANDOFFs adjudicated (1444e10) |
 | 2B — W3 video | **COMPLETE** | PR #6 merged (ba60a36, EV-007): StyleBible v1.0.0, storyboard compiler, deterministic SVG renderer, illustration/motion provider ports, compositor (Remotion primary + sealed offline fallback), QA pass 0 issues both benchmarks; station gates 332/332 (251 baseline + 81 video); determinism spot-check clean; credential sweep clean |
 | 3 — TL integration | CORE COMPLETE (both p3b waves merged) | Prep done (checklist 20cd14d; H-2 fixtures 9128369/EV-005; H-4 docs e6a9b17; EXP-A series EV-006; experiment registry + provider matrix live; v2 contract draft 9ec6521; station-review automation 95b0b9d). **P3A Director turn-budget fix MERGED (PR #7, 0ecd561, EV-008): anchor-mass-aware allocation, zero turn-over-budget on all canonical modes + the 180 s compression arm; canonical fingerprint transition documented (3 plans + s15/s16/s17 mutants re-pinned); station gates 338/338; determinism proven; credential sweep clean.** WFLX-P3B (cross-modal integration + experiment series, checklist §2) DISPATCHED 20:15 UTC (session be5d9368, GLM-5.3, Full-Stack). EXP-V + EXP-X-02 run + cross-modal IR tasks are p3b/TL scope |
-| 4 — promotion gate | PENDING | Inputs collected throughout; no promotion without TL evidence sign-off |
+| 4 — promotion gate | **PACKAGE ASSEMBLED — pending TL evidence sign-off + merge** | docs/promotion/ (README + promotion-decision.md, EV-015): evidence classes (a)–(f) assembled with labels + pointers; TL #2 SIGN-OFF block PENDING; merge of work/wflx-v2-contract-wave gates the verdict |
 
 ## Current position (honest state)
+
+**2026-09-30 ~01:00 UTC — WFLX-V2-3 (final wave) update.** The v2 contract
+wave is FULLY EXECUTED on `work/wflx-v2-contract-wave`: sub-wave 1 (C-7,
+CONTRACTS_VERSION 2.0.0 + C-3 note, C-5 both surfaces, C-9), sub-wave 2
+(C-10 monologic brief + the one-change fingerprint transition that
+regenerated every invalidated committed fingerprint with double-run
+byte-identity proofs), and now the final wave: **EXP-X-02 executed
+(EV-014)** — the ruling's designated verification experiment, per
+docs/experiments/design-exp-x-02.md. B-treatment (C-5 keying, wave HEAD):
+the single-turn refinement edit changed exactly 1/22 realized texts,
+1/22 per-turn audio segments and 2/22 target-adjacent gaps, turned the
+failing turn's gate to 0 over-budget (station quality bar PASSED), with
+total-duration accounting exact (+7806 ms = target +8000 ms + adjacent
+gaps −194 ms + 0 elsewhere); A-control (v1 planHash keying, git worktree
+at the pinned 720f984): the SAME edit reshuffled 17/22 texts + 21/22 gaps
+(the EXP-A-04 class). All four design-note falsifiers checked — none hit.
+Whole-artifact determinism double-run-proven on every plan; two full
+runner invocations reproduce the persisted artifacts byte-identically
+(wall-clock fields excepted, recorded as measured). Honest adaptations,
+documented in the record: post-EV-008 canonical plans compile with zero
+over-budget turns, so the loop's failing turn is introduced via the
+established single-turn mutant class; the note's e.g. word-count-cap
+brief edit maps onto the rate model's duration lever (anchors are
+verbatim claims); the TL sequencing decision runs the treatment arm
+pre-merge on the branch HEAD (identical tree to post-merge main —
+strictly safer, same evidence value). Gates on the branch: typecheck 0
+errors, lint clean, 370/370 chunked (151+123+82+14; branch baseline was
+370 before EXP-X-02 — no regressions, the experiment adds harness-level
+falsifier checks instead of tests). The Phase 4 promotion package is
+ASSEMBLED (EV-015): docs/promotion/ with the six evidence classes, every
+claim labeled + pointed, TL SIGN-OFF block left PENDING for TL #2. The
+manifest registry was rebuilt at the wave boundary (24 audio / 27 total,
+including the three EXP-X-02 runs). NOTHING here is a promotion decision:
+the TL audits the package, signs the verdict, and owns PR/merge. Branch
+pushed for TL review; no PR opened, main untouched, prior commits
+unrewritten.
 
 **The 9/27-9/28 platform outage is OVER** (root-caused 9/28 ~14:00 UTC as a
 read-path regression: chat-detail API stopped embedding message content;
