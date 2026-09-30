@@ -8,6 +8,16 @@
 
 export { CONTRACTS_VERSION } from './primitives';
 
+// C-7 (v2 contract wave): the authoritative shared rate model.
+export {
+  ANCHOR_CONNECTOR_TOKENS,
+  FACTUAL_TURN_PURPOSES,
+  MIN_TURN_SECONDS,
+  QUESTION_TAIL_TOKENS,
+  TOPICAL_TISSUE_TOKENS,
+  TURN_PLANNING_RATE_WPS,
+} from './rate-model';
+
 export {
   ContractVersionSchema,
   EvidenceSpanSchema,

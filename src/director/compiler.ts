@@ -30,9 +30,15 @@
  */
 
 import {
+  ANCHOR_CONNECTOR_TOKENS,
   CONTRACTS_VERSION,
   countWords,
+  FACTUAL_TURN_PURPOSES,
+  MIN_TURN_SECONDS,
   OverviewPlanSchema,
+  QUESTION_TAIL_TOKENS,
+  TOPICAL_TISSUE_TOKENS,
+  TURN_PLANNING_RATE_WPS,
   validateOverviewPlan,
   type AudioTurn,
   type AudioTurnPurpose,
@@ -174,48 +180,23 @@ function splitInteger(total: number, weights: number[], minimum: number): number
 // Turn-budget allocation (EV-005 fix, WFLX-P3A: anchor mass vs slot duration)
 // ---------------------------------------------------------------------------
 
-/**
- * Planning rate (words/second) at which a turn slot can voice its anchor
- * mass. A conservative editorial prior BELOW every audio mode's effective
- * rate ceiling (tightest: deep-dive/critique 2.6 wps x 0.96 measured pacing
- * x 1.15 ceiling multiplier = 2.87 wps), so a mass-fitting slot can never be
- * flagged turn-over-budget by the audio compiler's check (DESIGN.md §16.2
- * item 3: W2 fits text density; the Director must not hand it impossible
- * slots). HYPOTHESIS lab policy, testable per the experiment matrix.
+/*
+ * C-7 (v2 contract wave, ruling 2026-09-29): the rate model moved to the
+ * shared contracts — ONE authoritative surface consumed by the Director and
+ * (per ruling) the audio surface (EV-008 mirror-risk evidence, LAB-03/EV-009
+ * product truth). Values are IDENTICAL to the Director-local constants they
+ * replace, so this move alone produces ZERO output change. The Director
+ * re-exports TURN_PLANNING_RATE_WPS for API stability (tests/director and
+ * EV-008 cite it through this module path).
  */
-export const TURN_PLANNING_RATE_WPS = 2.5;
-
-/**
- * Purposes whose turns are factual carriers: the audio grounding rule
- * (src/audio/dialogue/types.ts ZERO_CLAIM_ALLOWED_PURPOSES) requires them
- * to cite at least one claim. Documented dependency, deliberately not an
- * import (worker path ownership: src/audio is W2's tree).
- */
-const FACTUAL_TURN_PURPOSES: ReadonlySet<AudioTurnPurpose> = new Set([
-  'explanation',
-  'example',
-  'connection',
-  'clarification',
-]);
-
-/**
- * Worst-case mass (countWords tokens) the realizer's BARE anchor block adds:
- * the longest question tail across the surface packs plus the em-dash
- * separator ("is that actually supported by the evidence?" + "—").
- */
-const QUESTION_TAIL_TOKENS = 8;
-
-/** Worst-case mass of one anchor connector between two anchors in one turn. */
-const ANCHOR_CONNECTOR_TOKENS = 5;
-
-/**
- * Conversational-tissue allowance for topical (claim-less) turns: opener +
- * a speaking pace's worth of orientation glue beyond the beat title.
- */
-const TOPICAL_TISSUE_TOKENS = 8;
-
-/** Minimum turn duration (s). */
-const MIN_TURN_SECONDS = 2;
+export {
+  ANCHOR_CONNECTOR_TOKENS,
+  FACTUAL_TURN_PURPOSES,
+  MIN_TURN_SECONDS,
+  QUESTION_TAIL_TOKENS,
+  TOPICAL_TISSUE_TOKENS,
+  TURN_PLANNING_RATE_WPS,
+};
 
 /**
  * Split an integer total across slots by proportional keys with per-slot
