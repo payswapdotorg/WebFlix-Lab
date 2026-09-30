@@ -295,15 +295,30 @@ EV-014; `docs/handoff/handoff-adjudications-001.md`.
 
 ## TL SIGN-OFF
 
-**PENDING TL #2.**
+**SIGNED — TL #2, 2026-09-30 09:0x UTC (integration station).**
 
-- Evidence classes (a)–(f) reviewed: ______
+- Evidence classes (a)–(f) reviewed: **YES — all six reviewed in full** (golden
+  reference identity incl. served-variant provenance; LAB-01..06 product-truth
+  series with the restructure-not-reskin / monologic-Brief / depth-compression
+  / native-language / stochasticity deltas honestly bounded as lab-control vs
+  product-observation; the EXP-A/V/D/X series with EXP-X-02's A/B measurement;
+  gates 332→338→352→370 history with byte-identity proofs at every boundary;
+  the dual-modality comparison with its one-golden-sample video boundary
+  explicit; the unresolved ledger with zero silent promotions).
 - Gates re-verified at sign-off (typecheck / lint / chunked tests):
-  ______
-- Determinism spot-check re-run (exp:x02 re-executed): ______
-- Verdict (PROMOTE / PROMOTE WITH CONDITIONS / HOLD): ______
-- Conditions / follow-ups assigned: ______
-- Date + signature: ______
-
-*(To be filled by TL #2 only. The assembler, WFLX-V2-3, does not sign this
-block.)*
+  **typecheck 0 errors; lint clean; 370/370 (151 contracts/source/director +
+  123 audio + 82 video + 14 integration), 0 fail — TL-run at 813dcd6.**
+- Determinism spot-check re-run (exp:x02 re-executed): **REPRODUCED —
+  TL re-execution at the station reproduces the record exactly: A-control
+  17/22 texts (16 non-target) + 21/22 gaps; B-treatment 1/22 (target only) +
+  2/22 target-adjacent gaps; total duration delta 7806 ms = target 8000 ms +
+  adjacent gaps −194 ms + 0 elsewhere; F1–F4 all PASS; station quality bar
+  PASSED; all four in-runner double-runs byte-identical.**
+- Verdict (PROMOTE / PROMOTE WITH CONDITIONS / HOLD): **PROMOTE.**
+- Conditions / follow-ups assigned: none blocking. Standing follow-ups (v3
+  line, already owned by the ledger): C-8 dual-modality plan shape with
+  EXP-D-01 standing inputs; EXP-V-05/V-06 multi-source extractor
+  consistency; compositor encoder nondeterminism remains excluded-by-rule
+  (content-fingerprinted); C-1/C-2/C-4/C-6 stay OUT with recorded reasons.
+- Date + signature: **2026-09-30, TL #2 (resident orchestrator,
+  payswapdotorg/WebFlix-Lab integration station).**

@@ -34,7 +34,7 @@ history plus `docs/evidence/registry.jsonl` remain the durable record.
 | 2A — W2 audio | COMPLETE | PR #3 design (eaa1eea), PR #5 stage-2 implementation (c90bd48); gates 237/237; EV-004; HANDOFFs adjudicated (1444e10) |
 | 2B — W3 video | **COMPLETE** | PR #6 merged (ba60a36, EV-007): StyleBible v1.0.0, storyboard compiler, deterministic SVG renderer, illustration/motion provider ports, compositor (Remotion primary + sealed offline fallback), QA pass 0 issues both benchmarks; station gates 332/332 (251 baseline + 81 video); determinism spot-check clean; credential sweep clean |
 | 3 — TL integration | CORE COMPLETE (both p3b waves merged) | Prep done (checklist 20cd14d; H-2 fixtures 9128369/EV-005; H-4 docs e6a9b17; EXP-A series EV-006; experiment registry + provider matrix live; v2 contract draft 9ec6521; station-review automation 95b0b9d). **P3A Director turn-budget fix MERGED (PR #7, 0ecd561, EV-008): anchor-mass-aware allocation, zero turn-over-budget on all canonical modes + the 180 s compression arm; canonical fingerprint transition documented (3 plans + s15/s16/s17 mutants re-pinned); station gates 338/338; determinism proven; credential sweep clean.** WFLX-P3B (cross-modal integration + experiment series, checklist §2) DISPATCHED 20:15 UTC (session be5d9368, GLM-5.3, Full-Stack). EXP-V + EXP-X-02 run + cross-modal IR tasks are p3b/TL scope |
-| 4 — promotion gate | **PACKAGE ASSEMBLED — pending TL evidence sign-off + merge** | docs/promotion/ (README + promotion-decision.md, EV-015): evidence classes (a)–(f) assembled with labels + pointers; TL #2 SIGN-OFF block PENDING; merge of work/wflx-v2-contract-wave gates the verdict |
+| 4 — promotion gate | **COMPLETE — TL #2 SIGNED 2026-09-30 (PROMOTE)** | docs/promotion/ (README + promotion-decision.md, EV-015): evidence classes (a)–(f) assembled with labels + pointers; TL #2 SIGN-OFF block PENDING; merge of work/wflx-v2-contract-wave gates the verdict |
 
 ## Current position (honest state)
 
@@ -128,3 +128,26 @@ package skeleton.
 4. Phase 4 promotion gated on: p3b delivery (integration core) + dual-modality
    comparison + TL evidence sign-off against the promotion package (LAB
    real-reference evidence now PRESENT).
+
+## 2026-09-30 — ROADMAP COMPLETE (TL #2 closing entry)
+
+- v2 contract wave executed + station-approved through three worker waves
+  (WFLX-V2-1/-2/-3, agents-tab GLM-5.3 Full-Stack, dispatched from inside
+  the replay per the standing operator directive): sub-wave 1 (bump 2.0.0 +
+  C-7 + C-5 both surfaces + C-9 + fingerprint transition, 6 commits),
+  sub-wave 2 (C-10 monologic brief + regeneration, 2 commits), final wave
+  (EXP-X-02 execution + Phase 4 package, 3 commits) — all on
+  work/wflx-v2-contract-wave, each station-reviewed (scope/gates/
+  credentials/determinism) before the next dispatch.
+- EXP-X-02 (EV-014): all four falsifiers PASS, station quality bar PASSED,
+  TL re-execution reproduces the record exactly (A-control 17/22 vs
+  B-treatment 1/22 changed units; +7806 ms accounting exact).
+- Phase 4 promotion package (EV-015): evidence classes (a)–(f) assembled;
+  TL #2 SIGNED — verdict PROMOTE (docs/promotion/promotion-decision.md
+  sign-off block, gates re-verified 370/370 + exp:x02 TL re-run).
+- Gates at the signed HEAD: typecheck 0 errors; lint clean; 370/370
+  (151+123+82+14); packet digest pair byte-identical at both wave
+  boundaries (0f437fb4… sub-wave 1; 6b60d5be… sub-wave 2, TL double-run).
+- Standing follow-ups (v3 line, owned by the ledger in
+  docs/promotion/promotion-decision.md class (f)): C-8 dual-modality plan
+  shape, EXP-V-05/V-06 multi-source extractor, encoder exclusion by rule.
