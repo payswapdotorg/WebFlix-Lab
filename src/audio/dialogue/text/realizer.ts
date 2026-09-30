@@ -9,8 +9,13 @@
  *   The realizer never invents facts — discourse glue (openers, tails,
  *   connectors) carries no factual assertions (DESIGN.md §3.2).
  * - SEEDED: every stochastic choice (opener pick, connector pick, tail pick)
- *   is keyed by (seed, planHash, turnId, slot) — reordering cannot change a
- *   pick; regenerating one turn is stable (§10).
+ *   is keyed by (seed, turn-LOCAL content hash, turnId, slot) — the C-5 v2
+ *   re-keying (src/contracts/unit-content-hash.ts): the hash covers
+ *   [turn.brief, ...anchorStatements], so a one-claim change reshuffles
+ *   only the turns whose OWN content changed; reordering cannot change a
+ *   pick; regenerating one turn is stable (§10). planHash stays OUT of
+ *   stochastic keys (it is plan-global by design and lives in
+ *   identification surfaces only).
  * - BUDGETED: text density fits the turn's authoritative target duration via
  *   the rate model (§16.2 item 3). Compression drops glue first; anchors are
  *   never dropped. If mandatory anchors cannot fit within the mode rate
@@ -28,9 +33,9 @@
  * `anchors-not-localized`).
  */
 
-import { countWords, type Id, type OverviewPlan } from '../../../contracts';
+import { countWords, unitContentHash, type Id, type OverviewPlan } from '../../../contracts';
 import { pickFor } from '../../rng';
-import type { ModeProfile, SurfacePack, TagFamily } from '../../modes/common';
+import type { EnumerationSpine, ModeProfile, SurfacePack, TagFamily } from '../../modes/common';
 import { TAG_FAMILY } from '../../modes/common';
 import { overlayPack } from '../../modes/common';
 import { languagePackFor } from '../../modes/language-packs';
@@ -136,9 +141,62 @@ function anchorStatements(ctx: RealizerContext, turn: DialogueTurn): string[] {
   return anchors;
 }
 
+/**
+ * Turn-LOCAL content hash for C-5 seeding (src/contracts/unit-content-hash.ts
+ * documents this composition as the audio-turn surface):
+ * unitContentHash([turn.brief, ...anchorStatements]). The turn id stays a
+ * PURE identifier — it never feeds the hash. One shared derivation serves
+ * the realizer keys AND the timing-gap keys (via the audio compiler).
+ */
+export function turnContentHash(ctx: RealizerContext, turn: DialogueTurn): string {
+  return unitContentHash([turn.brief, ...anchorStatements(ctx, turn)]);
+}
+
 function surfacePackFor(ctx: RealizerContext): SurfacePack {
   const { pack } = languagePackFor(ctx.plan.language);
   return overlayPack(pack, ctx.profile.surfaceOverlay);
+}
+
+// ---------------------------------------------------------------------------
+// Enumeration spine (C-10, EV-009 LAB-02)
+// ---------------------------------------------------------------------------
+
+/**
+ * C-10 position-based opener for spine-declared families (the monologic
+ * brief's First/Second/…/Finally). `position` is 1-based among the graph's
+ * spine-family turns in spoken order; the LAST spine turn takes the final
+ * marker. Returns null when the profile declares no spine, the family is
+ * not on the spine, or the position has no honest marker (single-item
+ * spines and ordinals beyond the declared list degrade to NO enumeration
+ * opener — the seeded/overlay path then applies, never a wrong marker).
+ * NEVER a seeded pick: enumeration ordering is structural product truth.
+ */
+export function enumerationOpenerFor(
+  enumeration: EnumerationSpine | undefined,
+  family: TagFamily,
+  position: number,
+  spineSize: number,
+): string | null {
+  if (enumeration === undefined || !enumeration.families.includes(family)) return null;
+  if (spineSize <= 1) return null;
+  if (position === spineSize) return enumeration.finalOpener;
+  return enumeration.ordinalOpeners[position - 1] ?? null;
+}
+
+/**
+ * Spine position of every turn (C-10): 1-based index among turns whose
+ * template family sits on the profile's enumeration spine, plus the spine
+ * size. Empty when the profile declares no spine (dialogic modes).
+ */
+function spinePositionsOf(ctx: RealizerContext): ReadonlyMap<Id, { position: number; size: number }> {
+  const byId = new Map<Id, { position: number; size: number }>();
+  const enumeration = ctx.profile.enumeration;
+  if (enumeration === undefined) return byId;
+  const spineIds = ctx.graph.turns
+    .filter((turn) => enumeration.families.includes(TAG_FAMILY[turn.enrichedTag]))
+    .map((turn) => turn.id);
+  spineIds.forEach((id, i) => byId.set(id, { position: i + 1, size: spineIds.length }));
+  return byId;
 }
 
 /** Topical basis for zero-claim turns: the beat title (plan-authoritative). */
@@ -168,10 +226,20 @@ function composeCore(
   family: TagFamily,
   anchors: readonly string[],
   pack: SurfacePack,
+  spine: { position: number; size: number } | undefined,
 ): { core: string; bare: string; isQuestion: boolean } {
-  const key = (slot: string) => `${ctx.graph.meta.seed}|${ctx.graph.meta.planHash}|${turn.id}|${slot}`;
+  const key = (slot: string) => `${ctx.graph.meta.seed}|${turnContentHash(ctx, turn)}|${turn.id}|${slot}`;
+  // C-10: spine-declared families open by POSITION (First/…/Finally —
+  // never a seeded pick); everything else keeps the C-5 seeded picks.
+  const enumOpener = enumerationOpenerFor(
+    ctx.profile.enumeration,
+    family,
+    spine?.position ?? 0,
+    spine?.size ?? 0,
+  );
   const openerOptions = pack.openers[family];
-  const opener = openerOptions !== undefined && openerOptions.length > 0 ? pickFor(key('opener'), openerOptions) : '';
+  const opener = enumOpener
+    ?? (openerOptions !== undefined && openerOptions.length > 0 ? pickFor(key('opener'), openerOptions) : '');
   const openerKeepsCapital = opener.endsWith(':') || opener.endsWith('.') || opener === '';
 
   const basis = anchors.length > 0 ? anchors : [topicalBasis(ctx, turn)];
@@ -187,17 +255,20 @@ function composeCore(
   }
 
   if (family === 'question') {
-    // Embedded anchored statement + natural question tail.
+    // Embedded anchored statement + natural question tail. C-10: monologic
+    // modes REMOVE the question-tail surface (dialogic tissue) — a plan-level
+    // question turn in such a mode degrades to its bare embedded anchors and
+    // is flagged by QA mode-semantics (discouraged purpose), never a crash.
     const embedded = basis.map((anchor) => asEmbeddedFragment(anchor));
     const joined = embedded.length === 1
       ? embedded[0] ?? ''
       : embedded.join(pickFor(key('connector'), pack.anchorConnectors));
-    const tail = pickFor(key('tail'), pack.questionTails);
-    const anchorBlock = `${joined} — ${tail}`;
+    const tail = pack.questionTails.length > 0 ? pickFor(key('tail'), pack.questionTails) : '';
+    const anchorBlock = tail !== '' ? `${joined} — ${tail}` : sentenceCase(joined);
     return {
       core: opener === '' ? sentenceCase(anchorBlock) : `${opener} ${lowerFirst(anchorBlock)}`,
       bare: sentenceCase(anchorBlock),
-      isQuestion: true,
+      isQuestion: tail !== '',
     };
   }
 
@@ -229,22 +300,26 @@ function composeCore(
   };
 }
 
-/** Conversational prefix: acknowledge a pending question / continue own turn. */
+/** Conversational prefix: acknowledge a pending question / continue own turn.
+ * C-10: monologic modes carry NO conversational prefixes — the enumeration
+ * spine is the connective device; acknowledgement/continuation tissue is
+ * dialogic and suppressed (a single narrator acknowledges no co-host). */
 function conversationalPrefix(
   ctx: RealizerContext,
   turn: DialogueTurn,
   previous: DialogueTurn | undefined,
   pack: SurfacePack,
 ): string {
+  if (ctx.profile.monologic === true) return '';
   if (previous === undefined) return '';
-  const key = `${ctx.graph.meta.seed}|${ctx.graph.meta.planHash}|${turn.id}|prefix`;
+  const key = `${ctx.graph.meta.seed}|${turnContentHash(ctx, turn)}|${turn.id}|prefix`;
   const answersPrevious =
     previous.speakerRole !== turn.speakerRole &&
     previous.purpose === 'question' &&
     turn.purpose !== 'question' &&
     turn.purpose !== 'interjection';
   if (answersPrevious) {
-    return pickFor(key, pack.acknowledgePrefixes);
+    return pack.acknowledgePrefixes.length > 0 ? pickFor(key, pack.acknowledgePrefixes) : '';
   }
   const continuesOwn =
     previous.speakerRole === turn.speakerRole && turn.purpose !== 'interjection';
@@ -276,18 +351,28 @@ function evidenceQuote(ctx: RealizerContext, turn: DialogueTurn): string | null 
  * Realize one turn: compose, then fit the authoritative word budget.
  * Over-budget ladder: drop closer -> drop opener -> flag (anchors never drop).
  * Under-budget expansion: closer -> evidence quote.
+ *
+ * `spine` carries the turn's C-10 enumeration-spine position (position among
+ * the profile's spine-family turns + spine size); omit it when realizing a
+ * turn in isolation (spine openers then degrade to the seeded/overlay path,
+ * as they must outside whole-graph realization).
  */
-export function realizeTurn(ctx: RealizerContext, turn: DialogueTurn, previous: DialogueTurn | undefined): RealizedTurn {
+export function realizeTurn(
+  ctx: RealizerContext,
+  turn: DialogueTurn,
+  previous: DialogueTurn | undefined,
+  spine?: { position: number; size: number },
+): RealizedTurn {
   const pack = surfacePackFor(ctx);
   const family = TAG_FAMILY[turn.enrichedTag];
   const { budget, min, max } = budgetFor(ctx, turn);
   const anchors = anchorStatements(ctx, turn);
 
-  const { core, bare, isQuestion } = composeCore(ctx, turn, family, anchors, pack);
+  const { core, bare, isQuestion } = composeCore(ctx, turn, family, anchors, pack, spine);
   const prefix = conversationalPrefix(ctx, turn, previous, pack);
   const closerOptions = pack.closers[family] ?? [];
   const evidence = evidenceQuote(ctx, turn);
-  const key = (slot: string) => `${ctx.graph.meta.seed}|${ctx.graph.meta.planHash}|${turn.id}|${slot}`;
+  const key = (slot: string) => `${ctx.graph.meta.seed}|${turnContentHash(ctx, turn)}|${turn.id}|${slot}`;
   const closer =
     closerOptions.length > 0 && !isQuestion && family !== 'interjection'
       ? pickFor(key('closer'), closerOptions)
@@ -344,9 +429,12 @@ export function realizeTurn(ctx: RealizerContext, turn: DialogueTurn, previous: 
 /** Realize every turn of the graph (spoken order). */
 export function realizeDialogue(ctx: RealizerContext): readonly RealizedTurn[] {
   const out: RealizedTurn[] = [];
+  // C-10: enumeration-spine positions are a property of the WHOLE graph
+  // (position among the profile's spine-family turns) — computed once here.
+  const spine = spinePositionsOf(ctx);
   let previous: DialogueTurn | undefined;
   for (const turn of ctx.graph.turns) {
-    out.push(realizeTurn(ctx, turn, previous));
+    out.push(realizeTurn(ctx, turn, previous, spine.get(turn.id)));
     previous = turn;
   }
   return out;

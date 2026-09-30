@@ -13,11 +13,19 @@
  * VideoCompilerError; soft quality problems surface as SceneCompilerIssue.
  *
  * Determinism: identical (plan, graph, seed) produce byte-identical outputs.
- * All stochastic choices key on (seed, planHash, mode, sceneId, choice).
+ * All stochastic choices key on (seed, scene-LOCAL content hash, mode,
+ * sceneId, choice) — the C-5 v2 re-keying
+ * (src/contracts/unit-content-hash.ts documents this composition as the
+ * video-scene surface): the hash covers [narrativePurpose, narrationBrief,
+ * visualBrief, ...anchorStatements, ...exactTexts], so a one-claim change
+ * reshuffles only the scenes whose OWN content changed. planHash stays OUT
+ * of stochastic keys (it remains in identification surfaces — storyboard
+ * meta, artifact ids, QA reports — by design).
  */
 
 import { createHash } from 'node:crypto';
 import {
+  unitContentHash,
   type ClaimRecord,
   type EntityRecord,
   type Id,
@@ -477,8 +485,21 @@ export function compileVideoScenes(
 
   // --- per-scene enrichment (deterministic)
   const storyboardScenes: StoryboardScene[] = plan.videoScenes.map((scene) => {
-    const key = `${seed}|${planHash}|${plan.mode}|${scene.id}`;
     const grounding = resolveGrounding(scene, index);
+    // C-5: scene-LOCAL content hash replaces the plan-global planHash in
+    // the stochastic key (composition per src/contracts/unit-content-hash.ts:
+    // [narrativePurpose, narrationBrief, visualBrief, ...anchorStatements,
+    // ...exactTexts as 'role:value' pairs]; the DERIVED visual brief is a
+    // function of this key, so only the plan's OWN brief feeds the hash —
+    // '' when absent). mode and scene.id stay PURE identifiers.
+    const sceneHash = unitContentHash([
+      scene.narrativePurpose,
+      scene.narrationBrief,
+      scene.visualBrief ?? '',
+      ...grounding.claimStatements,
+      ...scene.exactTexts.map((item) => `${item.role}:${item.value}`),
+    ]);
+    const key = `${seed}|${sceneHash}|${plan.mode}|${scene.id}`;
 
     const title = textsOfRole(scene.exactTexts, 'title')[0];
     const caption = textsOfRole(scene.exactTexts, 'caption')[0];

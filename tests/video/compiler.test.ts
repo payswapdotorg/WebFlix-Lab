@@ -255,3 +255,38 @@ describe('compileVideoScenes — canonical Director plan', () => {
     expect(planHashOf(mutated)).not.toBe(h1);
   });
 });
+
+describe('compileVideoScenes — C-5 per-unit content-keyed seeding (v2 wave)', () => {
+  /**
+   * The EXP-V-04 defect class at unit scale: mutate ONE scene's narration
+   * brief; the plan-global planHash changes (the v1 defect trigger) but
+   * under C-5 re-keying every OTHER scene's storyboard entry stays
+   * byte-identical — only the mutated scene's derived choices (visual
+   * brief, narration opener, render seed) may change.
+   */
+  test('one scene-brief mutation changes only that scene\'s storyboard entry', () => {
+    const base = compileVideoScenes(CANONICAL_VIDEO_PLAN, CANONICAL_GRAPH);
+    const mutatedPlan = mutatePlan(CANONICAL_VIDEO_PLAN, (draft) => {
+      const scene = draft.videoScenes[5];
+      if (scene !== undefined) {
+        scene.narrationBrief = `${scene.narrationBrief} (revised emphasis)`;
+      }
+    });
+    const mutated = compileVideoScenes(mutatedPlan, CANONICAL_GRAPH);
+
+    // planHash DID change (a different plan) — exactly the v1 trigger that
+    // used to reshuffle every scene's seeded choices.
+    expect(planHashOf(mutatedPlan)).not.toBe(planHashOf(CANONICAL_VIDEO_PLAN));
+
+    const changed: string[] = [];
+    base.storyboard.scenes.forEach((entry, i) => {
+      const other = mutated.storyboard.scenes[i];
+      if (other === undefined || stableStringify(entry) !== stableStringify(other)) {
+        changed.push(entry.scene.id);
+      }
+    });
+    const target = CANONICAL_VIDEO_PLAN.videoScenes[5];
+    expect(target).toBeDefined();
+    expect(changed).toEqual([target === undefined ? '' : target.id]);
+  });
+});

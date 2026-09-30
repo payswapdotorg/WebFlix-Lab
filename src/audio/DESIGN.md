@@ -232,22 +232,38 @@ closing:    takeaway -> closing
   duration engine grows or shrinks.
 - Agenda turn only when target duration exceeds a mode threshold (long-form).
 
-### 4.2 Brief
+### 4.2 Brief (C-10 monologic restructure, v2 contract wave)
 
 ```text
-opening:    framing (1–2 turns, no agenda, no host intro)
-core:       one compact exchange per selected claim (top-k by plan emphasis)
-            (statement + short confirm/question), no examples unless the plan
-            flags them essential
-closing:    single takeaway
+opening:    narrator framing sign-on (1 turn, no agenda, no host intro)
+core:       ONE narrator explanation turn per topic beat (the single carrier
+            voices every beat claim), enumerated First/Second/…/Finally —
+            openers by POSITION among the spine, never a seeded pick
+closing:    narrator conclusion + sign-off ('That is the brief.')
 ```
 
-- Coverage: priority subset of claims (k chosen by budget), dropped claims are
-  reported, never silently lost.
-- Backchannel probability ~0; gaps shorter; speaking pace slightly faster.
+- C-10 (EV-009 LAB-02, OBSERVED 93.92 s single-voice enumerated Brief on
+  the same source vs the v1 120 s 10-turn two-speaker dialog): the Brief
+  skeleton is monologic — speakers 1, every turn SpeakerRole 'narrator'
+  (v1 contracts enum; no contracts change for the role).
+- Dialogic surfaces removed (questionTails / acknowledgePrefixes empty;
+  conversational prefixes suppressed in monologic modes): a single narrator
+  asks no questions and acknowledges no co-host. Narrator sign-on 'Here is
+  the brief:' / sign-off 'That is the brief.'.
+- Duration policy (H-A-05): the product's ~120 s → ~94 s Brief delta comes
+  from TURN-COUNT REDUCTION (10-turn dialog → enumerated single-voice),
+  NOT a velocity hack — rate (2.9 wps) and gap scale (0.5) are unchanged
+  from v1 and the over-budget ladder still forbids speeding up to fit.
+- Coverage: priority subset of claims (k chosen by budget), dropped claims
+  are reported, never silently lost; every beat still voiced (H-A-01).
+- QA: dialogic purposes (question / interjection) discouraged with notes
+  citing C-10/LAB-02; the H-A-04 dialogic turn-taking predicates do not
+  apply to the monologic skeleton (the metric reports the C-10 note;
+  multi-speaker plans in a monologic mode are flagged as Director
+  feedback).
 - Structural signature vs Deep Dive: no `agenda`, no `example` (unless
-  essential), no `connection`, far fewer `question` turns, lower turn count
-  for the same plan.
+  essential), no `connection`, no `question`, single voice, far lower turn
+  count for the same plan.
 
 ### 4.3 Critique
 
@@ -297,11 +313,11 @@ closing:    judge-style synthesis, evidence-weighted; no artificial winner
 | Property | Deep Dive | Brief | Critique | Debate |
 | --- | --- | --- | --- | --- |
 | Coverage | full covered set | top-k subset | near-full | contested set + agreed core |
-| Opening | hook+framing(+agenda) | 1–2 turn framing | evaluative framing | motion + positions |
-| Cluster shape | explain+example | statement+confirm | assess+limit+imply | position/rebut/cross-examine |
-| Questions | common | rare | moderate | cross-examination |
-| Backchannels | moderate | ~none | moderate | moderate |
-| Closing | takeaway | takeaway | verdict | judged synthesis |
+| Opening | hook+framing(+agenda) | narrator sign-on | evaluative framing | motion + positions |
+| Cluster shape | explain+example | enumerated single-voice statement per beat | assess+limit+imply | position/rebut/cross-examine |
+| Questions | common | none (monologic, C-10) | moderate | cross-examination |
+| Backchannels | moderate | none (monologic, C-10) | moderate | moderate |
+| Closing | takeaway | takeaway + sign-off | verdict | judged synthesis |
 | Examples | budget-permitting | essential-only | supporting | as evidence |
 
 ## 5. Duration engine and narration density (EXP-A-05)

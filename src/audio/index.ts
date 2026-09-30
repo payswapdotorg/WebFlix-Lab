@@ -30,7 +30,7 @@ import type { SpeakerVoiceProfile, SpeechProvider, SpeechTurnRequest, SpeechTurn
 import { AudioCompilerError } from './errors';
 import { buildValidatedDialogueGraph } from './dialogue/engine';
 import type { DialogueGraph } from './dialogue/types';
-import { realizeDialogue, attachText, type RealizedTurn, type RealizerContext } from './dialogue/text/realizer';
+import { realizeDialogue, attachText, turnContentHash, type RealizedTurn, type RealizerContext } from './dialogue/text/realizer';
 import { modeProfileFor } from './modes';
 import { PACING_MULTIPLIERS } from './modes/common';
 import { languagePackFor } from './modes/language-packs';
@@ -50,7 +50,7 @@ export type { DialogueValidationIssue } from './errors';
 export { buildDialogueGraph, buildValidatedDialogueGraph, validateDialogueGraph, planHashOf, stableStringify } from './dialogue/engine';
 export type { DialogueGraph, DialogueTurn, EnrichedTurnTag, SpeakerPersona, SpeakerStance, DialogueLinks, DialogueSection } from './dialogue/types';
 export { ENRICHED_TAG_TO_PURPOSE, ZERO_CLAIM_ALLOWED_PURPOSES } from './dialogue/types';
-export { realizeDialogue, realizeTurn, attachText } from './dialogue/text/realizer';
+export { realizeDialogue, realizeTurn, attachText, turnContentHash, enumerationOpenerFor } from './dialogue/text/realizer';
 export type { RealizedTurn, RealizerContext } from './dialogue/text/realizer';
 export { analyzeTurnTaking, TURN_TAKING_THRESHOLDS } from './dialogue/turn-taking';
 export type { TurnTakingStats } from './dialogue/turn-taking';
@@ -215,9 +215,11 @@ export async function compileAudioOverview(
   }
 
   // 4. Timing: pre-synthesis manifest, then retime with measured durations.
+  // C-5: gap jitter keys on the gap-adjacent turns' content hashes (one
+  // shared derivation with the realizer keys — turnContentHash above).
   const gapPolicy: GapPolicyInput = {
     seed: options.seed,
-    planHash: dialogueGraph.meta.planHash,
+    turnContentHashes: dialogueGraph.turns.map((turn) => turnContentHash(realizerContext, turn)),
     gapScale: profile.gapScale,
   };
   const preManifest = buildTimingManifest(dialogueGraph, gapPolicy, MASTER_SAMPLE_RATE);

@@ -1,6 +1,6 @@
 {
   "recordType": "OverviewPlan",
-  "contractVersion": "1.0.0",
+  "contractVersion": "2.0.0",
   "id": "plan-messy-note-audio-deep-dive-5min",
   "sourceIds": [
     "source-messy-note-redacted"

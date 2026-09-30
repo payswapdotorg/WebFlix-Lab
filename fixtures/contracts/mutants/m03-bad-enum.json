@@ -1,6 +1,6 @@
 {
   "recordType": "SemanticGraph",
-  "contractVersion": "1.0.0",
+  "contractVersion": "2.0.0",
   "id": "graph-minimal",
   "sourceIds": [
     "source-minimal"
@@ -8,7 +8,7 @@
   "claims": [
     {
       "recordType": "ClaimRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "claim-alpha-audits",
       "statement": "Alpha tools require scheduled audits.",
       "kind": "constraint",
@@ -33,7 +33,7 @@
   "entities": [
     {
       "recordType": "EntityRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "entity-alpha-tools",
       "name": "Alpha tools",
       "kind": "gizmo",
@@ -52,7 +52,7 @@
   "topics": [
     {
       "recordType": "TopicRecord",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "topic-minimal",
       "title": "Minimal operations note",
       "summary": "A single-sentence note about scheduled audits.",

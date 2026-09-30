@@ -30,9 +30,15 @@
  */
 
 import {
+  ANCHOR_CONNECTOR_TOKENS,
   CONTRACTS_VERSION,
   countWords,
+  FACTUAL_TURN_PURPOSES,
+  MIN_TURN_SECONDS,
   OverviewPlanSchema,
+  QUESTION_TAIL_TOKENS,
+  TOPICAL_TISSUE_TOKENS,
+  TURN_PLANNING_RATE_WPS,
   validateOverviewPlan,
   type AudioTurn,
   type AudioTurnPurpose,
@@ -174,48 +180,23 @@ function splitInteger(total: number, weights: number[], minimum: number): number
 // Turn-budget allocation (EV-005 fix, WFLX-P3A: anchor mass vs slot duration)
 // ---------------------------------------------------------------------------
 
-/**
- * Planning rate (words/second) at which a turn slot can voice its anchor
- * mass. A conservative editorial prior BELOW every audio mode's effective
- * rate ceiling (tightest: deep-dive/critique 2.6 wps x 0.96 measured pacing
- * x 1.15 ceiling multiplier = 2.87 wps), so a mass-fitting slot can never be
- * flagged turn-over-budget by the audio compiler's check (DESIGN.md §16.2
- * item 3: W2 fits text density; the Director must not hand it impossible
- * slots). HYPOTHESIS lab policy, testable per the experiment matrix.
+/*
+ * C-7 (v2 contract wave, ruling 2026-09-29): the rate model moved to the
+ * shared contracts — ONE authoritative surface consumed by the Director and
+ * (per ruling) the audio surface (EV-008 mirror-risk evidence, LAB-03/EV-009
+ * product truth). Values are IDENTICAL to the Director-local constants they
+ * replace, so this move alone produces ZERO output change. The Director
+ * re-exports TURN_PLANNING_RATE_WPS for API stability (tests/director and
+ * EV-008 cite it through this module path).
  */
-export const TURN_PLANNING_RATE_WPS = 2.5;
-
-/**
- * Purposes whose turns are factual carriers: the audio grounding rule
- * (src/audio/dialogue/types.ts ZERO_CLAIM_ALLOWED_PURPOSES) requires them
- * to cite at least one claim. Documented dependency, deliberately not an
- * import (worker path ownership: src/audio is W2's tree).
- */
-const FACTUAL_TURN_PURPOSES: ReadonlySet<AudioTurnPurpose> = new Set([
-  'explanation',
-  'example',
-  'connection',
-  'clarification',
-]);
-
-/**
- * Worst-case mass (countWords tokens) the realizer's BARE anchor block adds:
- * the longest question tail across the surface packs plus the em-dash
- * separator ("is that actually supported by the evidence?" + "—").
- */
-const QUESTION_TAIL_TOKENS = 8;
-
-/** Worst-case mass of one anchor connector between two anchors in one turn. */
-const ANCHOR_CONNECTOR_TOKENS = 5;
-
-/**
- * Conversational-tissue allowance for topical (claim-less) turns: opener +
- * a speaking pace's worth of orientation glue beyond the beat title.
- */
-const TOPICAL_TISSUE_TOKENS = 8;
-
-/** Minimum turn duration (s). */
-const MIN_TURN_SECONDS = 2;
+export {
+  ANCHOR_CONNECTOR_TOKENS,
+  FACTUAL_TURN_PURPOSES,
+  MIN_TURN_SECONDS,
+  QUESTION_TAIL_TOKENS,
+  TOPICAL_TISSUE_TOKENS,
+  TURN_PLANNING_RATE_WPS,
+};
 
 /**
  * Split an integer total across slots by proportional keys with per-slot
@@ -293,6 +274,18 @@ interface ModeProfile {
 const A: TurnSlot = { role: 'host-a', purpose: 'framing' };
 const B_EXPLAIN: TurnSlot = { role: 'host-b', purpose: 'explanation' };
 
+/**
+ * C-10 narrator slots (v2 contract wave, ruling 2026-09-29; EV-009 LAB-02):
+ * the real Brief is a SINGLE narrator with enumerated structure
+ * (First/Second/Finally; 93.92 s single-voice, OBSERVED on the same source
+ * vs our v1 fixed 10-turn two-speaker dialog at 120 s) — the strongest
+ * product-truth delta in the register. The SpeakerRole 'narrator' already
+ * exists in the v1 contracts enum; no contracts change for the role.
+ */
+const NARRATOR_FRAMING: TurnSlot = { role: 'narrator', purpose: 'framing' };
+const NARRATOR_EXPLANATION: TurnSlot = { role: 'narrator', purpose: 'explanation' };
+const NARRATOR_CONCLUSION: TurnSlot = { role: 'narrator', purpose: 'conclusion' };
+
 const MODE_PROFILES: Record<string, ModeProfile> = {
   'deep-dive': {
     speakers: 2,
@@ -311,11 +304,17 @@ const MODE_PROFILES: Record<string, ModeProfile> = {
     ],
   },
   brief: {
-    speakers: 2,
+    // C-10 (EV-009 LAB-02): monologic skeleton — 1 speaker, ALL turns
+    // SpeakerRole 'narrator'; narrator framing sign-on, ONE explanation turn
+    // per topic beat (the single carrier voices every beat claim), narrator
+    // conclusion. Beat coverage preserved (H-A-01): every beat still voiced.
+    // Brief register: no agenda, no connection tissue, no examples unless
+    // plan-essential.
+    speakers: 1,
     tone: 'crisp, high-signal',
-    opening: [A],
-    perBeat: [A, B_EXPLAIN],
-    closing: [{ role: 'host-a', purpose: 'conclusion' }],
+    opening: [NARRATOR_FRAMING],
+    perBeat: [NARRATOR_EXPLANATION],
+    closing: [NARRATOR_CONCLUSION],
   },
   critique: {
     speakers: 2,
@@ -368,6 +367,14 @@ const MODE_PROFILES: Record<string, ModeProfile> = {
     perBeat: [A, B_EXPLAIN],
     closing: [A],
   },
+};
+
+/** Display names per SpeakerRole (C-10: 'narrator' -> 'Narrator'). */
+const SPEAKER_NAMES: Readonly<Record<SpeakerRole, string>> = {
+  'host-a': 'Host A',
+  'host-b': 'Host B',
+  guest: 'Guest',
+  narrator: 'Narrator',
 };
 
 const PURPOSE_DELIVERY: Record<AudioTurnPurpose, string> = {
@@ -759,7 +766,7 @@ export function compileOverviewPlan(request: DirectorRequest): OverviewPlan {
           contractVersion: CONTRACTS_VERSION,
           id: `turn-${turnNo}`,
           index: turnNo - 1,
-          speaker: slot.role === 'host-a' ? 'Host A' : 'Host B',
+          speaker: SPEAKER_NAMES[slot.role],
           speakerRole: slot.role,
           purpose: slot.purpose,
           brief:

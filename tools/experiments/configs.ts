@@ -194,8 +194,10 @@ const expAR2 = (): readonly ExperimentConfig[] => [
       next_experiment: 'EXP-A-02-R2 (critique framing)',
       status: 'supported',
       invariants: note(
-        'Both 300 s arms use identical source/graph/seed/now/audience; only the mode differs; the ' +
-          'canonical brief fixture is a frozen W1 input (unchanged since EV-006).',
+        'Both 300 s arms use identical source/graph/seed/now/audience; only the mode differs. The ' +
+          'canonical brief fixture is a W1 input regenerated ONCE at the C-10 v2-wave boundary ' +
+          '(2026-09-30: monologic narrator skeleton per EV-009 LAB-02; fingerprint addendum in ' +
+          'tests/contracts/fixtures.test.ts) — otherwise frozen across this series.',
       ),
       observations: note(
         'R2 context (REPRODUCED): this re-run lands through the wave-2 integration runner under the ' +

@@ -14,8 +14,11 @@ import {
 } from '../../src/contracts';
 
 describe('primitive schemas', () => {
-  test('contract version is frozen at 1.0.0', () => {
-    expect(CONTRACTS_VERSION).toBe('1.0.0');
+  // v2 contract wave (ruling 2026-09-29): the bundle bumped 1.0.0 -> 2.0.0
+  // (one breaking wave: C-5/C-7/C-9/C-3). Re-pinned here, dated; the v1
+  // value is preserved as git history.
+  test('contract version is frozen at 2.0.0', () => {
+    expect(CONTRACTS_VERSION).toBe('2.0.0');
   });
 
   test('sha256Hex produces lowercase hex digests', () => {

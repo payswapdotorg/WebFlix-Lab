@@ -1,6 +1,6 @@
 {
   "recordType": "OverviewPlan",
-  "contractVersion": "1.0.0",
+  "contractVersion": "2.0.0",
   "id": "plan-messy-note-video-explainer-7min",
   "sourceIds": [
     "source-messy-note-redacted"
@@ -212,7 +212,7 @@
   "videoScenes": [
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-1",
       "index": 0,
       "beatId": "beat-1",
@@ -243,7 +243,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-2",
       "index": 1,
       "beatId": "beat-1",
@@ -264,7 +264,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-3",
       "index": 2,
       "beatId": "beat-2",
@@ -310,7 +310,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-4",
       "index": 3,
       "beatId": "beat-2",
@@ -346,7 +346,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-5",
       "index": 4,
       "beatId": "beat-2",
@@ -367,7 +367,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-6",
       "index": 5,
       "beatId": "beat-3",
@@ -423,7 +423,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-7",
       "index": 6,
       "beatId": "beat-3",
@@ -443,7 +443,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-8",
       "index": 7,
       "beatId": "beat-3",
@@ -475,7 +475,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-9",
       "index": 8,
       "beatId": "beat-4",
@@ -512,7 +512,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-10",
       "index": 9,
       "beatId": "beat-4",
@@ -548,7 +548,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-11",
       "index": 10,
       "beatId": "beat-4",
@@ -569,7 +569,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-12",
       "index": 11,
       "beatId": "beat-5",
@@ -605,7 +605,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-13",
       "index": 12,
       "beatId": "beat-5",
@@ -641,7 +641,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-14",
       "index": 13,
       "beatId": "beat-6",
@@ -673,7 +673,7 @@
     },
     {
       "recordType": "VideoScene",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "scene-15",
       "index": 14,
       "beatId": "beat-6",

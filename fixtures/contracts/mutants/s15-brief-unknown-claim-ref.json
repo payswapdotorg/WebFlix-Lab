@@ -1,6 +1,6 @@
 {
   "recordType": "OverviewPlan",
-  "contractVersion": "1.0.0",
+  "contractVersion": "2.0.0",
   "id": "plan-messy-note-audio-brief-2min",
   "sourceIds": [
     "source-messy-note-redacted"
@@ -15,7 +15,7 @@
     "tone": "crisp, high-signal",
     "register": "plain-technical",
     "pacing": "measured",
-    "speakerCount": 2
+    "speakerCount": 1
   },
   "coverage": {
     "covered": [
@@ -24,8 +24,7 @@
         "role": "primary",
         "unitIds": [
           "beat-2",
-          "turn-2",
-          "turn-3"
+          "turn-2"
         ]
       },
       {
@@ -33,7 +32,7 @@
         "role": "primary",
         "unitIds": [
           "beat-3",
-          "turn-5"
+          "turn-3"
         ]
       },
       {
@@ -44,8 +43,8 @@
           "beat-5",
           "beat-6",
           "turn-1",
-          "turn-9",
-          "turn-10"
+          "turn-5",
+          "turn-6"
         ]
       },
       {
@@ -53,8 +52,7 @@
         "role": "primary",
         "unitIds": [
           "beat-4",
-          "turn-6",
-          "turn-7"
+          "turn-4"
         ]
       },
       {
@@ -62,7 +60,7 @@
         "role": "supporting",
         "unitIds": [
           "beat-2",
-          "turn-3"
+          "turn-2"
         ]
       }
     ],
@@ -183,11 +181,11 @@
   "audioTurns": [
     {
       "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "turn-1",
       "index": 0,
-      "speaker": "Host A",
-      "speakerRole": "host-a",
+      "speaker": "Narrator",
+      "speakerRole": "narrator",
       "purpose": "framing",
       "brief": "Open the segment and orient the listener. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
       "claimIds": [
@@ -210,38 +208,11 @@
     },
     {
       "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
+      "contractVersion": "2.0.0",
       "id": "turn-2",
       "index": 1,
-      "speaker": "Host A",
-      "speakerRole": "host-a",
-      "purpose": "framing",
-      "brief": "Open the segment and orient the listener. Anchors: The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems.",
-      "claimIds": [
-        "claim-tool-catalog"
-      ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b5",
-          "start": 252,
-          "end": 291,
-          "quote": "The source contains a mixed catalog of:"
-        }
-      ],
-      "beatId": "beat-2",
-      "style": {
-        "delivery": "warm, orienting"
-      },
-      "targetDurationSeconds": 10
-    },
-    {
-      "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-3",
-      "index": 2,
-      "speaker": "Host B",
-      "speakerRole": "host-b",
+      "speaker": "Narrator",
+      "speakerRole": "narrator",
       "purpose": "explanation",
       "brief": "Explain, grounded in the source. Anchors: The source contains a mixed catalog of AI tools covering video, image, voice and music generation, editing, scraping/API access and agent tool systems. The catalog also includes open-source media projects, local model runtimes and model catalogs.",
       "claimIds": [
@@ -269,34 +240,15 @@
         "delivery": "clear, expert, unhurried",
         "emphasis": "say entity names crisply: AI video tools, voice generation, agent tool systems"
       },
-      "targetDurationSeconds": 29
+      "targetDurationSeconds": 39
     },
     {
       "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-4",
-      "index": 3,
-      "speaker": "Host A",
-      "speakerRole": "host-a",
-      "purpose": "framing",
-      "brief": "Open the segment and orient the listener. No claim anchors this turn; stay on the segment topic: Infrastructure.",
-      "claimIds": [
-        "claim-nonexistent"
-      ],
-      "evidence": [],
-      "beatId": "beat-3",
-      "style": {
-        "delivery": "warm, orienting"
-      },
-      "targetDurationSeconds": 6
-    },
-    {
-      "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-5",
-      "index": 4,
-      "speaker": "Host B",
-      "speakerRole": "host-b",
+      "contractVersion": "2.0.0",
+      "id": "turn-3",
+      "index": 2,
+      "speaker": "Narrator",
+      "speakerRole": "narrator",
       "purpose": "explanation",
       "brief": "Explain, grounded in the source. Anchors: The infrastructure notes name Cloudflare/object storage, Postgres/Neon, LLM providers, Vercel/GitHub, messaging, payments, Redis, compliance, browser automation and realtime infrastructure.",
       "claimIds": [
@@ -316,46 +268,19 @@
         "delivery": "clear, expert, unhurried",
         "emphasis": "say entity names crisply: Cloudflare, Postgres, Neon"
       },
-      "targetDurationSeconds": 13
+      "targetDurationSeconds": 19
     },
     {
       "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-6",
-      "index": 5,
-      "speaker": "Host A",
-      "speakerRole": "host-a",
-      "purpose": "framing",
-      "brief": "Open the segment and orient the listener. Anchors: The architecture section discusses multi-agent orchestration.",
-      "claimIds": [
-        "claim-multi-agent-orchestration"
-      ],
-      "evidence": [
-        {
-          "sourceId": "source-messy-note-redacted",
-          "blockId": "b33",
-          "start": 883,
-          "end": 908,
-          "quote": "multi-agent orchestration"
-        }
-      ],
-      "beatId": "beat-4",
-      "style": {
-        "delivery": "warm, orienting"
-      },
-      "targetDurationSeconds": 12
-    },
-    {
-      "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-7",
-      "index": 6,
-      "speaker": "Host B",
-      "speakerRole": "host-b",
+      "contractVersion": "2.0.0",
+      "id": "turn-4",
+      "index": 3,
+      "speaker": "Narrator",
+      "speakerRole": "narrator",
       "purpose": "explanation",
       "brief": "Explain, grounded in the source. Anchors: The architecture section discusses multi-agent orchestration.",
       "claimIds": [
-        "claim-multi-agent-orchestration"
+        "claim-nonexistent"
       ],
       "evidence": [
         {
@@ -371,32 +296,15 @@
         "delivery": "clear, expert, unhurried",
         "emphasis": "say entity names crisply: multi-agent orchestration"
       },
-      "targetDurationSeconds": 7
+      "targetDurationSeconds": 19
     },
     {
       "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-8",
-      "index": 7,
-      "speaker": "Host A",
-      "speakerRole": "host-a",
-      "purpose": "framing",
-      "brief": "Open the segment and orient the listener. No claim anchors this turn; stay on the segment topic: Purpose of the note.",
-      "claimIds": [],
-      "evidence": [],
-      "beatId": "beat-5",
-      "style": {
-        "delivery": "warm, orienting"
-      },
-      "targetDurationSeconds": 7
-    },
-    {
-      "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-9",
-      "index": 8,
-      "speaker": "Host B",
-      "speakerRole": "host-b",
+      "contractVersion": "2.0.0",
+      "id": "turn-5",
+      "index": 4,
+      "speaker": "Narrator",
+      "speakerRole": "narrator",
       "purpose": "explanation",
       "brief": "Explain, grounded in the source. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
       "claimIds": [
@@ -415,15 +323,15 @@
       "style": {
         "delivery": "clear, expert, unhurried"
       },
-      "targetDurationSeconds": 12
+      "targetDurationSeconds": 19
     },
     {
       "recordType": "AudioTurn",
-      "contractVersion": "1.0.0",
-      "id": "turn-10",
-      "index": 9,
-      "speaker": "Host A",
-      "speakerRole": "host-a",
+      "contractVersion": "2.0.0",
+      "id": "turn-6",
+      "index": 5,
+      "speaker": "Narrator",
+      "speakerRole": "narrator",
       "purpose": "conclusion",
       "brief": "Land the closing takeaway. Anchors: The stated purpose of the note is to test semantic organization, source-grounded planning, visual metaphors, technical diagrams, multi-speaker explanation and video composition.",
       "claimIds": [

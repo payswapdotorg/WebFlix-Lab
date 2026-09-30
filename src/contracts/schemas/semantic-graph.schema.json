@@ -9,8 +9,8 @@
     },
     "contractVersion": {
       "type": "string",
-      "pattern": "^1\\.\\d+\\.\\d+$",
-      "description": "Contract bundle version (major must match 1.x.x of the frozen contracts)."
+      "pattern": "^2\\.\\d+\\.\\d+$",
+      "description": "Contract bundle version (major must match 2.x.x of the frozen contracts)."
     },
     "id": {
       "type": "string",
@@ -68,8 +68,8 @@
           },
           "contractVersion": {
             "type": "string",
-            "pattern": "^1\\.\\d+\\.\\d+$",
-            "description": "Contract bundle version (major must match 1.x.x of the frozen contracts)."
+            "pattern": "^2\\.\\d+\\.\\d+$",
+            "description": "Contract bundle version (major must match 2.x.x of the frozen contracts)."
           },
           "id": {
             "type": "string",
@@ -280,8 +280,8 @@
         },
         "contractVersion": {
           "type": "string",
-          "pattern": "^1\\.\\d+\\.\\d+$",
-          "description": "Contract bundle version (major must match 1.x.x of the frozen contracts)."
+          "pattern": "^2\\.\\d+\\.\\d+$",
+          "description": "Contract bundle version (major must match 2.x.x of the frozen contracts)."
         },
         "id": {
           "type": "string",
@@ -468,8 +468,8 @@
         },
         "contractVersion": {
           "type": "string",
-          "pattern": "^1\\.\\d+\\.\\d+$",
-          "description": "Contract bundle version (major must match 1.x.x of the frozen contracts)."
+          "pattern": "^2\\.\\d+\\.\\d+$",
+          "description": "Contract bundle version (major must match 2.x.x of the frozen contracts)."
         },
         "id": {
           "type": "string",
@@ -618,8 +618,8 @@
         },
         "contractVersion": {
           "type": "string",
-          "pattern": "^1\\.\\d+\\.\\d+$",
-          "description": "Contract bundle version (major must match 1.x.x of the frozen contracts)."
+          "pattern": "^2\\.\\d+\\.\\d+$",
+          "description": "Contract bundle version (major must match 2.x.x of the frozen contracts)."
         },
         "id": {
           "type": "string",
@@ -714,8 +714,8 @@
         },
         "contractVersion": {
           "type": "string",
-          "pattern": "^1\\.\\d+\\.\\d+$",
-          "description": "Contract bundle version (major must match 1.x.x of the frozen contracts)."
+          "pattern": "^2\\.\\d+\\.\\d+$",
+          "description": "Contract bundle version (major must match 2.x.x of the frozen contracts)."
         },
         "id": {
           "type": "string",

@@ -24,18 +24,18 @@ other_config:
 baseline_artifact: "artifacts/video/exp-v/v04-control-explainer-300s"
 mutation: "one claim changed via the b30 source paragraph (same edit as EXP-A-04): \"All credentials are `[REDACTED]`.\" -> \"All credentials are `[REDACTED]` and are rotated quarterly by the platform team.\""
 artifact_under_test: "artifacts/video/exp-v/v04-mut-b30-explainer-300s"
-artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) 52b0e7b6ccb7bd1db5da1588a6cd99e356089b5e1661e4883f4b32df61f7346f (baseline) vs 73a06b62a08aaf34077e9d51c72af3632c6867af1c3b9e9debc4a1cee03fb35f (variant); MP4 not composed at this layer — see determinism.json per arm"
+artifact_hash: "scene-SVG combined sha256 (pinned determinism layer) b188091413c8b216f873877f001a00c65cb7bf3b112ff6d9ac7540a106bffeed (baseline) vs b188091413c8b216f873877f001a00c65cb7bf3b112ff6d9ac7540a106bffeed (variant); MP4 not composed at this layer — see determinism.json per arm"
 observations:
-  - "BASELINE (REPRODUCED): v04-control-explainer-300s — mode explainer, 12 scenes / 7 beats, coverage 12/36 (33.33%), 300 scene-seconds, style bible style-bible--reference-ink, qa passed-with-issues (coverage-gapx5), in-arm SVG determinism hashA===hashB 52b0e7b6ccb7bd1d…"
+  - "BASELINE (REPRODUCED): v04-control-explainer-300s — mode explainer, 12 scenes / 7 beats, coverage 12/36 (33.33%), 300 scene-seconds, style bible style-bible--reference-ink, qa passed-with-issues (coverage-gapx5), in-arm SVG determinism hashA===hashB b188091413c8b216…"
   - "VARIANT v04-mut-b30-explainer-300s (REPRODUCED): 12 scenes / 7 beats (delta +0 / +0), coverage 12/36 (added [none], removed [none]), 300 scene-seconds (+0), qa passed-with-issues."
-  - "STRUCTURE vs BASELINE (REPRODUCED): 0/12 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 9/12 scene SVGs changed bytes; combined SVG hash CHANGED; plan fingerprint CHANGED."
+  - "STRUCTURE vs BASELINE (REPRODUCED): 0/12 scenes changed structure (type/anchors/beat/duration/motion/transition). SCENE SVGs vs BASELINE (REPRODUCED): 0/12 scene SVGs changed bytes; combined SVG hash IDENTICAL; plan fingerprint CHANGED."
   - "GRAPH LAYER (REPRODUCED): claims changed [claim-b30], added [none], removed [none]; entities added [none] removed [none]; topics added [none] removed [none]."
   - "First EXP-V landing on the merged W3 surface (REPRODUCED at the storyboard layer)."
 invariants:
   - "Runner tools/experiments/runner.ts executed this experiment with pinned seeds and a fixed now (determinism spine); records render as a pure function of the measured results."
   - "Both arms run the identical fresh chain with identical ids/seeds/now/planId; only the b30 paragraph text differs (one variable)."
 differences:
-  - "v04-mut-b30-explainer-300s vs v04-control-explainer-300s: scenes +0, beats +0, coverage added [none] removed [none], structure changed 0/12, scene SVGs changed 9/12, scene-seconds +0, plan fingerprint changed."
+  - "v04-mut-b30-explainer-300s vs v04-control-explainer-300s: scenes +0, beats +0, coverage added [none] removed [none], structure changed 0/12, scene SVGs changed 0/12, scene-seconds +0, plan fingerprint changed."
   - "graph: 1 claim statement(s) changed [claim-b30], 0 added, 0 removed."
 hypothesis: "The video analog of EXP-A-04: visual mutation impact is local at the semantic layers (graph: exactly the b30-fed claim; plan/storyboard: scene structure identical) and global at the rendered-surface layer, because the storyboard compiler keys stochastic choices on (seed | planHash | mode | sceneId) and any plan content change reshuffles every seeded scene surface — the same plan-global planHash defect class as audio (C-5, v2 wave candidate)."
 confidence: high

@@ -1494,7 +1494,11 @@ const STRUCTURAL_MUTANTS: MutantSpec[] = [
   { file: 'm02-bad-record-type.json', base: minimalGraph, path: 'claims.0.recordType', value: 'Claim', layer: 'both', description: 'claim recordType is not the literal ClaimRecord' },
   { file: 'm03-bad-enum.json', base: minimalGraph, path: 'entities.0.kind', value: 'gizmo', layer: 'both', description: 'entity kind outside the EntityKind enum' },
   { file: 'm04-extra-property.json', base: minimalGraph, path: 'topics.0.extra', value: 'nope', layer: 'both', description: 'unknown property on a TopicRecord (strict objects)' },
-  { file: 'm05-bad-contract-version.json', base: generatedArtifactExample, path: 'contractVersion', value: '2.0.0', layer: 'both', description: 'contractVersion major does not match the frozen bundle' },
+  // v2 contract wave: the bundle is 2.0.0 now, so '1.0.0' (the pre-v2
+  // version) is the wrong-major red value; '2.0.0' became VALID at the bump
+  // and would silently defuse this mutant (red-mutant regeneration rides
+  // the version bump per the wave mechanics).
+  { file: 'm05-bad-contract-version.json', base: generatedArtifactExample, path: 'contractVersion', value: '1.0.0', layer: 'both', description: 'contractVersion major does not match the frozen bundle' },
   { file: 'm06-empty-evidence.json', base: minimalGraph, path: 'claims.0.evidence', value: [], layer: 'both', description: 'claim evidence is empty (minItems 1)' },
   { file: 'm07-bad-timestamp.json', base: experimentRecordExample, path: 'timestampUtc', value: '2026-09-26 19:26:00', layer: 'both', description: 'timestamp is not ISO-8601 UTC with Z' },
   { file: 'm08-negative-offset.json', base: minimalGraph, path: 'claims.0.evidence.0.start', value: -1, layer: 'both', description: 'evidence start offset is negative' },

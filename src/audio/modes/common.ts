@@ -66,6 +66,29 @@ export type TagFamily =
 /** Families that realize their anchors as a question (with a question tail). */
 export const QUESTION_FAMILIES: ReadonlySet<TagFamily> = new Set<TagFamily>(['question']);
 
+// ---------------------------------------------------------------------------
+// Enumeration spine (C-10 monologic brief, EV-009 LAB-02)
+// ---------------------------------------------------------------------------
+
+/**
+ * C-10 (v2 contract wave, ruling 2026-09-29; EV-009 LAB-02): the real Brief
+ * is a SINGLE narrator with enumerated structure — First/Second/…/Finally
+ * (93.92 s single-voice, OBSERVED on the same source; the strongest
+ * product-truth delta in the register). A mode declares the families whose
+ * turns form the enumeration spine; the realizer opens those turns by
+ * POSITION among the spine — NEVER a seeded pick (enumeration ordering is
+ * structural product truth, not a stochastic surface). Everything outside
+ * the spine keeps the C-5 seeded picks.
+ */
+export interface EnumerationSpine {
+  /** Tag families whose turns are enumerated, in spoken order. */
+  readonly families: readonly TagFamily[];
+  /** 1-based ordinal openers (index 0 = position 1): 'First,' 'Second,' … */
+  readonly ordinalOpeners: readonly string[];
+  /** Opener for the LAST spine turn regardless of count ('Finally,'). */
+  readonly finalOpener: string;
+}
+
 /** Enriched tag -> template family used by the realizer. */
 export const TAG_FAMILY: Readonly<Record<EnrichedTurnTag, TagFamily>> = {
   opening_hook: 'framing',
@@ -190,6 +213,17 @@ export interface ModeProfile {
   readonly rate: RateModel;
   /** Gap-policy scale (DESIGN.md §4.2: Brief gaps shorter). */
   readonly gapScale: number;
+  /**
+   * C-10 (EV-009 LAB-02): true for single-voice modes (brief). Declares the
+   * mode's skeleton monologic BY DESIGN — the dialogic turn-taking QA
+   * predicates (speaker parity, alternation runs, same-speaker runs,
+   * question→answer links, backchannel presence; H-A-04) do not apply and
+   * the realizer suppresses conversational tissue (acknowledgement /
+   * continuation prefixes): the enumeration spine is the connective device.
+   */
+  readonly monologic?: boolean;
+  /** C-10: enumeration spine (brief: the statement family, First/…/Finally). */
+  readonly enumeration?: EnumerationSpine;
   readonly enrichedRules: readonly EnrichedTagRule[];
   readonly stanceRules: readonly StanceRule[];
   /** Template overlay applied over the language base pack. */

@@ -37,6 +37,14 @@ as collected in docs/notebooklm-overviews-research.md.
 | D-06 | Gemini native audio/TTS supports expressive multi-speaker output, including NotebookLM-style two-person overviews | DOCUMENTED |
 | D-07 | Audio Overviews are source-grounded (grounding in selected sources is the product's stated behavior) | DOCUMENTED |
 
+> **C-10 mode-level refinement (2026-09-30, v2 contract wave; EV-009
+> LAB-02, OBSERVED):** D-05's two-host shape is MODE-DEPENDENT — the real
+> Brief is a SINGLE narrator (93.92 s single-voice, enumerated
+> First/Second/Finally structure) on the same source where Deep Dive is a
+> two-host discussion. The lab brief skeleton + brief mode semantics were
+> restructured to reproduce this (see the H-A-01 addendum below); D-05
+> stands for the dialogic modes (Deep Dive / Critique / Debate).
+
 ## 2. Mode semantics — hypotheses with testable predicates
 
 > **Post-freeze alignment** (against `work/wflx-w1-contracts` @ `78be437`,
@@ -101,6 +109,36 @@ per-mode plans and validate realization + semantics):
 Product-level falsifier: a real Brief that covers the same claim set as a
 Deep Dive of the same source with only speaking-rate compression — or a real
 Brief containing agenda/example structure.
+
+> **C-10 UPDATE (2026-09-30, v2 contract wave; EV-009 LAB-02).** Black-box
+> evidence landed for this hypothesis: the real Brief on the reference
+> source is a SINGLE narrator with enumerated structure (93.92 s
+> single-voice; First/Second/Finally openers; OBSERVED), NOT a compressed
+> two-host dialog — our v1 brief skeleton (fixed 10-turn host-a/host-b
+> dialog, 120 s) was the strongest product-truth delta in the register.
+> Restructured together (ruling 2026-09-29, one wave):
+> - Director brief skeleton: speakers 1, every turn SpeakerRole 'narrator'
+>   (v1 contracts enum, no contracts change); narrator framing sign-on + ONE
+>   explanation turn per topic beat + narrator conclusion; beat coverage
+>   preserved (predicate 1 holds; the 'no agenda/connection/example'
+>   predicates hold unchanged).
+> - W2 brief profile: EnumerationSpine — First/…/Finally openers selected by
+>   POSITION among spine (statement) turns, never a seeded pick; dialogic
+>   surfaces removed (questionTails/acknowledgePrefixes empty; no
+>   conversational prefixes in monologic modes); narrator sign-on 'Here is
+>   the brief:' / sign-off 'That is the brief.'.
+> - Duration policy (H-A-05): the ~120 s → ~94 s product delta comes from
+>   turn-count reduction (10 → enumerated single-voice), NOT velocity — rate
+>   (2.9 wps) and gap scale (0.5) are unchanged; no over-budget turns.
+> - QA: dialogic purposes (question / interjection — acknowledgement is the
+>   enriched-tag view of interjection) discouraged with notes citing
+>   C-10/LAB-02; the H-A-04 dialogic turn-taking predicates are not
+>   applicable to the monologic skeleton (the metric reports the C-10 note
+>   instead of false parity/alternation warnings).
+> - Canonical fixture regenerated: speakerCount 1, 6-turn narrator skeleton
+>   (fingerprint transition addendum in tests/contracts/fixtures.test.ts).
+> Lab status: REPRODUCED at the structure/surface level; fixture-only
+> success is not product parity (AGENTS.md).
 
 ### H-A-02 — Critical framing is structurally distinct (Deep Dive → Critique) — EXP-A-02
 

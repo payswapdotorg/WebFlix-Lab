@@ -127,6 +127,18 @@ export const GeneratedArtifactSchema = z
   .strictObject({
     recordType: z.literal('GeneratedArtifact'),
     contractVersion: ContractVersionSchema,
+    /**
+     * C-9 (v2 contract wave): the video surface's StyleBible bundle version
+     * (Worker 3 namespace, src/video/style-bible.ts STYLE_BIBLE_VERSION),
+     * emitted by the video compiler's manifest since 2.0.0 for full
+     * reproducibility metadata (post-W3 audit e8ea606). Absent on audio
+     * artifacts and on pre-v2 video artifacts (StyleBible is a
+     * video-surface concept).
+     */
+    styleBibleVersion: SemVerSchema.optional().describe(
+      'StyleBible bundle version the video surface realized against ' +
+        '(video-overview only; absent pre-v2 and on audio artifacts).',
+    ),
     id: IdSchema.describe('New id for every generation; never reuse or overwrite a golden reference.'),
     kind: z.enum(['audio-overview', 'video-overview']),
     planId: IdSchema.describe('OverviewPlan this artifact realizes.'),

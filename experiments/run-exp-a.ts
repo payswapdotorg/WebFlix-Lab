@@ -606,7 +606,7 @@ async function main(): Promise<void> {
       resultOf('a04-mut-b30-deepdive-5min'),
       [
         'One-variable: only block b30 text differs between arms; both arms run the same adapter -> extractor -> Director -> audio chain with identical ids/seeds.',
-        'Realized-text locality is bounded below by planHash-keyed seeded surface choices: any plan content change reshuffles every turn surface (EV-005 determinism trap); structure locality is the meaningful signal here.',
+        'Post-C-5 (v2 wave) realized-text locality is turn-LOCAL: seeded surfaces key on the turn content hash, so unchanged turns keep their texts byte-identically (the v1 planHash-keyed reshuffle — 21/25 texts per EV-006 — is fixed; this diff regenerates under C-10 with the monologic brief skeleton, which touches the brief arms only).',
       ],
     ),
   );

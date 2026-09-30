@@ -113,7 +113,7 @@ describe('realizer — canonical deep dive', () => {
 });
 
 describe('realizer — mode registers (H-A-01/02/03 lab predicates)', () => {
-  test('brief: compact headline register (H-A-01)', async () => {
+  test('brief: monologic enumerated register (H-A-01 + C-10, EV-009 LAB-02)', async () => {
     const plan = buildBriefStandinPlan();
     const result = await compileAudioOverview({
       plan,
@@ -122,17 +122,19 @@ describe('realizer — mode registers (H-A-01/02/03 lab predicates)', () => {
       options: { seed: FIXED_SEED, now: FIXED_NOW, mastering: 'pure-ts' },
     });
     expect(result.qa.status).not.toBe('failed');
-    // Brief statements open in the compact register.
-    const statementTexts = result.realized.filter((r) => {
-      const turn = result.graph.turns.find((t) => t.id === r.turnId);
-      return turn?.purpose === 'explanation';
+    // C-10: the stand-in's four explanation turns open on the enumeration
+    // spine (First/Second/Third/Finally, position-based — never a seeded
+    // pick). The v1 compact openers ('In short:'/'The headline:': …) are
+    // gone with the dialogic surfaces; the stand-in is audio-local and
+    // non-canonical (its dialogic question turn is honestly discouraged by
+    // the C-10 QA — asserted in modes.test.ts).
+    const statementTurns = result.graph.turns.filter((turn) => turn.enrichedTag === 'explanation');
+    expect(statementTurns.length).toBe(4);
+    const openers = statementTurns.map((turn) => {
+      const outcome = result.realized.find((r) => r.turnId === turn.id);
+      return outcome?.text.split(' ')[0] ?? '';
     });
-    expect(statementTexts.length).toBeGreaterThan(0);
-    const briefOpeners = ['In short:', 'The headline:', 'Core point:', 'Simply put:'];
-    const compact = statementTexts.filter((r) =>
-      briefOpeners.some((opener) => r.text.includes(opener)),
-    );
-    expect(compact.length).toBeGreaterThan(0);
+    expect(openers).toEqual(['First,', 'Second,', 'Third,', 'Finally,']);
   }, 30000);
 
   test('critique: evaluative register + verdict closing (H-A-02)', async () => {
@@ -144,9 +146,15 @@ describe('realizer — mode registers (H-A-01/02/03 lab predicates)', () => {
       options: { seed: FIXED_SEED, now: FIXED_NOW, mastering: 'pure-ts' },
     });
     // Verdict-tagged closings realize in verdict register.
+    // v2 note: the marker list covers EVERY verdict-family pack option
+    // (openers 'So, weighing all of it:' / 'Our read, on balance:' / 'The
+    // judgment:'; closers 'That is our verdict.' / 'That is where we
+    // land.') so the register check holds under ANY seeded pick — C-5
+    // re-keying legitimately changed which options get drawn (the old list
+    // implicitly pinned v1 planHash-keyed picks).
     const verdictTurns = result.graph.turns.filter((turn) => turn.enrichedTag === 'verdict');
     expect(verdictTurns.length).toBeGreaterThanOrEqual(2);
-    const verdictMarkers = ['verdict', 'weighing', 'weigh', 'balance'];
+    const verdictMarkers = ['verdict', 'weighing', 'weigh', 'balance', 'judgment', 'land'];
     for (const turn of verdictTurns) {
       const outcome = result.realized.find((r) => r.turnId === turn.id);
       const hit = verdictMarkers.some((marker) => outcome?.text.toLowerCase().includes(marker));
@@ -288,5 +296,54 @@ describe('realizer — word budget mechanics', () => {
     for (const turn of realized) {
       expect(turn.wordCount).toBe(countWords(turn.text));
     }
+  });
+});
+
+describe('realizer — C-5 per-unit content-keyed seeding (v2 wave)', () => {
+  /**
+   * The EXP-A-04 defect class at unit scale: mutate ONE turn's brief and
+   * nothing else; the plan-global planHash changes (as does the plan's own
+   * fingerprint) but under C-5 re-keying only the MUTATED turn's surface
+   * may change — every other turn keeps its realized text byte-identically
+   * (the improved diff semantics the corrected wave mechanics prescribe;
+   * EXP-X-02 verifies the same property post-landing at artifact scale).
+   */
+  test('one turn-brief mutation changes only that turn\'s realized text', () => {
+    const base = contextFor(CANONICAL_PLAN);
+    const baseRealized = realizeDialogue(base);
+
+    // Mutate exactly one turn's brief (turn index 3) in the plan, keeping
+    // everything else byte-identical.
+    const mutatedPlan = JSON.parse(JSON.stringify(CANONICAL_PLAN)) as typeof CANONICAL_PLAN;
+    const target = mutatedPlan.audioTurns[3];
+    expect(target).toBeDefined();
+    if (target === undefined) return;
+    target.brief = `${target.brief} (revised emphasis)`;
+    const mutated = contextFor(mutatedPlan);
+    const mutatedRealized = realizeDialogue(mutated);
+
+    // Structure identical: same ids, purposes, claim citations.
+    expect(mutated.graph.turns.map((t) => [t.id, t.purpose, [...t.claimIds]])).toEqual(
+      base.graph.turns.map((t) => [t.id, t.purpose, [...t.claimIds]]),
+    );
+
+    // planHash DID change (the plan is a different plan) — the defect's
+    // trigger under v1 keying.
+    expect(mutated.graph.meta.planHash).not.toBe(base.graph.meta.planHash);
+
+    // Surfaces: only the mutated turn's text may differ.
+    const changed: string[] = [];
+    mutatedRealized.forEach((outcome, i) => {
+      if (outcome.text !== baseRealized[i]?.text) changed.push(outcome.turnId);
+    });
+    const mutatedTurn = mutated.graph.turns[3];
+    expect(mutatedTurn).toBeDefined();
+    expect(changed).toEqual([mutatedTurn === undefined ? '' : mutatedTurn.id]);
+  });
+
+  test('same seed + same plan re-realizes byte-identically (in-version determinism)', () => {
+    const first = realizeDialogue(contextFor(CANONICAL_PLAN));
+    const second = realizeDialogue(contextFor(CANONICAL_PLAN));
+    expect(first.map((r) => r.text)).toEqual(second.map((r) => r.text));
   });
 });
