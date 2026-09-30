@@ -4,7 +4,11 @@
  * Emits the W1 contract record (src/contracts/generated-artifact.ts); W3
  * invents no video-side variant (same discipline as W2 §16.1): media
  * fingerprint with sha256, provider usage per stage (image / composition /
- * evaluation), generator info with seed + reproducible flag, QA summary.
+ * evaluation), generator info with seed + reproducible flag, QA summary,
+ * and since v2 (C-9) the StyleBible bundle version
+ * (STYLE_BIBLE_VERSION from src/video/style-bible.ts) — the post-W3
+ * reproducibility-audit gap the p3b wave-1 test pinned is closed. The
+ * unified registry (tools/manifest) prefers this emitted value.
  * The artifact id derives deterministically from (planHash, seed, providers)
  * so reproducible regeneration reuses the same id on purpose and never
  * overwrites a golden reference (artifacts/README.md).
@@ -21,6 +25,7 @@ import {
   type UtcTimestamp,
 } from '../contracts';
 import { VideoCompilerError } from './errors';
+import { STYLE_BIBLE_VERSION } from './style-bible';
 import type { ComposeVideoResult } from '../compositor/render';
 import type { VideoQaReport } from './qa/report';
 import { toQaSummary } from './qa/report';
@@ -91,6 +96,9 @@ export function emitGeneratedVideoArtifact(
   const candidate: GeneratedArtifact = {
     recordType: 'GeneratedArtifact',
     contractVersion: CONTRACTS_VERSION,
+    // C-9 (v2): StyleBible bundle version emitted for reproducibility
+    // metadata completeness (post-W3 audit e8ea606).
+    styleBibleVersion: STYLE_BIBLE_VERSION,
     id: artifactId,
     kind: 'video-overview',
     planId: input.plan.id,

@@ -17,13 +17,14 @@
  * CONTRACTS_VERSION, StyleBible version, provider identities and tool
  * versions.
  *
- * KNOWN GAP (DOCUMENTED in checklist §2, post-W3 audit 2026-09-28): the
- * video artifact manifests do NOT emit styleBibleVersion — the const
- * STYLE_BIBLE_VERSION exists in src/video/style-bible.ts but
- * src/video/artifacts.ts does not reference it. This tool READS that const
- * (worker-owned path, read-only) and includes it in the unified registry,
- * with the gap labeled in `metadata.styleBibleVersionSource`. The emission
- * fix itself is HANDOFF C-9 for the v2 contract wave.
+ * KNOWN GAP CLOSED (C-9, v2 contract wave, ruling 2026-09-29): the video
+ * artifact manifests now EMIT styleBibleVersion
+ * (src/video/artifacts.ts references STYLE_BIBLE_VERSION since v2.0.0 —
+ * post-W3 audit e8ea606, pinned by the p3b wave-1 test which flipped to
+ * asserting PRESENCE). This tool PREFERS the emitted value and falls back
+ * to reading the const (worker-owned path, read-only) only for pre-v2
+ * records still in the store; the source of each record's value is
+ * labeled in `metadata.styleBibleVersionSource`.
  *
  * Determinism: identical store bytes + identical --now produce a
  * byte-identical registry (canonical key-sorted serialization, records
@@ -131,9 +132,11 @@ export interface RegistryRecord {
   /** Provider identities per stage (denormalized from artifact.providers). */
   readonly providerIdentities: readonly string[];
   /**
-   * Video records: STYLE_BIBLE_VERSION read from src/video/style-bible.ts
-   * (DOCUMENTED gap: not emitted by src/video/artifacts.ts — HANDOFF C-9).
-   * Audio records: null (StyleBible is a video-surface concept).
+   * Video records: the StyleBible version — the artifact's OWN emitted
+   * styleBibleVersion (C-9, v2) when present, otherwise the const
+   * STYLE_BIBLE_VERSION from src/video/style-bible.ts (pre-v2 records
+   * still in the store). Audio records: null (StyleBible is a
+   * video-surface concept).
    */
   readonly styleBibleVersion: string | null;
   readonly notes: string;
@@ -354,7 +357,8 @@ function buildRecord(
     plan,
     seeds: { artifactSeed, planSeed },
     providerIdentities,
-    styleBibleVersion: surface === 'video' ? STYLE_BIBLE_VERSION : null,
+    styleBibleVersion:
+      surface === 'video' ? (artifact.styleBibleVersion ?? STYLE_BIBLE_VERSION) : null,
     notes,
   };
 }
@@ -404,9 +408,11 @@ export function buildUnifiedRegistry(options: BuildRegistryOptions): UnifiedMani
     contractsVersion: CONTRACTS_VERSION,
     styleBibleVersion: STYLE_BIBLE_VERSION,
     styleBibleVersionSource:
-      `read from STYLE_BIBLE_VERSION in src/video/style-bible.ts; DOCUMENTED GAP: video ` +
-      `GeneratedArtifact manifests do NOT emit styleBibleVersion (src/video/artifacts.ts does not ` +
-      `reference the const) — HANDOFF C-9 to the v2 contract wave (checklist §2 post-W3 audit)`,
+      `emitted by video GeneratedArtifact manifests since CONTRACTS_VERSION 2.0.0 ` +
+      `(C-9, v2 contract wave — post-W3 audit e8ea606; the p3b wave-1 gap-pin ` +
+      `test flipped to asserting PRESENCE); records prefer the emitted value ` +
+      `and fall back to STYLE_BIBLE_VERSION in src/video/style-bible.ts only ` +
+      `for pre-v2 artifacts`,
     toolVersions: {
       manifestTool: `${MANIFEST_TOOL_ID}@${MANIFEST_TOOL_VERSION}`,
       bun: Bun.version,

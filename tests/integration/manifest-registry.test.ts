@@ -10,10 +10,12 @@
  *   - reproducibility metadata (item 3): seeds (artifact + resolved plan
  *     Director seed), CONTRACTS_VERSION, StyleBible version, provider
  *     identities, tool versions on every registry the tool emits;
- *   - the DOCUMENTED styleBibleVersion gap: video artifact.json files do NOT
- *     carry styleBibleVersion (src/video/artifacts.ts does not reference
- *     STYLE_BIBLE_VERSION) — the registry reads the const and labels the gap
- *     (HANDOFF C-9, v2 contract wave);
+ *   - the C-9 emission (v2 contract wave): video artifact.json files now
+ *     CARRY styleBibleVersion (src/video/artifacts.ts references
+ *     STYLE_BIBLE_VERSION since 2.0.0) — this wave-1 gap-pin test FLIPPED
+ *     from pinning the DOCUMENTED gap to asserting PRESENCE, and the
+ *     registry prefers the emitted value (const fallback only for
+ *     pre-v2 records);
  *   - determinism: two builds over the same store + same --now are
  *     byte-identical; the CLI writes the same bytes as the in-process build.
  *
@@ -121,9 +123,10 @@ describe('unified artifact manifest registry (Phase 3 checklist §2 items 2+3)',
     expect(registry.generatedAtSource).toBe('flag');
     expect(meta.contractsVersion).toBe(CONTRACTS_VERSION);
     expect(meta.styleBibleVersion).toBe(STYLE_BIBLE_VERSION);
-    // The DOCUMENTED gap is labeled, not hidden.
-    expect(meta.styleBibleVersionSource).toContain('DOCUMENTED GAP');
-    expect(meta.styleBibleVersionSource).toContain('HANDOFF C-9');
+    // C-9 landed (v2): the source note describes the EMISSION, not a gap.
+    expect(meta.styleBibleVersionSource).toContain('emitted');
+    expect(meta.styleBibleVersionSource).toContain('C-9');
+    expect(meta.styleBibleVersionSource).not.toContain('DOCUMENTED GAP');
     // Tool versions.
     expect(meta.toolVersions.manifestTool).toContain(`@${MANIFEST_TOOL_VERSION}`);
     expect(meta.toolVersions.bun).toBeTruthy();
@@ -167,17 +170,20 @@ describe('unified artifact manifest registry (Phase 3 checklist §2 items 2+3)',
     expect(benchmarkVideo.media.sha256Match).toBe(true);
   });
 
-  test('DOCUMENTED gap: video manifests lack styleBibleVersion; the registry supplies it read-only', () => {
+  test('C-9 FLIPPED (v2): video manifests now EMIT styleBibleVersion; the registry prefers the emitted value', () => {
     const registry = buildUnifiedRegistry({ now: REGISTRY_NOW });
 
     for (const record of registry.records.filter((r) => r.surface === 'video')) {
-      // The registry carries the StyleBible version for video records...
+      // The video surface's own manifest now carries the field (PRESENCE —
+      // the p3b wave-1 gap-pin flipped at the C-9 landing)...
+      const raw = JSON.parse(readFileSync(join(record.directory, 'artifact.json'), 'utf8')) as {
+        styleBibleVersion?: string;
+      };
+      expect(raw.styleBibleVersion).toBe(STYLE_BIBLE_VERSION);
+      expect(record.artifact.styleBibleVersion).toBe(STYLE_BIBLE_VERSION);
+      // ...and the registry record prefers that emitted value.
+      expect(record.styleBibleVersion).toBe(raw.styleBibleVersion ?? STYLE_BIBLE_VERSION);
       expect(record.styleBibleVersion).toBe(STYLE_BIBLE_VERSION);
-      // ...while the video surface's own manifest still does NOT emit it
-      // (OBSERVED store truth; emission fix is HANDOFF C-9, v2 wave).
-      const raw = readFileSync(join(record.directory, 'artifact.json'), 'utf8');
-      expect(raw).not.toContain('styleBibleVersion');
-      expect(record.artifact).not.toHaveProperty('styleBibleVersion');
     }
     // StyleBible is a video-surface concept; audio records carry null.
     for (const record of registry.records.filter((r) => r.surface === 'audio')) {
