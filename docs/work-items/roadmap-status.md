@@ -34,7 +34,7 @@ history plus `docs/evidence/registry.jsonl` remain the durable record.
 | 2A — W2 audio | COMPLETE | PR #3 design (eaa1eea), PR #5 stage-2 implementation (c90bd48); gates 237/237; EV-004; HANDOFFs adjudicated (1444e10) |
 | 2B — W3 video | **COMPLETE** | PR #6 merged (ba60a36, EV-007): StyleBible v1.0.0, storyboard compiler, deterministic SVG renderer, illustration/motion provider ports, compositor (Remotion primary + sealed offline fallback), QA pass 0 issues both benchmarks; station gates 332/332 (251 baseline + 81 video); determinism spot-check clean; credential sweep clean |
 | 3 — TL integration | CORE COMPLETE (both p3b waves merged) | Prep done (checklist 20cd14d; H-2 fixtures 9128369/EV-005; H-4 docs e6a9b17; EXP-A series EV-006; experiment registry + provider matrix live; v2 contract draft 9ec6521; station-review automation 95b0b9d). **P3A Director turn-budget fix MERGED (PR #7, 0ecd561, EV-008): anchor-mass-aware allocation, zero turn-over-budget on all canonical modes + the 180 s compression arm; canonical fingerprint transition documented (3 plans + s15/s16/s17 mutants re-pinned); station gates 338/338; determinism proven; credential sweep clean.** WFLX-P3B (cross-modal integration + experiment series, checklist §2) DISPATCHED 20:15 UTC (session be5d9368, GLM-5.3, Full-Stack). EXP-V + EXP-X-02 run + cross-modal IR tasks are p3b/TL scope |
-| 4 — promotion gate | **COMPLETE — TL #2 SIGNED 2026-09-30 (PROMOTE)** | docs/promotion/ (README + promotion-decision.md, EV-015): evidence classes (a)–(f) assembled with labels + pointers; TL #2 SIGN-OFF block PENDING; merge of work/wflx-v2-contract-wave gates the verdict |
+| 4 | Promotion gate: evidence package + TL sign-off | COMPLETE — TL SIGNED PROMOTE 2026-09-30 (PR #10, f43b08d) |
 
 ## Current position (honest state)
 
@@ -151,3 +151,19 @@ package skeleton.
 - Standing follow-ups (v3 line, owned by the ledger in
   docs/promotion/promotion-decision.md class (f)): C-8 dual-modality plan
   shape, EXP-V-05/V-06 multi-source extractor, encoder exclusion by rule.
+
+## 2026-09-30 21:35 UTC — PARITY COMPLETION PHASE OPENED (TL #2, operator handoff)
+
+- Operator's Final TL #2 Handoff received: R&D roadmap COMPLETE, product parity NOT —
+  next phase = Parity Completion Phase (canonical work order:
+  docs/work-items/parity-completion-work-order.md). Frozen architecture; three
+  replay-sequential waves WFLX-P1 (audio parity: live TTS execution + benchmarks +
+  Interactive Audio prototype) / WFLX-P2 (video parity: Explainer refresh + Short +
+  Cinematic asset pipeline) / WFLX-P3 (fresh real-product reference/benchmark
+  captures, operator-gated) → cross-modal QA → parity promotion gate (TL-owned).
+- Doc-consistency fix applied with this commit: the stale Phase 4 table row above
+  (leftover PENDING wording from pre-sign-off drafting) is corrected to match the
+  signed truth — Phase 4 COMPLETE / TL SIGNED PROMOTE (PR #10, f43b08d).
+- Phase-level acceptance gates added (work order §4): every capability VERIFIED or
+  EXPLICITLY UNRESOLVED with evidence; live-provider results must be real, never
+  simulated-as-real.
