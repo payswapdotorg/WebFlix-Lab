@@ -450,3 +450,53 @@ discipline per the work order §4:
 - Phase-gate note: the custom-prompt comparison gate receives its
   product-side evidence from the P3 capture matrix (TL-side arms) —
   closing the P1 work-order gap noted in the refined handoff.
+
+## 2026-10-01 19:40 UTC — PARITY CAPTURE MATRIX COMPLETE (TL #2) — video control/twin/custom-prompt landed; audio-lane behavior change observed
+
+The fresh real-product capture round (operator-gated, replay-browser, LAB-series
+pattern) closed the video-side capture matrix and banked the audio-lane truth:
+
+- **LAB-07 (video control, Short):** 84.82 s, 720x1280 9:16 vertical, h264@30 +
+  AAC mono 44.1 kHz; fresh per-run title; generation wall ~28.4 min. sha256
+  f89fd153… (commit 9069148).
+- **LAB-08 (video twin, same config):** 78.32 s, different title + full surface
+  on identical input — run-to-run stochasticity EXTENDED TO THE VIDEO SURFACE
+  (the LAB-06 audio finding now n=2-surfaces); duration band n=2 above the
+  lab's [48,72] s Short band; wall variance 28.4→7.4 min (not a stable
+  observable). Honest note: this run's intended custom-topic injection failed
+  (Angular form) and ASR adjudicated default content — the failure itself is
+  the negative control for LAB-09. sha256 23d313b0… (commit ef8b6f1).
+- **LAB-09 (video custom-prompt arm, VERIFIED):** 71.63 s, title "How AI Agents
+  Hide Their Keys", the ENTIRE episode re-planned around the security/compliance
+  focus (ASR: sandbox/keys/compliance throughout vs 0 hits on control) — the
+  product's focus control is an episode-level content re-plan, materially
+  different semantics from the lab's style-only custom layer (0/15 structure
+  change, EXP-V-07). sha256 52996d49… (commit 4b52a57).
+- **P2 comparison hooks — product-side numbers where captures exist:**
+  short.duration.seconds = 84.8 / 78.3 / 71.6 (n=3, content-elastic band ABOVE
+  the lab's 60 s target; the [48,72] band hypothesis refined); sceneDensity =
+  raw ffmpeg scene-cut instrument 3 / 13 / 1 cuts (huge run-to-run variance;
+  MEASUREMENT-CLASS NOTE: the lab's 5 scenes are structural plan units, the
+  product's ffmpeg cuts are visual transitions — not directly comparable
+  numbers, recorded as instrument truth only); hookProminence / shotDensity /
+  styleContinuity / liveGeneration.latency remain PENDING structured
+  annotation (curation work, honest).
+- **UI-truth banked (binding for the parity verdict):** the product's video
+  surface exposes exactly Short (9:16) | Explainer (16:9) — NO Cinematic
+  product format exists; the lab's Cinematic layer is a behavior
+  reconstruction of generative-asset workflows, recorded as a scoping truth
+  (not a format parity claim).
+- **AUDIO-LANE BEHAVIOR CHANGE (observed):** the Customize Audio Overview
+  dialog now states "This content will generate in a few hours. Or, upgrade to
+  get it sooner." — both LAB-10 runs (an accidental empty-focus era-control +
+  the VERIFIED custom-focus arm, 138 chars read back before Generate) are
+  "Scheduled for after 11pm". The audio lane moved from immediate ~7-10 min
+  generation (Sept 28 LAB-01..06 era) to scheduled queuing (Oct 1). The
+  custom-prompt AUDIO capture will land when the platform runs it; the
+  scheduling behavior itself is banked product truth.
+- **Capture matrix state:** audio {Deep Dive control ✅ LAB-01, Brief/Critique/
+  Debate ✅ LAB-02, Short length ✅ LAB-03, Spanish ✅ LAB-04, mutation ✅
+  LAB-05, twin ✅ LAB-06, custom prompt ⏳ scheduled LAB-10} × video {control ✅
+  LAB-07, twin ✅ LAB-08, custom prompt ✅ LAB-09, Explainer original ✅
+  (reference/video), Cinematic n/a-in-product, language ⏳ not captured
+  (PENDING — non-English video arm optional follow-up)}.
