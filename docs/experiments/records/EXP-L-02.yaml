@@ -1,0 +1,50 @@
+id: EXP-L-02
+timestamp_utc: "2026-10-01T07:05:00Z"
+operator: wflx-p1
+surface: audio
+reference_notebook: "none — lab-side benchmark suite (instrumented measurement; the real-product comparison series is WFLX-P3's operator-gated scope)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "speech benchmark suite: 6 deterministic offline arms (deep-dive 42 s + 5 min, brief 2 min, critique 5 min, debate 5 min, deep-dive 5 min ES) + live real-speech measurement over the EXP-L-01 evidence"
+language: "en + es arm"
+length: "canonical mode targets (42/120/300/300/300 s)"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-l-02.ts (package.json exp:l02)"
+  harness: "experiments/run-exp-l-02.ts + src/audio/qa/acoustics.ts (pure-TS instrumented measurement; NO LLM self-assessment — the TL-rejects rule)"
+  audio_seed: "wflx-exp-l02-audio-seed"
+  director_seed: "wflx-exp-l02-director-seed"
+  fixed_now: "2026-09-30T12:00:00Z (director) / 2026-01-01T00:00:00Z (reference re-derivation)"
+  mastering: "pure-ts"
+  live_arm: "artifacts/audio/exp-l-01/turns/*.wav (REAL speech, honestly stochastic one-run evidence) + z-ai-web-dev-sdk audio.asr (server-side, LIVE) for the transcript check"
+  acoustic_method: "Hann-windowed Goertzel LTAS at 48 log-spaced probes (80-8000 Hz) over 50 ms active frames"
+  calibration_history: "round 1: single-frame estimator + [1.0,3.0] wps live band — FAILED (within-speaker 0.737, ratio 0.17; short-turn spike 3.05 wps); round 2: LTAS + chars/sec band [6,24] (the work-order unit) — documented re-declaration, not silent; the same round exposed and fixed a Goertzel recurrence precedence bug and the rectangular-window integer-bin flaw (pure tones at integer DFT bins measured ~zero) — both caught by the benchmark's own honest numbers and its test suite"
+baseline_artifact: "per-arm baseline = the arm's own deterministic compile (double-run spot-check on deepdive-42s, byte-identical)"
+mutation: "none (measurement suite; the ES arm varies language per its dimension)"
+artifact_under_test: "artifacts/audio/exp-l-02/<arm>/ sidecars + live-measurement.json + summary.json"
+artifact_hash: "output set under artifacts/audio/exp-l-02/ (media fingerprinted in sidecars, not committed — golden-media precedent)"
+observations:
+  - "SPEAKER CONSISTENCY (VERIFIED with numbers): SC1 voice-config fingerprint — per-speaker distinct param sets == 1 on every arm including live (the deterministic lab guarantee). SC2 acoustic proxy on REAL speech — Hann-windowed LTAS band profile: within-speaker max L1 0.140 <= 0.20 AND between-speaker min distance 0.364, separation ratio 2.60 >= 1.5 (PASS). SC2 on the offline PLACEHOLDER arms is recorded as context only, not a falsifier: placeholder tones are designed per-turn distinguishable (seeded wobble/LFO) and are not speech — the re-scope is documented in the runner (calibration note), with all offline numbers retained."
+  - "PACING / PAUSE (VERIFIED with numbers): PC1 out-of-policy gaps == 0 on all six offline arms (per-boundary-class stats recorded per arm). PC2 per-turn speech rate: offline wps at or below every mode rate ceiling (the realizer budget invariant; below-floor turns recorded as distribution — the realizer has no floor rule, padding would falsify pacing); live per-turn chars/sec within the declared natural envelope [6, 24] c/s (mean 1.88 wps; band re-declaration documented)."
+  - "PRONUNCIATION PROXY (split verdict, honestly recorded): offline arms EXPLICITLY UNRESOLVED (placeholder audio carries no speech to transcribe) — duration-band + claim-voicing proxies VERIFIED (PR1: plan-covered claims voiced == covered on every arm, e.g. 11/11 on the canonical 5-min graph). LIVE arm: forced-alignment-free transcript check through the real ASR service — overall WER 0.034 (high transcript fidelity, OBSERVED), but numeric/label-token recovery 1/2 (50%) is below the declared 60% threshold: EXPLICITLY UNRESOLVED (n=2 label tokens — tiny sample, low statistical power; the proxy cannot distinguish TTS mispronunciation from ASR error; the 'API' token was not recovered; transcript rows recorded as evidence; threshold NOT re-fit)."
+  - "MULTI-LANGUAGE (VERIFIED): the documented v1 boundary still holds on the ES arm — languageId es pack, anchors-not-localized QA issue present, realized sample 'De acuerdo. The stated purpose of the note is to test semantic organization...' (EN anchors voiced on the ES surface; the real product regenerates natively, LAB-04 — recorded boundary, not a parity claim)."
+  - "MODE + DURATION (VERIFIED): brief 2 min = 6 turns single narrator (monologic C-10, single role); critique 5 min = 19 turns; debate 5 min = 19 turns; deep-dive 5 min = 22 turns; deep-dive 42 s = 5 turns; every arm within QA duration tolerance with over-budget == 0 and honest QA statuses recorded (passed / passed-with-issues with the issue codes in summary.json)."
+  - "DETERMINISM: the deepdive-42s arm double-run byte-identical (the offline suite core is deterministic); the live arm is one-run real evidence (ASR rate-limit backoff observed and handled — HTTP 429, OBSERVED)."
+invariants:
+  - "Same fixed seeds/now per arm; offline arms reproducible; the harness contains NO LLM self-assessment anywhere (binding rule)."
+  - "Every dimension verdict carries numbers or an explicit UNRESOLVED with the reason."
+differences:
+  "n/a (measurement suite)"
+hypothesis: "Lab-audio quality dimensions are measurable by repeatable instrumented proxies (config fingerprints, LTAS band profiles, gap/rate policy checks, ASR transcript checks) against declared targets — without LLM self-assessment."
+confidence: high
+falsifier: "SC1 any speaker with >1 distinct param set; SC2 live within > 0.20 or ratio < 1.5; PC1 any out-of-policy gap; PC2 any offline turn above its mode ceiling or live turn outside [6,24] c/s; PR1 any covered claim unvoiced; PR2 live label recovery < 0.6 (hit — recorded UNRESOLVED with the n=2 caveat); ML1 the ES arm localizing anchors (not observed); MD1 any arm out of duration tolerance / over-budget / monologic multi-role."
+next_experiment: "EXP-L-03 (Interactive Audio session prototype)"
+status: supported-with-one-unresolved-dimension
+evidence_paths:
+  - "artifacts/audio/exp-l-02/summary.json"
+  - "artifacts/audio/exp-l-02/live-measurement.json"
+  - "artifacts/audio/exp-l-02/"
+  - "experiments/run-exp-l-02.ts"
+  - "src/audio/qa/acoustics.ts"
+  - "tests/audio/acoustics.test.ts"

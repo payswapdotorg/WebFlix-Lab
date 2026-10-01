@@ -1,0 +1,51 @@
+id: EXP-L-01
+timestamp_utc: "2026-10-01T06:26:00Z"
+operator: wflx-p1
+surface: audio
+reference_notebook: "none — lab-side live-provider execution (the real TTS service is the z-ai-web-dev-sdk route, not the Gemini reference)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (canonical control source)"
+selected_sources: ["source-messy-note-redacted"]
+format: "deep-dive 42 s benchmark plan (plan-messy-note-audio-deep-dive-42s-benchmark) through the LIVE provider"
+language: "en"
+length: "42 s plan target (live realized 61.755 s)"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-l-01.ts (package.json exp:l01)"
+  audio_seed: "wflx-w2-audio-test-seed"
+  fixed_now: "2026-01-01T00:00:00Z"
+  mastering: "pure-ts"
+  provider: "zai-live-tts (z-ai-web-dev-sdk@0.0.18 server-side) — REAL production TTS service"
+  env_activation_flag: "WFLX_TTS_PROVIDER=live-zai (gating probe proven; instance injected for per-turn latency instrumentation)"
+  voices: "host-a=tongtong (from female-warm-analytical), host-b=xiaochen (from male-grounded-analytical)"
+  duration_band: "[21, 84] s (0.5x-2.0x of the 42 s target; rationale recorded in live-run.json)"
+baseline_artifact: "artifacts/audio/benchmark-deep-dive-42s (committed offline benchmark; F4 control)"
+mutation: "provider only: offline deterministic -> live zai (the one variable; env-gated)"
+artifact_under_test: "artifacts/audio/exp-l-01 (audio-overview-d512dfc74997)"
+artifact_hash: "master ebec31bbf28ad753bde8cf356647dc793ae123651155ea3f48f68c4b80ffa082 (5,446,910 bytes); per-turn WAVs under turns/"
+observations:
+  - "REAL live TTS execution through the EXISTING SpeechProvider port end-to-end (OBSERVED): 5/5 turns synthesized by the z-ai-web-dev-sdk server-side TTS with real playable speech (24 kHz mono 16-bit WAV each), mixed and mastered by the standard pipeline; per-turn segments + master committed under artifacts/audio/exp-l-01/."
+  - "Env-gated activation proven at the factory (OBSERVED): WFLX_TTS_PROVIDER=live-zai selects the ZaiLiveTts adapter; unset env keeps the offline deterministic default; the offline path is byte-UNCHANGED (F4: offline double-run byte-identical AND equal to the committed benchmark sha256 fbd812d3a86cd0bc...)."
+  - "Provenance recorded (OBSERVED): artifact.json speech provider = zai-live-tts@zai-tts-1; generator.reproducible=false (honesty rule for live output — the sidecar never claims byte reproducibility); notes carry the env flag + voices; live-run.json records per-turn latency (2613-5339 ms), payload bytes, durations."
+  - "Live duration 61.755 s vs 42 s plan target — INSIDE the pre-declared band [21, 84] s (F3 PASS) but honestly flagged by QA (duration-off-target warning + 4 turn-duration-drift warnings; qa status passed-with-issues): real speech runs at 1.88 wps vs the 2.3-2.6 wps planning prior — the systematic live-rate offset is recorded, not hidden."
+  - "Latency (OBSERVED): total live wall 19,541 ms for 5 turns (speech wall 19,065 ms); healthCheck live probe 51,216 bytes / 1.06 s."
+  - "Usage/cost observables (UNRESOLVED, recorded honestly): the SDK TTS route exposes no usage/cost metadata beyond the response payload; recorded proxies are per-turn bytes + latency; cost UNRESOLVED for the live route (offline path costs $0, recorded in its sidecar)."
+  - "Live output is honestly stochastic per call (LAB-06 discipline): byte-identity is NOT claimed; the F1-F3 falsifiers are structural, F4 proves the OFFLINE baseline is the unchanged control."
+invariants:
+  - "Same plan+graph+source+seed+now through the OFFLINE provider reproduce byte-identically (double-run) and equal the committed benchmark (fingerprint unchanged)."
+  - "No committed fingerprint changes elsewhere; CONTRACTS_VERSION stays 2.0.0 (additions behind existing surfaces: port gains optional modelId; factory gains the live-zai choice; artifact gains honest reproducible=false for live providers)."
+differences:
+  "provider offline -> live-zai: real speech bytes (stochastic), durations 8-10 s targets -> 6.2-17.1 s realized, sidecar reproducible true -> false, speech model recorded (zai-tts-1)"
+hypothesis: "A real production TTS service can be exercised through the existing provider-neutral port with zero changes to the deterministic default path, with honest stochastic-boundary provenance."
+confidence: high
+falsifier: "F1 a turn WAV fails structural validity (RIFF/WAVE header, 24 kHz, mono, 16-bit, decodable, non-trivial); F2 segment count != plan turns; F3 total live duration outside the declared band; F4 offline baseline bytes change when the live flag is off."
+next_experiment: "EXP-L-02 (speech benchmark suite over the recorded live evidence + deterministic arms)"
+status: supported
+evidence_paths:
+  - "artifacts/audio/exp-l-01/live-run.json"
+  - "artifacts/audio/exp-l-01/offline-control.json"
+  - "artifacts/audio/exp-l-01/artifact.json"
+  - "artifacts/audio/exp-l-01/turns/"
+  - "experiments/run-exp-l-01.ts"
+  - "src/providers/audio/zai-live.ts"
+  - "tests/audio/zai-live-provider.test.ts"
