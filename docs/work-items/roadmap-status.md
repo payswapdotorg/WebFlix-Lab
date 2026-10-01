@@ -250,3 +250,52 @@ discipline — each dimension VERIFIED with numbers or EXPLICITLY UNRESOLVED:
   package.json (devDependency z-ai-web-dev-sdk + exp:l01/l02/interactive
   scripts). No changes under src/contracts, src/source, src/director,
   src/video, src/compositor.
+
+## 2026-10-01 11:15 UTC — WFLX-P1 MERGED (PR #11) + TL POST-MERGE FOLLOW-UPS (TL #2)
+
+- **PR #11 MERGED** (c72058a) — WFLX-P1 audio parity wave, TL station-reviewed
+  integration. Station review record (gates independently re-run on the branch):
+  scope PASS (additive only inside P1 ownership; CONTRACTS_VERSION 2.0.0
+  unchanged), typecheck 0 / lint clean / **406/406** (151 + 159 + 82 + 14),
+  credential sweep CLEAN over the full branch diff and every commit tree,
+  F4 determinism independently reproduced at the station (canonical offline
+  benchmark byte-identical to the committed fingerprint), provenance audit
+  PASS (zai-live-tts@zai-tts-1, honest reproducible=false for live output),
+  evidence audit PASS (EV-016/017/018 line-by-line; no LLM self-assessment;
+  real provider execution, not simulation).
+- **TL ADJUDICATION — Director intervention entry point (HANDOFF from
+  EXP-L-03):** keep the session-layer response-plan construction for the
+  Parity Phase; do NOT introduce `compileInterventionPlan(...)` now.
+  Director ownership is preserved in substance (the intervention response
+  plan passes the SAME frozen plan guard + W1 deep validation and compiles
+  through the SAME Director compiler; the session layer holds only the
+  intervention lifecycle + plan-input construction — the same caller role
+  as every other plan producer). TRIGGER to reopen: WFLX-P3 Interactive
+  Audio captures demonstrating behavior the additive session layer cannot
+  reproduce (mid-turn barge-in, partial-turn regeneration, streaming
+  playback interruption) — then the entry point lands with evidence +
+  contract-version discipline, not speculatively.
+- **Preserved unresolved boundaries (NOT silently promoted):** real listener
+  voice input (capture → ASR → barge-in → playback interruption) UNRESOLVED
+  (text-scripted stand-ins); live label-token recovery 1/2 (n=2) EXPLICITLY
+  UNRESOLVED; custom steering-prompt audio benchmark arm EXPLICITLY
+  UNRESOLVED (work-order gap — covered by the P3 capture matrix and the
+  final parity gate); live-route usage/cost observables UNRESOLVED; Gemini
+  Notebook comparison deferred to WFLX-P3 (P1 proves lab capability + real
+  provider execution only).
+- **Unified registry rebuild executed (TL-owned, closes the pre-existing
+  staleness HANDOFF recorded in the P1 delivery section):**
+  `bun run manifest:build --now 2026-10-01T11:00:00Z` on merged main —
+  counts 27 → 37 records (registers exp-l-01, exp-l-02 ×6 arms,
+  interactive-01 ×3); store guard exit 0; **double-run byte-identical**
+  (fixed stamp). The 4-record drift vs the previously committed registry
+  is closed exactly as documented: exp-x02 ×3 (`diagnostics.json` sha —
+  the wallClockMs exception; plan/qa/timing sidecar shas identical) +
+  video exp-d (raw-MP4 `media.sha256` + sizeBytes 30113231 → 30113234 —
+  the compositor encoder nondeterminism, excluded-by-rule).
+- **WFLX-P2 DISPATCH AUTHORIZED** (video parity wave: Explainer refresh +
+  Short ~60s + Cinematic asset pipeline incl. REAL generative provider
+  execution where the sandbox allows; EV-019/020/021/022). Work order
+  dispatched verbatim into the worker session; first worker commit records
+  it as docs/work-items/32-WFLX-P2-VIDEO-PARITY.md. Baseline: main @
+  c72058a (contains the P1 delivery + parity charter).
