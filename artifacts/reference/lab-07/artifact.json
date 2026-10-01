@@ -1,0 +1,21 @@
+{
+  "id": "lab-07",
+  "title": "How Multi-Agent Orchestration Divides AI",
+  "surface": "video",
+  "format": "Short",
+  "captured_utc": "2026-10-01T18:06:24Z",
+  "ready_utc": "2026-10-01T18:34:49Z",
+  "generation_wall_seconds": 1705,
+  "file": "How_Multi-Agent_Orchestration_Divides_AI.mp4",
+  "sha256": "f89fd153e747fcad5eb5d2fb92d15b747afccbf6c670d56b639b3abf463386a7",
+  "size_bytes": 10561937,
+  "duration_seconds": 84.822494,
+  "video": {"codec": "h264", "width": 720, "height": 1280, "aspect": "9:16 vertical", "fps": 30},
+  "audio": {"codec": "aac", "sample_rate_hz": 44100, "channels": 1},
+  "notebook": "WFLX-LAB-07 (155eb020-2e49-4bae-a48d-1cc5d3f78b1b, fresh)",
+  "source": "Reference Fixture — Redacted Messy Note (control, sha256 17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47, ingested via Copied text)",
+  "language": "English",
+  "focus": "default (no suggestion/custom topic selected)",
+  "operator": "tl2+operator",
+  "media_gitignored": true
+}
