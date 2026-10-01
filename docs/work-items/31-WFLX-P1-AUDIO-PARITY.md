@@ -2,7 +2,9 @@
 
 Document status: **DISPATCHED 2026-09-30 to WFLX-P1** (audio-parity implementer,
 branch `work/wflx-p1-audio-parity` off `main` @ b1054a6). This file records the
-dispatched work order verbatim, per the first-commit rule of the dispatch.
+dispatched work order verbatim, per the first-commit rule of the dispatch —
+with ONE redaction: the push PAT in §6 is a push-URL-only credential and is
+never committed (AGENTS.md ground rule overrides verbatim reproduction).
 
 ## 0. Identity and ground rules
 
