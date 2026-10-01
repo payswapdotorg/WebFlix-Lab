@@ -1,0 +1,47 @@
+id: EXP-V-L-01
+timestamp_utc: "2026-10-01T12:00:00Z"
+operator: wflx-p2
+surface: video
+reference_notebook: "n/a (internal determinism experiment — the video-surface analog of EXP-X-02; not a reference-access comparison)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (fixtures/reference-messy-note-redacted.md; the graph is the committed W1 fixture)"
+selected_sources: ["source-messy-note-redacted"]
+format: "explainer (fixed)"
+language: "en"
+length: "180 s target, both arms"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-e-refresh.ts (target locality; npm alias exp:erefresh)"
+  director_seed: "wflx-exp-v-director-seed"
+  video_seed: "wflx-exp-v-video-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  mutation_target: "scene-2 (the first deterministic-surface scene: architecture-diagram — rendered labels derive from grounding)"
+  mutation: "scene-2 claimIds [claim-infra-stack] -> [claim-tool-catalog] (single-scene claim swap; structure untouched)"
+  purpose: "the C-5 regression proof for the VIDEO surface (work order Deliverable A): mutate one scene's claim -> ONLY that scene's visual surface changes; structure 0 reshuffle"
+baseline_artifact: "artifacts/video/exp-v-l-01/baseline-180s (Director explainer 180 s, storyboard layer)"
+mutation: "one scene-level claim swap on the baseline plan (scene-2)"
+artifact_under_test: "artifacts/video/exp-v-l-01/mutated-180s"
+artifact_hash: "scene-SVG combined sha256 baseline d49a29fe04e777291e73300e4e8dce467418528861b2f19fc1265084c1c9975e -> mutated (per-scene hashes in scene-svg-hashes.json per arm; combined hash changed; per-scene diff: exactly scene-2)"
+observations:
+  - "BASELINE (REPRODUCED): Director explainer 180 s over the committed fixture graph — 10 scenes, storyboard compiled with pinned video seed; scene SVG set + per-scene hashes persisted."
+  - "MUTATION SEMANTICS (REPRODUCED): swapping ONE scene's lead claim changes that scene's C-5 scene-local content hash (anchor statements enter unitContentHash) -> ONLY that scene's derived stochastic surface re-keys; grounding (entities/relationships) changes only for that scene."
+  - "LOCALITY (REPRODUCED): after the swap, EXACTLY 1/10 scene SVGs changed bytes (scene-2, the target), 1/10 render specs changed (scene-2), 1/10 narration texts changed (scene-2); 0 structure reshuffle (scene count, ids, order, types, durations all identical)."
+  - "DETERMINISM (REPRODUCED): both arms re-compiled + re-rendered; per-arm double-run combined SVG hashes byte-identical."
+  - "FALSIFIERS ALL PASS (REPRODUCED): F1 locality (changed scene ids == [scene-2]); F2 structure zero-reshuffle (1 render spec + 1 narration changed, nothing else moved); F3 double-run determinism (both arms)."
+  - "The v2 content-keyed seeding (C-5 video surface) is thereby regression-proven at the wave HEAD: a one-claim scene edit never cascades beyond its own scene."
+invariants:
+  - "Same fixture graph/source, same director + video seeds, same fixed now; only the single scene's claimIds differ between arms."
+  - "Scene structure (count, ids, order, visualType, durations) identical across arms."
+differences:
+  - "changed scene SVGs 1/10 (scene-2 only); render specs 1/10; narration texts 1/10; structure reshuffle 0."
+hypothesis: "The C-5 per-unit content-keyed seeding gives video-surface locality: a single-scene claim edit reshuffles only that scene's visual surface (the video analog of EXP-X-02's turn locality)."
+confidence: high
+falsifier: "More than one scene's SVG changing, or any structural field moving (count/id/order/type/duration), would falsify the locality claim."
+next_experiment: "None for this question (stopping rule: supported). WFLX-P3 reference captures for product-side comparison."
+status: supported
+evidence_paths:
+  - "artifacts/video/exp-v-l-01/locality-report.json"
+  - "artifacts/video/exp-v-l-01/baseline-180s"
+  - "artifacts/video/exp-v-l-01/mutated-180s"
+  - "experiments/run-exp-e-refresh.ts"
+  - "tests/video/custom-style.test.ts (EXP-V-L-01 invariants pinned by tests)"

@@ -1,0 +1,36 @@
+{
+  "asset": {
+    "actualMediaDimensions": {
+      "heightPx": 1080,
+      "widthPx": 1890
+    },
+    "assetClass": "video-generation",
+    "byteLength": 4910818,
+    "deterministic": false,
+    "dimensionHonesty": "the record widthPx/heightPx fields carry the job spec (1280x720); the REAL clip is 1890x1080 (ffprobe OBSERVED above) \u2014 aspect-equivalent, sliced into the canvas via preserveAspectRatio",
+    "file": "live-job-scene-4-vid.mp4",
+    "format": "mp4",
+    "generatedAtWall": "2026-10-01T14:00:25.693Z",
+    "heightPx": 720,
+    "jobId": "job-scene-4-vid",
+    "live": true,
+    "modelId": "zai-video-model",
+    "providerId": "zai-live-video",
+    "sceneId": "scene-4",
+    "sha256": "74a3c9d4ae62a046fcda093e2f524028cf1f51b1b9d6c16f97d110a0cebf77c5",
+    "wallMs": 209840,
+    "widthPx": 1280
+  },
+  "envFlag": "WFLX_VIDEO_PROVIDER=live-zai (explicit provider instance in this runner)",
+  "ffprobeObserved": {
+    "format": "format_name=mov,mp4,m4a,3gp,3g2,mj2\nduration=5.193548\nsize=4910818",
+    "note": "OBSERVED with the system ffprobe on the persisted clip bytes",
+    "streams": "codec_name=h264\ncodec_type=video\nwidth=1890\nheight=1080"
+  },
+  "honesty": "REAL live video generation (async task service). One honest run; bytes are stochastic per call; wall-clock is a measured observable, NOT reproducible.",
+  "model": "zai-video-model",
+  "provider": "zai-live-video",
+  "runStamp": "2026-10-01T12:00:00Z",
+  "sdk": "z-ai-web-dev-sdk video.generations.create + async.result.query (server-side)",
+  "status": "SUCCESS"
+}

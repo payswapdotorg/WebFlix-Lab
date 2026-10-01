@@ -299,3 +299,118 @@ discipline — each dimension VERIFIED with numbers or EXPLICITLY UNRESOLVED:
   dispatched verbatim into the worker session; first worker commit records
   it as docs/work-items/32-WFLX-P2-VIDEO-PARITY.md. Baseline: main @
   c72058a (contains the P1 delivery + parity charter).
+
+## 2026-10-01 — WFLX-P2 VIDEO PARITY WAVE DELIVERED (WFLX-P2, branch work/wflx-p2-video-parity)
+
+Dispatched work order: docs/work-items/32-WFLX-P2-VIDEO-PARITY.md (first
+worker commit; §7 push PAT redacted per the P1 credential-hygiene precedent
+— push-URL-only credential, never in files/commits). Baseline: main @ d12eb7a
+(P1 merged via PR #11 + TL follow-ups). Per-dimension delivery, gate
+discipline per the work order §4:
+
+- **Deliverable A — Explainer refresh (EV-019): VERIFIED.** The canonical
+  7-min Explainer benchmark re-run on the v2 baseline at the wave HEAD:
+  15 scenes / 6 beats, coverage 11/11, QA passed, SVG determinism pair equal,
+  composition-independent packet digest double-run byte-identical
+  (faf6e84557125bfc…). The committed canonical sidecar's SVG hash
+  reproduces BYTE-IDENTICALLY (9cca99c3bf22037a… — no drift at the pinned
+  layer; artifact id differs only via the composition-backend field, MP4
+  excluded-by-rule). Custom-style arm (EXP-V-07 pattern on the v2 baseline,
+  new deterministic custom-style layer src/video/custom-style.ts):
+  SVGs change at both layers, 0/15 scenes change structure, coverage +
+  timeline identical — the documented style-only prior extended to the
+  visual surface. **EXP-V-L-01 built and PASSING** (the C-5 regression
+  proof for video, the EXP-X-02 analog): a single-scene claim swap changes
+  exactly 1/10 scene SVGs + 1 render spec + 1 narration with 0 structure
+  reshuffle; double-run deterministic — F1/F2/F3 PASS.
+- **Deliverable B — Short ~60 s (EV-020): VERIFIED.** Dedicated Short
+  compile path (src/video/short/compiler.ts, additive; Director +
+  storyboard compiler + contracts untouched): depth compression (≤1
+  claim/scene, trimmed claims stay beat-covered and flagged
+  covered-not-visualized — never a silent drop), hook prominence (×1.35
+  opening-beat boost, 3 s floors, total conserved exactly), closed coverage
+  accounting. EXP-V-S-01: 5 scenes (skeleton hook/topic/topic/topic/
+  takeaways preserved), hookShare 0.25, 60 s inside the declared [48, 72] s
+  band, accounting 3+0+8=11 closed, double full-pipeline run byte-identical,
+  QA passed, MP4 committed (2,001,869 B). F1–F4 ALL PASS.
+- **Deliverable C1 — Cinematic compile layer (EV-021): VERIFIED (offline
+  stand-in).** The frozen-architecture §2 shape, additive in
+  src/video/cinematic/: CinematicDirector (continuity-aware scene planning:
+  subject-carry/motif/palette constraints; deterministic shot-plan vector
+  per scene keyed on the C-5 scene-local content hash; StyleBible-derived
+  cinematic params; asset-identity reuse — 13 distinct identities over 15
+  jobs), the five-class VisualAssetPlan (deterministic-diagram 8,
+  source-derived-media 2, illustration 1, generative-animation 3,
+  video-generation 1 on the canonical fixture), per-asset validation gates
+  (plan + content; failures throw before composition), compositor timeline
+  overlay (shot plans + clip references), cinematic QA (structure/
+  continuity/asset-validation/generative-honesty). EXP-V-CIN-01 (canonical
+  fixture through the cinematic layer, OFFLINE stand-ins): F1 double-run
+  plan+metadata byte-identical, F2 single-asset regeneration isolated
+  (scene-14 video job; plan/others/deterministic surfaces unchanged), F3
+  validator PASS, F4 QA passed — ALL PASS. Honest boundary: native
+  video-clip embedding in the offline compositor UNRESOLVED (clips are
+  validated + content-fingerprinted + overlay-referenced).
+- **Deliverable C2 — REAL generative provider execution (EV-022):
+  VERIFIED (real execution, live arm).** Live adapters over the
+  server-side z-ai-web-dev-sdk (the P1 EV-016 route family):
+  src/providers/visual/zai-live.ts (images.generations.create) +
+  src/providers/video/zai-live.ts (video.generations.create +
+  async.result.query poll + download), env-gated
+  WFLX_VISUAL_PROVIDER=live-zai / WFLX_VIDEO_PROVIDER=live-zai, defaults
+  OFFLINE (pinned by tests). EXP-V-CIN-LIVE-01 (reduced 36 s cinematic arm,
+  4 scenes): **2 REAL images generated** (jpeg 1344×768, 56.0 s + 41.8 s
+  wall) **and 1 REAL video clip generated** (h264 mp4 4,910,818 B, ffprobe
+  OBSERVED 1890×1080 @ 5.19 s, 209.8 s wall) — the SDK video path WORKED in
+  this sandbox. All live media COMMITTED with sha256 + provider/model
+  provenance. F1 all generated assets pass their gates; F2 live plan
+  fingerprint == offline plan fingerprint (provider-independent); F3
+  provenance records real provider ids (reproducible=false honest); F4
+  offline baseline byte-unchanged with flags off (same-plan double run
+  identical + factory defaults verified) — ALL PASS. Honest boundaries:
+  the compose step consumed the RECORDED live bytes via replay providers
+  (generation and composition decoupled across runner targets; wall
+  latencies are measured observables, not reproducible); live bytes are
+  stochastic per call and byte-identity is never claimed for them.
+- **Real-product comparison hooks (for WFLX-P3):** short.duration.seconds /
+  short.sceneDensity.scenesPerMinute / short.hookProminence.share /
+  cinematic.shotDensity.shotClasses / cinematic.styleContinuity.constraints
+  / cinematic.liveGeneration.latency — each recorded with its lab
+  measurement in the experiment records, marked COMPARISON PENDING REFERENCE
+  CAPTURE. No product-side numbers asserted.
+- **Regression preservation:** all four chunks green at the wave HEAD —
+  contracts 75, source 45, director 31, audio 159, video **117** (82 + 35
+  new P2 tests), integration 14; typecheck 0 / lint clean. CONTRACTS_VERSION
+  stays 2.0.0 (no shared-contract changes; the VideoScene contract gained
+  no new required fields). EXP-X-02 re-executed and REPRODUCED (all
+  falsifiers + station bar PASS; wall-clock sidecar drift reverted so the
+  committed store stays byte-identical). Manifest packet digest double-run
+  byte-identical (262b4cb784f332c5… == 262b4cb784f332c5…); registry 37 → 42
+  records, ALL existing records unchanged (additive-only: exp-e-refresh ×2,
+  exp-v-s-01, exp-v-cin-01, exp-v-cin-live-01) — no-transition proof.
+- **Files touched (additive within ownership):** src/video/{custom-style.ts,
+  index.ts, artifacts.ts, short/, cinematic/}, src/providers/visual/
+  {generative-port.ts, offline-generative.ts, zai-live.ts,
+  generative-factory.ts}, src/providers/video/{generative-port.ts,
+  offline-generative.ts, zai-live.ts, generative-factory.ts},
+  tests/video/{custom-style,short-format,cinematic,
+  zai-generative-providers}.test.ts, experiments/run-exp-{e-refresh,
+  v-s-01,v-cin-01,v-cin-live-01}.ts, artifacts/video/{exp-e-refresh,
+  exp-v-l-01, exp-v-s-01, exp-v-cin-01, exp-v-cin-live-01}/,
+  artifacts/manifest/registry.json (additive rebuild),
+  docs/experiments/records/{EXP-E-REFRESH,EXP-V-L-01,EXP-V-S-01,
+  EXP-V-CIN-01,EXP-V-CIN-LIVE-01}.yaml, docs/evidence/registry.jsonl
+  (EV-019/020/021/022), package.json (exp:erefresh/vs01/vcin01/vcinlive
+  scripts). No changes under src/contracts, src/source, src/director,
+  src/audio, src/compositor (existing surfaces), reference/.
+- **HANDOFF entries (outside P2 ownership):**
+  1. Native video-clip embedding in composition (Remotion <Video> or ffmpeg
+     overlay) — UNRESOLVED in the offline compositor; the cinematic overlay
+     + asset records carry the references; compositor ownership is Worker 3/
+     TL-side. 2. Live-route usage/cost observables — the SDK routes report
+     no usage/cost metadata (same UNRESOLVED class P1 recorded for TTS).
+     3. A Director-level 'short' pacing profile (deeper per-mode editorial
+     priors) would live in Worker 1's tree; the P2 Short layer demonstrates
+     the behavior without Director changes. 4. The pre-existing registry
+     staleness discipline (rebuild on every artifact-adding wave) — honored
+     here (42 records committed); keep the habit for P3.

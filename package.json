@@ -18,7 +18,11 @@
     "exp:integration": "bun run tools/experiments/runner.ts",
     "exp:l01": "bun run experiments/run-exp-l-01.ts",
     "exp:l02": "bun run experiments/run-exp-l-02.ts",
-    "exp:interactive": "bun run experiments/run-interactive-audio.ts"
+    "exp:interactive": "bun run experiments/run-interactive-audio.ts",
+    "exp:erefresh": "bun run experiments/run-exp-e-refresh.ts",
+    "exp:vs01": "bun run experiments/run-exp-v-s-01.ts",
+    "exp:vcin01": "bun run experiments/run-exp-v-cin-01.ts",
+    "exp:vcinlive": "bun run experiments/run-exp-v-cin-live-01.ts"
   },
   "dependencies": {
     "zod": "^4.6.5"

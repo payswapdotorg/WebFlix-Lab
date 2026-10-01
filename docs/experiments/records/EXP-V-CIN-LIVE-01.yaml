@@ -1,0 +1,55 @@
+id: EXP-V-CIN-LIVE-01
+timestamp_utc: "2026-10-01T14:10:00Z"
+operator: wflx-p2
+surface: video
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "cinematic (REDUCED live arm: Director cinematic-mode plan at 36 s, 4 scenes)"
+language: "en"
+length: "36 s target (reduced arm)"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-v-cin-live-01.ts (npm alias exp:vcinlive; targets offline/live-images/live-video/live-compose/summary — long generations decoupled from composition)"
+  director_seed: "wflx-p2-cinlive-director-seed"
+  video_seed: "wflx-p2-cinlive-video-seed"
+  fixed_now: "2026-10-01T00:00:00Z"
+  providers: "LIVE z-ai through z-ai-web-dev-sdk (server-side): images.generations.create for the 2 generative-animation jobs; video.generations.create + async.result.query for the 1 video-generation job"
+  env_flags: "WFLX_VISUAL_PROVIDER=live-zai / WFLX_VIDEO_PROVIDER=live-zai (factory path; this runner constructs the provider instances directly — same adapters)"
+  reduced_arm: "4 scenes: title-card (deterministic) + 2 metaphor-illustration pans (generative-animation) + closing hero zoom (video-generation) = 2 live image jobs + 1 live video job"
+  compose_step: "the full cinematic pipeline over the recorded live bytes (replay providers preserving the ORIGINAL provider/model provenance); validation gates + composition + QA + artifact sidecar"
+baseline_artifact: "artifacts/video/exp-v-cin-live-01/offline-baseline.json (the SAME plan through the OFFLINE stand-ins, run twice)"
+mutation: "none (live-execution experiment)"
+artifact_under_test: "artifacts/video/exp-v-cin-live-01 (live-generated media + composed outputs)"
+artifact_hash: "live image assets: job-scene-2-anim 145,443 B jpeg 1344x768 sha256 in live-images.json; job-scene-3-anim 165,062 B jpeg 1344x768; live video clip: job-scene-4-vid 4,910,818 B mp4 h264 (ffprobe OBSERVED 1890x1080, 5.19 s) sha256 74a3c9d4ae62a046…; composed mp4 5,909,644 B fingerprinted only"
+observations:
+  - "REAL LIVE IMAGE GENERATION (OBSERVED): 2/2 generative-animation jobs generated as REAL media through the z-ai SDK image route — jpeg 1344x768, 145,443 B in 56,033 ms and 165,062 B in 41,831 ms (aspect-equivalent to the 1280x720 spec; sliced via preserveAspectRatio). VLM cross-check on one asset: 'A dark-haired woman … channeling a stream of glowing turquoise energy' — real generated imagery matching the brief's palette directive, not a placeholder."
+  - "REAL LIVE VIDEO GENERATION (OBSERVED): the video-generation job ran as a REAL async task through the SDK video route — task created, polled to SUCCESS, downloaded as a 4,910,818-byte h264 MP4 (ffprobe: 1890x1080, 5.19 s, mov/mp4 container) in 209,840 ms wall. The clip is COMMITTED with sha256 + provider provenance."
+  - "VALIDATION (REPRODUCED): every generated asset passes its validation gate in the composed run (dimensions aspect-equivalence for live raster, real-mp4 container check, provider metadata, content fingerprints recomputed from the recorded bytes, live byte floors) — F1 PASS."
+  - "PROVIDER-INDEPENDENT METADATA (REPRODUCED): the cinematic plan fingerprint of the live run EQUALS the offline arm's fingerprint for the same plan (the plan is provider-independent) — F2 PASS."
+  - "PROVENANCE (OBSERVED): live-images.json / live-video.json / artifact.json record the REAL provider ids and models (zai-live-generative / zai-live-video through z-ai-web-dev-sdk); the artifact sidecar carries generator.reproducible=false (honest: live output is stochastic per call) — F3 PASS."
+  - "OFFLINE BASELINE UNCHANGED (REPRODUCED): the same plan through the factory defaults (flags off) run TWICE — structural digest byte-identical, factory selections confirm offline stand-ins with no env flags; the committed offline store is untouched by the live arm — F4 PASS."
+  - "COMPOSED OUTPUT (REPRODUCED): the reduced arm composes through the cinematic pipeline with the live media embedded — validation PASS, video QA passed, cinematic QA passed, 3/4 assets live (title-card is the deterministic layer), mp4 5,909,644 bytes fingerprinted only."
+  - "FALSIFIERS F1-F4 ALL PASS (OBSERVED/REPRODUCED as labeled above)."
+invariants:
+  - "No credentials anywhere: the SDK authenticates from the ambient runtime (requiredCredentialKeys == []); a credential sweep over the whole wave diff is clean."
+  - "Live bytes are honestly stochastic: byte-identity is NEVER claimed for live output; reproducible=false in the artifact; wall latencies recorded as measured observables only."
+  - "The offline default path is untouched: the lab determinism spine stays offline-first."
+differences:
+  - "vs EXP-V-CIN-01: the same pipeline, LIVE providers — asset bytes are real generated media (jpeg raster + real mp4 clip) instead of deterministic placeholders; deterministic structural metadata unchanged."
+hypothesis: "The z-ai SDK image+video routes can serve as REAL generative providers behind the lab's provider ports (env-gated, provenance-recorded, honestly stochastic), satisfying the Parity-Phase requirement for real video-provider execution."
+confidence: high
+falsifier: "A generated asset failing its gate; live metadata diverging from offline plan metadata; provenance carrying placeholder ids; the offline baseline changing when flags are off."
+next_experiment: "WFLX-P3 reference captures (real-product Cinematic behavior) + full-scale live arms when cost/latency budgets allow."
+status: supported
+evidence_paths:
+  - "artifacts/video/exp-v-cin-live-01/experiment-record.json"
+  - "artifacts/video/exp-v-cin-live-01/live-images.json"
+  - "artifacts/video/exp-v-cin-live-01/live-video.json"
+  - "artifacts/video/exp-v-cin-live-01/live-job-scene-2-anim.jpeg"
+  - "artifacts/video/exp-v-cin-live-01/live-job-scene-3-anim.jpeg"
+  - "artifacts/video/exp-v-cin-live-01/live-job-scene-4-vid.mp4"
+  - "artifacts/video/exp-v-cin-live-01/artifact.json"
+  - "experiments/run-exp-v-cin-live-01.ts"
+  - "tests/video/zai-generative-providers.test.ts"

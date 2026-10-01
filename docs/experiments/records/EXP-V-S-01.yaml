@@ -1,0 +1,51 @@
+id: EXP-V-S-01
+timestamp_utc: "2026-10-01T12:00:00Z"
+operator: wflx-p2
+surface: video
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "short (DEDICATED ~60 s mode)"
+language: "en"
+length: "60 s target"
+visual_style: "style-bible--reference-ink (default)"
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-exp-v-s-01.ts (npm alias exp:vs01)"
+  director_seed: "wflx-p2-short-director-seed"
+  video_seed: "wflx-p2-short-video-seed"
+  fixed_now: "2026-10-01T00:00:00Z"
+  layer: "full pipeline (composition included; fallback backend)"
+  short_layer: "src/video/short/compiler.ts (WFLX-P2 Deliverable B — depth compression <=1 claim/scene, hook boost x1.35, total conserved, coverage-accounting closed)"
+  declared_duration_band: "[48, 72] s around the 60 s target (lab policy, explicit in every report)"
+  product_truth_anchor: "DOCUMENTED Short (approx. 60 s); audio-side EXP-A-05/LAB-03 (3.78x depth compression, coverage preserved)"
+baseline_artifact: "the base Director short-mode plan (artifacts/video/exp-v-s-01/base-short-plan.json)"
+mutation: "none (format experiment: the dedicated Short compile path over the 60 s plan)"
+artifact_under_test: "artifacts/video/exp-v-s-01 (adapted plan + full-pipeline outputs)"
+artifact_hash: "scene SVG combined sha256 in determinism.json; mp4 sha256 903bd12eb5cf39e04ac2ce8a39037d436614ecc3a0e713e853dad4bd9598d92a (2,001,869 bytes, COMMITTED — the benchmark-explainer-26s precedent); artifact id video-overview-f40f0ec617e8"
+observations:
+  - "STRUCTURE (REPRODUCED): 5 scenes base = 5 adapted (skeleton classes hook/topic/topic/topic/takeaways); scene ids, order, visualTypes and beat assignments identical to the base Director plan — F1 PASS."
+  - "HOOK PROMINENCE (REPRODUCED): opening-beat share 0.25 vs 0.10 uniform baseline (x1.35 boost with largest-remainder integer split + 3 s narratability floors); hook scenes >= median non-hook duration (15 s vs 11 s)."
+  - "SCENE DENSITY / DEPTH (REPRODUCED): 3 distinct claims visualized at 60 s (vs 8 at a 300 s short-mode plan — density scales with budget); multi-claim scenes are capped at 1 claim with explicit coverage accounting."
+  - "COVERAGE ACCOUNTING (REPRODUCED): every graph claim accounted — 3 visualized + 0 covered-not-visualized + 8 omitted-with-reason = 11/11 closed (EXP-D-01 discipline; the compiler additionally warns coverage-gap for any covered-but-unvisualized claim — never a silent drop) — F2 PASS."
+  - "DURATION BAND (REPRODUCED): 60 s total, inside the declared [48, 72] s band; total conserved exactly vs the base plan's scene-second sum — F3 PASS."
+  - "QA (REPRODUCED): existing video QA over the adapted plan (through the UNMODIFIED storyboard compiler) passes; honest flags where present."
+  - "DETERMINISM (REPRODUCED): double full-pipeline run — scene SVG set, timeline, narration WAV, QA report and the ShortFormat report byte-identical; in-run SVG pair equal — F4 PASS."
+  - "FALSIFIERS F1-F4 ALL PASS (REPRODUCED)."
+invariants:
+  - "Fixed seeds/now/planId; the Director and the storyboard compiler are UNMODIFIED frozen surfaces; the Short layer is additive (src/video/short/)."
+  - "Scene-count/skeleton band recorded from the measured run: [4, 6] scenes at the 60 s target on this fixture (base 5)."
+differences:
+  - "Short 60 s vs the 420 s canonical explainer: 5 scenes vs 15, 3 claims visualized vs 11, median scene 11 s vs ~28 s — depth compression with skeleton preservation (the audio-side EXP-A-05/LAB-03 shape, video side)."
+hypothesis: "A dedicated Short compile path preserves the editorial skeleton while compressing per-scene depth (fewer claims visualized, hook prominent, coverage accounting closed) at the documented ~60 s product duration."
+confidence: high
+falsifier: "Scene count/skeleton leaving the recorded band; a claim disappearing without accounting; duration outside the declared band; double-run divergence."
+next_experiment: "WFLX-P3 reference captures for the real-product Short duration band, scene density and hook prominence (comparison hooks recorded in experiment-record.json)."
+status: supported
+evidence_paths:
+  - "artifacts/video/exp-v-s-01/experiment-record.json"
+  - "artifacts/video/exp-v-s-01/short-format-report.json"
+  - "artifacts/video/exp-v-s-01/overview.mp4"
+  - "artifacts/video/exp-v-s-01/determinism.json"
+  - "experiments/run-exp-v-s-01.ts"
+  - "tests/video/short-format.test.ts"
