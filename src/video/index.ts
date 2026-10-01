@@ -40,6 +40,7 @@ import { runVideoQa, type NarrationSegmentTiming } from './qa/metrics';
 import type { VideoQaReport } from './qa/report';
 import { emitGeneratedVideoArtifact } from './artifacts';
 import type { MotionPlan } from '../providers/video/port';
+import type { StyleBible } from './style-bible';
 
 export { VideoCompilerError } from './errors';
 export {
@@ -74,6 +75,71 @@ export {
   styleBibleById,
 } from './style-bible';
 export type { StyleBible, StyleBiblePalette, StyleBibleTypography, StyleBibleLayout, StyleBibleDiagram, StyleBibleMotion, StyleBiblePacing, StyleBibleEvidence, PaletteEvidence } from './style-bible';
+// WFLX-P2 Deliverable A: the custom visual-style layer (deterministic
+// StyleBible derivation from a user style prompt — prompt affects visual
+// grammar only, never grounding/coverage/structure).
+export { customStyleBible, CUSTOM_ACCENT_FAMILIES } from './custom-style';
+export type { CustomAccentFamily, CustomStyleOptions } from './custom-style';
+// WFLX-P2 Deliverable B: the Short (~60 s) format layer.
+export {
+  compileShortVideoScenes,
+  SHORT_TARGET_SECONDS,
+  SHORT_DURATION_BAND,
+  SHORT_HOOK_BOOST,
+  SHORT_CLAIMS_PER_SCENE,
+  SHORT_MIN_SCENE_SECONDS,
+} from './short/compiler';
+export type {
+  CompileShortVideoOptions,
+  CompileShortVideoResult,
+  ShortClaimDisposition,
+  ShortCoverageAccounting,
+  ShortCoverageAccountingEntry,
+  ShortFormatReport,
+} from './short/compiler';
+// WFLX-P2 Deliverable C1: the Cinematic asset pipeline.
+export {
+  buildCinematicPlan,
+  cinematicPlanFingerprint,
+  cinematicParamsFor,
+  subjectKeyFor,
+  assetIdentityFor,
+  CINEMATIC_DIRECTOR_ID,
+} from './cinematic/director';
+export type { BuildCinematicPlanOptions, CinematicStyleParams } from './cinematic/director';
+export {
+  validateCinematicAssets,
+  validateCinematicAsset,
+  validateCinematicPlan,
+  failedGateSceneIds,
+} from './cinematic/validation';
+export {
+  compileCinematicOverview,
+  regenerateSceneAssets,
+  CINEMATIC_PIPELINE_ID,
+} from './cinematic/pipeline';
+export type {
+  CompileCinematicOptions,
+  CompileCinematicResult,
+  CinematicRegenerationProof,
+  CinematicOverlay,
+  CinematicTimelineEntry,
+} from './cinematic/pipeline';
+export type {
+  CameraMove,
+  CinematicAssetRecord,
+  CinematicPlan,
+  CinematicQaReport,
+  CinematicSceneStrategy,
+  CinematicValidationReport,
+  ContinuityConstraint,
+  ShotClass,
+  ShotPace,
+  ShotPlan,
+  VisualAssetClass,
+  VisualAssetJob,
+  AssetValidationOutcome,
+} from './cinematic/types';
 export { renderSceneSvg, renderStoryboardSvg, scanColors, scanFonts } from './render/renderer';
 export type { SceneRenderTrace, RenderSceneInput, RenderStoryboardInput, RenderStoryboardResult } from './render/renderer';
 export { buildTimeline, sampleTimelineLayers, frameTimes } from '../compositor/timeline';
@@ -116,6 +182,12 @@ export interface CompileVideoOverviewOptions {
   readonly browserExecutable?: string;
   /** Override the artifact id (tests). */
   readonly artifactId?: Id;
+  /**
+   * WFLX-P2 Deliverable A: explicit StyleBible override (the custom-style
+   * arm). Passed through to compileVideoScenes; absent -> the plan's own
+   * reference resolves exactly as before (zero behavior change).
+   */
+  readonly styleBible?: StyleBible;
 }
 
 export interface CompileVideoOverviewResult {
@@ -172,6 +244,7 @@ export async function compileVideoOverview(
 ): Promise<CompileVideoOverviewResult> {
   const compiled = compileVideoScenes(plan, graph, {
     ...(options.seed !== undefined ? { seed: options.seed } : {}),
+    ...(options.styleBible !== undefined ? { styleBible: options.styleBible } : {}),
   });
   const { storyboard } = compiled;
   const styleBible = storyboard.styleBible;

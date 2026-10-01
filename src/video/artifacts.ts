@@ -44,6 +44,18 @@ export interface EmitVideoArtifactInput {
   readonly now: UtcTimestamp;
   readonly artifactId?: Id;
   readonly notes?: string;
+  /**
+   * WFLX-P2 (Cinematic): public model identity for the image-stage provider
+   * (recorded in provenance). Default keeps the W3 value — zero change for
+   * existing callers.
+   */
+  readonly illustrationModel?: string;
+  /**
+   * WFLX-P2 (Cinematic): honest reproducibility flag. Default true (offline
+   * deterministic); live generative providers pass false (P1 live-TTS
+   * precedent — live output is honestly stochastic per call).
+   */
+  readonly reproducible?: boolean;
 }
 
 /** Deterministic default artifact id from the reproducibility key. */
@@ -69,7 +81,7 @@ export function emitGeneratedVideoArtifact(
     {
       stage: 'image',
       provider: input.illustrationProviderId,
-      model: 'reference-ink-grammar',
+      model: input.illustrationModel ?? 'reference-ink-grammar',
     },
     {
       stage: 'composition',
@@ -126,7 +138,7 @@ export function emitGeneratedVideoArtifact(
       name: 'wflx-video-compiler',
       version: '0.1.0',
       seed: input.seed,
-      reproducible: true,
+      reproducible: input.reproducible ?? true,
     },
     qa: toQaSummary(input.qa),
     notes:
