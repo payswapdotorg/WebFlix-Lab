@@ -80,8 +80,8 @@ export interface ZaiLiveVisualOptions extends VisualGenerativeOptions {
 /** Pick the SDK size closest to the requested canvas (16:9 canvases map to 1344x768). */
 export function nearestSdkSize(widthPx: number, heightPx: number): ZaiImageSize {
   const ratio = widthPx / Math.max(1, heightPx);
-  if (ratio > 1.6) return '1440x720';
-  if (ratio > 1.15) return '1344x768';
+  if (ratio > 1.85) return '1440x720';
+  if (ratio > 1.45) return '1344x768';
   if (ratio > 0.9) return '1024x1024';
   if (ratio > 0.65) return '864x1152';
   return '768x1344';

@@ -74,6 +74,8 @@ export type ZaiLiveVideoErrorKind =
 export interface ZaiLiveVideoOptions extends VideoGenerativeOptions {
   /** SDK client factory override (tests inject a fake; production uses ZAI.create()). */
   readonly clientFactory?: () => Promise<ZaiVideoClient>;
+  /** Poll interval between async-result queries (default 5 s; tests shrink it). */
+  readonly pollIntervalMs?: number;
 }
 
 export class ZaiLiveVideoGenerative implements VideoGenerativeProvider {
@@ -87,6 +89,7 @@ export class ZaiLiveVideoGenerative implements VideoGenerativeProvider {
   private readonly timeoutMs: number;
   private readonly maxRetries: number;
   private readonly pollBudgetMs: number;
+  private readonly pollIntervalMs: number;
   private client: ZaiVideoClient | undefined;
 
   constructor(options: ZaiLiveVideoOptions = {}, env: NodeJS.ProcessEnv = process.env) {
@@ -103,6 +106,7 @@ export class ZaiLiveVideoGenerative implements VideoGenerativeProvider {
     this.timeoutMs = options.timeoutMs ?? 120_000;
     this.maxRetries = options.maxRetries ?? 1;
     this.pollBudgetMs = options.pollBudgetMs ?? 480_000;
+    this.pollIntervalMs = options.pollIntervalMs ?? 5_000;
   }
 
   capabilities(): VideoGenerativeCapabilities {
@@ -150,7 +154,7 @@ export class ZaiLiveVideoGenerative implements VideoGenerativeProvider {
     let lastStatus = create.task_status ?? 'PROCESSING';
     let resultUrl: string | undefined;
     while (Date.now() - startedAt < this.pollBudgetMs) {
-      await sleep(5_000);
+      await sleep(this.pollIntervalMs);
       const status = await withTimeout(client.async.result.query(taskId), this.timeoutMs);
       lastStatus = status.task_status ?? lastStatus;
       const url = status.video_result?.[0]?.url ?? status.video_url ?? status.url ?? status.video;
