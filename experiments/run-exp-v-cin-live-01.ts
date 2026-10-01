@@ -36,7 +36,7 @@
  *   F4 offline baseline outputs byte-UNCHANGED when live flags are off
  */
 
-import { mkdirSync, writeFileSync, readFileSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, writeFileSync, readFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
@@ -47,10 +47,7 @@ import {
   buildCinematicPlan,
   cinematicPlanFingerprint,
   stableStringify,
-  type CinematicAssetRecord,
-  type VisualAssetJob,
 } from '../src/video';
-import { OfflineGenerativeVisual } from '../src/providers/visual/offline-generative';
 import { OfflineGenerativeVideo } from '../src/providers/video/offline-generative';
 import { ZaiLiveVisualGenerative } from '../src/providers/visual/zai-live';
 import { ZaiLiveVideoGenerative } from '../src/providers/video/zai-live';

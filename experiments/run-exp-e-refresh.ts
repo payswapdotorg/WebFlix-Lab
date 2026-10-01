@@ -285,7 +285,10 @@ async function runCustom(): Promise<void> {
   writeJson(dir2, 'artifact.json', result.artifact);
   writeJson(dir2, 'qa-report.json', result.qa);
   writeJson(dir2, 'timeline.json', result.timeline);
-  writeJson(dir2, 'arm-summary.json', { ...arm2, customStyleBibleId: customBible.id });
+  writeJson(dir2, 'arm-summary.json', {
+    ...summarize('custom-style-7min', CANONICAL_PLAN, result, packetDigestOf(packet)),
+    customStyleBibleId: customBible.id,
+  });
   writeJson(dir2, 'custom-style-bible.json', customBible);
   writeJson(dir2, 'style-delta.json', {
     customPrompt: CUSTOM_STYLE_PROMPT,
@@ -481,7 +484,6 @@ function runSummary(): void {
     packetDigestByteIdentical?: boolean;
   } | null;
   const arm2Delta = read(join(E_REFRESH_ROOT, 'custom-style-7min', 'style-delta.json'));
-  const arm2 = read(join(E_REFRESH_ROOT, 'custom-style-7min', 'arm-summary.json'));
   const locality = read(join(LOCALITY_ROOT, 'locality-report.json'));
 
   const committedDeterminism = existsSync('artifacts/video/canonical-explainer-7min/determinism.json')
