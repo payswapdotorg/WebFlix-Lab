@@ -234,6 +234,20 @@ async function runOffline(): Promise<void> {
   );
 }
 
+/** OBSERVED media facts from the system ffprobe (typed, best-effort). */
+async function ffprobeFacts(path: string): Promise<Record<string, unknown>> {
+  const { execFile } = await import('node:child_process');
+  const run = (args: string[]): Promise<string> =>
+    new Promise((resolve) => {
+      execFile('ffprobe', args, { timeout: 15_000 }, (error, stdout, stderr) => {
+        resolve(error ? `ffprobe error: ${String(error.message).slice(0, 120)}` : `${stdout}${stderr}`.trim());
+      });
+    });
+  const format = await run(['-v', 'error', '-show_entries', 'format=duration,size,format_name', '-of', 'default=noprint_wrappers=1', path]);
+  const streams = await run(['-v', 'error', '-show_entries', 'stream=codec_type,codec_name,width,height', '-of', 'default=noprint_wrappers=1', path]);
+  return { format, streams, note: 'OBSERVED with the system ffprobe on the persisted clip bytes' };
+}
+
 // ---------------------------------------------------------------------------
 // Target: live-images — REAL image generation
 // ---------------------------------------------------------------------------
@@ -334,11 +348,15 @@ async function runLiveVideo(): Promise<void> {
     const wallMs = Date.now() - startedAt;
     const file = `live-${job.jobId}.mp4`;
     writeBytes(file, result.bytes);
+    // OBSERVED media facts from the system prober (honest actual dimensions
+    // and codec of the REAL clip — the request spec may differ).
+    const probed = await ffprobeFacts(join(OUT_ROOT, file));
     writeJson('live-video.json', {
       runStamp: RUN_STAMP,
       status: 'SUCCESS',
       provider: result.providerId,
       model: result.modelId,
+      ffprobeObserved: probed,
       sdk: 'z-ai-web-dev-sdk video.generations.create + async.result.query (server-side)',
       envFlag: 'WFLX_VIDEO_PROVIDER=live-zai (explicit provider instance in this runner)',
       asset: {
@@ -536,7 +554,7 @@ async function runLiveCompose(): Promise<void> {
   const mp4Sha = sha256Hex(mp4Bytes);
   rmSync(workDir, { recursive: true, force: true });
 
-  writeJson('live-artifact.json', result.artifact);
+  writeJson('artifact.json', result.artifact);
   writeJson('live-qa-report.json', result.qa);
   writeJson('live-cinematic-qa.json', result.cinematicQa);
   writeJson('live-timeline.json', result.timeline);

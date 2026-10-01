@@ -1,0 +1,44 @@
+id: EXP-E-REFRESH
+timestamp_utc: "2026-10-01T13:30:00Z"
+operator: wflx-p2
+surface: video
+reference_notebook: "reference-messy-note (lab fixture stand-in; product-side comparison pending reference access)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "explainer (fixed)"
+language: "en"
+length: "420 s (the canonical 7-min fixture)"
+visual_style: "style-bible--reference-ink (default); custom arm style-bible--custom-9a321622 (derived)"
+custom_prompt: "arm 2: 'violet print shop mood, cool and precise, poster-like'"
+other_config:
+  runner: "experiments/run-exp-e-refresh.ts (npm alias exp:erefresh; targets baseline/custom/locality/summary)"
+  video_seed: "wflx-w3-test-seed"
+  fixed_now: "2026-09-30T00:00:00Z"
+  layer: "full pipeline (compileVideoOverview; fallback backend; SVG set = pinned determinism layer)"
+  refresh_reason: "the last committed full run predates the v2 wave per the dispatched work order; this run re-records current behavior at the WFLX-P2 wave HEAD"
+baseline_artifact: "the committed canonical-explainer-7min sidecars (the pre-refresh full run)"
+mutation: "arm 2 applies a custom style prompt (style-only); arm 3 (EXP-V-L-01, recorded separately) mutates one scene's claim"
+artifact_under_test: "artifacts/video/exp-e-refresh/baseline-canonical-7min + custom-style-7min"
+artifact_hash: "baseline scene-SVG combined sha256 9cca99c3bf22037ac92821e61b9e7e40a655da7913cd9e905b0c3f41ec185adf; composition-independent packet digest faf6e84557125bfc… (double-run IDENTICAL); custom arm SVG cfd68af58e204ad7…"
+observations:
+  - "BASELINE RE-RUN (REPRODUCED): the canonical 7-min fixture at the wave HEAD — 15 scenes / 6 beats, coverage 11/11 claims (100%), QA passed, scene-SVG set 106,554 B with combined sha256 9cca99c3bf22037a… — BYTE-IDENTICAL to the committed canonical full run (no drift at the SVG determinism layer); the composition-independent packet digest (realized scenes + SVG set + timeline + QA + narration WAV) is double-run byte-identical."
+  - "COMMITTED-COMPARISON (REPRODUCED): svgDriftVsCommittedFullRun = false — the committed canonical sidecar's determinism hash reproduces exactly at the wave HEAD; the artifact ID differs only through the composition backend field (committed run used remotion, this run used the deterministic fallback; MP4 bytes excluded-by-rule)."
+  - "CUSTOM-STYLE ARM (REPRODUCED): the same plan through the custom-style layer (prompt-derived accent family, canvas/typography/ground inherited) — rendered SVG bytes CHANGE at both layers (storyboard layer d49a29fe… -> 9f338f43…; full pipeline 9cca99c3… -> cfd68af5…) while 0/15 scenes change structure and coverage + timeline are IDENTICAL — the documented custom-prompt prior (style-only, never coverage) extended to the visual surface (the EXP-V-03 pattern on the v2 baseline with the v2 C-5 keying)."
+  - "NARRATION/VISUAL SYNC (REPRODUCED): scene-local narration timing vs the v2 content-keyed seeding confirmed via EXP-V-L-01 (recorded separately): a one-claim scene edit changes exactly that scene's SVG + narration with 0 reshuffle."
+  - "HONEST BOUNDARIES: offline placeholder narration + deterministic ink illustrations throughout — NOT product parity evidence; MP4 bytes excluded-by-rule; real-product comparisons COMPARISON PENDING REFERENCE CAPTURE (WFLX-P3)."
+invariants:
+  - "Fixed seed/now; the committed canonical store untouched (new artifacts under artifacts/video/exp-e-refresh/ are additive; registry no-transition proof: 0 existing records changed)."
+differences:
+  - "custom arm vs baseline: SVG bytes changed (palette accents), everything structural identical."
+hypothesis: "The canonical Explainer benchmark reproduces byte-identically at the v2 wave HEAD, and a custom style prompt changes only the rendered visual surface."
+confidence: high
+falsifier: "SVG-layer drift vs the committed run; the custom-style arm changing coverage/structure; packet digest divergence on double-run."
+next_experiment: "WFLX-P3 reference captures for the real-product Explainer refresh comparison."
+status: supported
+evidence_paths:
+  - "artifacts/video/exp-e-refresh/refresh-summary.json"
+  - "artifacts/video/exp-e-refresh/baseline-canonical-7min"
+  - "artifacts/video/exp-e-refresh/custom-style-7min"
+  - "artifacts/video/exp-v-l-01/locality-report.json"
+  - "experiments/run-exp-e-refresh.ts"
+  - "tests/video/custom-style.test.ts"
