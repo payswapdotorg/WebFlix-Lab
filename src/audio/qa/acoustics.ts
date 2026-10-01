@@ -57,12 +57,13 @@ export interface TurnAcousticProfile {
 
 /** Method description recorded alongside measurements (honest labeling). */
 export const ACOUSTIC_METHOD =
-  'Pure-TS deterministic DSP: long-term average spectrum (LTAS) — Goertzel power at 48 log-spaced probes (80-8000 Hz, 12 per formant-band region) computed per 50 ms active frame (frame RMS > -60 dBFS) and energy-averaged across frames; band energies normalized to sum 1; ZCR and centroid over the same active frames. LTAS is the standard coarse voice-timbre estimator; it is a structural proxy, NOT perceptual voice-identity verification.';
+  'Pure-TS deterministic DSP: long-term average spectrum (LTAS) — Hann-windowed Goertzel power at 48 log-spaced probes (80-8000 Hz, 12 per formant-band region) computed per 50 ms active frame (frame RMS > -60 dBFS) and energy-averaged across frames; band energies normalized to sum 1; ZCR and centroid over the same active frames. The Hann window is REQUIRED: with a rectangular window, tones at integer DFT bins of the frame length measure ~zero at every other integer bin (a flaw the benchmark test suite exposed). LTAS is the standard coarse voice-timbre estimator; it is a structural proxy, NOT perceptual voice-identity verification.';
 
 const FRAME_MS = 50;
 const SILENCE_DB = -60;
 
-/** Goertzel power at one frequency over a sample window. */
+/** Hann-windowed Goertzel power at one frequency over a sample window.
+ * The window is methodologically REQUIRED (see ACOUSTIC_METHOD). */
 function goertzelPower(samples: Float64Array, start: number, length: number, sampleRate: number, freqHz: number): number {
   const k = Math.round((length * freqHz) / sampleRate);
   if (k === 0 || k > length / 2) return 0;
@@ -71,12 +72,14 @@ function goertzelPower(samples: Float64Array, start: number, length: number, sam
   let sPrev = 0;
   let sPrev2 = 0;
   const end = Math.min(start + length, samples.length);
+  const n = Math.max(1, end - start);
   for (let i = start; i < end; i += 1) {
+    const window = 0.5 * (1 - Math.cos((2 * Math.PI * (i - start)) / (n - 1 || 1)));
     // Parentheses REQUIRED: `??` binds looser than `+`, so without them the
     // recurrence terms would attach to the nullish branch and silently drop
     // the filter state (a bug the benchmark's honest numbers exposed: two
     // voices with different fundamentals measured identical profiles).
-    const s = (samples[i] ?? 0) + sPrev * coeff - sPrev2;
+    const s = ((samples[i] ?? 0) * window) + sPrev * coeff - sPrev2;
     sPrev2 = sPrev;
     sPrev = s;
   }
