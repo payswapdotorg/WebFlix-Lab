@@ -260,6 +260,13 @@ export async function compileAudioOverview(
     master,
     qa,
     speechProviderId: provider.id,
+    // WFLX-P1 (EV-016): public model identity for live-provider provenance;
+    // absent (undefined) on the offline adapter — zero sidecar change there.
+    ...(provider.modelId !== undefined ? { speechProviderModel: provider.modelId } : {}),
+    // WFLX-P1 (EV-016, honesty rule): live remote providers are stochastic per
+    // call (LAB-06 discipline) — the sidecar must never claim byte
+    // reproducibility for live output. Offline deterministic stays true.
+    ...(provider.kind !== 'offline-deterministic' ? { reproducible: false } : {}),
     ...(options.recordLatency === true ? { speechLatencyMs } : {}),
     now: options.now,
     ...(options.artifactId !== undefined ? { artifactId: options.artifactId } : {}),

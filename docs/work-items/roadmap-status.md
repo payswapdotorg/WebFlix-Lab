@@ -167,3 +167,86 @@ package skeleton.
 - Phase-level acceptance gates added (work order §4): every capability VERIFIED or
   EXPLICITLY UNRESOLVED with evidence; live-provider results must be real, never
   simulated-as-real.
+## 2026-10-01 — WFLX-P1 AUDIO PARITY WAVE DELIVERED (WFLX-P1, branch work/wflx-p1-audio-parity)
+
+Dispatched work order: docs/work-items/31-WFLX-P1-AUDIO-PARITY.md (first
+commit, verbatim, dated 2026-09-30). Deliverables per the §4 gate
+discipline — each dimension VERIFIED with numbers or EXPLICITLY UNRESOLVED:
+
+- **Deliverable A — REAL live TTS execution path (EV-016, EXP-L-01):
+  VERIFIED.** zai-live-tts adapter (src/providers/audio/zai-live.ts) over
+  the server-side z-ai-web-dev-sdk (a REAL production TTS service),
+  exercised END-TO-END through the unmodified SpeechProvider port +
+  compile pipeline: 5/5 turns of the canonical 42 s benchmark plan as real
+  playable speech (24 kHz mono WAV per turn + mixed master) under
+  artifacts/audio/exp-l-01/. Env-gated WFLX_TTS_PROVIDER=live-zai (unset =
+  offline default, zero behavior change); no credential material anywhere;
+  provenance recorded (provider id + model id + voices + env flag; honest
+  reproducible=false for live output). Falsifiers F1-F4 ALL PASS, incl. F4
+  offline baseline byte-UNCHANGED (double-run + committed-benchmark sha
+  equality). Usage/cost observables: the SDK TTS route reports none —
+  UNRESOLVED, recorded. Live duration 61.755 s vs 42 s target: inside the
+  pre-declared band [21, 84] s, with the systematic live-rate offset (1.88
+  wps vs the planning prior) honestly flagged by QA.
+- **Deliverable B — speech benchmark suite (EV-017, EXP-L-02): VERIFIED
+  with one EXPLICITLY UNRESOLVED dimension.** Instrumented harness
+  (experiments/run-exp-l-02.ts + src/audio/qa/acoustics.ts — pure-TS
+  Goertzel LTAS; NO LLM self-assessment), 6 deterministic offline arms +
+  a live real-speech measurement arm incl. a real ASR transcript check.
+  Speaker consistency VERIFIED (SC1 config fingerprint everywhere; SC2
+  LTAS on real speech within 0.140 / ratio 2.60; offline placeholder
+  numbers retained as context — the proxy is speech-only, re-scope
+  documented); pacing/pause VERIFIED (0 out-of-policy gaps; wps under
+  every mode ceiling; live c/s in [6, 24]); pronunciation proxy: offline
+  UNRESOLVED-by-medium (claim-voicing 11/11 VERIFIED), live label-token
+  recovery 1/2 (50% < 60%) EXPLICITLY UNRESOLVED (n=2 tiny sample,
+  TTS-vs-ASR ambiguity recorded); multi-language VERIFIED (the documented
+  v1 EN-anchor boundary still holds on the ES arm); mode+duration VERIFIED
+  (4 modes at canonical targets, over-budget honesty preserved). Harness
+  calibration documented, not silent (band re-declaration; SC2 re-scope;
+  a Goertzel precedence bug and a rectangular-window integer-bin flaw were
+  exposed by the benchmark's own honest numbers and fixed under test).
+- **Deliverable C — Interactive Audio Overview (EV-018, EXP-L-03):
+  VERIFIED.** InteractiveAudioSession layer
+  (src/audio/interactive/session.ts) + prototype on the canonical 5-min
+  fixture: join -> deterministic claim retrieval over the same graph ->
+  response compiled through the SAME W1+W2-validated machinery -> original
+  overview resumes. Falsifiers F1-F4 ALL PASS: grounding (W1+W2+claims),
+  C-5 locality to the AUDIO BYTES (per-turn WAV/duration/gap identical;
+  exact post-boundary shift 21171/12314 ms), order integrity, double-run
+  determinism. Architecture: docs/audio/interactive-audio-architecture.md.
+  Honest boundaries: voice capture UNRESOLVED (text-scripted stand-ins);
+  response-plan construction is intervention-layer (no Director
+  single-turn entry point — HANDOFF).
+- **Gates at delivery (this wave):** typecheck 0 errors; lint clean;
+  406/406 = 151 (contracts/source/director) + 159 (audio: 123 baseline +
+  36 new — zai-live 17 / acoustics 8 / interactive 11) + 82 (video) + 14
+  (integration), 0 fail. EXP-X-02 re-run REPRODUCED exactly (B-treatment
+  1/22 texts + 2/22 target-adjacent gaps, total delta 7806 ms = target
+  8000 ms − 194 ms adjacent; A-control 17/22 + 21/22; F1-F4 PASS; station
+  quality bar PASSED; the re-run artifacts differ from the committed ones
+  ONLY in wallClockMs — the documented exception). Manifest packet digest
+  double-run identical: 7d82ff5a2d8ffb8deee0dc75b829f72c0680689a46696a5677ca8f96c9c16a3a
+  (the committed registry.json itself is untouched — no fingerprint
+  changes).
+- **Pre-existing registry staleness discovered (HANDOFF, not this wave's
+  drift):** rebuilding the unified registry on PRISTINE main @ b1054a6
+  reproduces the same 4-record drift vs the committed registry
+  (exp-x02 diagnostics.json wall-clock fields + video raw-MP4 sha — the
+  documented compositor encoder nondeterminism, excluded-by-rule). The
+  committed registry on main predates the final TL re-runs; TL-owned
+  rebuild recommended (my wave's new artifact dirs — exp-l-01/-02,
+  interactive-01 — pass the store guard and register cleanly when the TL
+  rebuilds).
+- **Files touched (additive only):** src/providers/audio/{zai-live.ts,
+  port.ts, factory.ts}, src/audio/{index.ts, artifacts.ts},
+  src/audio/qa/acoustics.ts, src/audio/interactive/session.ts,
+  tests/audio/{zai-live-provider,acoustics,interactive-session}.test.ts,
+  experiments/run-exp-{l-01,l-02}.ts + run-interactive-audio.ts,
+  artifacts/audio/{exp-l-01,exp-l-02,interactive-01}/,
+  docs/{audio/interactive-audio-architecture.md,
+  experiments/records/EXP-L-0{1,2,3}.yaml, evidence/registry.jsonl
+  (EV-016/017/018), work-items/31-WFLX-P1-AUDIO-PARITY.md},
+  package.json (devDependency z-ai-web-dev-sdk + exp:l01/l02/interactive
+  scripts). No changes under src/contracts, src/source, src/director,
+  src/video, src/compositor.

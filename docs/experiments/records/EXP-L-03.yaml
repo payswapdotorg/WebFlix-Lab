@@ -1,0 +1,51 @@
+id: EXP-L-03
+timestamp_utc: "2026-10-01T06:55:00Z"
+operator: wflx-p1
+surface: audio
+reference_notebook: "none — lab reconstruction of the Google-documented Interactive Audio Overview behavior (WFLX-P3 owns fresh real-product captures)"
+source_fingerprint: "17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47"
+selected_sources: ["source-messy-note-redacted"]
+format: "interactive audio session prototype over the canonical 5-min deep-dive (plan-audio-deep-dive-5min, 22 turns)"
+language: "en"
+length: "baseline 306.7 s + two interventions (response segments 21.2 s / 12.3 s inserted)"
+visual_style: ""
+custom_prompt: ""
+other_config:
+  runner: "experiments/run-interactive-audio.ts (package.json exp:interactive)"
+  session_layer: "src/audio/interactive/session.ts (InteractiveAudioSession)"
+  audio_seed: "wflx-interactive-audio-seed"
+  fixed_now: "2026-01-01T00:00:00Z"
+  mastering: "pure-ts"
+  provider: "deterministic-offline-tts (provider-independent session layer; any SpeechProvider works)"
+  listener_input: "text-scripted stand-ins (voice capture UNRESOLVED — recorded honestly)"
+baseline_artifact: "artifacts/audio/interactive-01/baseline-deepdive-5min"
+mutation: "listener interventions at turn boundaries (after 1-based turn-6 and turn-13)"
+artifact_under_test: "artifacts/audio/interactive-01/session-01 + session-02"
+artifact_hash: "session masters fingerprinted in intervention.json (not committed — golden-media precedent); session-01 sha256 recorded in summary.json"
+observations:
+  - "JOIN -> SOURCE-GROUNDED RESPONSE -> RESUME reproduced end-to-end (REPRODUCED): session-01 listener asks about open-source media projects and local model runtimes -> deterministic retrieval (token-overlap over the SAME semantic graph, salience tie-break) selects claim-oss-runtimes + claim-tool-catalog (content-matched) -> a host ack interjection + a grounded explanation turn are compiled through the SAME machinery (W1 deep validation + W2 dialogue-graph grounding + seeded realizer + synthesis + timing + mixing) -> the original 22-turn sequence resumes in order."
+  - "C-5 LOCALITY PROVEN PER-TURN (REPRODUCED): every original turn's WAV sha256, actual duration and gap are identical across the intervention boundary; startMs shifts by EXACTLY the inserted response total post-boundary (21171 ms session-01, 12314 ms session-02) and 0 pre-boundary; the session mix reuses the baseline synthesis payloads (never a re-synthesis)."
+  - "F1 grounding: W1 deep validation valid + W2 issues == 0 + all response claim ids resolve in the graph + the realized response voices the verbatim claim anchors (both sessions)."
+  - "F3 order integrity: session sequence == baseline sequence with the response turns inserted only at the boundary position (machine-checked)."
+  - "F4 determinism: the scripted session double-run is byte-identical (master WAV sha256 + manifest)."
+  - "Response-plan construction boundary (HONEST): the Director exposes no question-driven single-turn entry point, so the response plan is intervention-layer constructed and then validated + compiled through the same machinery — HANDOFF for TL adjudication (a compileInterventionPlan Director entry)."
+  - "Voice input boundary (HONEST): listener interventions are text-scripted stand-ins recorded with each session; voice capture (ASR front-end + barge-in/streaming playback) is UNRESOLVED and not claimed."
+invariants:
+  - "Same baseline plan/graph/source/seed/now for both sessions and the double-run; deterministic at fixed (seed, now, intervention) for the offline provider."
+  - "The baseline's own compiled artifact is untouched by the session construction (verified in tests)."
+differences:
+  "session = baseline + inserted response block: +2 turns per session at the boundary; total duration +21171 ms / +12314 ms; everything else byte-identical"
+hypothesis: "The observable Interactive Audio behavior (join -> grounded response -> original resumes intact) reconstructs as an additive session layer over the compiled overview, with the C-5 locality discipline carried to the audio bytes."
+confidence: high
+falsifier: "F1 the response turn fails any W1/W2 grounding surface; F2 any original turn's WAV/duration/gap changes across the boundary or the post-boundary shift != inserted total; F3 the original order not preserved; F4 the double-run session not byte-identical."
+next_experiment: "WFLX-P3 reference captures of the real Interactive Audio behavior (operator-gated) for product-side comparison"
+status: supported
+evidence_paths:
+  - "artifacts/audio/interactive-01/summary.json"
+  - "artifacts/audio/interactive-01/session-01/"
+  - "artifacts/audio/interactive-01/session-02/"
+  - "artifacts/audio/interactive-01/baseline-deepdive-5min/"
+  - "experiments/run-interactive-audio.ts"
+  - "src/audio/interactive/session.ts"
+  - "docs/audio/interactive-audio-architecture.md"
+  - "tests/audio/interactive-session.test.ts"

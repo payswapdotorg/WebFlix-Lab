@@ -44,6 +44,13 @@ export interface EmitArtifactInput {
   readonly now: UtcTimestamp;
   readonly artifactId?: Id;
   readonly notes?: string;
+  /**
+   * WFLX-P1 (EV-016, honesty rule): byte-reproducibility of the artifact.
+   * Default true (the offline deterministic path). Live remote providers
+   * are honestly stochastic per call (LAB-06 discipline) — callers pass
+   * false so the sidecar never claims byte-identity for live output.
+   */
+  readonly reproducible?: boolean;
 }
 
 /** Deterministic default artifact id from the reproducibility key. */
@@ -131,7 +138,7 @@ export function emitGeneratedArtifact(input: EmitArtifactInput): GeneratedArtifa
       name: AUDIO_COMPILER_ID,
       version: '0.1.0',
       seed: input.graph.meta.seed,
-      reproducible: true,
+      reproducible: input.reproducible ?? true,
     },
     qa: toQaSummary(input.qa),
     notes,

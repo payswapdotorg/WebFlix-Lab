@@ -173,6 +173,13 @@ export interface SpeechProviderOptions {
 export interface SpeechProvider {
   readonly id: string;
   readonly kind: 'remote-multi-speaker' | 'remote-single-speaker' | 'offline-deterministic';
+  /**
+   * Optional PUBLIC model identity (e.g. service/model id) for artifact
+   * provenance — provider-neutral metadata, never a secret. Absent on
+   * providers without a meaningful external model id (the offline adapter).
+   * WFLX-P1 (EV-016): recorded in GeneratedArtifact.providers[speech].model.
+   */
+  readonly modelId?: string;
 
   capabilities(): SpeechProviderCapabilities;
 

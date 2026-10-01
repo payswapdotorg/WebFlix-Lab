@@ -15,7 +15,10 @@
     "exp:x02": "bun run experiments/run-exp-x-02.ts",
     "video:benchmark": "bun run tests/video/generate-benchmark.ts",
     "manifest:build": "bun run tools/manifest/build-registry.ts",
-    "exp:integration": "bun run tools/experiments/runner.ts"
+    "exp:integration": "bun run tools/experiments/runner.ts",
+    "exp:l01": "bun run experiments/run-exp-l-01.ts",
+    "exp:l02": "bun run experiments/run-exp-l-02.ts",
+    "exp:interactive": "bun run experiments/run-interactive-audio.ts"
   },
   "dependencies": {
     "zod": "^4.6.5"
@@ -33,6 +36,7 @@
     "react-dom": "19.3.0",
     "remotion": "4.0.529",
     "typescript": "^5.9.0",
-    "typescript-eslint": "^8.70.1"
+    "typescript-eslint": "^8.70.1",
+    "z-ai-web-dev-sdk": "^0.0.18"
   }
 }
