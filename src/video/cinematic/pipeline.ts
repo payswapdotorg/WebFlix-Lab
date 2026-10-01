@@ -777,15 +777,32 @@ export async function regenerateSceneAssets(
     return match !== undefined && match.record.sha256 === a.record.sha256;
   });
 
-  // Deterministic scene SVGs outside the target: byte-identical proof — the
-  // deterministic frames are a pure function of the storyboard + style
-  // bible (no generative input), so a fresh render of the same inputs must
-  // reproduce every non-target frame byte-for-byte; the target scene's
-  // generative content NEVER enters other scenes' frames (C-5 at the asset
-  // layer: fragments are keyed by scene id).
+  // Deterministic scene SVGs outside the target: byte-identical proof — a
+  // fresh render over the SAME storyboard + style bible + the BASELINE
+  // generative fragments of every NON-TARGET scene must reproduce every
+  // non-target frame byte-for-byte. The target scene's regenerated content
+  // NEVER enters other scenes' frames (C-5 at the asset layer: fragments are
+  // keyed by scene id).
+  const fragments = new Map<Id, string>();
+  for (const asset of baseline.assets) {
+    if (
+      (asset.record.assetClass !== 'illustration' &&
+        asset.record.assetClass !== 'generative-animation') ||
+      asset.record.sceneId === sceneId
+    ) {
+      continue;
+    }
+    if (!fragments.has(asset.record.sceneId)) {
+      fragments.set(
+        asset.record.sceneId,
+        fragmentFor(asset.bytes, asset.record.format, asset.record.widthPx, asset.record.heightPx),
+      );
+    }
+  }
   const freshRender = renderStoryboardSvg({
     storyboard: storyboard.scenes,
     styleBible,
+    illustrations: fragments,
   });
   let deterministicSurfacesUnchanged = true;
   for (const [id, svg] of baseline.render.frames) {

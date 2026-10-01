@@ -240,31 +240,39 @@ export function validateCinematicAsset(
     return { passed: false, checks };
   }
 
-  // Dimensions match the spec.
+  // Dimensions match the spec: exact for offline stand-ins; for live raster
+  // the provider maps the request onto its nearest supported size, so the
+  // gate accepts an ASPECT-RATIO-equivalent canvas (within 2%) — the fragment
+  // slices into the scene canvas via preserveAspectRatio. Actual media
+  // dimensions are recorded honestly in the asset record.
+  const specRatio = job.spec.widthPx / Math.max(1, job.spec.heightPx);
+  const actualRatio = record.widthPx / Math.max(1, record.heightPx);
   const dimsOk =
-    record.widthPx === job.spec.widthPx && record.heightPx === job.spec.heightPx;
+    (record.widthPx === job.spec.widthPx && record.heightPx === job.spec.heightPx) ||
+    (record.live && Math.abs(actualRatio - specRatio) / specRatio <= 0.02);
   checks.push({
     name: 'dimensions',
     passed: dimsOk,
     detail: dimsOk
-      ? `${record.widthPx}x${record.heightPx} matches spec`
-      : `${record.widthPx}x${record.heightPx} vs spec ${job.spec.widthPx}x${job.spec.heightPx}`,
+      ? `${record.widthPx}x${record.heightPx} ${record.widthPx === job.spec.widthPx ? 'matches spec' : `aspect-equivalent to spec ${job.spec.widthPx}x${job.spec.heightPx} (ratio ${actualRatio.toFixed(3)} vs ${specRatio.toFixed(3)})`}`
+      : `${record.widthPx}x${record.heightPx} (ratio ${actualRatio.toFixed(3)}) vs spec ${job.spec.widthPx}x${job.spec.heightPx} (ratio ${specRatio.toFixed(3)}) — neither exact nor aspect-equivalent`,
   });
 
-  // Format: live providers must emit the real expected format; offline
-  // stand-ins emit honest svg placeholders for every generative class.
-  const expected = record.live
-    ? job.spec.expectedFormat
-    : job.assetClass === 'video-generation'
-      ? 'svg'
-      : 'svg';
-  const formatOk = record.format === expected || (!record.live && record.format === 'svg');
+  // Format: provider-kind-aware. Offline stand-ins emit honest svg
+  // placeholders for every generative class. Live visual providers emit real
+  // raster (png/jpeg); live video providers emit real mp4.
+  const accepted: string[] = record.live
+    ? job.assetClass === 'video-generation'
+      ? ['mp4']
+      : ['png', 'jpeg']
+    : ['svg'];
+  const formatOk = accepted.includes(record.format);
   checks.push({
     name: 'format',
     passed: formatOk,
     detail: formatOk
       ? `${record.format} (${record.live ? 'live: real media' : 'offline stand-in: svg placeholder'})`
-      : `${record.format} != expected ${expected} for ${record.live ? 'live' : 'offline'} provider`,
+      : `${record.format} not in the accepted set [${accepted.join(', ')}] for a ${record.live ? 'live' : 'offline'} ${job.assetClass} asset`,
   });
 
   // Real-mp4 gate for live video-generation assets.
