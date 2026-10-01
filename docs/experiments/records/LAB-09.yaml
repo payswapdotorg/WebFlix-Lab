@@ -1,0 +1,42 @@
+id: LAB-09
+timestamp_utc: "2026-10-01T19:26:00Z"
+operator: tl2+operator
+surface: video
+reference_notebook: "WFLX-LAB-07 (same notebook; id 155eb020) — custom-prompt arm on the control fixture"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — byte-identical to LAB-01/05/06/07/08)"
+selected_sources:
+  - "# Reference Fixture — Redacted Messy Note"
+format: "Short (crop_9_16 vertical)"
+language: "English"
+length: "Short (default)"
+visual_style: ""
+custom_prompt: "Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note."
+other_config:
+  generation_start: "2026-10-01T19:00:04Z"
+  generation_ready: "2026-10-01T19:19:10Z (~19.1 min wall)"
+  injection_verified: "trusted click-focus + CDP Input.insertText; 138 chars read back in the form BEFORE Generate (the LAB-08 failure lesson applied)"
+baseline_artifact: "artifacts/reference/lab-07/How_Multi-Agent_Orchestration_Divides_AI.mp4 (the control run)"
+mutation: "NONE — identical source; ONLY the Custom topic focus differs from the control"
+artifact_under_test: "artifacts/reference/lab-09/How_AI_Agents_Hide_Their_Keys.mp4"
+artifact_hash: "sha256:52996d49a244dbaa161a3c493115377849cb1220d6e71fe8e3e7a0ba4b8613dd"
+observations:
+  - "OBSERVED (custom-prompt steering, VERIFIED): the custom topic MATERIALLY re-steered the entire episode — title 'How AI Agents Hide Their Keys'; the full 71.6 s episode is a security/credentials narrative (execution sandbox, agents deployed 'stripped of keys', blind-payload key injection at the final millisecond, 'handing that secret key back to the AI directly violates security compliance'). ASR keyword evidence: security 1 / compliance 1 / key 3 / secret 1 / password-themed throughout vs the control's 0/0/0/0. The custom focus is a FULL CONTENT RE-PLAN, not a topical filter."
+  - "OBSERVED (duration response): 71.63 s on the custom focus vs 84.82 s control / 78.32 s twin — duration varies with content focus (n=3: 71.6-84.8 s band on this fixture, all above the lab's [48,72] s Short band, 71.6 s sits 0.4 s below the band ceiling... recorded exactly: 71.63 < 72 by 0.37 s — the third capture lands effectively AT the lab band's upper edge)."
+  - "OBSERVED (format invariants under custom focus): same 9:16 vertical geometry, h264 30 fps + AAC mono 44.1 kHz, hook-question opening ('How can an AI use your cloud infrastructure without ever holding your passwords?'), single-narrator Short register — the custom focus changes CONTENT, not FORMAT."
+  - "OBSERVED (fixture-faithfulness under steering): the episode's sandbox/credentials narrative is a stylized synthesis AROUND the fixture's credential/rotation notes (the fixture's actual line is 'All credentials are [REDACTED] and are rotated quarterly by the platform team') — the product extrapolates a scenario from the focus angle rather than quoting the source; semantic anchoring is loose (the 'quarterly rotation' fact itself is NOT voiced)."
+invariants:
+  - "9:16 geometry, mono AAC 44.1 kHz, hook-question opening, Short register — stable under custom focus."
+differences:
+  - "vs LAB-07 control: completely different episode content (security-focused vs general architecture walkthrough), different title, duration 71.6 vs 84.8 s — the custom-prompt delta is a full-surface change (consistent with the product's global re-plan behavior from LAB-05/06)."
+  - "vs the lab's custom-style layer: the lab's style custom-prompt changes STYLE (SVG/visual surface) with 0/15 structure change (EXP-V-07 pattern); the product's focus custom-prompt changes CONTENT wholesale. Different control semantics — recorded as a parity distinction, not a defect."
+hypothesis: "The product's Custom topic is an episode-level content-steering control that triggers the same full re-plan pipeline with the focus injected as a generation prior."
+confidence: high
+falsifier: "A custom-topic run ignoring the focus (default-content output) would falsify the steering reading — the LAB-08 failed-injection run accidentally provides the negative control (transcript = default content)."
+next_experiment: "LAB-10 (audio-surface custom prompt, Deep Dive + custom instructions) closes the audio side of the custom-prompt matrix; then the TL parity-close documentation."
+status: observed
+evidence_paths:
+  - artifacts/reference/lab-09/How_AI_Agents_Hide_Their_Keys.mp4
+  - artifacts/reference/lab-09/artifact.json
+  - docs/experiments/records/LAB-09-transcript.txt
+  - docs/experiments/records/LAB-07.yaml
+  - docs/experiments/records/LAB-08.yaml
