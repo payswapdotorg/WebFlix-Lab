@@ -414,3 +414,39 @@ discipline per the work order §4:
      the behavior without Director changes. 4. The pre-existing registry
      staleness discipline (rebuild on every artifact-adding wave) — honored
      here (42 records committed); keep the habit for P3.
+
+## 2026-10-01 17:40 UTC — WFLX-P2 MERGED (PR #12) + station record + WFLX-P3 DISPATCH AUTHORIZED (TL #2)
+
+- **WFLX-P2 video parity MERGED via PR #12** (station review 17:16-17:35 UTC
+  on pristine b0a9fff, gates re-run trusting nothing): credential sweep
+  clean, typecheck 0 / lint clean, **441/441** (contracts 75, source 45,
+  director 31, audio 159, video 117, integration 14), manifest double-run
+  byte-identical (80ed5dd5…), do-not-disturb surfaces untouched, real media
+  verified on disk (2 live JPEGs 1344×768 + 1 live h264 clip 1890×1080
+  @ 5.19 s, sha256 + provider provenance). The WFLX-P2 delivery section
+  above stands as merged truth.
+- **OPERATIONAL LESSON (binding for all future waves):** the P2 worker
+  session 9a338327 delivered its branch 11:49–14:24 UTC while the resident
+  watch convicted it dead-turn at ~13:35 on DOM-freeze evidence
+  (thinking-chain static over 45 s) and then burned five duplicate
+  dispatches into a hostile capacity lane (dc970e7d, a07c306e, c6cec594,
+  de8bfe59, 55044993 — all zombie-convicted, tabs closed, herd-watch
+  armed at 17:19). DOM freeze is NOT server-side turn death. GIT TRUTH
+  (origin branch existence check) is consulted FIRST before any
+  void/re-dispatch decision from now on; a 15-minute admission window is
+  too aggressive under capacity contention — queue doctrine governs.
+- **WFLX-P3 DISPATCH AUTHORIZED** (reference/benchmark/parity lab wave):
+  the next-gen black-box comparison program over the LAB-series capture
+  estate (LAB-01..06 audio surfaces; the original Explainer video artifact
+  + scene atlas; the P1/P2 recorded comparison hooks) — comparison-record
+  schema + ingestion + audio parity comparison suite + video hook harness
+  + integration tests authorized through this work order. Fresh
+  real-product captures (video Short/Cinematic + custom-prompt arms) are
+  TL-side through the replay browser, landing as TL commits; the worker
+  NEVER fabricates product-side numbers (COMPARISON PENDING REFERENCE
+  CAPTURE discipline). Work order dispatched verbatim into the worker
+  session; first worker commit records it as
+  `docs/work-items/33-WFLX-P3-REFERENCE-LAB.md`. Baseline: main @ fe63944.
+- Phase-gate note: the custom-prompt comparison gate receives its
+  product-side evidence from the P3 capture matrix (TL-side arms) —
+  closing the P1 work-order gap noted in the refined handoff.
