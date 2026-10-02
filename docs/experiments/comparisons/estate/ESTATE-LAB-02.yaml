@@ -1,0 +1,82 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "ESTATE-LAB-02"
+kind: "estate-capture"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "audio"
+dimension: "reference.audio.lab-02"
+reference_config:
+  notebook: "WFLX-LAB-01 (dedicated; id 25661cd9) — SAME notebook as LAB-01, CONTROL source restored (remove + re-add; pasted sources are content-immutable)"
+  format: "Brief, Critique, Debate (three generations, same dialog, format radio switched per run)"
+  language: "English"
+  length: "Default (all three)"
+  visual_style: ""
+  custom_prompt: ""
+  other_config:
+    generation_sequence: "Brief 21:09:31Z -> ready ~21:14 (~4.5 min); Critique 21:15:07Z -> ready ~21:22 (~7 min); Debate 21:25:02Z -> ready ~21:31 (~6 min)"
+    ai_usage_ui: "dialog shows an AI Usage meter ('Already used / Estimated use') — limits refresh every 5 h (PRO tier); five generations on this notebook so far without hitting a limit"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — identical to LAB-01 baseline)"
+artifact_fingerprint:
+  sha256: null
+  path: "three artifacts in artifacts/reference/lab-02/"
+  media_present: false
+  additional:
+    - label: "Brief (Inside the Redacted AI Project Blueprint)"
+      sha256: "4da66f188a7d17f057d56ed1becfbc3ff0e8d91622d39dab061ded05dbb118ed"
+      duration_seconds: 93.92
+    - label: "Critique (Replacing flat AI notes with vertical stacks)"
+      sha256: "304228546316f96df78302c32fe0e907793a96873becddc9c280c0698897b43d"
+      duration_seconds: 1019.89
+    - label: "Debate (Autonomous AI or enterprise containment grid)"
+      sha256: "b9e791da1e7086bb849468238dd1d84aaf2013831b8a6d10fc413b8d3c17c4b7"
+      duration_seconds: 1049.89
+  note: "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+captured_utc: null
+duration_seconds: null
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "(Brief, 93.92 s): SINGLE narrator voice, no second host — 'This is the brief on...'. Structure is explicitly enumerated ('First... Second... Finally...'), compressing the same three-part roadmap the Deep Dive walks conversationally. ~11x shorter than the Deep Dive control."
+    source: "docs/experiments/records/LAB-02.yaml"
+  - label: "OBSERVED"
+    text: "(Critique, 1019.89 s = 16:59): TWO hosts in an evaluative review stance — the episode reviews THE SOURCE ITSELF ('what if we looked at it from the perspective of a dual view approach?', 'conceptual friction'), proposing concrete improvements (glossary view vs systems view) rather than unpacking content. Suggests critique voices the document's weaknesses/design tradeoffs."
+    source: "docs/experiments/records/LAB-02.yaml"
+  - label: "OBSERVED"
+    text: "(Debate, 1049.89 s = 17:29): TWO hosts in adversarial positions with visible rebuttal moves — 'I am not convinced by that line of reasoning because...', counter-analogy (autonomous vehicle on a track with moving guardrails), micro-scenario evidence, concession-reframe ('That's an interesting point, though I would frame it differently')."
+    source: "docs/experiments/records/LAB-02.yaml"
+  - label: "OBSERVED"
+    text: "(restructure, not re-skin): the three formats differ in VOICE COUNT (1 vs 2), STANCE (neutral summary vs evaluative review vs adversarial debate), and DURATION (1:33 vs 17:00 vs 17:29) on the SAME source — a structural re-composition per mode, matching our EXP-A-01..03 axis qualitatively."
+    source: "docs/experiments/records/LAB-02.yaml"
+  - label: "OBSERVED"
+    text: "(duration band): Critique and Debate sit within ~90 s of each other and ~3 min below the Deep Dive control — a mid-length band distinct from both Brief and Deep Dive."
+    source: "docs/experiments/records/LAB-02.yaml"
+  - label: "OBSERVED"
+    text: ": all three generated titles are content-derived and mode-appropriate ('Inside the Redacted AI Project Blueprint' / 'Replacing flat AI notes with vertical stacks' / 'Autonomous AI or enterprise containment grid') — the Critique title literally names its proposed improvement."
+    source: "docs/experiments/records/LAB-02.yaml"
+  - label: "OBSERVED"
+    text: ": same codec envelope for all formats (AAC 256 kbps 44.1 kHz stereo) — mode differences are editorial, not technical."
+    source: "docs/experiments/records/LAB-02.yaml"
+  - label: "OBSERVED"
+    text: ": sequential generations on one notebook do not cross-contaminate — each artifact stands alone; the Studio list holds all five artifacts (2 Deep Dive + 3 modes) concurrently."
+    source: "docs/experiments/records/LAB-02.yaml"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: null
+  lab_pipeline: null
+  metrics: []
+confidence: "medium"
+unresolved_behavior:
+  - "vs LAB-01 (Deep Dive control): every format restructures rather than reskins — duration spread 1:33 to 20:01, voice count 1-2, stance neutral/evaluative/adversarial."
+  - "vs our EXP-A-01..03: our brief is a fixed 10-turn skeleton; the real Brief is a single continuous narration (~1.5 min) with enumeration markers — our skeleton model over-structures the real Brief surface."
+tl_hooks: []
+evidence_paths:
+  - "artifacts/reference/lab-02/Inside_the_Redacted_AI_Project_Blueprint.m4a"
+  - "artifacts/reference/lab-02/Replacing_flat_AI_notes_with_vertical_stacks.m4a"
+  - "artifacts/reference/lab-02/Autonomous_AI_or_enterprise_containment_grid.m4a"
+  - "artifacts/reference/lab-02/artifact.json"
+  - "docs/experiments/records/LAB-01.yaml"
+status: "ingested"

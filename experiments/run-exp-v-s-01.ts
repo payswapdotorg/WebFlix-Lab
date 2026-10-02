@@ -15,9 +15,13 @@
  *   F3 duration within the explicit band [48, 72] s of the 60 s target
  *   F4 determinism (double-run byte-identical)
  *
- * Lab reconstruction of DOCUMENTED product behavior ("Short (approx. 60 s)")
- * — product-side numbers are COMPARISON PENDING REFERENCE CAPTURE.
- * Offline placeholders throughout — NOT product parity evidence (AGENTS.md).
+ * Lab reconstruction of DOCUMENTED product behavior ("Short (approx. 60 s)").
+ * WFLX-P3 (EV-025): the ad-hoc product-side pending markers are REPLACED by
+ * schema-compliant comparison records (tools/comparison/video-hooks.ts) fed
+ * by the ingested LAB-series estate — LAB-07/08/09 product captures with the
+ * n=3 duration band, the 9:16 geometry gap, the instrument-truth sceneDensity
+ * note and the pending hookProminence annotation. Offline placeholders
+ * throughout — NOT product parity evidence (AGENTS.md).
  */
 
 import { mkdirSync, writeFileSync, readFileSync, mkdtempSync, rmSync } from 'node:fs';
@@ -31,6 +35,7 @@ import {
   stableStringify,
 } from '../src/video';
 import type { OverviewPlan, SemanticGraph } from '../src/contracts';
+import { buildShortComparisonRecord } from '../tools/comparison/video-hooks';
 
 const OUT_ROOT = 'artifacts/video/exp-v-s-01';
 
@@ -142,6 +147,32 @@ async function main(): Promise<void> {
     stableStringify(short.report) === stableStringify(shortB.report) &&
     full.artifact.id === fullB.artifact.id;
 
+  // WFLX-P3 (EV-025): schema-compliant comparison records replace the ad-hoc
+  // product-side pending markers — product values come from the ingested
+  // LAB-07/08/09 estate (captured artifacts, never live re-runs).
+  const comparisonRecords = [
+    buildShortComparisonRecord({
+      labDurationSeconds: full.timeline.durationSeconds,
+      labTargetSeconds: TARGET_SECONDS,
+      declaredBand: { minSeconds: band.minSeconds, maxSeconds: band.maxSeconds },
+      labSceneCount: report.sceneCount,
+      labHookShare: report.hookShare,
+      labGeometry: {
+        width: full.artifact.media.video?.width ?? 1280,
+        height: full.artifact.media.video?.height ?? 720,
+        fps: full.artifact.media.video?.frameRate ?? 30,
+      },
+      labAudioStream: {
+        codec: full.artifact.media.audio?.codec ?? 'aac',
+        channels: full.artifact.media.audio?.channels ?? 1,
+        sampleRateHz: full.artifact.media.audio?.sampleRateHz ?? 44100,
+      },
+      determinismByteIdentical: falsifiers.F4_determinism === true,
+      labArtifactId: full.artifact.id,
+      sourceNote: 'EXP-V-S-01 live run measurements (this runner)',
+    }),
+  ];
+
   const experimentRecord = {
     experiment: 'EXP-V-S-01',
     runStamp: RUN_STAMP,
@@ -165,26 +196,9 @@ async function main(): Promise<void> {
         'MP4 bytes depend on the encoder build (raw-MP4 exclusion-by-rule); the pinned layers are the scene SVGs, timeline, narration WAV, QA report and artifact sidecar.',
     },
     falsifiers,
-    comparisonsPendingReferenceCapture: [
-      {
-        metric: 'short.duration.seconds',
-        labMeasurement: full.timeline.durationSeconds,
-        note: 'COMPARISON PENDING REFERENCE CAPTURE — real-product Short duration band (~60 s DOCUMENTED) to be captured by WFLX-P3',
-      },
-      {
-        metric: 'short.sceneDensity.scenesPerMinute',
-        labMeasurement:
-          Math.round((report.sceneCount / (full.timeline.durationSeconds / 60)) * 100) / 100,
-        note: 'COMPARISON PENDING REFERENCE CAPTURE — real-product Short scene density to be captured by WFLX-P3',
-      },
-      {
-        metric: 'short.hookProminence.share',
-        labMeasurement: report.hookShare,
-        note: 'COMPARISON PENDING REFERENCE CAPTURE — real-product Short opening-hook prominence to be captured by WFLX-P3',
-      },
-    ],
+    comparisonRecords,
     honestBoundaries: [
-      'Short-mode depth compression, hook boost and the [48, 72] s band are LAB POLICY reconstructions of DOCUMENTED ~60 s behavior; exact product-side numbers are not asserted.',
+      'Short-mode depth compression, hook boost and the [48, 72] s band are LAB POLICY reconstructions of DOCUMENTED ~60 s behavior; product-side numbers are now RECORDED from the LAB-07/08/09 captures in the schema-compliant comparison records (EV-025) — the product duration band sits ABOVE the lab target on this fixture class (recorded gap).',
       'Offline placeholder narration + deterministic ink illustrations — NOT product parity evidence (AGENTS.md).',
     ],
     labels: { observation: 'REPRODUCED (lab)' },

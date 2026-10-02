@@ -1,0 +1,106 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "VIDEO-PARITY-06",
+  "kind": "pending-slot",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "video",
+  "dimension": "video.mutation-locality",
+  "reference_config": {
+    "notebook": null,
+    "format": "Explainer (video) + one-source mutation (the EXP-V-L-01 axis)",
+    "language": null,
+    "length": null,
+    "visual_style": null,
+    "custom_prompt": null,
+    "other_config": null
+  },
+  "source_fingerprint": null,
+  "artifact_fingerprint": {
+    "sha256": null,
+    "path": null,
+    "media_present": false,
+    "additional": [],
+    "note": "no video-side source-mutation product capture exists (LAB-05 is the AUDIO-surface mutation probe)"
+  },
+  "captured_utc": null,
+  "duration_seconds": null,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "the product mutation probe (LAB-05, b30 paragraph edit) is AUDIO-surface: global re-plan with macro-pattern preservation. No video-surface mutation capture exists; the audio-surface finding (global re-plan; mutation locality not separately observable above run-to-run variance) is the working hypothesis for video",
+      "source": "docs/experiments/records/LAB-05.yaml + docs/experiments/records/LAB-06.yaml"
+    },
+    {
+      "label": "REPRODUCED",
+      "text": "lab video locality proof (EXP-V-L-01): 1 changed SVG / 10 scenes, 1 render spec, 1 narration, 0 structure reshuffle, F1-F3 PASS",
+      "source": "experiments/run-exp-e-refresh.ts arm 3 (EV-019) — committed artifacts/video/exp-v-l-01/locality-report.json"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": "exp-v-l-01 (locality-report.json, EV-019)",
+    "lab_pipeline": "lab pipeline: Director 180s explainer plan -> single-scene claim swap -> storyboard compile + SVG render per arm (EXP-V-L-01 / EV-019)",
+    "metrics": [
+      {
+        "metric": "videoMutation.localityClass",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "lab C-5 video locality: a single-scene claim swap changes EXACTLY 1 scene SVG (scene-2) + 1 render spec + 1 narration, 0 structure reshuffle",
+          "source": "artifacts/video/exp-v-l-01/locality-report.json (EXP-V-L-01, EV-019)",
+          "note": null
+        },
+        "product": {
+          "value": null,
+          "source": null,
+          "note": null
+        },
+        "delta": null,
+        "verdict": "PENDING",
+        "pending_reason": "COMPARISON PENDING REFERENCE CAPTURE",
+        "confidence": "low",
+        "note": "the product-side video mutation capture does not exist (the mutation probe family is audio-side: LAB-05)"
+      },
+      {
+        "metric": "videoMutation.macroStructurePreservation",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "lab: 10 scenes, structure preserved, double-run deterministic",
+          "source": "artifacts/video/exp-v-l-01/locality-report.json (EXP-V-L-01, EV-019)",
+          "note": null
+        },
+        "product": {
+          "value": null,
+          "source": null,
+          "note": null
+        },
+        "delta": null,
+        "verdict": "PENDING",
+        "pending_reason": "COMPARISON PENDING REFERENCE CAPTURE",
+        "confidence": "low",
+        "note": "the product-side video mutation capture does not exist"
+      }
+    ]
+  },
+  "confidence": "medium",
+  "unresolved_behavior": [
+    "video-surface mutation locality: no product capture — UNRESOLVED (audio-surface global-re-plan finding is the hypothesis, not video truth)"
+  ],
+  "tl_hooks": [
+    "TL: land a video-surface source-mutation capture (Explainer or Short + one-source edit + regenerate, LAB-series pattern) to fill this record"
+  ],
+  "evidence_paths": [
+    "artifacts/video/exp-v-l-01/locality-report.json",
+    "docs/experiments/records/EXP-V-L-01.yaml",
+    "docs/experiments/records/LAB-05.yaml"
+  ],
+  "status": "pending-capture"
+}

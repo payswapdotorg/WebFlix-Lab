@@ -1,0 +1,169 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "AUDIO-PARITY-03",
+  "kind": "dimension-comparison",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "audio",
+  "dimension": "audio.length-control",
+  "reference_config": {
+    "notebook": "WFLX-LAB-01 (dedicated; id 25661cd9) — same notebook, control source",
+    "format": "Deep Dive",
+    "language": "English",
+    "length": "Short (dialog Length control: Short / Default / Long — UI-exposed, answering the LAB-03 precondition)",
+    "visual_style": "",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "2026-09-28T22:06:43Z",
+      "generation_ready": "~2026-09-28T22:11:00Z (~4.5 min — faster than Default's ~7-8 min)"
+    }
+  },
+  "source_fingerprint": "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — identical to LAB-01)",
+  "artifact_fingerprint": {
+    "sha256": "4a16e9d300a1d39da8300214b4ba7aa5911b27aa5ab12fcadc70548efdb283f6",
+    "path": "artifacts/reference/lab-03/Blueprint_for_an_autonomous_AI_workforce.m4a",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-09-28T22:06:43Z",
+  "duration_seconds": 318.21,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(duration control is real): Short setting produced a 318.21 s (5:18) episode vs the Default control's 1201.82 s (20:01) — a 3.78x compression on the same source and format.",
+      "source": "docs/experiments/records/LAB-03.yaml"
+    },
+    {
+      "label": "REPRODUCED",
+      "text": "lab compiles: 300 s baseline 20 turns coverage 11/11; 180 s arm 18 turns coverage 7/11 (wps 1.443 -> 1.8)",
+      "source": "experiments/run-comparison-audio.ts (this suite) reproducing artifacts/audio/exp-a-r2/"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": "artifact-exp-a-deepdive-3min",
+    "lab_pipeline": "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)",
+    "metrics": [
+      {
+        "metric": "lengthControl.compressionRatio",
+        "unit": null,
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": 0.6,
+          "source": "lab 180 s arm / 300 s baseline (EXP-A-05 axis)",
+          "note": null
+        },
+        "product": {
+          "value": 0.2648,
+          "source": "LAB-03 Short 318.21 s / LAB-01 Default 1201.82 s (estate sidecars)",
+          "note": null
+        },
+        "delta": "product/lab = 0.4413 (lab 0.6, product 0.2648) — rule duration-ratio-band [0.75, 1.3333]",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "compression magnitudes differ: the product Short control compresses 3.78x; the lab duration knob compresses 1.67x on the canonical pair."
+      },
+      {
+        "metric": "lengthControl.coverageBehavior",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "salience-omission: covered claims 11 -> 7 at 180 s (4 omitted by salience, omitted-with-reason — never silently dropped)",
+          "source": "artifacts/audio/exp-a-r2/deepdive-3min-duration (plan.coverage)",
+          "note": null
+        },
+        "product": {
+          "value": "(compression strategy = depth reduction, not structure removal): the Short episode keeps the two-host dialogic form, the hook->title->roadmap opening, the section walk (tools catalog -> infrastructure -> architecture), the banter register, and the redaction-as-framing move; every section is present but covered faster (infrastructure reached within ~2 min vs ~5+ min in Default).",
+          "source": "docs/experiments/records/LAB-03.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": "compression philosophy differs: lab drops claims by salience while raising rate; the product preserves topic coverage and shrinks per-topic depth (the LAB-03 differences note — recorded, not normalized)."
+      },
+      {
+        "metric": "lengthControl.speakerCountPreserved",
+        "unit": null,
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": true,
+          "source": "two hosts at both 300 s and 180 s (lab compiles)",
+          "note": null
+        },
+        "product": {
+          "value": true,
+          "source": "ESTATE-LAB-03 vs ESTATE-LAB-01 (hosts: 2 both)",
+          "note": null
+        },
+        "delta": "lab true, product true — rule equality",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": null
+      },
+      {
+        "metric": "lengthControl.macroSkeletonPreserved",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "same plan shape at 180 s: 6 beats (frame -> sections -> synthesize), same beat titles as the 300 s baseline",
+          "source": "artifacts/audio/exp-a-r2/deepdive-3min-duration (plan.beats)",
+          "note": null
+        },
+        "product": {
+          "value": "(compression strategy = depth reduction, not structure removal): the Short episode keeps the two-host dialogic form, the hook->title->roadmap opening, the section walk (tools catalog -> infrastructure -> architecture), the banter register, and the redaction-as-framing move; every section is present but covered faster (infrastructure reached within ~2 min vs ~5+ min in Default).",
+          "source": "docs/experiments/records/LAB-03.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": null
+      },
+      {
+        "metric": "lengthControl.speakingRateResponse",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "lab wps 1.443 (300 s) -> 1.8 (180 s) = +24.7% under compression",
+          "source": "artifacts/audio/exp-a-r2/{deepdive-5min-baseline,deepdive-3min-duration} (timing + realized words)",
+          "note": null
+        },
+        "product": {
+          "value": "conversational pace preserved (qualitative ASR observation; per-topic depth shrinks instead)",
+          "source": "docs/experiments/records/LAB-03.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "low",
+        "note": "declared rule: |lab wps change| <= 10% reads as pace-preserved. The product side is not numerically measurable black-box (qualitative observation recorded; measurement-class note)."
+      }
+    ]
+  },
+  "confidence": "medium",
+  "unresolved_behavior": [
+    "product claim-level coverage under compression is not measurable black-box (LAB-03: coverage observable only qualitatively from ASR sampling)"
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "docs/experiments/records/LAB-03.yaml",
+    "artifacts/reference/lab-03/artifact.json",
+    "artifacts/audio/exp-a-r2/deepdive-3min-duration/",
+    "artifacts/audio/exp-a-r2/deepdive-5min-baseline/",
+    "docs/experiments/comparisons/estate/ESTATE-LAB-03.yaml"
+  ],
+  "status": "compared"
+}

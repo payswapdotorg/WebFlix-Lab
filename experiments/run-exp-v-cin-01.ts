@@ -23,6 +23,12 @@
  *   regen — single-asset local regeneration proof
  *   summary — assemble experiment-record.json from the persisted outputs
  *
+ * WFLX-P3 (EV-025): the ad-hoc product-side pending markers in the summary
+ * record are REPLACED by schema-compliant comparison records
+ * (tools/comparison/video-hooks.ts) — the Cinematic slot records the SCOPING
+ * TRUTH that no Cinematic product format exists (LAB-07 UI-truth) with all
+ * metrics COMPARISON PENDING REFERENCE CAPTURE.
+ *
  * Falsifiers (work order §4 C1):
  *   F1 determinism (double-run byte-identical plan + metadata)
  *   F2 local regeneration (single-asset regen touches only that asset)
@@ -47,6 +53,7 @@ import {
 import { OfflineGenerativeVisual } from '../src/providers/visual/offline-generative';
 import { OfflineGenerativeVideo } from '../src/providers/video/offline-generative';
 import type { OverviewPlan, SemanticGraph } from '../src/contracts';
+import { buildCinematicPendingRecord } from '../tools/comparison/video-hooks';
 
 const OUT_ROOT = 'artifacts/video/exp-v-cin-01';
 
@@ -319,20 +326,19 @@ function runSummary(): void {
     regeneration: regen,
     assetClassHistogram: assetClasses,
     falsifiers,
-    comparisonsPendingReferenceCapture: [
-      {
-        metric: 'cinematic.shotDensity.shotClasses',
-        labMeasurement: a.scenes,
-        note: 'COMPARISON PENDING REFERENCE CAPTURE — real-product Cinematic shot density/class mix to be captured by WFLX-P3',
-      },
-      {
-        metric: 'cinematic.styleContinuity.constraints',
-        labMeasurement: 'per-adjacency subject-carry/motif + per-scene palette (see cinematic-plan.json)',
-        note: 'COMPARISON PENDING REFERENCE CAPTURE — real-product Cinematic continuity behavior to be captured by WFLX-P3',
-      },
+    comparisonRecords: [
+      buildCinematicPendingRecord({
+        labSceneCount: (a.scenes as number) ?? 0,
+        labJobs: (a.jobs as number) ?? 0,
+        assetClassHistogram: assetClasses,
+        planFingerprintIdentical: det.planFingerprintIdentical === true,
+        regenIsolationProven: falsifiers.F2_local_regeneration === true,
+        labArtifactId: 'exp-v-cin-01 (cinematic plan fingerprint — see committed cinematic-plan-fingerprint.json)',
+      }),
     ],
     honestBoundaries: [
       'OFFLINE generative stand-ins: deterministic placeholder renderers behind the REAL job interface — NOT real generative output and NOT product parity evidence (AGENTS.md).',
+      'SCOPING TRUTH (WFLX-P3 / EV-025): no Cinematic product format exists in the product video surface (LAB-07 UI-truth) — the comparison record carries the scoping truth with all metrics COMPARISON PENDING REFERENCE CAPTURE, never a parity claim.',
       'Native video-clip embedding in the offline compositor is UNRESOLVED: video-generation assets are validated, content-fingerprinted, provenance-recorded and referenced in the timeline overlay; the composed MP4 renders the deterministic + still-art layers.',
       'MP4 bytes follow the raw-MP4 exclusion-by-rule discipline; the pinned layers are the cinematic plan fingerprint, asset manifest, validation, overlay, timeline, QA reports and the scene-SVG set.',
       'Real generative provider execution is Deliverable C2 / EXP-V-CIN-LIVE-01 (EV-022).',

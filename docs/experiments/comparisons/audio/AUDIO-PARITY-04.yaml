@@ -1,0 +1,101 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "AUDIO-PARITY-04"
+kind: "dimension-comparison"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "audio"
+dimension: "audio.language"
+reference_config:
+  notebook: "WFLX-LAB-01 (dedicated; id 25661cd9) — same notebook, control source"
+  format: "Deep Dive (dialog default)"
+  language: "español (dialog language combobox — full locale list incl. español / español (Latinoamérica) / Deutsch / Français etc.)"
+  length: "Default"
+  visual_style: ""
+  custom_prompt: ""
+  other_config:
+    generation_start: "~2026-09-28T21:57:00Z"
+    generation_ready: "~2026-09-28T22:06:00Z (~9 min)"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — identical to LAB-01)"
+artifact_fingerprint:
+  sha256: "275e5c37673ebc9ed8bbe9f842d599fdbdd5a9033896dfebcbb20f00ac2b4170"
+  path: "artifacts/reference/lab-04/Qué_esconde_la_nota_de_IA_censurada.m4a"
+  media_present: false
+  additional: []
+  note: "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+captured_utc: "~2026-09-28T21:57:00Z"
+duration_seconds: 1034.84
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "(structure invariance): the discourse skeleton is preserved — cold-open hook, explicit source-title reference (adapted as 'nota desordenada y censurada'), mission framing, two hosts, section walk."
+    source: "docs/experiments/records/LAB-04.yaml"
+  - label: "REPRODUCED"
+    text: "lab es arm: 20 turns, 2 speakers, coverage 11/11, 300 s — structure byte-equal to the en baseline plan at the plan layer"
+    source: "experiments/run-comparison-audio.ts (this suite) reproducing artifacts/audio/exp-a-r2/deepdive-5min-es"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: "artifact-exp-a-deepdive-5min-es"
+  lab_pipeline: "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)"
+  metrics:
+    - metric: "language.planStructureInvariance"
+      unit: null
+      measurement_class: "like-for-like"
+      lab:
+        value: true
+        source: "es arm: 20 turns / 2 speakers / coverage 11 — identical to the en baseline (plan structure)"
+        note: null
+      product:
+        value: true
+        source: "ESTATE-LAB-04 (invariants: discourse skeleton preserved across the language switch)"
+        note: null
+      delta: "lab true, product true — rule equality"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "high"
+      note: null
+    - metric: "language.surfaceRegeneration"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "lab ES arm: plan structure invariant, realized anchor texts surface in ENGLISH (placeholder realizer anchors are not localized — the ML1 boundary recorded by EXP-L-02/EV-017)"
+        source: "artifacts/audio/exp-a-r2/deepdive-5min-es + docs/experiments/records/EXP-A-06.yaml"
+        note: null
+      product:
+        value: ": full Spanish-language generation on an English source — the episode is natively Spanish ('Vale, vamos a desgranar esto...'), not translated-English; banter markers are Spanish ('Vale', 'Exacto', '¿sí?')."
+        source: "docs/experiments/records/LAB-04.yaml"
+        note: null
+      delta: "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)"
+      verdict: "DIVERGENT"
+      pending_reason: null
+      confidence: "high"
+      note: "the product regenerates the full episode natively in the target language; the lab placeholder surface stays EN — the structure-invariant/surface-specific split matches, the surface regeneration does not (honest boundary)."
+    - metric: "language.durationShiftPercent"
+      unit: "%"
+      measurement_class: "like-for-like"
+      lab:
+        value: 0
+        source: "lab placeholder synthesis pins realized duration to the 300 s target in BOTH languages (0% shift by construction)"
+        note: null
+      product:
+        value: -13.9
+        source: "LAB-04 1034.84 s vs LAB-01 1201.82 s = -13.9% at the same Default length setting"
+        note: null
+      delta: "lab 0%, product -13.9% — |Δ| 13.9 pp — rule percent-point-tolerance <= 5 pp"
+      verdict: "DIVERGENT"
+      pending_reason: null
+      confidence: "medium"
+      note: "measurement-class note: the lab 0% is a construction artifact of placeholder timing (not a claimed parity); the product varies by language with real speech."
+confidence: "medium"
+unresolved_behavior:
+  - "lab anchor localization gap (ML1): placeholder anchors surface EN under es — recorded boundary, not parity"
+tl_hooks: []
+evidence_paths:
+  - "docs/experiments/records/LAB-04.yaml"
+  - "artifacts/reference/lab-04/artifact.json"
+  - "artifacts/audio/exp-a-r2/deepdive-5min-es/"
+  - "docs/experiments/comparisons/estate/ESTATE-LAB-04.yaml"
+status: "compared"

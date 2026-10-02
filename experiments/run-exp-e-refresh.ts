@@ -44,6 +44,11 @@ import {
   type CompileVideoOverviewResult,
 } from '../src/video';
 import type { OverviewPlan, SemanticGraph, VideoScene } from '../src/contracts';
+import {
+  buildExplainerComparisonRecord,
+  buildVideoCustomPromptComparisonRecord,
+  buildVideoLocalityPendingRecord,
+} from '../tools/comparison/video-hooks';
 
 const E_REFRESH_ROOT = 'artifacts/video/exp-e-refresh';
 const LOCALITY_ROOT = 'artifacts/video/exp-v-l-01';
@@ -459,9 +464,20 @@ function runLocality(): void {
       F2_structure_zero_reshuffle: !structureReshuffle && changedRenderSpecs === 1 && changedNarration === 1,
       F3_determinism_double_run: detBase && detMut,
     },
+    // WFLX-P3 (EV-025): the ad-hoc productComparison pending string is
+    // REPLACED by a schema-compliant comparison record (no video-side
+    // mutation capture exists — COMPARISON PENDING REFERENCE CAPTURE with
+    // the TL hook; the audio-surface LAB-05/LAB-06 finding is the recorded
+    // hypothesis, never video truth).
+    productComparisonRecord: buildVideoLocalityPendingRecord({
+      changedSvgs: changedSvgs.length,
+      sceneCount: compileBase.scenes.length,
+      targetSceneId: targetScene.id,
+      labArtifactId: 'exp-v-l-01 (locality-report.json, EV-019)',
+    }),
     labels: {
       observation: 'REPRODUCED (lab)',
-      productComparison: 'COMPARISON PENDING REFERENCE CAPTURE (WFLX-P3 scope)',
+      productComparison: 'see productComparisonRecord (WFLX-P3 / EV-025 schema-compliant slot)',
     },
   };
   writeJson(LOCALITY_ROOT, 'locality-report.json', localityReport);
@@ -501,10 +517,62 @@ function runSummary(): void {
   const svgDriftVsCommitted =
     committedDeterminism !== undefined && committedDeterminism.sceneSvgCombinedSha256 !== currentSvg;
 
+  // WFLX-P3 (EV-025): schema-compliant comparison records replace the ad-hoc
+  // real-product pending markers — the Explainer comparison is fed by the
+  // original Explainer reference artifact + scene atlas (the ONE golden
+  // product sample); the custom-prompt comparison by LAB-09 vs the lab
+  // custom-style layer. Lab measurements are the persisted P2-era arm
+  // outputs, read verbatim (no composition re-run, no committed-store churn).
+  const arm1Timeline = read(join(E_REFRESH_ROOT, 'baseline-canonical-7min', 'timeline.json')) as {
+    durationSeconds?: number;
+  } | null;
+  const arm1Artifact = read(join(E_REFRESH_ROOT, 'baseline-canonical-7min', 'artifact.json')) as {
+    id?: string;
+    media?: {
+      video?: { width?: number; height?: number; frameRate?: number };
+      audio?: { codec?: string; channels?: number; sampleRateHz?: number };
+    };
+  } | null;
+  const arm1Summary = arm1 as { sceneCount?: number } | null;
+  const arm2StyleDelta = arm2Delta as {
+    structureChangedScenes?: number;
+    coverageIdentical?: boolean;
+    timelineIdentical?: boolean;
+  } | null;
+  const comparisonRecords = [
+    buildExplainerComparisonRecord({
+      labDurationSeconds: arm1Timeline?.durationSeconds ?? 0,
+      labSceneCount: arm1Summary?.sceneCount ?? 0,
+      labGeometry: {
+        width: arm1Artifact?.media?.video?.width ?? 1280,
+        height: arm1Artifact?.media?.video?.height ?? 720,
+        fps: arm1Artifact?.media?.video?.frameRate ?? 30,
+      },
+      labAudioStream: {
+        codec: arm1Artifact?.media?.audio?.codec ?? 'aac',
+        channels: arm1Artifact?.media?.audio?.channels ?? 1,
+        sampleRateHz: arm1Artifact?.media?.audio?.sampleRateHz ?? 44100,
+      },
+      labArtifactId: arm1Artifact?.id ?? 'n/a',
+      customStyleStructureChangedScenes: arm2StyleDelta?.structureChangedScenes ?? 0,
+      customStyleCoverageIdentical: arm2StyleDelta?.coverageIdentical === true,
+      customStyleTimelineIdentical: arm2StyleDelta?.timelineIdentical === true,
+    }),
+    buildVideoCustomPromptComparisonRecord({
+      customStyleStructureChangedScenes: arm2StyleDelta?.structureChangedScenes ?? 0,
+      customStyleCoverageIdentical: arm2StyleDelta?.coverageIdentical === true,
+      customStyleTimelineIdentical: arm2StyleDelta?.timelineIdentical === true,
+      labSceneCount: arm1Summary?.sceneCount ?? 0,
+      labArtifactId: 'exp-e-refresh custom-style-7min (style-delta.json, EV-019)',
+    }),
+  ];
+
   const refreshSummary = {
     experiment: 'EXP-E-REFRESH',
     runStamp: RUN_STAMP,
     baseline: 'WFLX-P2 wave branch HEAD (post-P1 merge c72058a + d12eb7a; branch work/wflx-p2-video-parity)',
+    p3HookWiring:
+      'WFLX-P3 / EV-025: comparisonRecords added; arm measurements are the committed P2 outputs read verbatim (no composition re-run)',
     arm1_baseline: arm1,
     arm1_double_run: {
       packetDigestRunA: arm1Det?.packetDigestRunA ?? null,
@@ -522,10 +590,11 @@ function runSummary(): void {
     },
     arm2_custom_style: arm2Delta,
     arm3_locality: locality,
+    comparisonRecords,
     honestBoundaries: [
       'Offline placeholder narration + deterministic ink illustrations throughout — NOT product parity evidence (AGENTS.md).',
       'MP4 bytes are excluded-by-rule (encoder-dependent); the pinned determinism layers are the scene SVGs, timeline, narration WAV, QA report and the composition-independent packet digest.',
-      'Real-product comparison hooks are COMPARISON PENDING REFERENCE CAPTURE (WFLX-P3 scope); no product-side numbers are asserted here.',
+      'WFLX-P3 / EV-025: real-product Explainer comparisons now carry product-side values from the ONE golden reference artifact + scene atlas (schema-compliant comparisonRecords); scene-count comparisons are instrument-truth-only (binding measurement-class note: ffmpeg cuts vs plan units are never compared like-for-like).',
     ],
   };
   writeJson(E_REFRESH_ROOT, 'refresh-summary.json', refreshSummary);

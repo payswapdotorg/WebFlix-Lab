@@ -1,0 +1,79 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "ESTATE-LAB-01"
+kind: "estate-capture"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "audio"
+dimension: "reference.audio.lab-01"
+reference_config:
+  notebook: "WFLX-LAB-01 (dedicated; id 25661cd9)"
+  format: "Deep Dive (dialog default; all four formats exposed in one dialog: Deep Dive / Brief / Critique / Debate)"
+  language: "English (dialog default; language selector present)"
+  length: "Default (dialog exposes Short / Default / Long)"
+  visual_style: ""
+  custom_prompt: ""
+  other_config:
+    notebook_url_env: "GEMINI_REFERENCE_NOTEBOOK_URL (local env only, never in git)"
+    account: "operator Google session in replay browser (PRO tier); VPN egress required — direct egress yields location=unsupported"
+    generation_start: "2026-09-28T20:35:06Z (Generate now clicked)"
+    generation_ready: "~2026-09-28T20:42Z (~7-8 min wall-clock for a 1-source 20-min artifact)"
+    player_ui: "waveform player, 1.0x/replay_10/forward_10, 'Interactive mode' chip present; download via player more-menu -> Download (.m4a)"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (fixtures/reference-messy-note-redacted.md, 1213 bytes)"
+artifact_fingerprint:
+  sha256: "eb544895237d7e1013fe4dc8e7c50dd54b24bf755c696f2daaf92c8508c032a0"
+  path: "artifacts/reference/lab-01/Blueprint_for_a_Redacted_AI_City.m4a"
+  media_present: false
+  additional: []
+  note: "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+captured_utc: "2026-09-28T20:35:06Z"
+duration_seconds: 1201.82
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: ": artifact is a single stereo AAC (.m4a) file, 256 kbps, 44.1 kHz, duration 1201.82 s (20:01) for the 1-source 1213-byte fixture at Default length."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: ": exactly TWO hosts in lively conversation; rapid back-and-forth banter with acknowledgment tokens ('Exactly', 'Yeah', questions) — matches the Deep Dive format description 'A lively conversation between two hosts, unpacking and connecting topics'."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: ": opening (~first 90 s) = hook ('Imagine a digital city...') + explicit source-title reference ('titled # Reference Fixture Redacted: Messy Note') + framing ('three distinct strata') roadmap."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: ": the episode follows the source's own three-section structure (creative tools -> infrastructure -> operational architecture) — the hosts name Section 3 explicitly and walk the sections in order."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: ": hosts re-interpret the redaction ('credentials blacked out... structural secrets left wide open') — the redaction is discussed AS CONTENT, i.e. source-level features surface as episode framing."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: ": middle segment (~9:30-12:00) is section-by-section deep dive with analogies ('robot middle managers'), rhetorical questions, and inter-host elaboration pairs."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: ": closing (~17:30-20:01) is a synthesis recap of the three strata + listener-facing takeaway ('the next time you use an AI tool...') — a conclusion beat, not a trailing cliff."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: "(ASR rough transcript, 3 x 150 s sampled at 0:00/9:30/17:30): alternation cadence roughly 2-6 host turns per topic beat; no single turn exceeds ~40 s in the sampled windows."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: ": UI exposes duration control (Short/Default/Long) and language selection in the SAME dialog as the four formats — duration/format mutation is UI-exposed, directly enabling LAB-02/LAB-03."
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "OBSERVED"
+    text: ": generation latency ~7-8 min; artifact title is model-generated from content ('Blueprint for a Redacted AI City'), not the source filename."
+    source: "docs/experiments/records/LAB-01.yaml"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: "ASR rough transcript sampled 3x150 s at 0:00/9:30/17:30 (z-ai ASR; chunks ephemeral, summarized into the LAB-01 record observations)"
+comparison:
+  lab_artifact_id: null
+  lab_pipeline: null
+  metrics: []
+confidence: "medium"
+unresolved_behavior: []
+tl_hooks: []
+evidence_paths:
+  - "artifacts/reference/lab-01/Blueprint_for_a_Redacted_AI_City.m4a"
+  - "artifacts/reference/lab-01/artifact.json"
+  - "fixtures/reference-messy-note-redacted.md"
+  - "docs/experiments/lab-series-runbook.md"
+status: "ingested"

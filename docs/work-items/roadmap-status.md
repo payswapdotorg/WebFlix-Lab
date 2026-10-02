@@ -500,3 +500,97 @@ pattern) closed the video-side capture matrix and banked the audio-lane truth:
   LAB-07, twin ✅ LAB-08, custom prompt ✅ LAB-09, Explainer original ✅
   (reference/video), Cinematic n/a-in-product, language ⏳ not captured
   (PENDING — non-English video arm optional follow-up)}.
+
+## 2026-10-02 — WFLX-P3 DELIVERED (branch work/wflx-p3-reference-lab) — the reference/comparison program over the capture estate
+
+Wave: WFLX-P3 (work order `docs/work-items/33-WFLX-P3-REFERENCE-LAB.md`,
+first commit `dc14713`). Baseline: main @ `39f3e09`. All four chunks green
+at the wave HEAD: **contracts 75, source 45, director 31, audio 159, video
+117, integration 29** (was 14; +15 new comparison tests) = **456/456**;
+typecheck 0 errors, lint clean; manifest packet digest double-run
+byte-identical at a fixed stamp (committed registry untouched — the wave
+adds no artifacts under the audio/video registry roots; 42 records, no
+transition); credential sweep over the wave diff = 0 hits.
+
+- **Deliverable A — comparison-record schema + ingestion (EV-023):
+  VERIFIED.** Canonical schema (`tools/comparison/schema.ts`, zod-validated;
+  docs: `docs/experiments/comparison-record-schema.md` + template) carrying
+  the §3 charter field list. REQUIRED-EITHER-VALUE-OR-PENDING is mechanical
+  and test-enforced: VERIFIED/DIVERGENT metrics carry BOTH lab and product
+  values with a product source pointer; PENDING metrics carry exactly
+  "COMPARISON PENDING REFERENCE CAPTURE" with a NULL product value;
+  instrument-truth numbers are never compared like-for-like. The ingester
+  folds the committed estate (LAB-01..09 + the original Explainer reference
+  + scene atlas) into **10 estate records** — every ingested number traces
+  to a committed record; missing fields become null. Hand-rolled fail-loud
+  YAML subset parser/emitter (the repo's no-yaml-dependency discipline).
+- **Deliverable B — audio parity comparison suite (EV-024): VERIFIED (with
+  recorded DIVERGENT verdicts).** `tools/comparison/audio-suite.ts` +
+  `experiments/run-comparison-audio.ts` compile the LAB-canonical source
+  through the offline deterministic pipeline (reproducing the committed
+  exp-a-r2 arm structure) and emit **8 dimension records** — 17 VERIFIED /
+  12 DIVERGENT / 6 PENDING metrics, every verdict from a DECLARED mechanical
+  rule (duration-ratio-band, equality, percent-point, cited-qualitative).
+  Key honest verdicts: Deep Dive structure/speakers VERIFIED, duration class
+  DIVERGENT (300 s lab canonical vs 1201.82 s product Default); mode-family
+  voice counts + stances + band ordering VERIFIED, dialogic durations
+  DIVERGENT; compression philosophy DIVERGENT (salience-omission vs
+  depth-shrink); language structure-invariance VERIFIED, surface + duration
+  shift DIVERGENT (ML1 placeholder boundary recorded); mutation content
+  voiced VERIFIED, locality class DIVERGENT (lab C-5 22/24 texts identical
+  vs product global re-plan — architecture-rule distinction recorded);
+  twin stochasticity DIVERGENT (lab determinism = control choice, not
+  parity). LAB-10 (custom prompt) + Interactive Audio = PENDING SLOTS with
+  TL hooks (the 2026-10-01 scheduling-lane change banked as truth).
+- **Deliverable C — video hook harness (EV-025): VERIFIED.** The three
+  video runners (EXP-V-S-01, EXP-V-CIN-01, EXP-E-REFRESH) are wired to the
+  shared builders (`tools/comparison/video-hooks.ts`) — their ad-hoc
+  product-side pending markers are REPLACED by schema-compliant comparison
+  records; **6 video dimension records** — 6 VERIFIED / 7 DIVERGENT / 8
+  PENDING metrics. Short duration DIVERGENT (product n=3 band 71.63–84.82 s
+  above the lab 60 s target + [48,72] band; 71.63 sits 0.37 s below the
+  ceiling — recorded exactly); Short geometry DIVERGENT (9:16 vertical vs
+  16:9 — structural gap recorded); Short audio stream VERIFIED; sceneDensity
+  = instrument truth ONLY (binding measurement-class note: ffmpeg cuts
+  3/13/1 vs 5 plan units — never compared like-for-like); Cinematic = PENDING
+  SLOT carrying the SCOPING TRUTH (no Cinematic product format exists —
+  LAB-07 UI-truth; not a parity claim); Explainer duration/geometry/audio
+  VERIFIED vs the ONE golden reference (n=1 caveat recorded); custom-prompt
+  steering semantics DIVERGENT (product content re-plan vs lab style-only —
+  parity distinction recorded per LAB-09); language arm + video mutation
+  locality = PENDING SLOTS. Surgical regeneration: only the three intended
+  experiment records changed; pinned layers byte-identical (git-verified);
+  EXP-V-S-01 full composition deliberately NOT re-run (raw-MP4 encoder
+  nondeterminism would churn committed fingerprints) — its wiring is
+  source-level + canonical record from committed outputs, consistency
+  test-asserted.
+- **Deliverable D — integration tests + registry + docs (EV-026):
+  VERIFIED.** `tests/integration/comparison-schema.test.ts` (10 tests:
+  schema, round-trip, regeneration byte-identity, required-either-value-or-
+  pending, pending-discipline) + `tests/integration/comparison-harness.
+  test.ts` (5 tests: end-to-end harness on the canonical fixture, verdict
+  rules, lab-value consistency). EV-023/024/025/026 appended to
+  `docs/evidence/registry.jsonl` (21 → 25). This roadmap section appended.
+- **Pending-capture list (explicit):** audio custom steering prompt (LAB-10
+  — scheduled on the product side, scheduling-lane change banked);
+  Interactive Audio product capture (operator-gated; lab prototype EV-018
+  stands); video language arm (no capture); video mutation locality (no
+  video-side capture); Short hook-prominence structured annotation
+  (curation work); the whole Cinematic slot (no product format exists —
+  scoping truth, not a pending capture).
+- **HANDOFF entries (outside P3 ownership):**
+  1. `tests/integration/` additive files were authorized by the WFLX-P3 work
+     order Deliverable D; no shared fixtures were modified — the TL should
+     note the two new files in the chunk map (integration 14 → 29).
+  2. The EXP-V-S-01 runner now imports the comparison builders; a FUTURE
+     full re-run of `exp:vs01` will emit the schema-compliant records into
+     its experiment record directly — when that happens, expect a
+     raw-MP4/artifact-sidecar churn decision (encoder nondeterminism,
+     exclusion-by-rule discipline; TL-owned call).
+  3. When LAB-10 / video-language / video-mutation / Interactive-Audio
+     captures land: extend `tools/comparison/ingest.ts` LAB_IDS + re-run
+     `exp:cmpaudio` / `exp:cmpvideo` — the pending slots fill mechanically.
+  4. The audio-lane scheduling behavior (generation moved to scheduled
+     queuing, 2026-10-01) affects any FUTURE product-side audio capture
+     workflow — capture runbooks should expect the queued lane (TL/operator
+     note).

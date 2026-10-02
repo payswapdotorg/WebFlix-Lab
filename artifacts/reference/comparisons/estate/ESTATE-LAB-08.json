@@ -1,0 +1,105 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "ESTATE-LAB-08",
+  "kind": "estate-capture",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "video",
+  "dimension": "reference.video.lab-08",
+  "reference_config": {
+    "notebook": "WFLX-LAB-07 (same notebook; id 155eb020) — second run on the control fixture",
+    "format": "Short (crop_9_16 vertical)",
+    "language": "English",
+    "length": "Short (default)",
+    "visual_style": "",
+    "custom_prompt": "INTENDED but NOT REGISTERED: 'Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note.' — the native-setter injection into the Custom-topic textarea did not register with the Angular form (ambiguous return, unverified before Generate); ASR transcript adjudication: 0 keyword hits for compliance/credential/rotation/redact → the output is default-focus content. HONEST RECLASSIFICATION: this run is the VIDEO TWIN (same config as LAB-07, fresh generation), not the custom-prompt arm.",
+    "other_config": {
+      "generation_start": "2026-10-01T18:46:13Z",
+      "generation_ready": "2026-10-01T18:53:35Z (~7.4 min wall — vs 28.4 min for LAB-07 on the same notebook+source+format; warm-pipeline variance OBSERVED, wall-clock is not a stable product observable)",
+      "ui_note": "suggestion-topic cards failed to load this run ('Couldn't load topics. Refresh or add your own.' — recorded as a product-side transient)"
+    }
+  },
+  "source_fingerprint": "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — byte-identical to LAB-01/05/06/07)",
+  "artifact_fingerprint": {
+    "sha256": "23d313b0b3c0d4d157c9a59b5d9c63c6947d29ef4312fadd93b3f34744a2de4d",
+    "path": "artifacts/reference/lab-08/Inside_a_Fully_Automated_AI_Architecture.mp4",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (artifacts/reference/lab-0X/*.mp4); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-10-01T18:46:13Z",
+  "duration_seconds": 78.320907,
+  "custom_prompt": "INTENDED but NOT REGISTERED: 'Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note.' — the native-setter injection into the Custom-topic textarea did not register with the Angular form (ambiguous return, unverified before Generate); ASR transcript adjudication: 0 keyword hits for compliance/credential/rotation/redact → the output is default-focus content. HONEST RECLASSIFICATION: this run is the VIDEO TWIN (same config as LAB-07, fresh generation), not the custom-prompt arm.",
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(video run-to-run stochasticity — the LAB-06 twin finding extended to the VIDEO surface): identical source + identical settings produced a DIFFERENT title ('Inside a Fully Automated AI Architecture' vs 'How Multi-Agent Orchestration Divides AI Work'), a DIFFERENT duration (78.32 s vs 84.82 s, -7.7%), and a different byte stream — the product's video pipeline is NOT deterministic across runs, matching the audio-surface finding.",
+      "source": "docs/experiments/records/LAB-08.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(macro-pattern stability on video): both runs walk the same three-part structure of the fixture (creative tools -> infrastructure -> multi-agent orchestration) with a hook-question opening ('Have you ever wondered…') — discourse-skeleton stability with surface stochasticity, same as audio.",
+      "source": "docs/experiments/records/LAB-08.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(duration band, n=2): 84.8 s and 78.3 s — both ABOVE the lab's [48,72] s Short band; the band hypothesis strengthens (per-fixture, above-60s).",
+      "source": "docs/experiments/records/LAB-08.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(generation wall variance): 28.4 min vs 7.4 min for the same notebook/source/format — wall-clock is heavily variable and NOT a stable observable for comparison (the lab's EV-022 per-asset latencies are a different measurement class).",
+      "source": "docs/experiments/records/LAB-08.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(custom-topic UI friction, honest): the Custom topic control is an accordion with a 'Describe your own' textarea; injection via the React native-setter + input event did NOT register this run. The custom-prompt arm remains PENDING a verified capture (LAB-09).",
+      "source": "docs/experiments/records/LAB-08.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(ASR transcript): 1,284 chars for 78.3 s — the full spoken content transcribed cleanly (3x26s chunks); the transcript is committed as the content-level record for this capture.",
+      "source": "docs/experiments/records/LAB-08.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "generation wall 442 s (sidecar; wall-clock is not a stable product observable — LAB-08)",
+      "source": "artifacts/reference/lab-08/artifact.json"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "video stream 720x1280 (9:16 vertical) @ 30 fps h264; audio aac 1ch 44100 Hz",
+      "source": "artifacts/reference/lab-08/artifact.json"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "full spoken content transcribed via ASR (committed transcript is the content-level record for this capture)",
+      "source": "docs/experiments/records/LAB-08-transcript.txt"
+    }
+  ],
+  "annotations": {
+    "transcript_path": "docs/experiments/records/LAB-08-transcript.txt",
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
+  },
+  "confidence": "high",
+  "unresolved_behavior": [
+    "vs LAB-07: title, duration (-6.5 s), hook phrasing, and full surface differ on identical input — this IS the twin finding.",
+    "vs our lab's determinism doctrine: same class as LAB-06 (audio twin) — the real product re-samples its full pipeline per run at BOTH surfaces."
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "artifacts/reference/lab-08/Inside_a_Fully_Automated_AI_Architecture.mp4",
+    "artifacts/reference/lab-08/artifact.json",
+    "docs/experiments/records/LAB-08-transcript.txt",
+    "docs/experiments/records/LAB-07.yaml",
+    "docs/experiments/records/LAB-06.yaml"
+  ],
+  "status": "ingested"
+}

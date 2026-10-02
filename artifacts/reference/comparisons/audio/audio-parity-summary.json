@@ -1,0 +1,174 @@
+program: "WFLX-P3 audio parity comparison suite (EV-024)"
+stamp: "2026-10-01T20:00:00Z"
+runner: "experiments/run-comparison-audio.ts"
+harness: "tools/comparison/audio-suite.ts"
+recordCount: 8
+records:
+  - id: "AUDIO-PARITY-01"
+    dimension: "audio.deep-dive.default"
+    kind: "dimension-comparison"
+    verdicts:
+      - "DIVERGENT"
+      - "VERIFIED"
+      - "VERIFIED"
+      - "VERIFIED"
+  - id: "AUDIO-PARITY-02"
+    dimension: "audio.mode-family"
+    kind: "dimension-comparison"
+    verdicts:
+      - "VERIFIED"
+      - "VERIFIED"
+      - "VERIFIED"
+      - "VERIFIED"
+      - "DIVERGENT"
+      - "VERIFIED"
+      - "VERIFIED"
+      - "DIVERGENT"
+      - "VERIFIED"
+      - "VERIFIED"
+  - id: "AUDIO-PARITY-03"
+    dimension: "audio.length-control"
+    kind: "dimension-comparison"
+    verdicts:
+      - "DIVERGENT"
+      - "DIVERGENT"
+      - "VERIFIED"
+      - "VERIFIED"
+      - "DIVERGENT"
+  - id: "AUDIO-PARITY-04"
+    dimension: "audio.language"
+    kind: "dimension-comparison"
+    verdicts:
+      - "VERIFIED"
+      - "DIVERGENT"
+      - "DIVERGENT"
+  - id: "AUDIO-PARITY-05"
+    dimension: "audio.mutation-locality"
+    kind: "dimension-comparison"
+    verdicts:
+      - "VERIFIED"
+      - "VERIFIED"
+      - "DIVERGENT"
+      - "DIVERGENT"
+  - id: "AUDIO-PARITY-06"
+    dimension: "audio.twin-stochasticity"
+    kind: "dimension-comparison"
+    verdicts:
+      - "DIVERGENT"
+      - "VERIFIED"
+      - "DIVERGENT"
+  - id: "AUDIO-PARITY-07"
+    dimension: "audio.custom-prompt"
+    kind: "pending-slot"
+    verdicts:
+      - "PENDING"
+      - "PENDING"
+      - "PENDING"
+  - id: "AUDIO-PARITY-08"
+    dimension: "audio.interactive"
+    kind: "pending-slot"
+    verdicts:
+      - "PENDING"
+      - "PENDING"
+      - "PENDING"
+determinismSpotCheck:
+  baselineRunId: "deepdive-5min-baseline"
+  recompiledMediaSha256: "61ed761bece6628d6e7791589161643890b2a389850386c6e756f1e7abdd3aa4"
+  byteIdentical: true
+mutationLocality:
+  textIdenticalTurns: 22
+  textChangedTurns: 2
+  structureChangedTurns: 0
+  mutatedContentVoiced: true
+arms:
+  deepdive-5min-baseline:
+    turnCount: 20
+    beatCount: 6
+    speakers:
+      - "Host A"
+      - "Host B"
+    coveredClaims: 11
+    omittedClaims: 0
+    totalTurnSeconds: 300
+    wordsPerSecondMean: 1.443
+    artifactId: "artifact-exp-a-deepdive-5min-baseline"
+  brief-2min-canonical:
+    turnCount: 6
+    beatCount: 6
+    speakers:
+      - "Narrator"
+    coveredClaims: 5
+    omittedClaims: 6
+    totalTurnSeconds: 120
+    wordsPerSecondMean: 1.433
+    artifactId: "artifact-exp-a-brief-2min"
+  critique-5min-canonical:
+    turnCount: 19
+    beatCount: 6
+    speakers:
+      - "Host A"
+      - "Host B"
+    coveredClaims: 11
+    omittedClaims: 0
+    totalTurnSeconds: 300
+    wordsPerSecondMean: 1.513
+    artifactId: "artifact-exp-a-critique-5min"
+  debate-5min-canonical:
+    turnCount: 19
+    beatCount: 6
+    speakers:
+      - "Host A"
+      - "Host B"
+    coveredClaims: 11
+    omittedClaims: 0
+    totalTurnSeconds: 300
+    wordsPerSecondMean: 1.633
+    artifactId: "artifact-exp-a-debate-5min"
+  deepdive-3min-duration:
+    turnCount: 18
+    beatCount: 6
+    speakers:
+      - "Host A"
+      - "Host B"
+    coveredClaims: 7
+    omittedClaims: 4
+    totalTurnSeconds: 180
+    wordsPerSecondMean: 1.8
+    artifactId: "artifact-exp-a-deepdive-3min"
+  deepdive-5min-es:
+    turnCount: 20
+    beatCount: 6
+    speakers:
+      - "Host A"
+      - "Host B"
+    coveredClaims: 11
+    omittedClaims: 0
+    totalTurnSeconds: 300
+    wordsPerSecondMean: 1.437
+    artifactId: "artifact-exp-a-deepdive-5min-es"
+  a04-control-deepdive-5min:
+    turnCount: 24
+    beatCount: 7
+    speakers:
+      - "Host A"
+      - "Host B"
+    coveredClaims: 12
+    omittedClaims: 24
+    totalTurnSeconds: 300
+    wordsPerSecondMean: 1.56
+    artifactId: "artifact-exp-a04-control-deepdive-5min"
+  a04-mut-b30-deepdive-5min:
+    turnCount: 24
+    beatCount: 7
+    speakers:
+      - "Host A"
+      - "Host B"
+    coveredClaims: 12
+    omittedClaims: 24
+    totalTurnSeconds: 300
+    wordsPerSecondMean: 1.587
+    artifactId: "artifact-exp-a04-mut-b30-deepdive-5min"
+honestBoundaries:
+  - "comparisons are against the CAPTURED LAB-series artifacts, never live re-runs (the 2026-10-01 scheduling-lane behavior change is banked truth)"
+  - "lab placeholder narration pins realized duration to planning targets (0% shift by construction where noted — measurement-class notes are in the records)"
+  - "AUDIO-PARITY-07 (custom prompt, LAB-10) and AUDIO-PARITY-08 (Interactive Audio) are COMPARISON PENDING REFERENCE CAPTURE"

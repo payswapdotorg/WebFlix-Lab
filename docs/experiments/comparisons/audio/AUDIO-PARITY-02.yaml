@@ -1,0 +1,225 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "AUDIO-PARITY-02"
+kind: "dimension-comparison"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "audio"
+dimension: "audio.mode-family"
+reference_config:
+  notebook: "WFLX-LAB-01 (dedicated; id 25661cd9) — SAME notebook as LAB-01, CONTROL source restored (remove + re-add; pasted sources are content-immutable)"
+  format: "Brief, Critique, Debate (three generations, same dialog, format radio switched per run)"
+  language: "English"
+  length: "Default (all three)"
+  visual_style: ""
+  custom_prompt: ""
+  other_config:
+    generation_sequence: "Brief 21:09:31Z -> ready ~21:14 (~4.5 min); Critique 21:15:07Z -> ready ~21:22 (~7 min); Debate 21:25:02Z -> ready ~21:31 (~6 min)"
+    ai_usage_ui: "dialog shows an AI Usage meter ('Already used / Estimated use') — limits refresh every 5 h (PRO tier); five generations on this notebook so far without hitting a limit"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — identical to LAB-01 baseline)"
+artifact_fingerprint:
+  sha256: null
+  path: "three artifacts in artifacts/reference/lab-02/"
+  media_present: false
+  additional:
+    - label: "Brief (Inside the Redacted AI Project Blueprint)"
+      sha256: "4da66f188a7d17f057d56ed1becfbc3ff0e8d91622d39dab061ded05dbb118ed"
+      duration_seconds: 93.92
+    - label: "Critique (Replacing flat AI notes with vertical stacks)"
+      sha256: "304228546316f96df78302c32fe0e907793a96873becddc9c280c0698897b43d"
+      duration_seconds: 1019.89
+    - label: "Debate (Autonomous AI or enterprise containment grid)"
+      sha256: "b9e791da1e7086bb849468238dd1d84aaf2013831b8a6d10fc413b8d3c17c4b7"
+      duration_seconds: 1049.89
+  note: "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+captured_utc: null
+duration_seconds: null
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "(restructure, not re-skin): the three formats differ in VOICE COUNT (1 vs 2), STANCE (neutral summary vs evaluative review vs adversarial debate), and DURATION (1:33 vs 17:00 vs 17:29) on the SAME source — a structural re-composition per mode, matching our EXP-A-01..03 axis qualitatively."
+    source: "docs/experiments/records/LAB-02.yaml"
+  - label: "REPRODUCED"
+    text: "lab compiles: brief 6 turns/1 voice/120 s; critique 19 turns/2 voices/300 s; debate 19 turns/2 voices/300 s"
+    source: "experiments/run-comparison-audio.ts (this suite) reproducing artifacts/audio/exp-a-r2/"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: "artifact-exp-a-brief-2min | artifact-exp-a-critique-5min | artifact-exp-a-debate-5min"
+  lab_pipeline: "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)"
+  metrics:
+    - metric: "mode.brief.voiceCount"
+      unit: null
+      measurement_class: "like-for-like"
+      lab:
+        value: 1
+        source: "artifact-exp-a-brief-2min (single Narrator — the C-10 monologic brief)"
+        note: null
+      product:
+        value: 1
+        source: "ESTATE-LAB-02 (Brief sidecar voices: 1)"
+        note: null
+      delta: "lab 1, product 1 — delta 0 — rule equality"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "high"
+      note: null
+    - metric: "mode.brief.duration.seconds"
+      unit: "s"
+      measurement_class: "like-for-like"
+      lab:
+        value: 120
+        source: "artifact-exp-a-brief-2min (120 s canonical target)"
+        note: null
+      product:
+        value: 93.92
+        source: "ESTATE-LAB-02 (Brief sidecar 93.92 s)"
+        note: null
+      delta: "product/lab = 0.7827 (lab 120, product 93.92) — rule duration-ratio-band [0.75, 1.3333]"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "medium"
+      note: "product/lab within the declared duration-ratio band (same duration class); -26.08 s (-21.7%)"
+    - metric: "mode.brief.monologicStructure"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "C-10 monologic brief: single Narrator over a 6-turn enumerated skeleton (explanation/framing/conclusion purposes, enumeration openers)"
+        source: "fixtures/contracts/plan-audio-brief-2min.json + src/audio mode semantics (EXP-A-01 axis)"
+        note: null
+      product:
+        value: "(Brief, 93.92 s): SINGLE narrator voice, no second host — 'This is the brief on...'. Structure is explicitly enumerated ('First... Second... Finally...'), compressing the same three-part roadmap the Deep Dive walks conversationally. ~11x shorter than the Deep Dive control."
+        source: "docs/experiments/records/LAB-02.yaml"
+        note: null
+      delta: "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "medium"
+      note: "both monologic + enumerated; the lab models the surface as a 6-turn skeleton while the product is one continuous narration (over-structuring distinction recorded in unresolved_behavior)."
+    - metric: "mode.critique.voiceCount"
+      unit: null
+      measurement_class: "like-for-like"
+      lab:
+        value: 2
+        source: "artifact-exp-a-critique-5min (Host A + Host B)"
+        note: null
+      product:
+        value: 2
+        source: "ESTATE-LAB-02 (Critique sidecar voices: 2)"
+        note: null
+      delta: "lab 2, product 2 — delta 0 — rule equality"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "high"
+      note: null
+    - metric: "mode.critique.duration.seconds"
+      unit: "s"
+      measurement_class: "like-for-like"
+      lab:
+        value: 300
+        source: "artifact-exp-a-critique-5min (300 s canonical target)"
+        note: null
+      product:
+        value: 1019.89
+        source: "ESTATE-LAB-02 (Critique sidecar 1019.89 s)"
+        note: null
+      delta: "product/lab = 3.3996 (lab 300, product 1019.89) — rule duration-ratio-band [0.75, 1.3333]"
+      verdict: "DIVERGENT"
+      pending_reason: null
+      confidence: "high"
+      note: "duration-class gap (dialogic modes): product Critique ~17 min vs lab canonical 5 min."
+    - metric: "mode.critique.stance"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "critique mode semantics: two hosts in an evaluative review stance over the source (EXP-A-02 axis, canonical plan fixture)"
+        source: "fixtures/contracts/plan-audio-critique-5min.json + src/audio mode semantics"
+        note: null
+      product:
+        value: "(Critique, 1019.89 s = 16:59): TWO hosts in an evaluative review stance — the episode reviews THE SOURCE ITSELF ('what if we looked at it from the perspective of a dual view approach?', 'conceptual friction'), proposing concrete improvements (glossary view vs systems view) rather than unpacking content. Suggests critique voices the document's weaknesses/design tradeoffs."
+        source: "docs/experiments/records/LAB-02.yaml"
+        note: null
+      delta: "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "medium"
+      note: null
+    - metric: "mode.debate.voiceCount"
+      unit: null
+      measurement_class: "like-for-like"
+      lab:
+        value: 2
+        source: "artifact-exp-a-debate-5min (Host A + Host B)"
+        note: null
+      product:
+        value: 2
+        source: "ESTATE-LAB-02 (Debate sidecar voices: 2)"
+        note: null
+      delta: "lab 2, product 2 — delta 0 — rule equality"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "high"
+      note: null
+    - metric: "mode.debate.duration.seconds"
+      unit: "s"
+      measurement_class: "like-for-like"
+      lab:
+        value: 300
+        source: "artifact-exp-a-debate-5min (300 s canonical target)"
+        note: null
+      product:
+        value: 1049.89
+        source: "ESTATE-LAB-02 (Debate sidecar 1049.89 s)"
+        note: null
+      delta: "product/lab = 3.4996 (lab 300, product 1049.89) — rule duration-ratio-band [0.75, 1.3333]"
+      verdict: "DIVERGENT"
+      pending_reason: null
+      confidence: "high"
+      note: "duration-class gap (dialogic modes): product Debate ~17.5 min vs lab canonical 5 min."
+    - metric: "mode.debate.stance"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "debate mode semantics: adversarial positions with rebuttal moves (EXP-A-03 axis, canonical plan fixture)"
+        source: "fixtures/contracts/plan-audio-debate-5min.json + src/audio mode semantics"
+        note: null
+      product:
+        value: "(Debate, 1049.89 s = 17:29): TWO hosts in adversarial positions with visible rebuttal moves — 'I am not convinced by that line of reasoning because...', counter-analogy (autonomous vehicle on a track with moving guardrails), micro-scenario evidence, concession-reframe ('That's an interesting point, though I would frame it differently')."
+        source: "docs/experiments/records/LAB-02.yaml"
+        note: null
+      delta: "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "medium"
+      note: null
+    - metric: "mode.durationBandStructure"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "lab band ordering: brief 120 s << critique 300 s ~ debate 300 s (canonical targets)"
+        source: "artifacts/audio/exp-a-r2/{brief-2min-canonical,critique-5min-canonical,debate-5min-canonical}"
+        note: null
+      product:
+        value: "(duration band): Critique and Debate sit within ~90 s of each other and ~3 min below the Deep Dive control — a mid-length band distinct from both Brief and Deep Dive."
+        source: "docs/experiments/records/LAB-02.yaml"
+        note: null
+      delta: "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "medium"
+      note: "the three-band ORDERING matches (brief << critique ~ debate); the magnitudes diverge per the per-mode duration metrics above (recorded honestly, not normalized)."
+confidence: "medium"
+unresolved_behavior:
+  - "over-structuring distinction (LAB-02 differences): the lab brief is a fixed 10-turn skeleton family / 6-turn canonical fixture; the real Brief is a single continuous narration (~1.5 min) with enumeration markers"
+  - "dialogic-mode duration class: product ~17 min vs lab canonical 5 min (parity gap recorded)"
+tl_hooks: []
+evidence_paths:
+  - "docs/experiments/records/LAB-02.yaml"
+  - "artifacts/reference/lab-02/artifact.json"
+  - "artifacts/audio/exp-a-r2/brief-2min-canonical/"
+  - "artifacts/audio/exp-a-r2/critique-5min-canonical/"
+  - "artifacts/audio/exp-a-r2/debate-5min-canonical/"
+  - "docs/experiments/comparisons/estate/ESTATE-LAB-02.yaml"
+status: "compared"

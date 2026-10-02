@@ -1,0 +1,128 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "AUDIO-PARITY-06",
+  "kind": "dimension-comparison",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "audio",
+  "dimension": "audio.twin-stochasticity",
+  "reference_config": {
+    "notebook": "WFLX-LAB-06 (TWIN; id ed804a87) — fresh notebook, IDENTICAL control source set as LAB-01",
+    "format": "Deep Dive (dialog default)",
+    "language": "English",
+    "length": "Default",
+    "visual_style": "",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "2026-09-28T21:41:28Z",
+      "generation_ready": "~2026-09-28T21:51:00Z (~9.5 min)"
+    }
+  },
+  "source_fingerprint": "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — byte-identical to LAB-01)",
+  "artifact_fingerprint": {
+    "sha256": "77b1b01228df89d5278e3732a966a0beeb8c3044f6e5cb0033449e8ece2b029b",
+    "path": "artifacts/reference/lab-06/Blueprint_for_an_AI_Explanation_Engine.m4a",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-09-28T21:41:28Z",
+  "duration_seconds": 1322.84,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(run-to-run stochasticity): identical input + identical settings + fresh notebook produced a DIFFERENT title ('Blueprint for an AI Explanation Engine' vs 'Blueprint for a Redacted AI City'), a DIFFERENT duration (1322.84 s = 22:02 vs 1201.82 s = 20:01, +10.2%), and a different byte stream (trivially, given duration) — the real product is NOT deterministic across runs at any measurable level.",
+      "source": "docs/experiments/records/LAB-06.yaml"
+    },
+    {
+      "label": "REPRODUCED",
+      "text": "lab determinism proof: recompiled baseline media sha256 61ed761bece6628d6e7791589161643890b2a389850386c6e756f1e7abdd3aa4 — byte-identical to the first compile (determinism spot-check, this suite)",
+      "source": "experiments/run-comparison-audio.ts (this suite)"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": "artifact-exp-a-deepdive-5min-baseline",
+    "lab_pipeline": "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)",
+    "metrics": [
+      {
+        "metric": "stochasticity.runToRunByteIdentity",
+        "unit": null,
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": true,
+          "source": "double-compile of the identical plan: media sha256 61ed761bece6628d… byte-identical (this suite's determinism spot-check)",
+          "note": null
+        },
+        "product": {
+          "value": false,
+          "source": "ESTATE-LAB-06 (identical source + settings + fresh notebook produced a different title, +10.2% duration, different bytes)",
+          "note": null
+        },
+        "delta": "lab true, product false — rule equality",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "lab determinism is a CONTROL choice (fixed seeds -> identical artifacts), not a product-fidelity property — the LAB-06 differences note; the real product re-samples its full pipeline per run."
+      },
+      {
+        "metric": "stochasticity.macroPatternStability",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "identical macro plan on every run (deterministic compile — the skeleton is fixed by construction)",
+          "source": "this suite (determinism spot-check) + artifacts/audio/exp-a-r2",
+          "note": null
+        },
+        "product": {
+          "value": "(macro-pattern stability): the twin keeps the same discourse skeleton — cold-open hook ('walking through a secretive engineering facility... redacted blueprint on a desk'), explicit source-title reference, three-part mission framing, two hosts with the same banter register, ~20-22 min duration band.",
+          "source": "docs/experiments/records/LAB-06.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": "both sides keep the macro skeleton stable across runs; the product achieves it through discourse-template priors under full re-sampling."
+      },
+      {
+        "metric": "stochasticity.surfaceVariance",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "byte-identical surface: title/duration/text all fixed by the seed (deterministic compile)",
+          "source": "this suite (determinism spot-check)",
+          "note": null
+        },
+        "product": {
+          "value": "(hook variance across three runs): LAB-01 'a digital city running on autopilot' / LAB-05 'a crumpled paper from a briefcase' / LAB-06 'a redacted blueprint on a desk in a secretive facility' — same rhetorical slot (redaction-as-mystery), different surface every run.",
+          "source": "docs/experiments/records/LAB-06.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": null
+      }
+    ]
+  },
+  "confidence": "high",
+  "unresolved_behavior": [
+    "product stochasticity is sampled at n=2 (LAB-01 vs LAB-06) for the audio surface — more twin runs would strengthen the reading (LAB-06 falsifier note)"
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "docs/experiments/records/LAB-06.yaml",
+    "artifacts/reference/lab-06/artifact.json",
+    "artifacts/audio/exp-a-r2/deepdive-5min-baseline/",
+    "docs/experiments/comparisons/estate/ESTATE-LAB-06.yaml"
+  ],
+  "status": "compared"
+}

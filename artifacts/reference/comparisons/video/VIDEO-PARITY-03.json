@@ -1,0 +1,162 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "VIDEO-PARITY-03",
+  "kind": "dimension-comparison",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "video",
+  "dimension": "video.explainer",
+  "reference_config": {
+    "notebook": null,
+    "format": "Explainer (16:9 narrated illustration — observed family)",
+    "language": null,
+    "length": null,
+    "visual_style": null,
+    "custom_prompt": null,
+    "other_config": {
+      "reference_status": "served-variant-committed-original-pin-preserved",
+      "binary_import": "original bytes not committed (65 MB); served variant committed at reference/video/ with full provenance"
+    }
+  },
+  "source_fingerprint": null,
+  "artifact_fingerprint": {
+    "sha256": "36485eb804de5c69aadf9c0a9d4998dfa85ce4e3ed9a4f502bbd45fc170cdce2",
+    "path": "reference/video/Orchestrating_Agentic_Development__Deconstructing_a_Multi-Agent.mp4",
+    "media_present": true,
+    "additional": [
+      {
+        "label": "served-variant (deterministic; original pin preserved unreplaced)",
+        "sha256": "f1241c219a42906d35030eb01f51be490f5ec95ba0682d4b1c629ee88031768b",
+        "duration_seconds": 415.613968
+      }
+    ],
+    "note": "duration 415.660408 s is the ORIGINAL pin; the served variant runs 415.613968 s (server-side remux); captured 2026-09-26T19:26:00Z via authenticated replay-browser session"
+  },
+  "captured_utc": "2026-09-26T19:26:00Z",
+  "duration_seconds": 415.660408,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "scene atlas: 49 ffmpeg scdet-style segments over the full duration (true, no gaps) — INSTRUMENT TRUTH (cut points), not structural plan scenes; measurement-class note binding: never compared like-for-like with plan scene units",
+      "source": "reference/annotations/reference-video-scenes.json"
+    },
+    {
+      "label": "DOCUMENTED",
+      "text": "origin: user-supplied Gemini Notebook / NotebookLM output; observed family \"explainer / narrated illustration\"; role golden-reference",
+      "source": "docs/reference/reference-artifact-manifest.json"
+    },
+    {
+      "label": "REPRODUCED",
+      "text": "lab Explainer compile: 15 scenes / 6 beats, coverage 11/11, 420 s timeline, QA passed, packet digest double-run byte-identical; custom-style arm: 0/15 scenes change structure, coverage identical (true), timeline identical (true)",
+      "source": "experiments/run-exp-e-refresh.ts (EXP-E-REFRESH, EV-019) — committed artifacts/video/exp-e-refresh/"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": "reference/annotations/reference-video-scenes.json",
+    "notes": "scene atlas method: OBSERVED: ffmpeg 7.1.5 scdet-style scene filter on 320x180 downscale, threshold 0.2, full duration; 48 cut points, 49 segments, no gaps"
+  },
+  "comparison": {
+    "lab_artifact_id": "video-overview-470ceac8115d",
+    "lab_pipeline": "lab pipeline: canonical plan-video-explainer-7min fixture -> storyboard compile -> SVG render -> timeline -> placeholder narration -> composition (offline deterministic fallback; EXP-E-REFRESH / EV-019)",
+    "metrics": [
+      {
+        "metric": "explainer.duration.seconds",
+        "unit": "s",
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": 420,
+          "source": "EXP-E-REFRESH baseline-canonical-7min timeline (420 s at the 7-min canonical target)",
+          "note": null
+        },
+        "product": {
+          "value": 415.660408,
+          "source": "ESTATE-EXPLAINER-001 (original pin 415.660408 s; served variant 415.613968 s)",
+          "note": null
+        },
+        "delta": "product/lab = 0.9897 (lab 420, product 415.660408) — rule duration-ratio-band [0.75, 1.3333]",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "the ONE golden product Explainer sample: original pin 415.66 s / served variant 415.61 s vs lab 420 s canonical target — same duration class. Single-sample caveat: n=1 product capture of ONE mode (per-mode product truth lives in the LAB series)."
+      },
+      {
+        "metric": "explainer.geometry",
+        "unit": null,
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": "1280x720 @ 30 fps h264",
+          "source": "EXP-E-REFRESH baseline artifact.json media.video",
+          "note": null
+        },
+        "product": {
+          "value": "1280x720 @ 30 fps h264",
+          "source": "ESTATE-EXPLAINER-001 (manifest served observed_metadata; 12468 frames served)",
+          "note": null
+        },
+        "delta": "lab \"1280x720 @ 30 fps h264\", product \"1280x720 @ 30 fps h264\" — rule equality",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": null
+      },
+      {
+        "metric": "explainer.audioStream",
+        "unit": null,
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": "aac 1ch @ 44100 Hz",
+          "source": "EXP-E-REFRESH baseline artifact.json media.audio (placeholder narration)",
+          "note": null
+        },
+        "product": {
+          "value": "aac 1ch @ 44100 Hz",
+          "source": "ESTATE-EXPLAINER-001 (manifest served observed_metadata)",
+          "note": null
+        },
+        "delta": "lab \"aac 1ch @ 44100 Hz\", product \"aac 1ch @ 44100 Hz\" — rule equality",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "stream SHAPE comparison only — the lab narration is offline placeholder synthesis, the product narration is real speech (measurement-class note)."
+      },
+      {
+        "metric": "explainer.narrationCoverage",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "placeholder narration segments cover the full timeline (per-scene narration, full duration, no gaps)",
+          "source": "EXP-E-REFRESH baseline timeline.json + narration manifest",
+          "note": null
+        },
+        "product": {
+          "value": "narration throughout the artifact: ASR transcribed the AAC mono track in 17 silence-aligned chunks; scene cuts align to narration-pause boundaries (atlas alignment field)",
+          "source": "reference/annotations/reference-video-scenes.json (method.narration + per-scene narrationPauseDistanceSeconds)",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "low",
+        "note": "qualitative full-duration narration on both sides; lab placeholder vs product real speech — not a quality comparison."
+      }
+    ]
+  },
+  "confidence": "medium",
+  "unresolved_behavior": [
+    "scene structure comparison is instrument-truth-only (BINDING measurement-class note): lab 15 structural plan scenes vs product 49 ffmpeg scdet segments — different measurement classes, never compared like-for-like",
+    "the golden reference is ONE product sample of ONE mode (n=1); language not recorded in the manifest (VIDEO-PARITY-05 carries the language arm)",
+    "lab narration is placeholder synthesis — speech quality parity UNRESOLVED at this layer (the audio-surface quality dimensions live in the EXP-L-02 suite)"
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "docs/reference/reference-artifact-manifest.json",
+    "reference/annotations/reference-video-scenes.json",
+    "artifacts/video/exp-e-refresh/baseline-canonical-7min/",
+    "artifacts/video/exp-e-refresh/custom-style-7min/style-delta.json",
+    "docs/experiments/records/EXP-E-REFRESH.yaml"
+  ],
+  "status": "compared"
+}

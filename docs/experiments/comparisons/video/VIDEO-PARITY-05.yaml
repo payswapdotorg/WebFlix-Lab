@@ -1,0 +1,86 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "VIDEO-PARITY-05"
+kind: "pending-slot"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "video"
+dimension: "video.language"
+reference_config:
+  notebook: null
+  format: "Short / Explainer + language selection (the video dialog exposes Choose language — LAB-07 OBSERVED)"
+  language: null
+  length: null
+  visual_style: null
+  custom_prompt: null
+  other_config: null
+source_fingerprint: null
+artifact_fingerprint:
+  sha256: null
+  path: null
+  media_present: false
+  additional: []
+  note: "no non-English video capture exists (capture-matrix state: language not captured — optional follow-up)"
+captured_utc: null
+duration_seconds: null
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "the video dialog exposes language selection: \"Format radio (Short | Explainer — NO Cinematic format exists in the product's video surface); Choose language; 'What should the video focus on?' suggestion cards + Custom topic; AI Usage meter; Generate later/now\""
+    source: "docs/experiments/records/LAB-07.yaml (other_config.dialog_exposed)"
+  - label: "OBSERVED"
+    text: "capture-matrix state: video language arm NOT captured (PENDING — non-English video arm optional follow-up per the TL station record)"
+    source: "docs/work-items/roadmap-status.md (TL #2 station record, 2026-10-01 19:40 UTC)"
+  - label: "REPRODUCED"
+    text: "lab side: the EXP-A-06 structure-invariant / surface-specific language axis is proven on the AUDIO surface; the video-surface language arm has no lab compile either (no non-English video plan fixture) — both sides pending"
+    source: "docs/experiments/records/EXP-A-06.yaml (audio-surface analog)"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: null
+  lab_pipeline: "no lab non-English video arm exists (both sides pending — honest gap)"
+  metrics:
+    - metric: "language.videoStructureInvariance"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: null
+        source: null
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: "no product-side non-English video capture exists"
+    - metric: "language.surfaceRegeneration"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: null
+        source: null
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: "no product-side non-English video capture exists"
+confidence: "low"
+unresolved_behavior:
+  - "video-surface language behavior: UNRESOLVED on BOTH sides (no product capture, no lab non-English video arm)"
+tl_hooks:
+  - "TL: land the non-English video capture (Short or Explainer + language selection, LAB-series pattern) to fill this record; the audio-surface EXP-A-06/LAB-04 axis is the working hypothesis"
+evidence_paths:
+  - "docs/experiments/records/LAB-07.yaml"
+  - "docs/work-items/roadmap-status.md"
+  - "docs/experiments/records/EXP-A-06.yaml"
+status: "pending-capture"

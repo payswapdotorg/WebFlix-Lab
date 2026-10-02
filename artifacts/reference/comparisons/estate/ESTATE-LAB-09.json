@@ -1,0 +1,95 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "ESTATE-LAB-09",
+  "kind": "estate-capture",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "video",
+  "dimension": "reference.video.lab-09",
+  "reference_config": {
+    "notebook": "WFLX-LAB-07 (same notebook; id 155eb020) — custom-prompt arm on the control fixture",
+    "format": "Short (crop_9_16 vertical)",
+    "language": "English",
+    "length": "Short (default)",
+    "visual_style": "",
+    "custom_prompt": "Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note.",
+    "other_config": {
+      "generation_start": "2026-10-01T19:00:04Z",
+      "generation_ready": "2026-10-01T19:19:10Z (~19.1 min wall)",
+      "injection_verified": "trusted click-focus + CDP Input.insertText; 138 chars read back in the form BEFORE Generate (the LAB-08 failure lesson applied)"
+    }
+  },
+  "source_fingerprint": "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — byte-identical to LAB-01/05/06/07/08)",
+  "artifact_fingerprint": {
+    "sha256": "52996d49a244dbaa161a3c493115377849cb1220d6e71fe8e3e7a0ba4b8613dd",
+    "path": "artifacts/reference/lab-09/How_AI_Agents_Hide_Their_Keys.mp4",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (artifacts/reference/lab-0X/*.mp4); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-10-01T19:00:04Z",
+  "duration_seconds": 71.63356,
+  "custom_prompt": "Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note.",
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(custom-prompt steering, VERIFIED): the custom topic MATERIALLY re-steered the entire episode — title 'How AI Agents Hide Their Keys'; the full 71.6 s episode is a security/credentials narrative (execution sandbox, agents deployed 'stripped of keys', blind-payload key injection at the final millisecond, 'handing that secret key back to the AI directly violates security compliance'). ASR keyword evidence: security 1 / compliance 1 / key 3 / secret 1 / password-themed throughout vs the control's 0/0/0/0. The custom focus is a FULL CONTENT RE-PLAN, not a topical filter.",
+      "source": "docs/experiments/records/LAB-09.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(duration response): 71.63 s on the custom focus vs 84.82 s control / 78.32 s twin — duration varies with content focus (n=3: 71.6-84.8 s band on this fixture, all above the lab's [48,72] s Short band, 71.6 s sits 0.4 s below the band ceiling... recorded exactly: 71.63 < 72 by 0.37 s — the third capture lands effectively AT the lab band's upper edge).",
+      "source": "docs/experiments/records/LAB-09.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(format invariants under custom focus): same 9:16 vertical geometry, h264 30 fps + AAC mono 44.1 kHz, hook-question opening ('How can an AI use your cloud infrastructure without ever holding your passwords?'), single-narrator Short register — the custom focus changes CONTENT, not FORMAT.",
+      "source": "docs/experiments/records/LAB-09.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(fixture-faithfulness under steering): the episode's sandbox/credentials narrative is a stylized synthesis AROUND the fixture's credential/rotation notes (the fixture's actual line is 'All credentials are [REDACTED] and are rotated quarterly by the platform team') — the product extrapolates a scenario from the focus angle rather than quoting the source; semantic anchoring is loose (the 'quarterly rotation' fact itself is NOT voiced).",
+      "source": "docs/experiments/records/LAB-09.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "generation wall 1146 s (sidecar; wall-clock is not a stable product observable — LAB-08)",
+      "source": "artifacts/reference/lab-09/artifact.json"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "video stream 720x1280 (9:16 vertical) @ 30 fps h264; audio aac 1ch 44100 Hz",
+      "source": "artifacts/reference/lab-09/artifact.json"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "full spoken content transcribed via ASR (committed transcript is the content-level record for this capture)",
+      "source": "docs/experiments/records/LAB-09-transcript.txt"
+    }
+  ],
+  "annotations": {
+    "transcript_path": "docs/experiments/records/LAB-09-transcript.txt",
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
+  },
+  "confidence": "high",
+  "unresolved_behavior": [
+    "vs LAB-07 control: completely different episode content (security-focused vs general architecture walkthrough), different title, duration 71.6 vs 84.8 s — the custom-prompt delta is a full-surface change (consistent with the product's global re-plan behavior from LAB-05/06).",
+    "vs the lab's custom-style layer: the lab's style custom-prompt changes STYLE (SVG/visual surface) with 0/15 structure change (EXP-V-07 pattern); the product's focus custom-prompt changes CONTENT wholesale. Different control semantics — recorded as a parity distinction, not a defect."
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "artifacts/reference/lab-09/How_AI_Agents_Hide_Their_Keys.mp4",
+    "artifacts/reference/lab-09/artifact.json",
+    "docs/experiments/records/LAB-09-transcript.txt",
+    "docs/experiments/records/LAB-07.yaml",
+    "docs/experiments/records/LAB-08.yaml"
+  ],
+  "status": "ingested"
+}

@@ -1,0 +1,83 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "ESTATE-LAB-03",
+  "kind": "estate-capture",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "audio",
+  "dimension": "reference.audio.lab-03",
+  "reference_config": {
+    "notebook": "WFLX-LAB-01 (dedicated; id 25661cd9) — same notebook, control source",
+    "format": "Deep Dive",
+    "language": "English",
+    "length": "Short (dialog Length control: Short / Default / Long — UI-exposed, answering the LAB-03 precondition)",
+    "visual_style": "",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "2026-09-28T22:06:43Z",
+      "generation_ready": "~2026-09-28T22:11:00Z (~4.5 min — faster than Default's ~7-8 min)"
+    }
+  },
+  "source_fingerprint": "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — identical to LAB-01)",
+  "artifact_fingerprint": {
+    "sha256": "4a16e9d300a1d39da8300214b4ba7aa5911b27aa5ab12fcadc70548efdb283f6",
+    "path": "artifacts/reference/lab-03/Blueprint_for_an_autonomous_AI_workforce.m4a",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-09-28T22:06:43Z",
+  "duration_seconds": 318.21,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(duration control is real): Short setting produced a 318.21 s (5:18) episode vs the Default control's 1201.82 s (20:01) — a 3.78x compression on the same source and format.",
+      "source": "docs/experiments/records/LAB-03.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(compression strategy = depth reduction, not structure removal): the Short episode keeps the two-host dialogic form, the hook->title->roadmap opening, the section walk (tools catalog -> infrastructure -> architecture), the banter register, and the redaction-as-framing move; every section is present but covered faster (infrastructure reached within ~2 min vs ~5+ min in Default).",
+      "source": "docs/experiments/records/LAB-03.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(compression vs our EXP-A-05 finding): our salience-omission + rate-rise mechanism (coverage falls 11/11 -> 7/11 while wps rises) has a real-product counterpart in duration compression, but the observable surface here preserves section coverage and host banter — the real product compresses per-topic depth rather than dropping topics outright (coverage observable only qualitatively from ASR sampling; claim-level coverage is not measurable black-box).",
+      "source": "docs/experiments/records/LAB-03.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(title): again content-derived and run-specific ('Blueprint for an autonomous AI workforce') — different from both the Default control title and every other run.",
+      "source": "docs/experiments/records/LAB-03.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": ": generation latency scales with target length (~4.5 min for Short vs ~7-9.5 min for Default).",
+      "source": "docs/experiments/records/LAB-03.yaml"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
+  },
+  "confidence": "medium",
+  "unresolved_behavior": [
+    "vs LAB-01: -883.6 s duration (-73.5%), faster section cadence, same skeleton — the Length control scales depth, not structure.",
+    "vs our EXP-A-05: our lab's compression drops claims by salience and raises speaking rate; the real product's observable compression preserves topic coverage and conversational pace (depth-per-topic shrinks)."
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "artifacts/reference/lab-03/Blueprint_for_an_autonomous_AI_workforce.m4a",
+    "artifacts/reference/lab-03/artifact.json",
+    "docs/experiments/records/LAB-01.yaml",
+    "docs/experiments/records/EXP-A-05.yaml"
+  ],
+  "status": "ingested"
+}

@@ -1,0 +1,88 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "ESTATE-LAB-04",
+  "kind": "estate-capture",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "audio",
+  "dimension": "reference.audio.lab-04",
+  "reference_config": {
+    "notebook": "WFLX-LAB-01 (dedicated; id 25661cd9) — same notebook, control source",
+    "format": "Deep Dive (dialog default)",
+    "language": "español (dialog language combobox — full locale list incl. español / español (Latinoamérica) / Deutsch / Français etc.)",
+    "length": "Default",
+    "visual_style": "",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "~2026-09-28T21:57:00Z",
+      "generation_ready": "~2026-09-28T22:06:00Z (~9 min)"
+    }
+  },
+  "source_fingerprint": "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — identical to LAB-01)",
+  "artifact_fingerprint": {
+    "sha256": "275e5c37673ebc9ed8bbe9f842d599fdbdd5a9033896dfebcbb20f00ac2b4170",
+    "path": "artifacts/reference/lab-04/Qué_esconde_la_nota_de_IA_censurada.m4a",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+  },
+  "captured_utc": "~2026-09-28T21:57:00Z",
+  "duration_seconds": 1034.84,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": ": full Spanish-language generation on an English source — the episode is natively Spanish ('Vale, vamos a desgranar esto...'), not translated-English; banter markers are Spanish ('Vale', 'Exacto', '¿sí?').",
+      "source": "docs/experiments/records/LAB-04.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(structure invariance): the discourse skeleton is preserved — cold-open hook, explicit source-title reference (adapted as 'nota desordenada y censurada'), mission framing, two hosts, section walk.",
+      "source": "docs/experiments/records/LAB-04.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(surface specificity): the hook metaphor is NEW again ('un laboratorio de alta seguridad abandonado a toda prisa... planos desparramados' — the mad scientist's blueprints), consistent with run-to-run stochasticity PLUS language-specific regeneration; metaphor inventory is language-culture-specific.",
+      "source": "docs/experiments/records/LAB-04.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(duration shift): 1034.84 s (17:14) vs English Deep Dive band 1201.8-1432.3 s (20:01-23:52) — the Spanish Deep Dive is ~14-28% shorter than all three English Deep Dives; suggests language-dependent compression (Spanish syllable rate / content-selection differences), same Default length setting.",
+      "source": "docs/experiments/records/LAB-04.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(title): generated in Spanish ('Qué esconde la nota de IA censurada') — titles localize with the output language.",
+      "source": "docs/experiments/records/LAB-04.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(redaction discussed): the hosts again treat the redaction as content ('todas las contraseñas... tachadas con un rotulador negro irrompible. Censurado totalmente.') — the source's redaction feature surfaces as episode framing in both languages.",
+      "source": "docs/experiments/records/LAB-04.yaml"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
+  },
+  "confidence": "medium",
+  "unresolved_behavior": [
+    "vs LAB-01: language (Spanish vs English), duration (-167 s), title language, metaphor inventory — surface layer fully language-specific.",
+    "vs our EXP-A-06: our lab found structure-invariant / surface-specific language switching; the real product matches that split qualitatively."
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "artifacts/reference/lab-04/Qué_esconde_la_nota_de_IA_censurada.m4a",
+    "artifacts/reference/lab-04/artifact.json",
+    "docs/experiments/records/LAB-01.yaml",
+    "docs/experiments/records/EXP-A-06.yaml"
+  ],
+  "status": "ingested"
+}

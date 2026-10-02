@@ -1,0 +1,104 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "VIDEO-PARITY-02"
+kind: "pending-slot"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "video"
+dimension: "video.cinematic"
+reference_config:
+  notebook: null
+  format: "Cinematic — NO product format exists (UI-truth: the product video dialog exposes exactly Short 9:16 and Explainer 16:9)"
+  language: null
+  length: null
+  visual_style: null
+  custom_prompt: null
+  other_config: null
+source_fingerprint: null
+artifact_fingerprint:
+  sha256: null
+  path: null
+  media_present: false
+  additional: []
+  note: "no Cinematic product artifact exists to fingerprint — the lab layer is a behavior reconstruction of generative-asset workflows (scoping truth, not a parity claim)"
+captured_utc: null
+duration_seconds: null
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "(UI-truth): the Customize Video Overview dialog exposes exactly TWO formats — Short (9:16, 'New!') and Explainer (16:9). NO 'Cinematic' format exists in the product's video surface; the lab's Cinematic layer is a behavior reconstruction of generative-asset workflows, not a product-format twin. Recorded as a scoping truth for the parity comparison."
+    source: "docs/experiments/records/LAB-07.yaml"
+  - label: "OBSERVED"
+    text: "(focus controls): the dialog exposes suggestion-card focus topics ('The architecture behind AI workflows' / 'How multi-agent systems function' / '5 trending AI media tools') + Custom topic — the custom-prompt arm is a FIRST-CLASS product control for video (LAB-08 exercises it)."
+    source: "docs/experiments/records/LAB-07.yaml"
+  - label: "REPRODUCED"
+    text: "lab cinematic pipeline: 15 jobs over 15 scenes (deterministic-diagramx8, generative-animationx3, illustrationx1, source-derived-mediax2, video-generationx1); plan fingerprint double-run identical (true); single-asset local regeneration isolated (true); validation + QA pass — OFFLINE stand-ins (EV-021), live execution EV-022"
+    source: "experiments/run-exp-v-cin-01.ts (EXP-V-CIN-01, EV-021) — committed artifacts/video/exp-v-cin-01/"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: "exp-v-cin-01 (cinematic plan fingerprint — see committed cinematic-plan-fingerprint.json)"
+  lab_pipeline: "lab pipeline: storyboard compile -> CinematicDirector -> VisualAssetPlan (five frozen classes) -> offline generative stand-ins -> validation gates -> timeline/overlay -> QA (EXP-V-CIN-01 / EV-021; live arm EXP-V-CIN-LIVE-01 / EV-022)"
+  metrics:
+    - metric: "cinematic.shotDensity.shotClasses"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "15 jobs over 15 scenes — asset classes: deterministic-diagramx8, generative-animationx3, illustrationx1, source-derived-mediax2, video-generationx1"
+        source: "EXP-V-CIN-01 committed outputs (EV-021)"
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: "the product side has NO Cinematic format (scoping truth); shot density comparison has no product counterpart"
+    - metric: "cinematic.styleContinuity.constraints"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "per-adjacency subject-carry/motif constraints + per-scene palette continuity (CinematicDirector, deterministic shot-plan vector keyed on the C-5 scene-local content hash)"
+        source: "EXP-V-CIN-01 committed outputs (EV-021)"
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: "the product side has NO Cinematic format (scoping truth); continuity comparison has no product counterpart"
+    - metric: "cinematic.generationLatency"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: null
+        source: null
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: "generation wall-clock is not a stable product observable (LAB-08: 28.4 vs 7.4 min on identical input); the lab EV-022 per-asset latencies are a different measurement class — recorded UNRESOLVED-shape, not compared"
+confidence: "high"
+unresolved_behavior:
+  - "SCOPING TRUTH (binding for the parity verdict): the product video surface exposes exactly Short (9:16) | Explainer (16:9) — NO Cinematic product format exists; the lab Cinematic layer is a behavior reconstruction of generative-asset workflows, not a product-format twin"
+  - "native video-clip embedding in the offline compositor UNRESOLVED (EV-021 honest boundary)"
+tl_hooks:
+  - "TL: this slot stays PENDING unless/until the product ships a Cinematic video format; if it ships, capture per the LAB-series pattern and re-run exp:cmpvideo to fill the metrics"
+evidence_paths:
+  - "docs/experiments/records/LAB-07.yaml"
+  - "artifacts/reference/lab-07/artifact.json"
+  - "artifacts/video/exp-v-cin-01/experiment-record.json"
+  - "docs/experiments/records/EXP-V-CIN-01.yaml"
+status: "pending-capture"
