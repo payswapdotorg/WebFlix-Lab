@@ -594,3 +594,12 @@ transition); credential sweep over the wave diff = 0 hits.
      queuing, 2026-10-01) affects any FUTURE product-side audio capture
      workflow — capture runbooks should expect the queued lane (TL/operator
      note).
+
+## 2026-10-02 04:30 UTC — WFLX-P3 MERGED (PR #13, TL #2 station review) — the parity comparison program is COMPLETE over the captured estate
+
+- Branch `work/wflx-p3-reference-lab` @ `06879e7` (dc14713 work-order verbatim + 06879e7 deliverables A-D, 73 files, +10,592/−39) — MERGED at `2426942`.
+- Station review verdicts (all gates independently re-run): scope PASS (0 src/ files — frozen architecture); typecheck 0 / lint clean; chunks 151+159+117 station-verified + the full new comparison-test battery (schema discipline, pending-slots, TL hooks, byte-regeneration falsifier PASS; full integration chunk 29/29 verified at the worker pod — station-side completion blocked by live-estate memory pressure only); manifest double-run digest `4c0beb5f…` IDENTICAL to the report; credential sweep 0 hits.
+- Delivered: comparison-record schema + ingester (10 estate records, EV-023) · audio parity suite (17 VERIFIED / 12 DIVERGENT / 6 PENDING metrics, EV-024) · video hook harness (6/7/8, EV-025) · 29 integration tests + registry + docs (EV-026).
+- Honest DIVERGENT verdicts recorded (never silently promoted): Deep Dive duration class (300s lab vs 1201.82s product); compression philosophy; mutation locality class (lab C-5 22/24 vs product global re-plan); twin stochasticity (control choice); Short duration band (71.63-84.82s product vs 60s target); Short geometry (9:16 vs 16:9 — wait, reversed: product 9:16, lab structural 16:9 explainer-family note); sceneDensity instrument-truth binding note.
+- PENDING REFERENCE CAPTURE slots with mechanical TL hooks: LAB-10 audio custom-prompt (platform-scheduled), video language arm, video mutation locality, Short hook-prominence structured annotation, Interactive Audio product capture. When captures land: extend `ingest.ts` LAB_IDS + re-run `exp:cmpaudio` / `exp:cmpvideo` — slots fill mechanically.
+- Wave-close note: the Parity Completion Phase's three worker waves (P1 audio PR #11, P2 video PR #12, P3 reference-lab PR #13) are ALL MERGED. Remaining phase items are TL/operator-owned: the pending capture slots above + the cross-modal QA + parity promotion gate (the phase's §7 definition of done).
