@@ -1,0 +1,48 @@
+id: LAB-10
+timestamp_utc: "2026-10-02T05:39:00Z"
+operator: tl2+operator
+surface: audio
+reference_notebook: "WFLX-LAB-07 (same notebook as the video wave; id 155eb020) — audio custom-prompt arm on the control fixture"
+source_fingerprint: "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — byte-identical to LAB-01/05/06/07/08/09)"
+selected_sources:
+  - "# Reference Fixture — Redacted Messy Note"
+format: "Deep Dive (Customize Audio Overview dialog + custom steering prompt)"
+language: "English (dialog default)"
+length: "Default (dialog default)"
+visual_style: ""
+custom_prompt: "Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note."
+other_config:
+  generation_start: "2026-10-01T~19:30:00Z (scheduling submit — banked before the 19:40 UTC station record; the audio lane's scheduled-queuing era)"
+  generation_ready: "executed by the scheduled lane ~23:35-23:40 UTC Oct 1 (the product listed BOTH LAB-10 runs '6h ago' at the 2026-10-02T05:37 UTC studio check — the 'Scheduled for after 11pm' promise kept)"
+  scheduling_lane: "the 2026-10-01 audio-lane behavior change: 'This content will generate in a few hours. Or, upgrade to get it sooner.' (roadmap station record; immediate ~7-10 min lane was the Sept 28 LAB-01..06 era)"
+  injection_verified: "138 chars read back in the form BEFORE Generate (the LAB-09 lesson applied) AND re-verified POST-GENERATION in the product's 'View prompt and sources' dialog — the Prompt panel reads back the full custom prompt verbatim + the 1 source (the strongest injection-evidence class: the product itself confirms the prompt that shaped the artifact)"
+  era_control: "the accidental empty-focus run 'Anatomy of a Redacted AI Blueprint' (same notebook, same fixture, same scheduled lane, NO Prompt panel in its View-prompt dialog) captured as the same-lane era-control companion — artifacts/reference/lab-10/Anatomy_of_a_Redacted_AI_Blueprint.m4a"
+  download: "player more-menu -> Download (.m4a) via the replay browser's operator Google session (VPN egress), 2026-10-02T05:39Z"
+baseline_artifact: "LAB-01 immediate-lane control (1201.82 s, artifacts/reference/lab-01) + the same-lane empty-focus era-control companion (1415.09 s, this lab's directory)"
+mutation: "NONE — identical source; ONLY the Custom topic focus differs from the era-control"
+artifact_under_test: "artifacts/reference/lab-10/Securing_Autonomous_AI_Infrastructure.m4a"
+artifact_hash: "sha256:bf4dad8c3f85df93c7a9cfb0eb9fad2a914b213d4eab5cdb617ddd1e9a87cd23"
+observations:
+  - "OBSERVED (custom-prompt steering, VERIFIED): the custom topic MATERIALLY re-steered the episode — title 'Securing Autonomous AI Infrastructure' (era-control title: 'Anatomy of a Redacted AI Blueprint'); the opening hook is a compliance-lawsuit nightmare ('Imagine handing a robot your company's credit card... how long before you are completely bankrupt or worse facing a massive compliance lawsuit') and the closing synthesis is the security theme itself ('How does a machine creatively understand and depict the very sandboxes, resource limits and redacted keys that were explicitly designed to keep it caged'). ASR keyword-stem evidence over 168 s sampled (6 x 28 s windows at 0:00/8:14/15:32): 20 security-framed stem hits in 459 words (4.4%) including the DEFENSIVE vocabulary vault/shield/fortress/cage x2/rogue/isolate x2/lawsuit/bankrupt/locked-down — vs the era-control's 5 hits in 314 words (1.6%, zero defensive vocabulary; its compliance mentions trace to the fixture's own security-protocols topic list). The custom focus is a FULL CONTENT RE-PLAN (the audio surface repeats the LAB-09 video finding), not a topical filter."
+  - "OBSERVED (duration response): 1015.80 s on the custom focus vs 1415.09 s same-lane empty-focus era-control = -28.2% (vs the LAB-01 immediate-lane control 1201.82 s = -15.5%) — Deep Dive duration is content-elastic under the focus on the audio surface (the video surface's LAB-09 duration-response finding extended to audio; n=2 same-fixture Deep Dives on the scheduled lane)."
+  - "OBSERVED (structure preservation under custom focus): the 2-host dialogic Deep Dive register is preserved — both sampled hosts exchange reactively throughout ('Oh wow! Yeah...'); the macro skeleton framing -> section walk -> synthesis is intact (hook at 0:00, mid sections on isolation/snapshot/shield/fortress themes at 8:14, synthesis on 'the AI explains its own secure architecture' at 15:32). The focus re-plans CONTENT, not FORMAT."
+  - "OBSERVED (scheduled-lane era truth): BOTH runs generated ~23:35-23:40 UTC Oct 1 per the product's '6h ago' studio stamps at the 05:37 UTC check — the 'Scheduled for after 11pm' promise executed; the scheduling-lane behavior change (2026-10-01) is confirmed end-to-end, not just at the dialog."
+  - "OBSERVED (fixture-faithfulness under steering): the episode names its source ('the file we're looking at is literally titled Reference Fixture Redacted: Messy Note') and builds a defensive-security narrative AROUND the fixture's credential/rotation/infrastructure notes — a stylized synthesis from the focus angle rather than a quotation of the source (the same loose semantic anchoring as LAB-09 video)."
+  - "OBSERVED (format invariants under custom focus): AAC LC 44.1 kHz stereo ~257 kbps .m4a container — byte-format identical to every LAB-series audio capture; 'Interactive mode' chip present on the artifact row (the Interactive Audio surface remains a separate operator-gated capture)."
+invariants:
+  - "2-host Deep Dive dialogic register, framing->sections->synthesis skeleton, AAC LC 44.1 kHz stereo m4a — stable under the custom focus."
+differences:
+  - "vs the era-control (same lane, empty focus): completely different episode content (defensive-security narrative vs default architecture walkthrough), different title, duration 1015.80 vs 1415.09 s (-28.2%) — the custom-prompt delta is a full-surface content change with a material duration response."
+  - "vs the lab's custom-steering axis: the lab's steering surface is the plan-level focus/style layer (Director), not a user-facing audio custom-prompt; the lab default compile has NO audio custom-prompt arm — the steering-surface existence itself is the parity distinction (recorded as DIVERGENT in AUDIO-PARITY-07, mirroring the VIDEO-PARITY-04 semantics distinction)."
+hypothesis: "The product's Customize prompt is an episode-level content-steering prior on the audio surface (same mechanism as the video surface's Custom topic): full re-plan with focus-injected generation, format invariants preserved, duration content-elastic."
+confidence: high
+falsifier: "A custom-prompt run ignoring the focus (default-content output) would falsify the steering reading — the era-control (empty Prompt panel, default content) is the in-product negative control, and the product's own post-generation Prompt dialog read-back pins the injected prompt to the artifact."
+next_experiment: "Interactive Audio product capture (operator-gated; EV-018 lab prototype stands) + the video language/mutation arms; then the TL parity-close documentation and the cross-modal QA + promotion gate."
+status: observed
+evidence_paths:
+  - artifacts/reference/lab-10/Securing_Autonomous_AI_Infrastructure.m4a
+  - artifacts/reference/lab-10/artifact.json
+  - docs/experiments/records/LAB-10-transcript.txt
+  - docs/experiments/records/LAB-01.yaml
+  - docs/experiments/records/LAB-09.yaml
+  - docs/work-items/roadmap-status.md (the 2026-10-01 19:40 UTC station record: both runs scheduled)

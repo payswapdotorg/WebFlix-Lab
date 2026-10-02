@@ -337,6 +337,7 @@ export async function runAudioComparisonSuite(): Promise<AudioSuiteResult> {
   const estateLab04 = estateById(estate, 'ESTATE-LAB-04');
   const estateLab05 = estateById(estate, 'ESTATE-LAB-05');
   const estateLab06 = estateById(estate, 'ESTATE-LAB-06');
+  const estateLab10 = estateById(estate, 'ESTATE-LAB-10');
 
   // ---- compile the canonical arms (offline deterministic default) --------
   const arms: Record<string, ArmMeasurement> = {};
@@ -987,78 +988,93 @@ export async function runAudioComparisonSuite(): Promise<AudioSuiteResult> {
     }),
   );
 
-  // ---- AUDIO-PARITY-07: custom steering prompt (LAB-10) — PENDING ---------
+  // ---- AUDIO-PARITY-07: custom steering prompt (LAB-10) ------------------
+  // FILLED 2026-10-02: the scheduled product runs executed (~23:35 UTC Oct 1)
+  // and were captured/harvested through the replay browser (TL #2 + operator).
+  // The pending slot's TL hook executed: ingest.ts LAB_IDS + LAB-10 capture
+  // record landed; this record now carries the comparison.
+  const productCustomDuration = estate.captures['LAB-10'].durationSeconds ?? 0;
+  const eraControlEntry = estateLab10.artifact_fingerprint.additional.find((entry) =>
+    entry.label.includes('era-control'),
+  );
+  if (eraControlEntry === undefined || eraControlEntry.duration_seconds === null) {
+    throw new Error('AUDIO-PARITY-07: the same-lane era-control companion capture is missing from ESTATE-LAB-10');
+  }
+  const productEraControlDuration = eraControlEntry.duration_seconds;
+  const productCustomShiftPercent = Math.round(((productCustomDuration - productEraControlDuration) / productEraControlDuration) * 1000) / 10;
   records.push(
-    pendingRecord(
-      'AUDIO-PARITY-07',
-      'audio.custom-prompt',
-      [
-        {
+    buildDimensionRecord(estate, {
+      id: 'AUDIO-PARITY-07',
+      surface: 'audio',
+      dimension: 'audio.custom-prompt',
+      estateRecordId: 'ESTATE-LAB-10',
+      labArtifactId: baseline.artifactId,
+      confidence: 'high',
+      metrics: [
+        qualitativeMetric({
           metric: 'customPrompt.steeringEffect',
-          unit: null,
-          measurement_class: 'like-for-like',
           lab: {
-            value: 'no audio custom-steering surface in the lab default compile (the steering axis is the plan-level focus/style layer; audio custom-prompt arm is not compiled pending the product capture)',
-            source: 'src/audio (compile surface) — no custom-prompt arm in the EXP-A series',
-            note: null,
+            text: 'no user-facing audio custom-steering surface in the lab default compile — the steering axis is the plan-level focus/style layer at the Director (the audio custom-prompt arm is not compiled; there is nothing for a user prompt to steer)',
+            source: 'src/audio + src/director (compile surface) — no custom-prompt arm in the EXP-A series',
           },
-          product: { value: null, source: null, note: null },
-          delta: null,
-          verdict: 'PENDING',
-          pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-          confidence: 'low',
-          note: 'LAB-10 (audio custom steering prompt) is SCHEDULED on the product side — the 2026-10-01 scheduling-lane behavior change banked below.',
-        },
-        {
+          product: {
+            text: observationOf(estateLab10, 'custom-prompt steering').text,
+            source: 'docs/experiments/records/LAB-10.yaml (ASR keyword-stem evidence + in-product post-generation Prompt-dialog read-back)',
+          },
+          verdict: 'DIVERGENT',
+          confidence: 'high',
+          note: 'the product exposes an episode-level audio custom-steering surface (VERIFIED full content re-plan: title/hook/synthesis all re-steered, 20 defensive-security stem hits/459 words vs the era-control’s 0; the era-control is the in-product negative control with an empty Prompt panel) — the lab has no equivalent surface. Steering-surface EXISTENCE is the parity distinction (mirrors VIDEO-PARITY-04’s recorded semantics distinction).',
+        }),
+        percentPointMetric({
           metric: 'customPrompt.durationResponse',
-          unit: 's',
-          measurement_class: 'like-for-like',
-          lab: { value: null, source: null, note: null },
-          product: { value: null, source: null, note: null },
-          delta: null,
-          verdict: 'PENDING',
-          pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-          confidence: 'low',
-          note: null,
-        },
-        {
+          unit: '%',
+          lab: { value: 0, source: 'lab 0% by construction — no audio custom-prompt arm in the lab default compile; realized duration is plan-pinned (300 s Deep Dive canonical)' },
+          product: { value: productCustomShiftPercent, source: 'LAB-10 1015.803356 s (custom focus) vs the same-lane empty-focus era-control 1415.093696 s (the pending slot’s unit “s” becomes the shift % at fill — the RESPONSE axis is the shift, per the AUDIO-PARITY-04 durationShiftPercent pattern)' },
+          confidence: 'high',
+          note: 'measurement-class note: the lab 0% is a construction artifact (no surface, plan-pinned timing — not a claimed parity); the product’s Deep Dive duration is content-elastic under the focus (-28.2% vs the same-lane control, -15.5% vs the LAB-01 immediate-lane control 1201.82 s).',
+        }),
+        qualitativeMetric({
           metric: 'customPrompt.structurePreservation',
-          unit: null,
-          measurement_class: 'qualitative',
-          lab: { value: null, source: null, note: null },
-          product: { value: null, source: null, note: null },
-          delta: null,
-          verdict: 'PENDING',
-          pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-          confidence: 'low',
-          note: null,
-        },
+          lab: {
+            text: 'the lab’s steering axis (plan-level focus/style at the Director) preserves plan structure by construction — the compile realizes the plan skeleton; structure change under steering is 0 by the pipeline’s contract',
+            source: 'src/director + src/audio (plan-realization contract)',
+          },
+          product: {
+            text: observationOf(estateLab10, 'structure preservation under custom focus').text,
+            source: 'docs/experiments/records/LAB-10.yaml (ASR windows: hook at 0:00, mid sections, synthesis at 15:32)',
+          },
+          verdict: 'VERIFIED',
+          confidence: 'high',
+          note: 'both sides preserve the macro skeleton under the steering axis: the product keeps the 2-host dialogic Deep Dive register and framing->sections->synthesis skeleton while re-planning content (the focus changes CONTENT, not FORMAT — the LAB-09 video finding repeated on the audio surface).',
+        }),
       ],
-      [
-        {
-          label: 'OBSERVED',
-          text: 'AUDIO-LANE BEHAVIOR CHANGE (banked product truth, 2026-10-01): the Customize Audio Overview dialog now states "This content will generate in a few hours. Or, upgrade to get it sooner." — both LAB-10 runs (an accidental empty-focus era-control + the VERIFIED custom-focus arm, 138 chars read back before Generate) are "Scheduled for after 11pm". The audio lane moved from immediate ~7-10 min generation (Sept 28 LAB-01..06 era) to scheduled queuing (Oct 1).',
-          source: 'docs/work-items/roadmap-status.md (TL #2 station record, 2026-10-01 19:40 UTC)',
-        },
-        {
-          label: 'OBSERVED',
-          text: 'comparisons in this program are against the CAPTURED artifacts, never against live re-runs — the scheduling-lane change does not invalidate the LAB-01..06 captures.',
-          source: 'docs/work-items/roadmap-status.md (TL #2 station record)',
-        },
+      productObservations: [
+        productObservation(observationOf(estateLab10, 'custom-prompt steering')),
+        productObservation(observationOf(estateLab10, 'duration response')),
+        productObservation(observationOf(estateLab10, 'structure preservation under custom focus')),
+        productObservation(observationOf(estateLab10, 'scheduled-lane era truth')),
+        productObservation(observationOf(estateLab10, 'fixture-faithfulness under steering')),
+        productObservation(observationOf(estateLab10, 'format invariants under custom focus')),
       ],
-      [
-        'TL: land LAB-10 (audio custom-steering-prompt capture) when the platform executes the scheduled runs — docs/experiments/records/LAB-10.yaml + artifacts/reference/lab-10/artifact.json per the LAB-series pattern; then extend tools/comparison/ingest.ts LAB_IDS and re-run exp:cmpaudio to fill this record',
+      labObservations: [
+        labObservation(
+          'lab side: the offline deterministic Deep Dive compile (the 300 s canonical) has no custom-prompt surface — the steering axis is the Director’s plan-level focus/style layer; there is no lab audio artifact to compare on the focus axis (the existence gap is the DIVERGENT verdict)',
+          'tools/comparison/audio-suite.ts (this suite) — the deepdive-5min-baseline arm',
+        ),
       ],
-      [
-        'docs/work-items/roadmap-status.md',
-        'docs/experiments/records/LAB-09.yaml (next_experiment: LAB-10 closes the audio custom-prompt matrix)',
-        'docs/experiments/comparisons/estate/',
+      unresolvedBehavior: [
+        'the product’s audio custom-steering surface has no lab counterpart (surface-existence divergence, recorded — not a defect claim); a future lab custom-prompt audio arm would fill the like-for-like axis',
+        'the scheduled-lane era (2026-10-01+) applies to any FUTURE product-side audio capture workflow — capture runbooks expect the queued lane (banked truth)',
       ],
-      [
-        'audio custom steering prompt (LAB-10): product capture SCHEDULED, not yet landed',
-        'the scheduling-lane behavior change (2026-10-01) is banked truth; the custom-prompt comparison itself remains open',
+      tlHooks: [],
+      evidencePaths: [
+        'docs/experiments/records/LAB-10.yaml',
+        'docs/experiments/records/LAB-10-transcript.txt',
+        'artifacts/reference/lab-10/artifact.json',
+        'docs/experiments/comparisons/estate/ESTATE-LAB-10.yaml',
+        'docs/experiments/records/LAB-09.yaml (the video custom-prompt precedent)',
       ],
-    ),
+    }),
   );
 
   // ---- AUDIO-PARITY-08: Interactive Audio — PENDING ------------------------

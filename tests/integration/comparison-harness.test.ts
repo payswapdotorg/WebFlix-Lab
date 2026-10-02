@@ -63,8 +63,8 @@ describe('comparison harness end-to-end (EV-026)', () => {
         }
       }
     }
-    // The honest-boundary pending slots.
-    for (const id of ['AUDIO-PARITY-07', 'AUDIO-PARITY-08']) {
+    // The honest-boundary pending slot (Interactive Audio; LAB-10 filled 2026-10-02).
+    for (const id of ['AUDIO-PARITY-08']) {
       const record = suite.records.find((candidate) => candidate.id === id);
       if (record === undefined) throw new Error(`${id} missing`);
       expect(record.kind).toBe('pending-slot');
@@ -135,6 +135,18 @@ describe('comparison harness end-to-end (EV-026)', () => {
     // Twin stochasticity: deterministic lab vs stochastic product, recorded.
     expect(metricOf(byId('AUDIO-PARITY-06'), 'stochasticity.runToRunByteIdentity').verdict).toBe('DIVERGENT');
     expect(metricOf(byId('AUDIO-PARITY-06'), 'stochasticity.macroPatternStability').verdict).toBe('VERIFIED');
+
+    // Custom steering prompt (LAB-10, filled 2026-10-02): the product has an
+    // episode-level audio custom-steering surface the lab lacks (DIVERGENT,
+    // recorded); duration response -28.2% vs the same-lane era-control
+    // (DIVERGENT vs the lab's 0-by-construction); macro structure preserved
+    // under the focus on both sides (VERIFIED).
+    expect(metricOf(byId('AUDIO-PARITY-07'), 'customPrompt.steeringEffect').verdict).toBe('DIVERGENT');
+    expect(metricOf(byId('AUDIO-PARITY-07'), 'customPrompt.durationResponse').verdict).toBe('DIVERGENT');
+    expect(metricOf(byId('AUDIO-PARITY-07'), 'customPrompt.durationResponse').product.value).toBe(-28.2);
+    expect(metricOf(byId('AUDIO-PARITY-07'), 'customPrompt.structurePreservation').verdict).toBe('VERIFIED');
+    expect(byId('AUDIO-PARITY-07').kind).toBe('dimension-comparison');
+    expect(byId('AUDIO-PARITY-07').duration_seconds).toBeCloseTo(1015.803356, 4);
   }, 120_000);
 
   test('video harness: 6 records from the committed runner outputs, invariants + honest verdicts', () => {

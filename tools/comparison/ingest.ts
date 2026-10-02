@@ -51,7 +51,7 @@ const INDEX_PATH = 'artifacts/reference/comparisons/index.json';
 const INGEST_OPERATOR = 'wflx-p3';
 const INGEST_STAMP = '2026-10-01T20:00:00Z';
 
-export const LAB_IDS = ['LAB-01', 'LAB-02', 'LAB-03', 'LAB-04', 'LAB-05', 'LAB-06', 'LAB-07', 'LAB-08', 'LAB-09'] as const;
+export const LAB_IDS = ['LAB-01', 'LAB-02', 'LAB-03', 'LAB-04', 'LAB-05', 'LAB-06', 'LAB-07', 'LAB-08', 'LAB-09', 'LAB-10'] as const;
 export type LabId = (typeof LAB_IDS)[number];
 
 // ---------------------------------------------------------------------------
@@ -335,7 +335,9 @@ function labEstateRecord(id: LabId): ComparisonRecord {
   const yamlPath = `${RECORDS_DIR}/${id}.yaml`;
   const surface = numbers.surface;
   const transcriptPath =
-    id === 'LAB-08' || id === 'LAB-09' ? `${RECORDS_DIR}/${id}-transcript.txt` : null;
+    id === 'LAB-08' || id === 'LAB-09' || id === 'LAB-10'
+      ? `${RECORDS_DIR}/${id}-transcript.txt`
+      : null;
   const confidence = requireString(yaml, 'confidence', context);
   if (!['low', 'medium', 'high'].includes(confidence)) {
     throw new Error(`${context}: unknown confidence ${confidence}`);

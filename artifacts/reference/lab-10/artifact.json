@@ -1,0 +1,37 @@
+{
+  "id": "LAB-10",
+  "kind": "real-product Deep Dive Audio Overview with custom steering prompt (audio custom-prompt arm)",
+  "source": "control fixture (sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47)",
+  "captured_utc": "2026-10-01T19:30:00Z",
+  "ready_utc": "~2026-10-01T23:35:00Z (scheduled lane: 'Scheduled for after 11pm'; the product studio listed BOTH runs '6h ago' at the 2026-10-02T05:37Z check)",
+  "file": "Securing_Autonomous_AI_Infrastructure.m4a",
+  "sha256": "bf4dad8c3f85df93c7a9cfb0eb9fad2a914b213d4eab5cdb617ddd1e9a87cd23",
+  "bytes": 32693298,
+  "container": "m4a/mp4",
+  "audio": {"codec": "aac", "profile": "LC", "sample_rate": 44100, "channels": 2, "bit_rate": 257477},
+  "duration_seconds": 1015.803356,
+  "title": "Securing Autonomous AI Infrastructure",
+  "format": "Deep Dive",
+  "length_setting": "Default",
+  "language": "English",
+  "hosts": 2,
+  "custom_prompt": "Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note.",
+  "injection_verified": "138 chars read back before Generate AND post-generation in the product's View-prompt dialog (the Prompt panel reads the custom prompt back verbatim + the 1 source)",
+  "artifacts": [
+    {
+      "format": "Deep Dive (era-control: empty focus, same scheduled lane)",
+      "file": "Anatomy_of_a_Redacted_AI_Blueprint.m4a",
+      "sha256": "c375708dc360f5c443c34eb91a4724a2047b4ae1b9caef15cb35060dfc729c0a",
+      "bytes": 45544013,
+      "duration_seconds": 1415.093696,
+      "title": "Anatomy of a Redacted AI Blueprint",
+      "started_utc": "2026-10-01T~19:10:00Z",
+      "ready_utc": "~2026-10-01T23:35:00Z",
+      "voices": 2,
+      "audio": {"codec": "aac", "profile": "LC", "sample_rate": 44100, "channels": 2, "bit_rate": 257475},
+      "notes": "the accidental empty-focus run on the SAME scheduled lane + fixture (no Prompt panel in its View-prompt dialog) — the same-lane era-control companion; duration response of the custom arm = (1015.803356 - 1415.093696) / 1415.093696 = -28.2%"
+    }
+  ],
+  "asr_sampling": "custom arm 6 x 28 s windows at 0:00 / 8:14 / 15:32; era-control 4 x 28 s windows at 0:00 / 11:34 (z-ai ASR, 16 kHz mono WAV chunks); transcripts in docs/experiments/records/LAB-10-transcript.txt",
+  "provenance": "operator Google session in replay browser, VPN egress; scheduled Oct 1 ~19:30 UTC; downloaded via player more-menu -> Download on 2026-10-02T05:39Z"
+}

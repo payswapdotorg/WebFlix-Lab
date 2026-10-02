@@ -1,12 +1,12 @@
 {
   "recordType": "ComparisonRecord",
   "schemaVersion": "1.0.0",
-  "id": "AUDIO-PARITY-07",
-  "kind": "dimension-comparison",
+  "id": "ESTATE-LAB-10",
+  "kind": "estate-capture",
   "timestamp_utc": "2026-10-01T20:00:00Z",
   "operator": "wflx-p3",
   "surface": "audio",
-  "dimension": "audio.custom-prompt",
+  "dimension": "reference.audio.lab-10",
   "reference_config": {
     "notebook": "WFLX-LAB-07 (same notebook as the video wave; id 155eb020) — audio custom-prompt arm on the control fixture",
     "format": "Deep Dive (Customize Audio Overview dialog + custom steering prompt)",
@@ -72,9 +72,9 @@
       "source": "docs/experiments/records/LAB-10.yaml"
     },
     {
-      "label": "REPRODUCED",
-      "text": "lab side: the offline deterministic Deep Dive compile (the 300 s canonical) has no custom-prompt surface — the steering axis is the Director’s plan-level focus/style layer; there is no lab audio artifact to compare on the focus axis (the existence gap is the DIVERGENT verdict)",
-      "source": "tools/comparison/audio-suite.ts (this suite) — the deepdive-5min-baseline arm"
+      "label": "OBSERVED",
+      "text": "full spoken content transcribed via ASR (committed transcript is the content-level record for this capture)",
+      "source": "docs/experiments/records/LAB-10-transcript.txt"
     }
   ],
   "annotations": {
@@ -83,83 +83,23 @@
     "notes": null
   },
   "comparison": {
-    "lab_artifact_id": "artifact-exp-a-deepdive-5min-baseline",
-    "lab_pipeline": "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)",
-    "metrics": [
-      {
-        "metric": "customPrompt.steeringEffect",
-        "unit": null,
-        "measurement_class": "qualitative",
-        "lab": {
-          "value": "no user-facing audio custom-steering surface in the lab default compile — the steering axis is the plan-level focus/style layer at the Director (the audio custom-prompt arm is not compiled; there is nothing for a user prompt to steer)",
-          "source": "src/audio + src/director (compile surface) — no custom-prompt arm in the EXP-A series",
-          "note": null
-        },
-        "product": {
-          "value": "(custom-prompt steering, VERIFIED): the custom topic MATERIALLY re-steered the episode — title 'Securing Autonomous AI Infrastructure' (era-control title: 'Anatomy of a Redacted AI Blueprint'); the opening hook is a compliance-lawsuit nightmare ('Imagine handing a robot your company's credit card... how long before you are completely bankrupt or worse facing a massive compliance lawsuit') and the closing synthesis is the security theme itself ('How does a machine creatively understand and depict the very sandboxes, resource limits and redacted keys that were explicitly designed to keep it caged'). ASR keyword-stem evidence over 168 s sampled (6 x 28 s windows at 0:00/8:14/15:32): 20 security-framed stem hits in 459 words (4.4%) including the DEFENSIVE vocabulary vault/shield/fortress/cage x2/rogue/isolate x2/lawsuit/bankrupt/locked-down — vs the era-control's 5 hits in 314 words (1.6%, zero defensive vocabulary; its compliance mentions trace to the fixture's own security-protocols topic list). The custom focus is a FULL CONTENT RE-PLAN (the audio surface repeats the LAB-09 video finding), not a topical filter.",
-          "source": "docs/experiments/records/LAB-10.yaml (ASR keyword-stem evidence + in-product post-generation Prompt-dialog read-back)",
-          "note": null
-        },
-        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
-        "verdict": "DIVERGENT",
-        "pending_reason": null,
-        "confidence": "high",
-        "note": "the product exposes an episode-level audio custom-steering surface (VERIFIED full content re-plan: title/hook/synthesis all re-steered, 20 defensive-security stem hits/459 words vs the era-control’s 0; the era-control is the in-product negative control with an empty Prompt panel) — the lab has no equivalent surface. Steering-surface EXISTENCE is the parity distinction (mirrors VIDEO-PARITY-04’s recorded semantics distinction)."
-      },
-      {
-        "metric": "customPrompt.durationResponse",
-        "unit": "%",
-        "measurement_class": "like-for-like",
-        "lab": {
-          "value": 0,
-          "source": "lab 0% by construction — no audio custom-prompt arm in the lab default compile; realized duration is plan-pinned (300 s Deep Dive canonical)",
-          "note": null
-        },
-        "product": {
-          "value": -28.2,
-          "source": "LAB-10 1015.803356 s (custom focus) vs the same-lane empty-focus era-control 1415.093696 s (the pending slot’s unit “s” becomes the shift % at fill — the RESPONSE axis is the shift, per the AUDIO-PARITY-04 durationShiftPercent pattern)",
-          "note": null
-        },
-        "delta": "lab 0%, product -28.2% — |Δ| 28.2 pp — rule percent-point-tolerance <= 5 pp",
-        "verdict": "DIVERGENT",
-        "pending_reason": null,
-        "confidence": "high",
-        "note": "measurement-class note: the lab 0% is a construction artifact (no surface, plan-pinned timing — not a claimed parity); the product’s Deep Dive duration is content-elastic under the focus (-28.2% vs the same-lane control, -15.5% vs the LAB-01 immediate-lane control 1201.82 s)."
-      },
-      {
-        "metric": "customPrompt.structurePreservation",
-        "unit": null,
-        "measurement_class": "qualitative",
-        "lab": {
-          "value": "the lab’s steering axis (plan-level focus/style at the Director) preserves plan structure by construction — the compile realizes the plan skeleton; structure change under steering is 0 by the pipeline’s contract",
-          "source": "src/director + src/audio (plan-realization contract)",
-          "note": null
-        },
-        "product": {
-          "value": "(structure preservation under custom focus): the 2-host dialogic Deep Dive register is preserved — both sampled hosts exchange reactively throughout ('Oh wow! Yeah...'); the macro skeleton framing -> section walk -> synthesis is intact (hook at 0:00, mid sections on isolation/snapshot/shield/fortress themes at 8:14, synthesis on 'the AI explains its own secure architecture' at 15:32). The focus re-plans CONTENT, not FORMAT.",
-          "source": "docs/experiments/records/LAB-10.yaml (ASR windows: hook at 0:00, mid sections, synthesis at 15:32)",
-          "note": null
-        },
-        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
-        "verdict": "VERIFIED",
-        "pending_reason": null,
-        "confidence": "high",
-        "note": "both sides preserve the macro skeleton under the steering axis: the product keeps the 2-host dialogic Deep Dive register and framing->sections->synthesis skeleton while re-planning content (the focus changes CONTENT, not FORMAT — the LAB-09 video finding repeated on the audio surface)."
-      }
-    ]
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
   },
   "confidence": "high",
   "unresolved_behavior": [
-    "the product’s audio custom-steering surface has no lab counterpart (surface-existence divergence, recorded — not a defect claim); a future lab custom-prompt audio arm would fill the like-for-like axis",
-    "the scheduled-lane era (2026-10-01+) applies to any FUTURE product-side audio capture workflow — capture runbooks expect the queued lane (banked truth)"
+    "vs the era-control (same lane, empty focus): completely different episode content (defensive-security narrative vs default architecture walkthrough), different title, duration 1015.80 vs 1415.09 s (-28.2%) — the custom-prompt delta is a full-surface content change with a material duration response.",
+    "vs the lab's custom-steering axis: the lab's steering surface is the plan-level focus/style layer (Director), not a user-facing audio custom-prompt; the lab default compile has NO audio custom-prompt arm — the steering-surface existence itself is the parity distinction (recorded as DIVERGENT in AUDIO-PARITY-07, mirroring the VIDEO-PARITY-04 semantics distinction)."
   ],
   "tl_hooks": [],
   "evidence_paths": [
-    "docs/experiments/records/LAB-10.yaml",
-    "docs/experiments/records/LAB-10-transcript.txt",
+    "artifacts/reference/lab-10/Securing_Autonomous_AI_Infrastructure.m4a",
     "artifacts/reference/lab-10/artifact.json",
-    "docs/experiments/comparisons/estate/ESTATE-LAB-10.yaml",
-    "docs/experiments/records/LAB-09.yaml (the video custom-prompt precedent)"
+    "docs/experiments/records/LAB-10-transcript.txt",
+    "docs/experiments/records/LAB-01.yaml",
+    "docs/experiments/records/LAB-09.yaml",
+    "docs/work-items/roadmap-status.md (the 2026-10-01 19:40 UTC station record: both runs scheduled)"
   ],
-  "status": "compared"
+  "status": "ingested"
 }

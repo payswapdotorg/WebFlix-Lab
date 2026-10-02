@@ -603,3 +603,51 @@ transition); credential sweep over the wave diff = 0 hits.
 - Honest DIVERGENT verdicts recorded (never silently promoted): Deep Dive duration class (300s lab vs 1201.82s product); compression philosophy; mutation locality class (lab C-5 22/24 vs product global re-plan); twin stochasticity (control choice); Short duration band (71.63-84.82s product vs 60s target); Short geometry (9:16 vs 16:9 — wait, reversed: product 9:16, lab structural 16:9 explainer-family note); sceneDensity instrument-truth binding note.
 - PENDING REFERENCE CAPTURE slots with mechanical TL hooks: LAB-10 audio custom-prompt (platform-scheduled), video language arm, video mutation locality, Short hook-prominence structured annotation, Interactive Audio product capture. When captures land: extend `ingest.ts` LAB_IDS + re-run `exp:cmpaudio` / `exp:cmpvideo` — slots fill mechanically.
 - Wave-close note: the Parity Completion Phase's three worker waves (P1 audio PR #11, P2 video PR #12, P3 reference-lab PR #13) are ALL MERGED. Remaining phase items are TL/operator-owned: the pending capture slots above + the cross-modal QA + parity promotion gate (the phase's §7 definition of done).
+
+## 2026-10-02 06:00 UTC — LAB-10 LANDED (TL #2 + operator) — the audio custom-prompt matrix is CLOSED; AUDIO-PARITY-07 filled
+
+- The platform executed both scheduled LAB-10 runs ~23:35-23:40 UTC Oct 1
+  (the "Scheduled for after 11pm" promise kept — the product studio listed
+  both artifacts "6h ago" at the 05:37 UTC harvest check). Harvested through
+  the replay browser's operator Google session (VPN egress): downloads via
+  the player more-menu, ffprobe + sha256 verified, ASR-sampled (6+4 x 28 s
+  windows), and the STRONGEST injection-evidence class banked: the product's
+  own post-generation "View prompt and sources" dialog reads the full
+  138-char custom prompt back verbatim on the custom-focus artifact — and
+  shows NO Prompt panel on the era-control (empty focus) — the in-product
+  negative control.
+- **LAB-10 capture record landed** (`docs/experiments/records/LAB-10.yaml`
+  + transcript + `artifacts/reference/lab-10/artifact.json`): custom-focus
+  arm "Securing Autonomous AI Infrastructure" 1015.80 s (sha256 bf4dad8c…,
+  AAC LC 44.1 kHz stereo) vs the same-lane empty-focus era-control
+  "Anatomy of a Redacted AI Blueprint" 1415.09 s (sha256 c375708d…).
+  OBSERVED: full content re-plan (title/hook/synthesis re-steered; 20
+  defensive-security stem hits/459 sampled words vs the era-control's 5/314
+  — all 5 traceable to the fixture's own topic list, zero defensive
+  vocabulary); duration response -28.2% vs same-lane control (-15.5% vs the
+  LAB-01 immediate-lane control); 2-host dialogic Deep Dive skeleton
+  preserved (the focus changes CONTENT, not FORMAT — the LAB-09 video
+  finding repeated on audio).
+- **AUDIO-PARITY-07 FILLED** (the pending slot's TL hook executed):
+  `ingest.ts` LAB_IDS extended to LAB-10 (11 estate records — the other 10
+  regenerate byte-identically, surgical); the audio suite's pending record
+  became a dimension comparison. Audio suite totals: **18 VERIFIED / 14
+  DIVERGENT / 3 PENDING** (was 17/12/6). Honest verdicts:
+  steeringEffect DIVERGENT (the product has an episode-level audio
+  custom-steering surface; the lab default compile has none —
+  surface-existence divergence mirroring VIDEO-PARITY-04);
+  durationResponse DIVERGENT (product -28.2% content-elastic vs lab
+  0%-by-construction, percent-point rule, measurement-class note recorded);
+  structurePreservation VERIFIED (macro skeleton preserved under the
+  steering axis on both sides). Integration tests updated and green
+  (15/15: schema, round-trip, byte-regeneration, pending-discipline — the
+  remaining pending slots are AUDIO-PARITY-08 + VIDEO-PARITY-02/05/06).
+- **Capture matrix state (updated):** audio {Deep Dive control ✅ LAB-01,
+  mode family ✅ LAB-02, length ✅ LAB-03, language ✅ LAB-04, mutation ✅
+  LAB-05, twin ✅ LAB-06, custom prompt ✅ LAB-10} — the AUDIO side of the
+  matrix is COMPLETE. Remaining pending captures: Interactive Audio
+  (operator-gated; EV-018 lab prototype stands), video language arm, video
+  mutation locality, Short hook-prominence structured annotation (Cinematic
+  stays a scoping truth — no product format).
+- Remaining phase items (TL/operator-owned): the four pending captures
+  above + cross-modal QA + the parity promotion gate.

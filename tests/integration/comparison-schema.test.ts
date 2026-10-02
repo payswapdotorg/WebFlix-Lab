@@ -2,7 +2,7 @@
  * Comparison-record schema tests (WFLX-P3 Deliverable A validation / EV-023).
  *
  * Runs over the REAL committed comparison-record estate:
- *   docs/experiments/comparisons/estate/*.yaml   (10 ingested capture records)
+ *   docs/experiments/comparisons/estate/*.yaml   (11 ingested capture records)
  *   docs/experiments/comparisons/audio/*.yaml    (8 audio dimension records)
  *   docs/experiments/comparisons/video/*.yaml    (6 video dimension records)
  *
@@ -39,7 +39,7 @@ import { runAudioComparisonSuite } from '../../tools/comparison/audio-suite';
 import { buildVideoComparisonRecordsFromCommittedStore } from '../../tools/comparison/video-hooks';
 
 const RECORD_SETS = [
-  { docsDir: 'docs/experiments/comparisons/estate', expectedCount: 10 },
+  { docsDir: 'docs/experiments/comparisons/estate', expectedCount: 11 },
   { docsDir: 'docs/experiments/comparisons/audio', expectedCount: 8 },
   { docsDir: 'docs/experiments/comparisons/video', expectedCount: 6 },
 ] as const;
@@ -61,7 +61,7 @@ function readCommittedRecords(): { path: string; record: ComparisonRecord }[] {
 describe('comparison-record schema (EV-023)', () => {
   test('every committed record parses and schema-validates', () => {
     const records = readCommittedRecords();
-    expect(records.length).toBe(24);
+    expect(records.length).toBe(25);
     for (const { path, record } of records) {
       // parseRecord already validates; re-validate explicitly for the error path.
       const result = ComparisonRecordSchema.safeParse(JSON.parse(JSON.stringify(record)));
@@ -83,7 +83,7 @@ describe('comparison-record schema (EV-023)', () => {
 
   test('the ingester regenerates the committed estate records byte-identically', () => {
     const estate = loadEstate();
-    expect(estate.records.length).toBe(10);
+    expect(estate.records.length).toBe(11);
     for (const record of estate.records) {
       const committed = readFileSync(join('docs/experiments/comparisons/estate', `${record.id}.yaml`), 'utf8');
       expect(serializeRecord(record)).toBe(committed);
@@ -131,7 +131,6 @@ describe('comparison-record schema (EV-023)', () => {
     const pendingSlots = readCommittedRecords().filter(({ record }) => record.kind === 'pending-slot');
     const ids = pendingSlots.map(({ record }) => record.id).sort();
     expect(ids).toEqual([
-      'AUDIO-PARITY-07',
       'AUDIO-PARITY-08',
       'VIDEO-PARITY-02',
       'VIDEO-PARITY-05',

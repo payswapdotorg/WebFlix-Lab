@@ -75,6 +75,14 @@
       "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-09.json"
     },
     {
+      "id": "ESTATE-LAB-10",
+      "kind": "estate-capture",
+      "surface": "audio",
+      "dimension": "reference.audio.lab-10",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-10.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-10.json"
+    },
+    {
       "id": "ESTATE-EXPLAINER-001",
       "kind": "estate-capture",
       "surface": "video",
