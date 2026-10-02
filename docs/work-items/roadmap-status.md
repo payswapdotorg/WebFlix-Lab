@@ -700,3 +700,31 @@ transition); credential sweep over the wave diff = 0 hits.
 - Remaining phase items (TL-owned): the cross-modal QA + parity promotion
   gate (the phase's §7 definition of done) — the parity-close
   documentation over the completed comparison program.
+
+## 2026-10-02 07:30 UTC — PARITY COMPLETION PHASE CLOSED (TL #2 sign-off) — the parity-close decision + promotion gate
+
+- **docs/promotion/parity-close-decision.md** authored and SIGNED by TL #2:
+  the §4 acceptance-gate walk (all twelve capabilities VERIFIED or
+  EXPLICITLY UNRESOLVED with evidence pointers — Interactive Audio's
+  product capture is the ONE open slot, operator-gated with the ask
+  posted; its lab prototype EV-018 stands), the cross-modal QA summary
+  (audio 18V/14D/3P + video 9V/11D/3P over the 13-record estate, every
+  verdict from a declared mechanical rule), the honest divergence ledger
+  (nine recorded distinctions, never normalized), and the verdict: the
+  phase CLOSES with the lab advancing to **parity-characterized** — the
+  comparison program + capture estate are the integration handoff (the
+  WebFlix production boundary holds).
+- Cross-surface QA findings banked: language duration response is
+  surface-dependent (audio -13.9% vs video Short -3.5% within tolerance);
+  the global re-plan response is consistent across surfaces; custom-focus
+  steering re-plans content wholesale on both; the product front-loads ~4 s
+  hooks vs the lab's full opening beats; the mutated claim's surfacing is
+  selection-dependent on the Short (n=1 UNRESOLVED).
+- Final gates at close: typecheck 0 / lint clean / 456/456 / credential
+  sweep 0 / determinism spine byte-reproducible over all 27 committed
+  comparison records.
+- Phase ledger: WFLX-P1 (PR #11) + WFLX-P2 (PR #12) + WFLX-P3 (PR #13) +
+  the TL/operator capture program (LAB-01..12, EV-027/028) — every wave
+  replay-dispatched, every capture harvested through the operator's
+  authenticated replay session, every verdict honest. The standing
+  directive (no early returns until the parity phase closes) is fulfilled.
