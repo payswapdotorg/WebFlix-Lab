@@ -1,0 +1,83 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "ESTATE-LAB-06",
+  "kind": "estate-capture",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "audio",
+  "dimension": "reference.audio.lab-06",
+  "reference_config": {
+    "notebook": "WFLX-LAB-06 (TWIN; id ed804a87) — fresh notebook, IDENTICAL control source set as LAB-01",
+    "format": "Deep Dive (dialog default)",
+    "language": "English",
+    "length": "Default",
+    "visual_style": "",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "2026-09-28T21:41:28Z",
+      "generation_ready": "~2026-09-28T21:51:00Z (~9.5 min)"
+    }
+  },
+  "source_fingerprint": "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — byte-identical to LAB-01)",
+  "artifact_fingerprint": {
+    "sha256": "77b1b01228df89d5278e3732a966a0beeb8c3044f6e5cb0033449e8ece2b029b",
+    "path": "artifacts/reference/lab-06/Blueprint_for_an_AI_Explanation_Engine.m4a",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-09-28T21:41:28Z",
+  "duration_seconds": 1322.84,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(run-to-run stochasticity): identical input + identical settings + fresh notebook produced a DIFFERENT title ('Blueprint for an AI Explanation Engine' vs 'Blueprint for a Redacted AI City'), a DIFFERENT duration (1322.84 s = 22:02 vs 1201.82 s = 20:01, +10.2%), and a different byte stream (trivially, given duration) — the real product is NOT deterministic across runs at any measurable level.",
+      "source": "docs/experiments/records/LAB-06.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(macro-pattern stability): the twin keeps the same discourse skeleton — cold-open hook ('walking through a secretive engineering facility... redacted blueprint on a desk'), explicit source-title reference, three-part mission framing, two hosts with the same banter register, ~20-22 min duration band.",
+      "source": "docs/experiments/records/LAB-06.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(hook variance across three runs): LAB-01 'a digital city running on autopilot' / LAB-05 'a crumpled paper from a briefcase' / LAB-06 'a redacted blueprint on a desk in a secretive facility' — same rhetorical slot (redaction-as-mystery), different surface every run.",
+      "source": "docs/experiments/records/LAB-06.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(emphasis variance): the twin's opening leans into the fixture's own purpose ('it represents the exact shape of a source used to generate a reference video overview') — an angle the LAB-01 control did not take in its opening; content selection varies run-to-run even at the framing level.",
+      "source": "docs/experiments/records/LAB-06.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(LAB-05 falsifier RESOLVED): the b30-mutation delta (+19% duration, title change, full surface reshuffle) sits WITHIN the baseline run-to-run variance measured here (+10% duration, title change, full surface reshuffle on IDENTICAL source) — mutation locality is not separately observable at the artifact level; the real product re-plans the full episode every generation.",
+      "source": "docs/experiments/records/LAB-06.yaml"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
+  },
+  "confidence": "high",
+  "unresolved_behavior": [
+    "vs LAB-01: title, +121 s duration, hook metaphor, opening emphasis — all differ on identical input (this IS the finding).",
+    "vs our lab's determinism doctrine: our pipeline is byte-deterministic by construction (same seeds -> identical artifacts); the real product is fully surface-stochastic with macro-structural regularity only. Our determinism is a LAB CONTROL choice, not a product-fidelity property."
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "artifacts/reference/lab-06/Blueprint_for_an_AI_Explanation_Engine.m4a",
+    "artifacts/reference/lab-06/artifact.json",
+    "docs/experiments/records/LAB-01.yaml",
+    "docs/experiments/records/LAB-05.yaml"
+  ],
+  "status": "ingested"
+}

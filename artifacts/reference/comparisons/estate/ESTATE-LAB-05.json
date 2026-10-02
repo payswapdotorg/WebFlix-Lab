@@ -1,0 +1,96 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "ESTATE-LAB-05",
+  "kind": "estate-capture",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "audio",
+  "dimension": "reference.audio.lab-05",
+  "reference_config": {
+    "notebook": "WFLX-LAB-01 (dedicated; id 25661cd9) — SAME notebook as LAB-01, source swapped",
+    "format": "Deep Dive (dialog default)",
+    "language": "English",
+    "length": "Default",
+    "visual_style": "",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "2026-09-28T20:53:36Z",
+      "generation_ready": "~2026-09-28T21:01:00Z (~7.5 min wall-clock; control took ~7-8 min)",
+      "control_artifact": "LAB-01 (Blueprint for a Redacted AI City, 1201.82 s)"
+    }
+  },
+  "source_fingerprint": "sha256:6f3754bc3b37f62863ffa269d577ba1641eaacd17fce632367dcb122ee0d830c (b30-mutated fixture: 'All credentials are `[REDACTED]` and are rotated quarterly by the platform team.' — same mutation text as EXP-A-04)",
+  "artifact_fingerprint": {
+    "sha256": "6431109e9fd670bc6595e39041b4ea6cb68f626c120aa98c12c1bba79ef00c70",
+    "path": "artifacts/reference/lab-05/The_Architecture_of_Autonomous_AI_Systems.m4a",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-09-28T20:53:36Z",
+  "duration_seconds": 1432.25,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(artifact-level GLOBAL response): a single-paragraph source edit produced a DIFFERENT generated title ('The Architecture of Autonomous AI Systems' vs 'Blueprint for a Redacted AI City'), a LONGER duration (1432.25 s = 23:52 vs 1201.82 s = 20:01, +19%), and a larger file (46.1 MB vs 38.7 MB) — the real product re-plans the whole episode, it does not minimally patch it.",
+      "source": "docs/experiments/records/LAB-05.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(semantic propagation): the b30 mutation content IS voiced — the closing segment references 'Quarterly rotated platform credentials' verbatim — the mutated claim surfaces in the output (local semantic inclusion confirmed).",
+      "source": "docs/experiments/records/LAB-05.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(macro-structure preserved): same discourse pattern as LAB-01 — cold-open hook, explicit source-title reference, three-part roadmap (surface creative tools -> hidden infrastructure/databases -> architectural workflows), section walk with analogies, synthesis close with listener takeaway.",
+      "source": "docs/experiments/records/LAB-05.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(surface fully reshuffled): hook metaphor differs ('crumpled redacted paper from a high-tech architect's briefcase' vs 'a digital city running on autopilot'); mid-section topic selection differs (Redis-as-sticky-notes + autonomous purchasing + browser automation vs compliance code-level enforcement + multi-agent 'robot middle managers'); closing frames 'communication layer/source-grounded planning' vs 'the messy note behind the clean UI'.",
+      "source": "docs/experiments/records/LAB-05.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(analogies are per-generation, not canonical): Redis compared to 'sticky notes on your monitor' here; air-traffic-control and brain-simulation metaphors appear in the closing — the analogy inventory differs from the control episode's.",
+      "source": "docs/experiments/records/LAB-05.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": ": two hosts again, same conversational register (banter, rhetorical questions, acknowledgment tokens); alternation cadence in sampled windows matches the control (2-6 turns per beat).",
+      "source": "docs/experiments/records/LAB-05.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": ": UI truth for the mutation procedure — source content is immutable once ingested (Rename/Remove only), so 'edit one paragraph and regenerate' necessarily means source replacement; recorded as a UI affordance constraint on this probe.",
+      "source": "docs/experiments/records/LAB-05.yaml"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
+  },
+  "confidence": "medium",
+  "unresolved_behavior": [
+    "vs LAB-01: title, duration (+230.4 s), byte size, hook metaphor, mid-section topic selection, analogy inventory, closing frame — all changed from a 47-character source edit.",
+    "vs EXP-A-04 (our lab): OUR pipeline was plan-local + seed-global on the same mutation; the REAL product is global at EVERY layer (title, duration, content selection) while preserving macro pattern. The real product exhibits no turn-level stability to preserve."
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "artifacts/reference/lab-05/The_Architecture_of_Autonomous_AI_Systems.m4a",
+    "artifacts/reference/lab-05/artifact.json",
+    "artifacts/reference/lab-01/Blueprint_for_a_Redacted_AI_City.m4a",
+    "docs/experiments/records/LAB-01.yaml",
+    "docs/experiments/records/EXP-A-04.yaml",
+    "fixtures/reference-messy-note-redacted.md"
+  ],
+  "status": "ingested"
+}

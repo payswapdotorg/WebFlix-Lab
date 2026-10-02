@@ -1,0 +1,104 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "ESTATE-LAB-07",
+  "kind": "estate-capture",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "video",
+  "dimension": "reference.video.lab-07",
+  "reference_config": {
+    "notebook": "WFLX-LAB-07 (fresh; id 155eb020) — new notebook, control fixture ingested via Copied text (React native-setter path)",
+    "format": "Short (crop_9_16 — UI-tagged 'New!', 'A bite-sized overview to help you quickly grasp core ideas')",
+    "language": "English",
+    "length": "Short (default for the format)",
+    "visual_style": "n/a (no style control exposed in the Video Overview dialog)",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "2026-10-01T18:06:24Z",
+      "generation_ready": "2026-10-01T18:34:49Z (~28.4 min wall)",
+      "dialog_exposed": "Format radio (Short | Explainer — NO Cinematic format exists in the product's video surface); Choose language; 'What should the video focus on?' suggestion cards + Custom topic; AI Usage meter; Generate later/now"
+    }
+  },
+  "source_fingerprint": "sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 (control fixture — byte-identical to LAB-01/05/06)",
+  "artifact_fingerprint": {
+    "sha256": "f89fd153e747fcad5eb5d2fb92d15b747afccbf6c670d56b639b3abf463386a7",
+    "path": "artifacts/reference/lab-07/How_Multi-Agent_Orchestration_Divides_AI.mp4",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (artifacts/reference/lab-0X/*.mp4); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-10-01T18:06:24Z",
+  "duration_seconds": 84.822494,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(duration): the product's Short ran 84.82 s (1:24) on the control fixture — NOT pinned to ~60 s; the lab's Short compile band [48,72] s (targeting the product's documented ~60 s Short) sits BELOW this capture. Per-fixture caveat: the lab's 60 s measurement was on the lab's own canonical fixture; duration is content-elastic, and the honest comparison records the band difference as a parity gap on the duration dimension.",
+      "source": "docs/experiments/records/LAB-07.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(format geometry): 720x1280 (9:16 vertical) @ 30 fps h264 — the Short format is VERTICAL video, matching the dialog's crop_9_16 marker; the lab's Short reconstruction renders 16:9 Explainer-geometry video — the vertical dimension is a structural parity gap the lab has not reconstructed.",
+      "source": "docs/experiments/records/LAB-07.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(audio stream): AAC mono 44.1 kHz — same audio stream shape as the reference Explainer artifact and the lab's overview audio (mono AAC 44.1 kHz).",
+      "source": "docs/experiments/records/LAB-07.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(title): auto-generated 'How Multi-Agent Orchestration Divides AI' — a fresh title per run (consistent with the run-to-run stochasticity family: LAB-01/05/06 titles all differed).",
+      "source": "docs/experiments/records/LAB-07.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(UI-truth): the Customize Video Overview dialog exposes exactly TWO formats — Short (9:16, 'New!') and Explainer (16:9). NO 'Cinematic' format exists in the product's video surface; the lab's Cinematic layer is a behavior reconstruction of generative-asset workflows, not a product-format twin. Recorded as a scoping truth for the parity comparison.",
+      "source": "docs/experiments/records/LAB-07.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(focus controls): the dialog exposes suggestion-card focus topics ('The architecture behind AI workflows' / 'How multi-agent systems function' / '5 trending AI media tools') + Custom topic — the custom-prompt arm is a FIRST-CLASS product control for video (LAB-08 exercises it).",
+      "source": "docs/experiments/records/LAB-07.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(generation latency): ~28.4 min wall for a 1:24 Short on one 1.2 kB source — video generation is materially slower than audio overviews (~7-10 min); the lab's EV-022 live-route latencies (56 s/image, 210 s/clip) are per-asset, not per-episode, so the wall-clock comparison is per-episode-vs-per-asset and is recorded as UNRESOLVED-shape, not a like-for-like number.",
+      "source": "docs/experiments/records/LAB-07.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "generation wall 1705 s (sidecar; wall-clock is not a stable product observable — LAB-08)",
+      "source": "artifacts/reference/lab-07/artifact.json"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "video stream 720x1280 (9:16 vertical) @ 30 fps h264; audio aac 1ch 44100 Hz",
+      "source": "artifacts/reference/lab-07/artifact.json"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
+  },
+  "confidence": "high",
+  "unresolved_behavior": [
+    "vs the lab's Short reconstruction: product duration 84.8 s vs lab band [48,72] s (gap, recorded); product 9:16 vertical vs lab 16:9 (gap, recorded); product focus controls + custom topic exist at the video dialog level (the lab's equivalent is the plan-level custom-style layer).",
+    "vs the original Explainer reference: 84.8 s vs 415.7 s; 720x1280 vs 1280x720 — the two product video formats are structurally distinct surfaces."
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "artifacts/reference/lab-07/How_Multi-Agent_Orchestration_Divides_AI.mp4",
+    "artifacts/reference/lab-07/artifact.json",
+    "docs/experiments/records/LAB-01.yaml",
+    "docs/experiments/records/LAB-06.yaml"
+  ],
+  "status": "ingested"
+}

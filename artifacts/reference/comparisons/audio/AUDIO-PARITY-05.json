@@ -1,0 +1,150 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "AUDIO-PARITY-05",
+  "kind": "dimension-comparison",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "audio",
+  "dimension": "audio.mutation-locality",
+  "reference_config": {
+    "notebook": "WFLX-LAB-01 (dedicated; id 25661cd9) — SAME notebook as LAB-01, source swapped",
+    "format": "Deep Dive (dialog default)",
+    "language": "English",
+    "length": "Default",
+    "visual_style": "",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "2026-09-28T20:53:36Z",
+      "generation_ready": "~2026-09-28T21:01:00Z (~7.5 min wall-clock; control took ~7-8 min)",
+      "control_artifact": "LAB-01 (Blueprint for a Redacted AI City, 1201.82 s)"
+    }
+  },
+  "source_fingerprint": "sha256:6f3754bc3b37f62863ffa269d577ba1641eaacd17fce632367dcb122ee0d830c (b30-mutated fixture: 'All credentials are `[REDACTED]` and are rotated quarterly by the platform team.' — same mutation text as EXP-A-04)",
+  "artifact_fingerprint": {
+    "sha256": "6431109e9fd670bc6595e39041b4ea6cb68f626c120aa98c12c1bba79ef00c70",
+    "path": "artifacts/reference/lab-05/The_Architecture_of_Autonomous_AI_Systems.m4a",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (LAB-series discipline); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-09-28T20:53:36Z",
+  "duration_seconds": 1432.25,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(semantic propagation): the b30 mutation content IS voiced — the closing segment references 'Quarterly rotated platform credentials' verbatim — the mutated claim surfaces in the output (local semantic inclusion confirmed).",
+      "source": "docs/experiments/records/LAB-05.yaml"
+    },
+    {
+      "label": "REPRODUCED",
+      "text": "lab b30 arms: control 24 turns / mut 24 turns; realized-text diff 22 identical / 2 changed; mutated content voiced: true",
+      "source": "experiments/run-comparison-audio.ts (this suite) reproducing artifacts/audio/exp-a-r2/a04-*"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": "artifact-exp-a04-control-deepdive-5min",
+    "lab_pipeline": "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)",
+    "metrics": [
+      {
+        "metric": "mutation.mutatedContentVoiced",
+        "unit": null,
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": true,
+          "source": "b30 mutation content (\"rotated quarterly\") present in the mutated arm's realized texts: true",
+          "note": null
+        },
+        "product": {
+          "value": true,
+          "source": "ESTATE-LAB-05 (OBSERVED: the closing segment references \"Quarterly rotated platform credentials\" verbatim)",
+          "note": null
+        },
+        "delta": "lab true, product true — rule equality",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": null
+      },
+      {
+        "metric": "mutation.macroStructurePreserved",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "macro plan preserved: 24 -> 24 turns, 7 -> 7 beats, same beat titles",
+          "source": "artifacts/audio/exp-a-r2/{a04-control,a04-mut-b30}-deepdive-5min (plans)",
+          "note": null
+        },
+        "product": {
+          "value": "(macro-structure preserved): same discourse pattern as LAB-01 — cold-open hook, explicit source-title reference, three-part roadmap (surface creative tools -> hidden infrastructure/databases -> architectural workflows), section walk with analogies, synthesis close with listener takeaway.",
+          "source": "docs/experiments/records/LAB-05.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": null
+      },
+      {
+        "metric": "mutation.localityClass",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "C-5 turn-local diff hygiene: 22/24 realized texts byte-identical across the b30 mutation (seeded surfaces key on turn content hashes — unchanged turns keep their texts)",
+          "source": "artifacts/audio/exp-a-r2/{a04-control,a04-mut-b30}-deepdive-5min (realized texts, this suite)",
+          "note": null
+        },
+        "product": {
+          "value": "(artifact-level GLOBAL response): a single-paragraph source edit produced a DIFFERENT generated title ('The Architecture of Autonomous AI Systems' vs 'Blueprint for a Redacted AI City'), a LONGER duration (1432.25 s = 23:52 vs 1201.82 s = 20:01, +19%), and a larger file (46.1 MB vs 38.7 MB) — the real product re-plans the whole episode, it does not minimally patch it.",
+          "source": "docs/experiments/records/LAB-05.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "architecture-rule distinction (recorded, not a defect claim): the lab C-5 diff hygiene keeps unchanged turns stable; the product re-plans globally. LAB-06 further resolves that the product mutation delta sits WITHIN its baseline run-to-run variance (locality not separately observable)."
+      },
+      {
+        "metric": "mutation.durationResponsePercent",
+        "unit": "%",
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": 0,
+          "source": "lab placeholder synthesis pins duration to the 300 s target in both arms (0% response by construction)",
+          "note": null
+        },
+        "product": {
+          "value": 19.2,
+          "source": "LAB-05 1432.25 s vs LAB-01 1201.82 s = +19.0%",
+          "note": null
+        },
+        "delta": "lab 0%, product 19.2% — |Δ| 19.2 pp — rule percent-point-tolerance <= 5 pp",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": "measurement-class note: the lab 0% is a construction artifact of placeholder timing; the product responds to the source edit with a full re-plan at a different duration."
+      }
+    ]
+  },
+  "confidence": "medium",
+  "unresolved_behavior": [
+    "the product mutation locality is not separately observable above its run-to-run stochasticity (LAB-06 falsifier RESOLVED — recorded in LAB-05/LAB-06)"
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "docs/experiments/records/LAB-05.yaml",
+    "artifacts/reference/lab-05/artifact.json",
+    "artifacts/audio/exp-a-r2/a04-control-deepdive-5min/",
+    "artifacts/audio/exp-a-r2/a04-mut-b30-deepdive-5min/",
+    "docs/experiments/comparisons/estate/ESTATE-LAB-05.yaml"
+  ],
+  "status": "compared"
+}

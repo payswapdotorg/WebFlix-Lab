@@ -1,0 +1,101 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "AUDIO-PARITY-08"
+kind: "pending-slot"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "audio"
+dimension: "audio.interactive"
+reference_config:
+  notebook: null
+  format: "Deep Dive + custom steering prompt (product-side capture scheduled — LAB-10)"
+  language: null
+  length: null
+  visual_style: null
+  custom_prompt: null
+  other_config: null
+source_fingerprint: null
+artifact_fingerprint:
+  sha256: null
+  path: null
+  media_present: false
+  additional: []
+  note: "product-side capture does not exist yet (LAB-10 scheduled; Interactive Audio operator-gated)"
+captured_utc: null
+duration_seconds: null
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "the product player UI exposes an \"Interactive mode\" chip (recorded in the LAB-01 capture other_config)"
+    source: "docs/experiments/records/LAB-01.yaml"
+  - label: "REPRODUCED"
+    text: "the lab Interactive Audio prototype (P1 Deliverable C / EV-018) reconstructs the observable behavior as an additive session layer with per-turn C-5 locality — lab reproduction only, NOT product parity evidence"
+    source: "docs/experiments/records/EXP-L-03.yaml"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: null
+  lab_pipeline: "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)"
+  metrics:
+    - metric: "interactive.interventionSourceGrounding"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "REPRODUCED (EV-018): listener intervention at a turn boundary -> deterministic claim retrieval over the same semantic graph -> source-grounded response (W1 deep validation + W2 dialogue-graph grounding, zero issues; claims resolve; anchors voiced)"
+        source: "docs/experiments/records/EXP-L-03.yaml + artifacts/audio/interactive-01/"
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: "Interactive Audio product capture is operator-gated (the listener verbally joins the hosts); no product-side capture exists yet."
+    - metric: "interactive.resumeOriginalOverview"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "REPRODUCED (EV-018): the ORIGINAL overview resumes with its original turns intact — every original turn WAV byte-identical across the boundary; startMs shifts by exactly the inserted response total (21171 ms session-01 / 12314 ms session-02), 0 pre-boundary"
+        source: "docs/experiments/records/EXP-L-03.yaml + artifacts/audio/interactive-01/"
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: null
+    - metric: "interactive.formatInvariants"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "REPRODUCED (EV-018): \"Interactive mode\" chip OBSERVED in the product player UI (LAB-01 other_config); lab prototype keeps codec/geometry invariants across the session boundary"
+        source: "docs/experiments/records/EXP-L-03.yaml + docs/experiments/records/LAB-01.yaml (player_ui)"
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: "product-side: the Interactive mode chip is OBSERVED in the player UI; the full intervention->response->resume journey has no committed product capture."
+confidence: "low"
+unresolved_behavior:
+  - "Interactive Audio product capture: none exists (operator-gated); the product player chip is the only product-side observable so far"
+  - "listener voice capture UNRESOLVED (EXP-L-03 uses text-scripted stand-ins; no speech-to-intent claimed)"
+tl_hooks:
+  - "TL: Interactive Audio real-product capture (listener verbally joins the hosts, receives a source-grounded response, original overview resumes) is operator-gated through the replay browser — land it per the LAB-series pattern, then re-run exp:cmpaudio to fill this record"
+evidence_paths:
+  - "docs/experiments/records/EXP-L-03.yaml"
+  - "artifacts/audio/interactive-01/"
+  - "docs/audio/interactive-audio-architecture.md"
+  - "docs/experiments/records/LAB-01.yaml"
+status: "pending-capture"

@@ -1,0 +1,65 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "ESTATE-EXPLAINER-001"
+kind: "estate-capture"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "video"
+dimension: "reference.video.explainer-original"
+reference_config:
+  notebook: null
+  format: "Explainer (16:9 narrated illustration — observed family)"
+  language: null
+  length: null
+  visual_style: null
+  custom_prompt: null
+  other_config:
+    reference_status: "served-variant-committed-original-pin-preserved"
+    binary_import: "original bytes not committed (65 MB); served variant committed at reference/video/ with full provenance"
+source_fingerprint: null
+artifact_fingerprint:
+  sha256: "36485eb804de5c69aadf9c0a9d4998dfa85ce4e3ed9a4f502bbd45fc170cdce2"
+  path: "reference/video/Orchestrating_Agentic_Development__Deconstructing_a_Multi-Agent.mp4"
+  media_present: true
+  additional:
+    - label: "served-variant (deterministic; original pin preserved unreplaced)"
+      sha256: "f1241c219a42906d35030eb01f51be490f5ec95ba0682d4b1c629ee88031768b"
+      duration_seconds: 415.613968
+  note: "duration 415.660408 s is the ORIGINAL pin; the served variant runs 415.613968 s (server-side remux); captured 2026-09-26T19:26:00Z via authenticated replay-browser session"
+captured_utc: "2026-09-26T19:26:00Z"
+duration_seconds: 415.660408
+custom_prompt: null
+observations:
+  - label: "DOCUMENTED"
+    text: "origin: user-supplied Gemini Notebook / NotebookLM output; observed family \"explainer / narrated illustration\"; role golden-reference"
+    source: "docs/reference/reference-artifact-manifest.json"
+  - label: "DOCUMENTED"
+    text: "original pin sha256 36485eb804de5c69aadf9c0a9d4998dfa85ce4e3ed9a4f502bbd45fc170cdce2 (expected ? bytes class); served variant sha256 f1241c219a42906d35030eb01f51be490f5ec95ba0682d4b1c629ee88031768b (67505094 bytes) — the exact bytes served by the product differ from the original pin (server-side remux); both authenticated fetches returned byte-identical content (deterministic served variant)"
+    source: "docs/reference/reference-artifact-manifest.json"
+  - label: "OBSERVED"
+    text: "video 1280x720 @ 30 fps h264 (12468 frames served); audio aac 1ch @ 44100 Hz"
+    source: "docs/reference/reference-artifact-manifest.json"
+  - label: "OBSERVED"
+    text: "scene atlas: 49 ffmpeg scdet-style segments over the full duration (true, no gaps) — INSTRUMENT TRUTH (cut points), not structural plan scenes; measurement-class note binding: never compared like-for-like with plan scene units"
+    source: "reference/annotations/reference-video-scenes.json"
+  - label: "OBSERVED"
+    text: "narration transcribed via ASR in 17 silence-aligned chunks (max 30 s each); narration pauses via ffmpeg silencedetect; scene-cut vs narration-pause alignment recorded per segment"
+    source: "reference/annotations/reference-video-scenes.json"
+annotations:
+  transcript_path: null
+  scene_annotation_path: "reference/annotations/reference-video-scenes.json"
+  notes: "scene atlas method: OBSERVED: ffmpeg 7.1.5 scdet-style scene filter on 320x180 downscale, threshold 0.2, full duration; 48 cut points, 49 segments, no gaps"
+comparison:
+  lab_artifact_id: null
+  lab_pipeline: null
+  metrics: []
+confidence: "high"
+unresolved_behavior:
+  - "operator confirmation of the original (pre-remux) artifact bytes remains pending (EV-002 note in the manifest)"
+  - "language of the narration is not recorded in the committed manifest/atlas (not asserted here)"
+tl_hooks: []
+evidence_paths:
+  - "docs/reference/reference-artifact-manifest.json"
+  - "reference/annotations/reference-video-scenes.json"
+  - "reference/video/ORIGINAL-ARTIFACT.md"
+status: "ingested"

@@ -1,0 +1,172 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "VIDEO-PARITY-01"
+kind: "dimension-comparison"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "video"
+dimension: "video.short"
+reference_config:
+  notebook: "WFLX-LAB-07 (fresh; id 155eb020) — new notebook, control fixture ingested via Copied text (React native-setter path)"
+  format: "Short (crop_9_16 — UI-tagged 'New!', 'A bite-sized overview to help you quickly grasp core ideas')"
+  language: "English"
+  length: "Short (default for the format)"
+  visual_style: "n/a (no style control exposed in the Video Overview dialog)"
+  custom_prompt: ""
+  other_config:
+    generation_start: "2026-10-01T18:06:24Z"
+    generation_ready: "2026-10-01T18:34:49Z (~28.4 min wall)"
+    dialog_exposed: "Format radio (Short | Explainer — NO Cinematic format exists in the product's video surface); Choose language; 'What should the video focus on?' suggestion cards + Custom topic; AI Usage meter; Generate later/now"
+source_fingerprint: null
+artifact_fingerprint:
+  sha256: "f89fd153e747fcad5eb5d2fb92d15b747afccbf6c670d56b639b3abf463386a7"
+  path: "artifacts/reference/lab-07/How_Multi-Agent_Orchestration_Divides_AI.mp4"
+  media_present: false
+  additional: []
+  note: "media git-ignored (artifacts/reference/lab-0X/*.mp4); sha256 + metadata committed"
+captured_utc: "2026-10-01T18:06:24Z"
+duration_seconds: 84.822494
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "(duration): the product's Short ran 84.82 s (1:24) on the control fixture — NOT pinned to ~60 s; the lab's Short compile band [48,72] s (targeting the product's documented ~60 s Short) sits BELOW this capture. Per-fixture caveat: the lab's 60 s measurement was on the lab's own canonical fixture; duration is content-elastic, and the honest comparison records the band difference as a parity gap on the duration dimension."
+    source: "docs/experiments/records/LAB-07.yaml"
+  - label: "OBSERVED"
+    text: "(format geometry): 720x1280 (9:16 vertical) @ 30 fps h264 — the Short format is VERTICAL video, matching the dialog's crop_9_16 marker; the lab's Short reconstruction renders 16:9 Explainer-geometry video — the vertical dimension is a structural parity gap the lab has not reconstructed."
+    source: "docs/experiments/records/LAB-07.yaml"
+  - label: "OBSERVED"
+    text: "(duration band, n=2): 84.8 s and 78.3 s — both ABOVE the lab's [48,72] s Short band; the band hypothesis strengthens (per-fixture, above-60s)."
+    source: "docs/experiments/records/LAB-08.yaml"
+  - label: "OBSERVED"
+    text: "(duration response): 71.63 s on the custom focus vs 84.82 s control / 78.32 s twin — duration varies with content focus (n=3: 71.6-84.8 s band on this fixture, all above the lab's [48,72] s Short band, 71.6 s sits 0.4 s below the band ceiling... recorded exactly: 71.63 < 72 by 0.37 s — the third capture lands effectively AT the lab band's upper edge)."
+    source: "docs/experiments/records/LAB-09.yaml"
+  - label: "OBSERVED"
+    text: "raw ffmpeg scene-cut instrument over the three Short captures: 3 cuts (LAB-07) / 13 (LAB-08) / 1 (LAB-09) — huge run-to-run variance. MEASUREMENT-CLASS NOTE (BINDING): the lab scene count is structural plan units; the product ffmpeg cuts are visual transitions — recorded as INSTRUMENT TRUTH only, never compared like-for-like."
+    source: "docs/work-items/roadmap-status.md (TL #2 station record, 2026-10-01 19:40 UTC)"
+  - label: "OBSERVED"
+    text: "generation wall-clock 28.4 min (LAB-07) vs 7.4 min (LAB-08) on identical notebook/source/format — wall-clock is heavily variable and NOT a stable observable for comparison; the lab EV-022 per-asset latencies are a different measurement class (per-episode vs per-asset, UNRESOLVED shape)."
+    source: "docs/experiments/records/LAB-08.yaml"
+  - label: "REPRODUCED"
+    text: "lab Short compile: 5 scenes, 60 s timeline (target 60 s), hookShare 0.25, skeleton hook/topic/topic/topic/takeaways, coverage accounting closed, double-run byte-identical (true)"
+    source: "experiments/run-exp-v-s-01.ts (EXP-V-S-01, EV-020) — committed artifacts/video/exp-v-s-01/"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: "video-overview-f40f0ec617e8"
+  lab_pipeline: "lab pipeline: Director short-mode plan (60 s) -> ShortFormat layer -> storyboard compiler -> full pipeline (offline deterministic fallback backend; EXP-V-S-01 / EV-020)"
+  metrics:
+    - metric: "short.duration.seconds"
+      unit: "s"
+      measurement_class: "like-for-like"
+      lab:
+        value: 60
+        source: "EXP-V-S-01 timeline duration (60 s target, declared band [48, 72] s) — committed EXP-V-S-01 outputs, read verbatim by the WFLX-P3 comparison program"
+        note: null
+      product:
+        value: 84.822494
+        source: "ESTATE-LAB-07 (control capture sidecar 84.82 s)"
+        note: null
+      delta: "n=3 product band 71.63-84.82 s (LAB-07 control 84.82 / LAB-08 twin 78.32 / LAB-09 custom focus 71.63) vs lab target 60 s + band [48, 72] s; control ratio product/lab = 1.4137; 71.63 sits 0.37 s BELOW the lab band ceiling (recorded exactly per LAB-09) — rule: control-within-lab-band"
+      verdict: "DIVERGENT"
+      pending_reason: null
+      confidence: "high"
+      note: "the product Short duration is content-elastic with a band ABOVE 60 s on this fixture class (LAB-07 hypothesis, n=3); the lab 60 s target was a documented-capability reading refined by the first real captures — a duration-band parity gap, recorded honestly."
+    - metric: "short.geometry.aspect"
+      unit: null
+      measurement_class: "like-for-like"
+      lab:
+        value: "1280x720 @ 30 fps h264 (16:9 landscape)"
+        source: "EXP-V-S-01 artifact.json media.video (fallback composition 16:9)"
+        note: null
+      product:
+        value: "720x1280 @ 30 fps h264 (9:16 vertical)"
+        source: "ESTATE-LAB-07 (capture sidecar video 720x1280 9:16 vertical)"
+        note: null
+      delta: "lab \"1280x720 @ 30 fps h264 (16:9 landscape)\", product \"720x1280 @ 30 fps h264 (9:16 vertical)\" — rule equality"
+      verdict: "DIVERGENT"
+      pending_reason: null
+      confidence: "high"
+      note: "STRUCTURAL PARITY GAP (LAB-07 OBSERVED): the product Short format is vertical 9:16; the lab Short reconstruction renders 16:9 Explainer geometry. Recorded as a gap, never normalized."
+    - metric: "short.audioStream"
+      unit: null
+      measurement_class: "like-for-like"
+      lab:
+        value: "aac 1ch @ 44100 Hz"
+        source: "EXP-V-S-01 artifact.json media.audio"
+        note: null
+      product:
+        value: "aac 1ch @ 44100 Hz"
+        source: "ESTATE-LAB-07 (capture sidecar audio)"
+        note: null
+      delta: "lab \"aac 1ch @ 44100 Hz\", product \"aac 1ch @ 44100 Hz\" — rule equality"
+      verdict: "VERIFIED"
+      pending_reason: null
+      confidence: "high"
+      note: null
+    - metric: "short.hookProminence.share"
+      unit: "share"
+      measurement_class: "like-for-like"
+      lab:
+        value: 0.25
+        source: "EXP-V-S-01 short-format-report.hookShare (x1.35 opening-beat boost)"
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: "product-side structured hook annotation remains pending (curation work — the captures exist, the structured annotation does not)."
+    - metric: "short.twinStochasticity"
+      unit: null
+      measurement_class: "like-for-like"
+      lab:
+        value: true
+        source: "EXP-V-S-01 F4: double full-pipeline run byte-identical at every pinned layer"
+        note: null
+      product:
+        value: false
+        source: "ESTATE-LAB-08 (identical source + settings produced a different title, -7.7% duration, different bytes)"
+        note: null
+      delta: "lab true, product false — rule equality"
+      verdict: "DIVERGENT"
+      pending_reason: null
+      confidence: "high"
+      note: "the LAB-06 audio stochasticity finding extended to the VIDEO surface (n=2); lab determinism is a control choice, not a product-fidelity property."
+    - metric: "short.titleRegeneration"
+      unit: null
+      measurement_class: "qualitative"
+      lab:
+        value: "deterministic artifact identity: the artifact id and sidecar are seed-derived; no per-run title surface exists in the lab reconstruction"
+        source: "EXP-V-S-01 artifact.json (generator.reproducible = true)"
+        note: null
+      product:
+        value: "(title): auto-generated 'How Multi-Agent Orchestration Divides AI' — a fresh title per run (consistent with the run-to-run stochasticity family: LAB-01/05/06 titles all differed)."
+        source: "docs/experiments/records/LAB-07.yaml"
+        note: null
+      delta: "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)"
+      verdict: "DIVERGENT"
+      pending_reason: null
+      confidence: "high"
+      note: null
+confidence: "high"
+unresolved_behavior:
+  - "product Short hook prominence: structured annotation pending (curation work) — the hookProminence metric stays PENDING"
+  - "9:16 vertical reconstruction: the lab renders 16:9 only (structural parity gap recorded, not claimed)"
+  - "scene density comparison is instrument-truth-only by the binding measurement-class note (ffmpeg cuts vs plan units are different measurement classes)"
+tl_hooks:
+  - "TL: land the product-side structured hook-prominence annotation for the Short captures (curation work), then re-run exp:cmpvideo to fill the short.hookProminence.share metric"
+evidence_paths:
+  - "docs/experiments/records/LAB-07.yaml"
+  - "docs/experiments/records/LAB-08.yaml"
+  - "docs/experiments/records/LAB-09.yaml"
+  - "artifacts/reference/lab-07/artifact.json"
+  - "artifacts/reference/lab-08/artifact.json"
+  - "artifacts/reference/lab-09/artifact.json"
+  - "artifacts/video/exp-v-s-01/experiment-record.json"
+  - "docs/work-items/roadmap-status.md"
+status: "compared"

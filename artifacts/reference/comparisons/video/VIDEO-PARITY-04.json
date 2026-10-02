@@ -1,0 +1,155 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "VIDEO-PARITY-04",
+  "kind": "dimension-comparison",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "video",
+  "dimension": "video.custom-prompt",
+  "reference_config": {
+    "notebook": "WFLX-LAB-07 (same notebook; id 155eb020) — custom-prompt arm on the control fixture",
+    "format": "Short (crop_9_16 vertical)",
+    "language": "English",
+    "length": "Short (default)",
+    "visual_style": "",
+    "custom_prompt": "Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note.",
+    "other_config": {
+      "generation_start": "2026-10-01T19:00:04Z",
+      "generation_ready": "2026-10-01T19:19:10Z (~19.1 min wall)",
+      "injection_verified": "trusted click-focus + CDP Input.insertText; 138 chars read back in the form BEFORE Generate (the LAB-08 failure lesson applied)"
+    }
+  },
+  "source_fingerprint": null,
+  "artifact_fingerprint": {
+    "sha256": "52996d49a244dbaa161a3c493115377849cb1220d6e71fe8e3e7a0ba4b8613dd",
+    "path": "artifacts/reference/lab-09/How_AI_Agents_Hide_Their_Keys.mp4",
+    "media_present": false,
+    "additional": [],
+    "note": "media git-ignored (artifacts/reference/lab-0X/*.mp4); sha256 + metadata committed"
+  },
+  "captured_utc": "2026-10-01T19:00:04Z",
+  "duration_seconds": 71.63356,
+  "custom_prompt": "Focus on the security and compliance angle: how the redacted credentials and rotation notes shape the infrastructure choices in this note.",
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "(custom-prompt steering, VERIFIED): the custom topic MATERIALLY re-steered the entire episode — title 'How AI Agents Hide Their Keys'; the full 71.6 s episode is a security/credentials narrative (execution sandbox, agents deployed 'stripped of keys', blind-payload key injection at the final millisecond, 'handing that secret key back to the AI directly violates security compliance'). ASR keyword evidence: security 1 / compliance 1 / key 3 / secret 1 / password-themed throughout vs the control's 0/0/0/0. The custom focus is a FULL CONTENT RE-PLAN, not a topical filter.",
+      "source": "docs/experiments/records/LAB-09.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(fixture-faithfulness under steering): the episode's sandbox/credentials narrative is a stylized synthesis AROUND the fixture's credential/rotation notes (the fixture's actual line is 'All credentials are [REDACTED] and are rotated quarterly by the platform team') — the product extrapolates a scenario from the focus angle rather than quoting the source; semantic anchoring is loose (the 'quarterly rotation' fact itself is NOT voiced).",
+      "source": "docs/experiments/records/LAB-09.yaml"
+    },
+    {
+      "label": "REPRODUCED",
+      "text": "lab custom-style arm: 0/15 scenes changed structure, coverage identical, timeline identical — the documented custom-prompt prior (style-only, never coverage) extended to the visual surface",
+      "source": "experiments/run-exp-e-refresh.ts arm 2 (EV-019) — committed artifacts/video/exp-e-refresh/custom-style-7min/"
+    }
+  ],
+  "annotations": {
+    "transcript_path": "docs/experiments/records/LAB-09-transcript.txt",
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": "exp-e-refresh custom-style-7min (style-delta.json, EV-019)",
+    "lab_pipeline": "lab pipeline: canonical plan -> customStyleBible(prompt) -> storyboard compile -> render (EXP-E-REFRESH arm 2 / EV-019; the EXP-V-07 custom-style pattern on the v2 baseline)",
+    "metrics": [
+      {
+        "metric": "custom.steeringSemantics",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "style-only steering: the custom style prompt changes the rendered SVG surface (palette accents); 0/15 scenes change structure, coverage identical (true), timeline identical (true)",
+          "source": "artifacts/video/exp-e-refresh/custom-style-7min/style-delta.json (EXP-E-REFRESH arm 2 / EXP-V-07 pattern)",
+          "note": null
+        },
+        "product": {
+          "value": "(custom-prompt steering, VERIFIED): the custom topic MATERIALLY re-steered the entire episode — title 'How AI Agents Hide Their Keys'; the full 71.6 s episode is a security/credentials narrative (execution sandbox, agents deployed 'stripped of keys', blind-payload key injection at the final millisecond, 'handing that secret key back to the AI directly violates security compliance'). ASR keyword evidence: security 1 / compliance 1 / key 3 / secret 1 / password-themed throughout vs the control's 0/0/0/0. The custom focus is a FULL CONTENT RE-PLAN, not a topical filter.",
+          "source": "docs/experiments/records/LAB-09.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "DIFFERENT CONTROL SEMANTICS (recorded as a parity distinction, not a defect — the LAB-09 differences note): the product custom topic is an episode-level CONTENT re-plan; the lab custom layer is a STYLE surface change. The LAB-08 failed-injection run is the negative control (transcript = default content)."
+      },
+      {
+        "metric": "custom.durationResponsePercent",
+        "unit": "%",
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": 0,
+          "source": "lab custom-style arm timeline identical to baseline (0% duration response by construction — the style layer never touches timing)",
+          "note": null
+        },
+        "product": {
+          "value": -15.5,
+          "source": "LAB-09 71.63 s vs LAB-07 control 84.82 s = -15.5%",
+          "note": null
+        },
+        "delta": "lab 0%, product -15.5% — |Δ| 15.5 pp — rule percent-point-tolerance <= 5 pp",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": "the product duration varies with content focus (n=3 band 71.6-84.8 s); the lab style arm does not move duration at all."
+      },
+      {
+        "metric": "custom.formatInvariantPreservation",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "format fully preserved under custom style (structure 0 changed, same geometry/codec envelope)",
+          "source": "artifacts/video/exp-e-refresh/custom-style-7min/style-delta.json",
+          "note": null
+        },
+        "product": {
+          "value": "(format invariants under custom focus): same 9:16 vertical geometry, h264 30 fps + AAC mono 44.1 kHz, hook-question opening ('How can an AI use your cloud infrastructure without ever holding your passwords?'), single-narrator Short register — the custom focus changes CONTENT, not FORMAT.",
+          "source": "docs/experiments/records/LAB-09.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": "both sides keep the format envelope invariant under custom steering (content/style changes, format does not)."
+      },
+      {
+        "metric": "custom.fixtureFaithfulness",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": "claim-grounded: custom style keeps the editorial claim selection identical (coverage 11/11 both arms — grounding invariant)",
+          "source": "artifacts/video/exp-e-refresh/custom-style-7min/style-delta.json (coverageIdentical)",
+          "note": null
+        },
+        "product": {
+          "value": "(fixture-faithfulness under steering): the episode's sandbox/credentials narrative is a stylized synthesis AROUND the fixture's credential/rotation notes (the fixture's actual line is 'All credentials are [REDACTED] and are rotated quarterly by the platform team') — the product extrapolates a scenario from the focus angle rather than quoting the source; semantic anchoring is loose (the 'quarterly rotation' fact itself is NOT voiced).",
+          "source": "docs/experiments/records/LAB-09.yaml",
+          "note": null
+        },
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "the product extrapolates a stylized narrative AROUND the focus angle with loose semantic anchoring (the quarterly-rotation fact itself is NOT voiced); the lab layer is strictly claim-grounded."
+      }
+    ]
+  },
+  "confidence": "high",
+  "unresolved_behavior": [
+    "control-semantics distinction: product focus steering re-plans content wholesale; lab style steering changes surface only — recorded as a parity distinction, not silently normalized"
+  ],
+  "tl_hooks": [],
+  "evidence_paths": [
+    "docs/experiments/records/LAB-09.yaml",
+    "docs/experiments/records/LAB-09-transcript.txt",
+    "artifacts/reference/lab-09/artifact.json",
+    "artifacts/video/exp-e-refresh/custom-style-7min/style-delta.json",
+    "docs/experiments/records/EXP-E-REFRESH.yaml"
+  ],
+  "status": "compared"
+}

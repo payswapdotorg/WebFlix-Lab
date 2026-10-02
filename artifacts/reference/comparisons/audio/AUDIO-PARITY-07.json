@@ -1,0 +1,127 @@
+{
+  "recordType": "ComparisonRecord",
+  "schemaVersion": "1.0.0",
+  "id": "AUDIO-PARITY-07",
+  "kind": "pending-slot",
+  "timestamp_utc": "2026-10-01T20:00:00Z",
+  "operator": "wflx-p3",
+  "surface": "audio",
+  "dimension": "audio.custom-prompt",
+  "reference_config": {
+    "notebook": null,
+    "format": "Deep Dive + custom steering prompt (product-side capture scheduled — LAB-10)",
+    "language": null,
+    "length": null,
+    "visual_style": null,
+    "custom_prompt": null,
+    "other_config": null
+  },
+  "source_fingerprint": null,
+  "artifact_fingerprint": {
+    "sha256": null,
+    "path": null,
+    "media_present": false,
+    "additional": [],
+    "note": "product-side capture does not exist yet (LAB-10 scheduled; Interactive Audio operator-gated)"
+  },
+  "captured_utc": null,
+  "duration_seconds": null,
+  "custom_prompt": null,
+  "observations": [
+    {
+      "label": "OBSERVED",
+      "text": "AUDIO-LANE BEHAVIOR CHANGE (banked product truth, 2026-10-01): the Customize Audio Overview dialog now states \"This content will generate in a few hours. Or, upgrade to get it sooner.\" — both LAB-10 runs (an accidental empty-focus era-control + the VERIFIED custom-focus arm, 138 chars read back before Generate) are \"Scheduled for after 11pm\". The audio lane moved from immediate ~7-10 min generation (Sept 28 LAB-01..06 era) to scheduled queuing (Oct 1).",
+      "source": "docs/work-items/roadmap-status.md (TL #2 station record, 2026-10-01 19:40 UTC)"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "comparisons in this program are against the CAPTURED artifacts, never against live re-runs — the scheduling-lane change does not invalidate the LAB-01..06 captures.",
+      "source": "docs/work-items/roadmap-status.md (TL #2 station record)"
+    }
+  ],
+  "annotations": {
+    "transcript_path": null,
+    "scene_annotation_path": null,
+    "notes": null
+  },
+  "comparison": {
+    "lab_artifact_id": null,
+    "lab_pipeline": "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)",
+    "metrics": [
+      {
+        "metric": "customPrompt.steeringEffect",
+        "unit": null,
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": "no audio custom-steering surface in the lab default compile (the steering axis is the plan-level focus/style layer; audio custom-prompt arm is not compiled pending the product capture)",
+          "source": "src/audio (compile surface) — no custom-prompt arm in the EXP-A series",
+          "note": null
+        },
+        "product": {
+          "value": null,
+          "source": null,
+          "note": null
+        },
+        "delta": null,
+        "verdict": "PENDING",
+        "pending_reason": "COMPARISON PENDING REFERENCE CAPTURE",
+        "confidence": "low",
+        "note": "LAB-10 (audio custom steering prompt) is SCHEDULED on the product side — the 2026-10-01 scheduling-lane behavior change banked below."
+      },
+      {
+        "metric": "customPrompt.durationResponse",
+        "unit": "s",
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": null,
+          "source": null,
+          "note": null
+        },
+        "product": {
+          "value": null,
+          "source": null,
+          "note": null
+        },
+        "delta": null,
+        "verdict": "PENDING",
+        "pending_reason": "COMPARISON PENDING REFERENCE CAPTURE",
+        "confidence": "low",
+        "note": null
+      },
+      {
+        "metric": "customPrompt.structurePreservation",
+        "unit": null,
+        "measurement_class": "qualitative",
+        "lab": {
+          "value": null,
+          "source": null,
+          "note": null
+        },
+        "product": {
+          "value": null,
+          "source": null,
+          "note": null
+        },
+        "delta": null,
+        "verdict": "PENDING",
+        "pending_reason": "COMPARISON PENDING REFERENCE CAPTURE",
+        "confidence": "low",
+        "note": null
+      }
+    ]
+  },
+  "confidence": "low",
+  "unresolved_behavior": [
+    "audio custom steering prompt (LAB-10): product capture SCHEDULED, not yet landed",
+    "the scheduling-lane behavior change (2026-10-01) is banked truth; the custom-prompt comparison itself remains open"
+  ],
+  "tl_hooks": [
+    "TL: land LAB-10 (audio custom-steering-prompt capture) when the platform executes the scheduled runs — docs/experiments/records/LAB-10.yaml + artifacts/reference/lab-10/artifact.json per the LAB-series pattern; then extend tools/comparison/ingest.ts LAB_IDS and re-run exp:cmpaudio to fill this record"
+  ],
+  "evidence_paths": [
+    "docs/work-items/roadmap-status.md",
+    "docs/experiments/records/LAB-09.yaml (next_experiment: LAB-10 closes the audio custom-prompt matrix)",
+    "docs/experiments/comparisons/estate/"
+  ],
+  "status": "pending-capture"
+}

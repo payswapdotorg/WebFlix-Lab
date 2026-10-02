@@ -1,0 +1,64 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "TEMPLATE-00"
+kind: "dimension-comparison"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "audio"
+dimension: "audio.template"
+reference_config:
+  notebook: null
+  format: null
+  language: null
+  length: null
+  visual_style: null
+  custom_prompt: null
+  other_config: null
+source_fingerprint: null
+artifact_fingerprint:
+  sha256: null
+  path: null
+  media_present: false
+  additional: []
+  note: null
+captured_utc: null
+duration_seconds: null
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "product-side observation, verbatim from a committed LAB record"
+    source: "docs/experiments/records/LAB-XX.yaml"
+  - label: "REPRODUCED"
+    text: "lab-side measurement, verbatim from a committed artifact/runner output"
+    source: "artifacts/…"
+annotations:
+  transcript_path: null
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: null
+  lab_pipeline: null
+  metrics:
+    - metric: "template.metric.name"
+      unit: null
+      measurement_class: "like-for-like"
+      lab:
+        value: null
+        source: null
+        note: null
+      product:
+        value: null
+        source: null
+        note: null
+      delta: null
+      verdict: "PENDING"
+      pending_reason: "COMPARISON PENDING REFERENCE CAPTURE"
+      confidence: "low"
+      note: null
+confidence: "low"
+unresolved_behavior: []
+tl_hooks:
+  - "TL: fill when the product-side capture lands (LAB-series pattern), then re-run the comparison program"
+evidence_paths:
+  - "docs/experiments/comparison-record-schema.md"
+status: "template"

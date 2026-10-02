@@ -1,0 +1,86 @@
+{
+  "generatedBy": "tools/comparison/ingest.ts (WFLX-P3 / EV-023)",
+  "stamp": "2026-10-01T20:00:00Z",
+  "records": [
+    {
+      "id": "ESTATE-LAB-01",
+      "kind": "estate-capture",
+      "surface": "audio",
+      "dimension": "reference.audio.lab-01",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-01.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-01.json"
+    },
+    {
+      "id": "ESTATE-LAB-02",
+      "kind": "estate-capture",
+      "surface": "audio",
+      "dimension": "reference.audio.lab-02",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-02.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-02.json"
+    },
+    {
+      "id": "ESTATE-LAB-03",
+      "kind": "estate-capture",
+      "surface": "audio",
+      "dimension": "reference.audio.lab-03",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-03.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-03.json"
+    },
+    {
+      "id": "ESTATE-LAB-04",
+      "kind": "estate-capture",
+      "surface": "audio",
+      "dimension": "reference.audio.lab-04",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-04.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-04.json"
+    },
+    {
+      "id": "ESTATE-LAB-05",
+      "kind": "estate-capture",
+      "surface": "audio",
+      "dimension": "reference.audio.lab-05",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-05.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-05.json"
+    },
+    {
+      "id": "ESTATE-LAB-06",
+      "kind": "estate-capture",
+      "surface": "audio",
+      "dimension": "reference.audio.lab-06",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-06.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-06.json"
+    },
+    {
+      "id": "ESTATE-LAB-07",
+      "kind": "estate-capture",
+      "surface": "video",
+      "dimension": "reference.video.lab-07",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-07.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-07.json"
+    },
+    {
+      "id": "ESTATE-LAB-08",
+      "kind": "estate-capture",
+      "surface": "video",
+      "dimension": "reference.video.lab-08",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-08.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-08.json"
+    },
+    {
+      "id": "ESTATE-LAB-09",
+      "kind": "estate-capture",
+      "surface": "video",
+      "dimension": "reference.video.lab-09",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-LAB-09.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-LAB-09.json"
+    },
+    {
+      "id": "ESTATE-EXPLAINER-001",
+      "kind": "estate-capture",
+      "surface": "video",
+      "dimension": "reference.video.explainer-original",
+      "docsPath": "docs/experiments/comparisons/estate/ESTATE-EXPLAINER-001.yaml",
+      "jsonPath": "artifacts/reference/comparisons/estate/ESTATE-EXPLAINER-001.json"
+    }
+  ]
+}
