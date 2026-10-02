@@ -1,0 +1,15 @@
+LAB-12 ASR TRANSCRIPT (z-ai ASR; full coverage: 0-28 / 28-56 / 56-74 s windows, 16 kHz mono WAV)
+Capture: How_Multi-Agent_Orchestration_Works.mp4 (mutation arm, 73.862676 s)
+
+=== 0:00-0:28 (hook + orchestration setup) ===
+Ask a standard AI to build a massive project all at once, and it will probably hallucinate. To pull it off, you need multi-agent orchestration. Let's say you drop in one prompt: "Build a complete weather app from scratch." Instead of answering directly, a primary manager node called the Orchestrator takes charge. It splits your request into discrete subtasks like a designer, a coder, and a tester. But if these...
+
+=== 0:28-0:56 (routing narrative) ===
+Specialized AI models work independently. How do you stop the coder from ignoring the designer's layout? The orchestrator solves this by acting as a strict traffic router. It takes the finalized layout from the design agent and feeds it directly into the coding agent as its starting point. Once the code is written, it gets routed to a testing agent. If the tester catches an error, it doesn't just fail the project; it automatically loops the bug back to the coder for a fix.
+
+=== 0:56-1:14 (closing callback synthesis) ===
+Before the orchestrator will accept it, and what about that complete weather app you asked for at the very beginning? The orchestrator compiles the validated code and design assets into a finished deployed application without you writing a single line.
+
+NOTE: the b30 mutation content ('credentials... rotated quarterly') does NOT surface anywhere
+in this full-coverage transcript — recorded as the honest n=1 selection-dependent finding in
+LAB-12.yaml (vs the audio surface's LAB-05 where the mutated claim WAS voiced).

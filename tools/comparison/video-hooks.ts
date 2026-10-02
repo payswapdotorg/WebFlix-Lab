@@ -136,6 +136,40 @@ export interface ShortComparisonInput {
   readonly sourceNote?: string;
 }
 
+// Short hook prominence (VIDEO-PARITY-01): filled 2026-10-02 from the
+// committed structured annotation (TL curation over the LAB-07/08/09
+// captures; reference/annotations/short-hook-prominence.json).
+function hookProminenceMetric(labHookShare: number): ComparisonMetric {
+  const annotation = JSON.parse(
+    readFileSync('reference/annotations/short-hook-prominence.json', 'utf8'),
+  ) as {
+    summary: { share_percent_band: [number, number]; share_percent_mean: number; n: number };
+  };
+  const labPercent = Math.round(labHookShare * 1000) / 10;
+  const productPercent = annotation.summary.share_percent_mean;
+  const gap = Math.abs(productPercent - labPercent);
+  return {
+    metric: 'short.hookProminence.share',
+    unit: '%',
+    measurement_class: 'like-for-like',
+    lab: {
+      value: labPercent,
+      source: 'EXP-V-S-01 short-format-report.hookShare (x1.35 opening-beat boost)',
+      note: null,
+    },
+    product: {
+      value: productPercent,
+      source: `reference/annotations/short-hook-prominence.json (structured annotation: n=${annotation.summary.n} captures, share band ${annotation.summary.share_percent_band[0]}-${annotation.summary.share_percent_band[1]}%, hook sentence ~4 s, ASR 4 s-window timing, declared ±4 s granularity)`,
+      note: null,
+    },
+    delta: `lab ${labPercent}%, product ${productPercent}% — |Δ| ${Math.round(gap * 10) / 10} pp — rule percent-point-tolerance <= 5 pp (the pending slot's unit 'share' becomes % at fill; the fraction equivalents are lab ${labHookShare} vs ~${(productPercent / 100).toFixed(3)})`,
+    verdict: gap <= 5 ? 'VERIFIED' : 'DIVERGENT',
+    pending_reason: null,
+    confidence: 'medium',
+    note: 'the product front-loads a ~4 s hook sentence (4.7-5.6% of the episode, n=3) and dives into content; the lab reserves a full opening beat (25% with the x1.35 boost). Granularity-robust: even at the ±4 s declared ceiling (8 s hooks = max 11.2%) the gap stays outside tolerance. Media provenance: measured on 2026-10-02 re-downloads (re-muxed containers, content-identical — the original media were wiped in the estate recycle; recorded in the annotation).',
+  };
+}
+
 export function buildShortComparisonRecord(input: ShortComparisonInput): ComparisonRecord {
   const estate = loadEstate();
   const lab07 = estate.captures['LAB-07'];
@@ -191,22 +225,7 @@ export function buildShortComparisonRecord(input: ShortComparisonInput): Compari
       product: { value: productAudioText, source: 'ESTATE-LAB-07 (capture sidecar audio)' },
       confidence: 'high',
     }),
-    {
-      metric: 'short.hookProminence.share',
-      unit: 'share',
-      measurement_class: 'like-for-like',
-      lab: {
-        value: input.labHookShare,
-        source: 'EXP-V-S-01 short-format-report.hookShare (x1.35 opening-beat boost)',
-        note: null,
-      },
-      product: { value: null, source: null, note: null },
-      delta: null,
-      verdict: 'PENDING',
-      pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-      confidence: 'low',
-      note: 'product-side structured hook annotation remains pending (curation work — the captures exist, the structured annotation does not).',
-    },
+    hookProminenceMetric(input.labHookShare),
     equalityMetric({
       metric: 'short.twinStochasticity',
       lab: {
@@ -637,82 +656,100 @@ export function buildVideoCustomPromptComparisonRecord(
 // VIDEO-PARITY-05 — video language arm (PENDING slot)
 // ---------------------------------------------------------------------------
 
-export function buildVideoLanguagePendingRecord(): ComparisonRecord {
+export function buildVideoLanguageComparisonRecord(): ComparisonRecord {
   const estate = loadEstate();
-  const estateLab07 = estateRecordOf(estate, 'ESTATE-LAB-07');
-  const pending = (metric: string, note: string): ComparisonMetric => ({
-    metric,
-    unit: null,
-    measurement_class: 'qualitative',
-    lab: { value: null, source: null, note: null },
-    product: { value: null, source: null, note: null },
-    delta: null,
-    verdict: 'PENDING',
-    pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-    confidence: 'low',
-    note,
-  });
+  const lab07 = estate.captures['LAB-07'];
+  const lab11 = estate.captures['LAB-11'];
+  const estateLab11 = estateRecordOf(estate, 'ESTATE-LAB-11');
+  const controlDuration = lab07.durationSeconds ?? 0;
+  const spanishDuration = lab11.durationSeconds ?? 0;
+  const productShift = Math.round(((spanishDuration - controlDuration) / controlDuration) * 1000) / 10;
+  const metrics: ComparisonMetric[] = [
+    qualitativeMetric({
+      metric: 'language.videoStructureInvariance',
+      lab: {
+        text: 'no lab non-English VIDEO arm exists; the language axis is proven on the AUDIO surface (EXP-A-06: plan structure invariant across en/es — 20 turns / 2 speakers / 11 claims identical; the placeholder surface stays EN — the ML1 boundary), and the video compile realizes plan structure by the same contract',
+        source: 'docs/experiments/records/EXP-A-06.yaml (audio-surface analog) + src/video (plan-realization contract)',
+      },
+      product: {
+        text: observationOf(estateLab11, 'hook-question opening preserved in Spanish').text,
+        source: 'docs/experiments/records/LAB-11.yaml (ASR windows: interrogative hook at 0:00, callback synthesis at the close)',
+      },
+      verdict: 'VERIFIED',
+      confidence: 'medium',
+      note: 'the hook->narrative->callback-synthesis skeleton and the full format envelope (9:16 geometry, mono AAC, single-narrator Short register) are preserved under the language switch on the product side; the lab’s structure-invariance axis (proven on audio) extends as the working analog — the EXP-A-06/LAB-04 hypothesis held.',
+    }),
+    qualitativeMetric({
+      metric: 'language.surfaceRegeneration',
+      lab: {
+        text: 'no lab non-English video arm exists (the video surface has no language selector surface to compare; the audio arm’s realized surface stays EN under es — the ML1 placeholder boundary)',
+        source: 'src/video + docs/experiments/records/EXP-A-06.yaml (audio-surface analog boundary)',
+      },
+      product: {
+        text: observationOf(estateLab11, 'surface regeneration').text,
+        source: 'docs/experiments/records/LAB-11.yaml (natively Spanish discourse + localized title, ASR evidence)',
+      },
+      verdict: 'DIVERGENT',
+      confidence: 'high',
+      note: 'the product regenerates the full video episode NATIVELY in the target language (Spanish discourse + localized title ‘Cómo colaboran los sistemas multiagente’); the lab has NO non-English video arm at all — surface-existence divergence recorded (mirrors AUDIO-PARITY-04’s honest boundary on the audio surface).',
+    }),
+    percentPointMetric({
+      metric: 'language.videoDurationShiftPercent',
+      unit: '%',
+      lab: {
+        value: 0,
+        source: 'lab realized duration is plan-pinned regardless of language (placeholder timing — the EXP-A-06 audio analog’s 0%-by-construction property, applied to the absent video arm as the construction property of the lab pipeline)',
+      },
+      product: {
+        value: productShift,
+        source: `LAB-11 81.827120 s (español) vs LAB-07 control 84.822494 s (English) = ${productShift}% at the same Short format`,
+      },
+      confidence: 'medium',
+      note: 'NO material language-duration response on the VIDEO Short surface (-3.5%, inside the ±5 pp tolerance AND inside the English Short band 71.63-84.82 s, n=4 with LAB-11) — a cross-surface distinction: the AUDIO Deep Dive surface’s Spanish shift was -13.9% (LAB-04 vs LAB-01); the Short’s fixed vertical-format timing dominates over language-dependent speech rate. n=1 per language caveat recorded.',
+    }),
+  ];
   return buildRecord({
     id: 'VIDEO-PARITY-05',
-    kind: 'pending-slot',
+    kind: 'dimension-comparison',
     dimension: 'video.language',
-    estateRecordId: null,
-    referenceConfig: {
-      notebook: null,
-      format: 'Short / Explainer + language selection (the video dialog exposes Choose language — LAB-07 OBSERVED)',
-      language: null,
-      length: null,
-      visual_style: null,
-      custom_prompt: null,
-      other_config: null,
-    },
-    artifactFingerprint: {
-      sha256: null,
-      path: null,
-      media_present: false,
-      additional: [],
-      note: 'no non-English video capture exists (capture-matrix state: language not captured — optional follow-up)',
-    },
-    capturedUtc: null,
-    durationSeconds: null,
-    customPrompt: null,
-    annotations: { transcript_path: null, scene_annotation_path: null, notes: null },
-    metrics: [
-      pending('language.videoStructureInvariance', 'no product-side non-English video capture exists'),
-      pending('language.surfaceRegeneration', 'no product-side non-English video capture exists'),
-    ],
+    estateRecordId: 'ESTATE-LAB-11',
+    referenceConfig: estateLab11.reference_config,
+    artifactFingerprint: estateLab11.artifact_fingerprint,
+    capturedUtc: estateLab11.captured_utc,
+    durationSeconds: lab11.durationSeconds,
+    customPrompt: lab11.customPrompt,
+    annotations: estateLab11.annotations,
+    metrics,
     productObservations: [
-      {
-        label: 'OBSERVED',
-        text: `the video dialog exposes language selection: "${estateLab07.reference_config.other_config?.dialog_exposed ?? 'dialog_exposed missing'}"`,
-        source: 'docs/experiments/records/LAB-07.yaml (other_config.dialog_exposed)',
-      },
-      {
-        label: 'OBSERVED',
-        text: 'capture-matrix state: video language arm NOT captured (PENDING — non-English video arm optional follow-up per the TL station record)',
-        source: ROADMAP_STATION,
-      },
+      observationOf(estateLab11, 'title localization'),
+      observationOf(estateLab11, 'surface regeneration'),
+      observationOf(estateLab11, 'hook-question opening preserved in Spanish'),
+      observationOf(estateLab11, 'duration response'),
+      observationOf(estateLab11, 'format invariants under language switch'),
+      observationOf(estateLab11, 'ASR language-detection artifact'),
     ],
     labObservations: [
       labObservation(
-        'lab side: the EXP-A-06 structure-invariant / surface-specific language axis is proven on the AUDIO surface; the video-surface language arm has no lab compile either (no non-English video plan fixture) — both sides pending',
+        'lab side: no non-English video arm exists; the language axis (structure-invariant, surface-specific) is proven on the audio surface by EXP-A-06 — the video-surface comparison is recorded as the surface-existence + regeneration distinction, never a like-for-like lab claim',
         'docs/experiments/records/EXP-A-06.yaml (audio-surface analog)',
       ),
     ],
     unresolvedBehavior: [
-      'video-surface language behavior: UNRESOLVED on BOTH sides (no product capture, no lab non-English video arm)',
+      'the lab has no non-English video arm (surface-existence divergence recorded); the structure-invariance verdict rides the audio-surface analog — a future lab video language arm would make it like-for-like',
+      'ASR opening-window CJK misdetection (transcription-front-end property, two independent chunkings; semantic hook content recovered) — recorded in LAB-11.yaml, does not affect the product verdict',
     ],
-    tlHooks: [
-      'TL: land the non-English video capture (Short or Explainer + language selection, LAB-series pattern) to fill this record; the audio-surface EXP-A-06/LAB-04 axis is the working hypothesis',
-    ],
+    tlHooks: [],
     evidencePaths: [
+      'docs/experiments/records/LAB-11.yaml',
+      'docs/experiments/records/LAB-11-transcript.txt',
+      'artifacts/reference/lab-11/artifact.json',
+      'docs/experiments/comparisons/estate/ESTATE-LAB-11.yaml',
       'docs/experiments/records/LAB-07.yaml',
-      'docs/work-items/roadmap-status.md',
-      'docs/experiments/records/EXP-A-06.yaml',
+      'docs/experiments/records/EXP-A-06.yaml (audio-surface analog)',
     ],
-    confidence: 'low',
+    confidence: 'high',
     labArtifactId: null,
-    labPipeline: 'no lab non-English video arm exists (both sides pending — honest gap)',
+    labPipeline: 'no lab non-English video arm exists; the audio-surface EXP-A-06 axis (structure-invariant / surface-specific) is the declared analog',
   });
 }
 
@@ -727,62 +764,76 @@ export interface VideoLocalityPendingInput {
   readonly labArtifactId: string | null;
 }
 
-export function buildVideoLocalityPendingRecord(input: VideoLocalityPendingInput): ComparisonRecord {
-  const pending = (metric: string, labValue: string, note: string): ComparisonMetric => ({
-    metric,
-    unit: null,
-    measurement_class: 'qualitative',
-    lab: { value: labValue, source: 'artifacts/video/exp-v-l-01/locality-report.json (EXP-V-L-01, EV-019)', note: null },
-    product: { value: null, source: null, note: null },
-    delta: null,
-    verdict: 'PENDING',
-    pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-    confidence: 'low',
-    note,
-  });
+export function buildVideoLocalityComparisonRecord(input: VideoLocalityPendingInput): ComparisonRecord {
+  const estate = loadEstate();
+  const estateLab12 = estateRecordOf(estate, 'ESTATE-LAB-12');
+  const lab07 = estate.captures['LAB-07'];
+  const lab12 = estate.captures['LAB-12'];
+  const controlDuration = lab07.durationSeconds ?? 0;
+  const mutatedDuration = lab12.durationSeconds ?? 0;
+  const productShift = Math.round(((mutatedDuration - controlDuration) / controlDuration) * 1000) / 10;
+  const metrics: ComparisonMetric[] = [
+    qualitativeMetric({
+      metric: 'videoMutation.localityClass',
+      lab: {
+        text: `lab C-5 video locality: a single-scene claim swap changes EXACTLY ${input.changedSvgs} scene SVG (${input.targetSceneId}) + 1 render spec + 1 narration, 0 structure reshuffle`,
+        source: 'artifacts/video/exp-v-l-01/locality-report.json (EXP-V-L-01, EV-019)',
+      },
+      product: {
+        text: observationOf(estateLab12, 'artifact-level GLOBAL response').text,
+        source: 'docs/experiments/records/LAB-12.yaml (title/duration/content all changed under the b30 edit)',
+      },
+      verdict: 'DIVERGENT',
+      confidence: 'high',
+      note: 'the product re-plans the WHOLE episode under a single-paragraph source edit (different title, -12.9% duration, different content scenario) — the LAB-05 audio global-re-plan finding EXTENDED TO THE VIDEO SURFACE; the lab’s C-5 locality is an architecture choice (deterministic scene-local patching), recorded as the locality-class distinction, never normalized.',
+    }),
+    qualitativeMetric({
+      metric: 'videoMutation.macroStructurePreservation',
+      lab: {
+        text: `lab: ${input.sceneCount} scenes, structure preserved, double-run deterministic`,
+        source: 'artifacts/video/exp-v-l-01/locality-report.json (EXP-V-L-01, EV-019)',
+      },
+      product: {
+        text: observationOf(estateLab12, 'macro-structure preserved').text,
+        source: 'docs/experiments/records/LAB-12.yaml (ASR: hook at 0:00, orchestration narrative, closing callback synthesis)',
+      },
+      verdict: 'VERIFIED',
+      confidence: 'high',
+      note: 'both sides preserve the macro skeleton under the source edit: the lab keeps scene structure (0 reshuffle); the product keeps the Short skeleton (challenge-hook -> narrative -> callback synthesis) while re-planning content wholesale.',
+    }),
+    percentPointMetric({
+      metric: 'videoMutation.durationResponsePercent',
+      unit: '%',
+      lab: {
+        value: 0,
+        source: 'lab C-5 locality: the single-scene swap keeps the timeline identical (0% duration response by construction — scene-local patching never moves timing)',
+      },
+      product: {
+        value: productShift,
+        source: `LAB-12 73.862676 s (b30-mutated fixture) vs LAB-07 control 84.822494 s (unmutated) = ${productShift}%`,
+      },
+      confidence: 'medium',
+      note: 'the product duration moves materially under the source edit (-12.9%) — the artifact-level global-response signature (matching the audio surface’s LAB-05 +19% finding, opposite sign, similar magnitude class); the lab’s scene-local patching moves it 0%.',
+    }),
+  ];
   return buildRecord({
     id: 'VIDEO-PARITY-06',
-    kind: 'pending-slot',
+    kind: 'dimension-comparison',
     dimension: 'video.mutation-locality',
-    estateRecordId: null,
-    referenceConfig: {
-      notebook: null,
-      format: 'Explainer (video) + one-source mutation (the EXP-V-L-01 axis)',
-      language: null,
-      length: null,
-      visual_style: null,
-      custom_prompt: null,
-      other_config: null,
-    },
-    artifactFingerprint: {
-      sha256: null,
-      path: null,
-      media_present: false,
-      additional: [],
-      note: 'no video-side source-mutation product capture exists (LAB-05 is the AUDIO-surface mutation probe)',
-    },
-    capturedUtc: null,
-    durationSeconds: null,
-    customPrompt: null,
-    annotations: { transcript_path: null, scene_annotation_path: null, notes: null },
-    metrics: [
-      pending(
-        'videoMutation.localityClass',
-        `lab C-5 video locality: a single-scene claim swap changes EXACTLY ${input.changedSvgs} scene SVG (${input.targetSceneId}) + 1 render spec + 1 narration, 0 structure reshuffle`,
-        'the product-side video mutation capture does not exist (the mutation probe family is audio-side: LAB-05)',
-      ),
-      pending(
-        'videoMutation.macroStructurePreservation',
-        `lab: ${input.sceneCount} scenes, structure preserved, double-run deterministic`,
-        'the product-side video mutation capture does not exist',
-      ),
-    ],
+    estateRecordId: 'ESTATE-LAB-12',
+    referenceConfig: estateLab12.reference_config,
+    artifactFingerprint: estateLab12.artifact_fingerprint,
+    capturedUtc: estateLab12.captured_utc,
+    durationSeconds: lab12.durationSeconds,
+    customPrompt: lab12.customPrompt,
+    annotations: estateLab12.annotations,
+    metrics,
     productObservations: [
-      {
-        label: 'OBSERVED',
-        text: 'the product mutation probe (LAB-05, b30 paragraph edit) is AUDIO-surface: global re-plan with macro-pattern preservation. No video-surface mutation capture exists; the audio-surface finding (global re-plan; mutation locality not separately observable above run-to-run variance) is the working hypothesis for video',
-        source: 'docs/experiments/records/LAB-05.yaml + docs/experiments/records/LAB-06.yaml',
-      },
+      observationOf(estateLab12, 'artifact-level GLOBAL response'),
+      observationOf(estateLab12, 'mutated content NOT voiced'),
+      observationOf(estateLab12, 'macro-structure preserved'),
+      observationOf(estateLab12, 'format invariants under mutation'),
+      observationOf(estateLab12, 'generation lane'),
     ],
     labObservations: [
       labObservation(
@@ -791,17 +842,19 @@ export function buildVideoLocalityPendingRecord(input: VideoLocalityPendingInput
       ),
     ],
     unresolvedBehavior: [
-      'video-surface mutation locality: no product capture — UNRESOLVED (audio-surface global-re-plan finding is the hypothesis, not video truth)',
+      'the mutated claim (b30 credentials/rotation) does NOT surface in the video Short’s full-coverage transcript (n=1) — selection-dependent on the ~74 s content budget, UNLIKE the audio Deep Dive where LAB-05 voiced it verbatim; with run-to-run stochasticity (LAB-08) a different run could select it — recorded UNRESOLVED, never promoted to a like-for-like claim',
     ],
-    tlHooks: [
-      'TL: land a video-surface source-mutation capture (Explainer or Short + one-source edit + regenerate, LAB-series pattern) to fill this record',
-    ],
+    tlHooks: [],
     evidencePaths: [
+      'docs/experiments/records/LAB-12.yaml',
+      'docs/experiments/records/LAB-12-transcript.txt',
+      'artifacts/reference/lab-12/artifact.json',
+      'docs/experiments/comparisons/estate/ESTATE-LAB-12.yaml',
       'artifacts/video/exp-v-l-01/locality-report.json',
-      'docs/experiments/records/EXP-V-L-01.yaml',
       'docs/experiments/records/LAB-05.yaml',
+      'docs/experiments/records/LAB-07.yaml',
     ],
-    confidence: 'medium',
+    confidence: 'high',
     labArtifactId: input.labArtifactId,
     labPipeline:
       'lab pipeline: Director 180s explainer plan -> single-scene claim swap -> storyboard compile + SVG render per arm (EXP-V-L-01 / EV-019)',
@@ -924,8 +977,8 @@ export function buildVideoComparisonRecordsFromCommittedStore(): readonly Compar
       labSceneCount: numField(explainerArmSummary, ['sceneCount']),
       labArtifactId: 'exp-e-refresh custom-style-7min (style-delta.json, EV-019)',
     }),
-    buildVideoLanguagePendingRecord(),
-    buildVideoLocalityPendingRecord({
+    buildVideoLanguageComparisonRecord(),
+    buildVideoLocalityComparisonRecord({
       changedSvgs: measured['scenesWithChangedSvgs'] as number,
       sceneCount: (locality['invariants'] as JsonRecord)['sceneCount'] as number,
       targetSceneId: ((locality['mutation'] as JsonRecord)['targetSceneId'] as string) ?? 'scene-2',

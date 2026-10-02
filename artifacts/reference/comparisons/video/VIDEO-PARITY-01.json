@@ -139,23 +139,23 @@
       },
       {
         "metric": "short.hookProminence.share",
-        "unit": "share",
+        "unit": "%",
         "measurement_class": "like-for-like",
         "lab": {
-          "value": 0.25,
+          "value": 25,
           "source": "EXP-V-S-01 short-format-report.hookShare (x1.35 opening-beat boost)",
           "note": null
         },
         "product": {
-          "value": null,
-          "source": null,
+          "value": 5.1,
+          "source": "reference/annotations/short-hook-prominence.json (structured annotation: n=3 captures, share band 4.7-5.6%, hook sentence ~4 s, ASR 4 s-window timing, declared ±4 s granularity)",
           "note": null
         },
-        "delta": null,
-        "verdict": "PENDING",
-        "pending_reason": "COMPARISON PENDING REFERENCE CAPTURE",
-        "confidence": "low",
-        "note": "product-side structured hook annotation remains pending (curation work — the captures exist, the structured annotation does not)."
+        "delta": "lab 25%, product 5.1% — |Δ| 19.9 pp — rule percent-point-tolerance <= 5 pp (the pending slot's unit 'share' becomes % at fill; the fraction equivalents are lab 0.25 vs ~0.051)",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": "the product front-loads a ~4 s hook sentence (4.7-5.6% of the episode, n=3) and dives into content; the lab reserves a full opening beat (25% with the x1.35 boost). Granularity-robust: even at the ±4 s declared ceiling (8 s hooks = max 11.2%) the gap stays outside tolerance. Media provenance: measured on 2026-10-02 re-downloads (re-muxed containers, content-identical — the original media were wiped in the estate recycle; recorded in the annotation)."
       },
       {
         "metric": "short.twinStochasticity",

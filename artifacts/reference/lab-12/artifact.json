@@ -1,0 +1,23 @@
+{
+  "id": "LAB-12",
+  "kind": "real-product Short Video Overview, source-mutation arm (b30)",
+  "source": "b30-mutated fixture (sha256:6f3754bc3b37f62863ffa269d577ba1641eaacd17fce632367dcb122ee0d830c — the SAME mutation text as EXP-A-04/LAB-05)",
+  "captured_utc": "2026-10-02T06:27:24Z",
+  "ready_utc": "~2026-10-02T06:44:00Z (~17.5 min wall, concurrent with LAB-11 in another notebook)",
+  "file": "How_Multi-Agent_Orchestration_Works.mp4",
+  "sha256": "e55360d16ee8eb6792995972fcbd90585a6b1c879db2b05ba9269ed454bce732",
+  "size_bytes": 8961890,
+  "duration_seconds": 73.862676,
+  "video": {"codec": "h264", "width": 720, "height": 1280, "aspect": "9:16 vertical", "fps": 30},
+  "audio": {"codec": "aac", "sample_rate_hz": 44100, "channels": 1},
+  "notebook": "WFLX-LAB-12 (fresh; id 4863612c)",
+  "language": "English (control language)",
+  "title": "How Multi-Agent Orchestration Works",
+  "format": "Short",
+  "length_setting": "Short (default)",
+  "focus": "default (suggestion cards; no Custom topic)",
+  "asr_transcript_path": "docs/experiments/records/LAB-12-transcript.txt",
+  "mutation": "b30: credentials line gains 'and are rotated quarterly by the platform team' (+47 chars)",
+  "operator": "tl2+operator",
+  "media_gitignored": true
+}

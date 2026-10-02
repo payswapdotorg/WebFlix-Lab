@@ -1,0 +1,20 @@
+LAB-11 ASR TRANSCRIPT SAMPLING (z-ai ASR; 16 kHz mono WAV chunks)
+Capture: Cómo_colaboran_los_sistemas_multiagente.mp4 (Spanish Short, 81.827 s)
+Windows: 0-14 / 14-28 / 28-56 / 56-82 s
+
+ASR LANGUAGE-DETECTION ARTIFACT (recorded): the 0-14 s opening window transcribes into
+Chinese characters on TWO independent chunkings (4 s and 14 s) while every later window
+transcribes as proper Spanish. The Chinese text is a semantically-correct rendering of the
+Spanish hook question — a transcription-front-end property, NOT a product property.
+
+=== 0:00-0:14 (opening hook — ASR CJK misdetection, semantic content preserved) ===
+如何解决这些人工智能的不可逾越问题？答案就是多代理排序，因为它需要一个系统来同时调查、编辑和编程，几乎像一个人一样工作。
+
+=== 0:14-0:28 ===
+Siempre genera respuestas superficiales y con errores. En cambio, imagina pedir mediante un simple texto la creación de una web funcional desde cero. El primer nodo recibe la petición y actúa como planificador. En lugar de improvisar...
+
+=== 0:28-0:56 (mid) ===
+divide el proyecto en pasos manejables y deriva el trabajo en paralelo manda la estructura a un agente programador y los textos a un redactor pero aquí llega el obstáculo: el programa genera código defectuoso que podría paralizar todo el proceso antes de avanzar otra hiéndependiente intercepta ese fallo analiza el error y exige modificaciones inmediatas a este rol de control de calidad lo llamamos agente supervisor
+
+=== 0:56-1:22 (closing synthesis with hook callback) ===
+mantiene el bucle de correcciones activo hasta lograr un código impecible. Una vez pulidas, los especialistas devuelven sus tareas al planificador y este ensambla la estructura final con los textos. Al final, ¿recuerdas aquel sencillo texto inicial? Termina convertido en una página web publicada y sin errores, todo gracias al esfuerzo coordinado de este equipo de inteligencias artificiales.

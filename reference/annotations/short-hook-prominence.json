@@ -1,0 +1,57 @@
+{
+  "annotation": "short-hook-prominence",
+  "annotated_utc": "2026-10-02T07:00:00Z",
+  "operator": "tl2+operator",
+  "declared_rule": "the product-side hook span = 0:00 to the end of the opening hook sentence (the interrogative or challenge-statement that opens the episode), measured by ASR over consecutive 4 s windows of the audio track; hook_end = the FIRST chunk boundary at which the body/roadmap begins (declared granularity ±4 s). share = hook_end / total_duration_seconds (the committed product durations).",
+  "media_provenance": "the original capture media were wiped in the 2026-10-01 estate recycle; these annotations were measured on 2026-10-02 re-downloads from the SAME product artifacts (the studio rows for LAB-07/08/09). The re-downloads are RE-MUXED containers: different sha256 (42f4fd40… / 912bd09e… / 6f85f543…) with +0.04-0.05 s container padding vs the committed durations — content-identical audio streams; the declared ±4 s granularity dwarfs the container delta, so the measurement is unaffected. LAB-11 (Spanish) and LAB-12 (mutation) were downloaded fresh (first-class captures).",
+  "captures": [
+    {
+      "lab": "LAB-07",
+      "title": "How Multi-Agent Orchestration Divides AI Work",
+      "hook_sentence": "Multi-agent orchestration runs massive AI tasks.",
+      "hook_kind": "challenge-statement",
+      "asr_evidence": "hook sentence complete within 0:00-0:04; 0:04-0:08 begins the rationale/body ('Because asking a single AI model to do everything at once...')",
+      "hook_end_seconds": 4,
+      "duration_seconds_committed": 84.822494,
+      "share": 0.0472,
+      "share_percent": 4.7
+    },
+    {
+      "lab": "LAB-08",
+      "title": "Inside a Fully Automated AI Architecture",
+      "hook_sentence": "Have you ever wondered what actually powers a fully autonomous AI?",
+      "hook_kind": "interrogative",
+      "asr_evidence": "hook question complete within 0:00-0:04; 0:04-0:08 begins the roadmap ('The blueprint breaks down into three architectural layers')",
+      "hook_end_seconds": 4,
+      "duration_seconds_committed": 78.320907,
+      "share": 0.0511,
+      "share_percent": 5.1
+    },
+    {
+      "lab": "LAB-09",
+      "title": "How AI Agents Hide Their Keys",
+      "hook_sentence": "How can an AI use your cloud infrastructure without ever holding your passwords?",
+      "hook_kind": "interrogative",
+      "asr_evidence": "hook question complete within 0:00-0:04; 0:04-0:08 begins the answer/body ('It relies on a secure boundary called an execution sandbox')",
+      "hook_end_seconds": 4,
+      "duration_seconds_committed": 71.63356,
+      "share": 0.0558,
+      "share_percent": 5.6
+    }
+  ],
+  "summary": {
+    "n": 3,
+    "hook_end_seconds_all": 4,
+    "share_percent_band": [4.7, 5.6],
+    "share_percent_mean": 5.1,
+    "lab_hook_share_percent": 25.0,
+    "comparison_note": "the product front-loads a ~4 s hook sentence and dives into content; the lab's Short compile reserves a full opening beat (hookShare 0.25 with the x1.35 boost). Even at the declared ±4 s granularity ceiling (8 s hooks -> max share 11.2%), the gap to 25% stays outside any tolerance — the DIVERGENT verdict is granularity-robust."
+  },
+  "evidence_paths": [
+    "docs/experiments/records/LAB-07.yaml",
+    "docs/experiments/records/LAB-08.yaml",
+    "docs/experiments/records/LAB-09.yaml",
+    "docs/experiments/records/LAB-08-transcript.txt",
+    "docs/experiments/records/LAB-09-transcript.txt"
+  ]
+}

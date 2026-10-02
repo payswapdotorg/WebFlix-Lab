@@ -170,8 +170,12 @@ describe('comparison harness end-to-end (EV-026)', () => {
     expect(metricOf(short, 'short.duration.seconds').product.value).toBeCloseTo(84.822494, 4);
     expect(metricOf(short, 'short.geometry.aspect').verdict).toBe('DIVERGENT');
     expect(metricOf(short, 'short.audioStream').verdict).toBe('VERIFIED');
-    expect(metricOf(short, 'short.hookProminence.share').verdict).toBe('PENDING');
-    expect(metricOf(short, 'short.hookProminence.share').pending_reason).toBe(PENDING_REASON);
+    // Hook prominence: FILLED 2026-10-02 from the structured annotation —
+    // product ~4 s hook sentence (5.1% mean, n=3) vs the lab's full opening
+    // beat (25%) — DIVERGENT, granularity-robust.
+    expect(metricOf(short, 'short.hookProminence.share').verdict).toBe('DIVERGENT');
+    expect(metricOf(short, 'short.hookProminence.share').product.value).toBe(5.1);
+    expect(metricOf(short, 'short.hookProminence.share').lab.value).toBe(25);
     expect(metricOf(short, 'short.twinStochasticity').verdict).toBe('DIVERGENT');
     // The instrument-truth sceneDensity numbers live in observations, not metrics.
     expect(short.comparison.metrics.find((m) => m.metric.includes('sceneDensity'))).toBeUndefined();
@@ -200,18 +204,26 @@ describe('comparison harness end-to-end (EV-026)', () => {
     expect(metricOf(custom, 'custom.steeringSemantics').verdict).toBe('DIVERGENT');
     expect(metricOf(custom, 'custom.formatInvariantPreservation').verdict).toBe('VERIFIED');
 
-    // Language + mutation locality: pending slots with TL hooks.
-    for (const id of ['VIDEO-PARITY-05', 'VIDEO-PARITY-06']) {
-      const record = records.find((candidate) => candidate.id === id);
-      if (record === undefined) throw new Error(`${id} missing`);
-      expect(record.kind).toBe('pending-slot');
-      expect(record.tl_hooks.length).toBeGreaterThan(0);
-      for (const metric of record.comparison.metrics) {
-        expect(metric.verdict).toBe('PENDING');
-        expect(metric.pending_reason).toBe(PENDING_REASON);
-        expect(metric.product.value).toBeNull();
-      }
-    }
+    // Language + mutation locality: FILLED 2026-10-02 (LAB-11 + LAB-12) —
+    // language: structure VERIFIED (audio-surface analog), surface regeneration
+    // DIVERGENT (no lab non-English video arm), duration shift -3.5% WITHIN
+    // the ±5pp tolerance (vs the audio surface's -13.9%); mutation: locality
+    // class DIVERGENT (lab C-5 scene-local vs product global re-plan), macro
+    // structure preservation VERIFIED.
+    const lang = records.find((record) => record.id === 'VIDEO-PARITY-05');
+    if (lang === undefined) throw new Error('VIDEO-PARITY-05 missing');
+    expect(lang.kind).toBe('dimension-comparison');
+    expect(metricOf(lang, 'language.videoStructureInvariance').verdict).toBe('VERIFIED');
+    expect(metricOf(lang, 'language.surfaceRegeneration').verdict).toBe('DIVERGENT');
+    expect(metricOf(lang, 'language.videoDurationShiftPercent').verdict).toBe('VERIFIED');
+    expect(metricOf(lang, 'language.videoDurationShiftPercent').product.value).toBe(-3.5);
+    expect(lang.duration_seconds).toBeCloseTo(81.82712, 4);
+
+    const mut = records.find((record) => record.id === 'VIDEO-PARITY-06');
+    if (mut === undefined) throw new Error('VIDEO-PARITY-06 missing');
+    expect(mut.kind).toBe('dimension-comparison');
+    expect(metricOf(mut, 'videoMutation.localityClass').verdict).toBe('DIVERGENT');
+    expect(metricOf(mut, 'videoMutation.macroStructurePreservation').verdict).toBe('VERIFIED');
   });
 
   test('video harness: lab values match the committed runner outputs verbatim', () => {

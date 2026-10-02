@@ -651,3 +651,52 @@ transition); credential sweep over the wave diff = 0 hits.
   stays a scoping truth — no product format).
 - Remaining phase items (TL/operator-owned): the four pending captures
   above + cross-modal QA + the parity promotion gate.
+
+## 2026-10-02 07:10 UTC — CAPTURE MATRIX 2 LANDED (TL #2 + operator) — LAB-11 language arm + LAB-12 mutation arm + hook-prominence annotation; VIDEO-PARITY-01/05/06 filled; the product-side capture matrix is COMPLETE
+
+- **LAB-11 (video language arm)** captured in WFLX-LAB-07: español Short
+  "Cómo colaboran los sistemas multiagente" 81.83 s (sha256 27c7029a…) —
+  natively-Spanish generation + localized title (ASR evidence); hook->
+  narrative->callback-synthesis skeleton preserved; duration INSIDE the
+  English Short band (-3.5% vs the LAB-07 control — NO material
+  language-duration response on the video surface, in contrast to the audio
+  surface's -13.9%); generated on the IMMEDIATE video lane ~20 min (the
+  2026-10-01 scheduling change is audio-lane only — banked).
+- **LAB-12 (video mutation arm)** captured in a fresh notebook (4863612c)
+  with the b30-mutated fixture (byte-verified against the LAB-05
+  fingerprint before ingestion): "How Multi-Agent Orchestration Works"
+  73.86 s (sha256 e55360d1…) — GLOBAL re-plan (different title, -12.9%
+  duration, different scenario) with the Short skeleton preserved; the
+  mutated claim does NOT surface in the full-coverage transcript (honest
+  n=1 selection-dependent finding, UNRESOLVED — unlike the audio surface
+  where LAB-05 voiced it); generated CONCURRENTLY with LAB-11 in another
+  notebook (parallel video generations OBSERVED).
+- **Short hook-prominence structured annotation landed**
+  (reference/annotations/short-hook-prominence.json): declared rule =
+  the opening hook sentence span (0:00 to the first 4 s-window boundary
+  where the body begins), ASR-timed on the LAB-07/08/09 captures (media
+  re-downloaded 2026-10-02 — re-muxed containers, content-identical,
+  provenance recorded): ~4 s hooks on 71.6-84.8 s episodes = 4.7-5.6%
+  share (n=3) vs the lab's 25% opening beat — DIVERGENT,
+  granularity-robust (even 8 s hooks stay outside tolerance).
+- **VIDEO-PARITY-01 hookProminence filled** (percent-point rule, 25.0 vs
+  5.1 = 19.9 pp) · **VIDEO-PARITY-05 filled** (structure VERIFIED via the
+  EXP-A-06 audio-surface analog; surface regeneration DIVERGENT — no lab
+  non-English video arm; duration shift -3.5% VERIFIED within ±5 pp) ·
+  **VIDEO-PARITY-06 filled** (locality class DIVERGENT — product global
+  re-plan vs lab C-5 scene-local; macro structure preservation VERIFIED;
+  duration response -12.9% DIVERGENT). Video suite totals: **9 VERIFIED /
+  11 DIVERGENT / 3 PENDING** (was 6/7/8; the remaining pending slot is
+  the Cinematic SCOPING TRUTH only). Estate: 13 records (LAB-01..12 +
+  the Explainer reference); integration tests updated and green; full
+  battery 456/456; typecheck 0; lint clean.
+- **Capture matrix state (FINAL):** audio {7/7 arms complete incl.
+  LAB-10} × video {control ✅, twin ✅, custom prompt ✅, language ✅
+  LAB-11, mutation ✅ LAB-12, hook-prominence annotation ✅, Explainer
+  reference ✅; Cinematic = scoping truth (no product format)}. The
+  product-side capture matrix is COMPLETE. The one remaining
+  operator-gated family: Interactive Audio product capture (EV-018 lab
+  prototype stands; recorded as the honest open slot).
+- Remaining phase items (TL-owned): the cross-modal QA + parity promotion
+  gate (the phase's §7 definition of done) — the parity-close
+  documentation over the completed comparison program.

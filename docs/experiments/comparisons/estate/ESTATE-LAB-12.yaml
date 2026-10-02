@@ -1,0 +1,73 @@
+recordType: "ComparisonRecord"
+schemaVersion: "1.0.0"
+id: "ESTATE-LAB-12"
+kind: "estate-capture"
+timestamp_utc: "2026-10-01T20:00:00Z"
+operator: "wflx-p3"
+surface: "video"
+dimension: "reference.video.lab-12"
+reference_config:
+  notebook: "WFLX-LAB-12 (fresh; id 4863612c) — mutation arm: the b30-mutated fixture ingested via 'Copied text' in a NEW notebook, then a Short generated with the control procedure (English, default focus)"
+  format: "Short (crop_9_16 — the same 'New!' bite-sized format as LAB-07)"
+  language: "English (dialog default — the CONTROL language; only the source differs from LAB-07)"
+  length: "Short (default for the format)"
+  visual_style: ""
+  custom_prompt: ""
+  other_config:
+    generation_start: "2026-10-02T06:27:24Z (Generate now)"
+    generation_ready: "~2026-10-02T06:44:00Z (~17.5 min wall — inside the 17.5-28.4 min Short lane band)"
+    concurrent_generation: "generated CONCURRENTLY with LAB-11 (language arm, WFLX-LAB-07 notebook) — the product allows parallel video generations across notebooks (OBSERVED)"
+    source_ingestion: "new notebook -> Add sources -> Copied text -> paste the b30-mutated fixture (1260 bytes, byte-faithful paste verified against the React textarea state); Insert"
+    download: "studio row more-menu -> Download (.mp4) via the replay browser's operator Google session (VPN egress), 2026-10-02T06:41Z"
+source_fingerprint: "sha256:6f3754bc3b37f62863ffa269d577ba1641eaacd17fce632367dcb122ee0d830c (b30-mutated fixture: 'All credentials are `[REDACTED]` and are rotated quarterly by the platform team.' — the SAME mutation text as EXP-A-04/LAB-05; reconstructed locally and byte-verified against the LAB-05 fingerprint before ingestion; the paste was byte-faithful)"
+artifact_fingerprint:
+  sha256: "e55360d16ee8eb6792995972fcbd90585a6b1c879db2b05ba9269ed454bce732"
+  path: "artifacts/reference/lab-12/How_Multi-Agent_Orchestration_Works.mp4"
+  media_present: false
+  additional: []
+  note: "media git-ignored (artifacts/reference/lab-0X/*.mp4); sha256 + metadata committed"
+captured_utc: "2026-10-02T06:27:24Z"
+duration_seconds: 73.862676
+custom_prompt: null
+observations:
+  - label: "OBSERVED"
+    text: "(artifact-level GLOBAL response): a single-paragraph source edit produced a DIFFERENT generated title ('How Multi-Agent Orchestration Works' vs the control's 'How Multi-Agent Orchestration Divides AI Work'), a SHORTER duration (73.86 s = 1:13.9 vs 84.82 s control, -12.9%), and a different content scenario (a weather-app build narrative — 'Build a complete weather app from scratch' with an Orchestrator splitting subtasks — vs the control's scrape/script/generate request narrative) — the real product re-plans the whole video episode, it does not minimally patch it (the LAB-05 audio finding EXTENDED TO THE VIDEO SURFACE)."
+    source: "docs/experiments/records/LAB-12.yaml"
+  - label: "OBSERVED"
+    text: "(mutated content NOT voiced — honest n=1 finding): the b30 mutation content ('credentials... rotated quarterly') does NOT surface anywhere in the 74 s episode (full-coverage ASR: 0-28/28-56/56-74 s windows, all clean English) — UNLIKE the audio Deep Dive surface where LAB-05's mutated claim WAS voiced verbatim in the closing segment. Reading: the Short format's ~74 s content budget selects ONE narrative arc (here multi-agent orchestration) and the credentials/rotation topic area was NOT selected this run; with the run-to-run stochasticity of LAB-08 (twin), a different run COULD select it — the mutatedContentVoiced axis on the video Short surface is selection-dependent (n=1), recorded UNRESOLVED, never promoted to a like-for-like claim."
+    source: "docs/experiments/records/LAB-12.yaml"
+  - label: "OBSERVED"
+    text: "(macro-structure preserved): the Short skeleton is intact — challenge-statement hook at 0:00 ('Ask a standard AI to build a massive project all at once, and it will probably hallucinate'), orchestration narrative with subtask routing (designer/coder/tester agents, error-checking loop), closing callback synthesis ('what about that complete weather app you asked for at the very beginning?... a finished deployed application without you writing a single line')."
+    source: "docs/experiments/records/LAB-12.yaml"
+  - label: "OBSERVED"
+    text: "(format invariants under mutation): same 9:16 vertical geometry (720x1280) @ 30 fps h264 + AAC mono 44.1 kHz — the format envelope is identical to every English Short capture; the source mutation changes CONTENT, not FORMAT."
+    source: "docs/experiments/records/LAB-12.yaml"
+  - label: "OBSERVED"
+    text: "(generation lane): immediate video lane (~17.5 min wall, concurrent with LAB-11's generation in another notebook) — no scheduling dialog on the video surface."
+    source: "docs/experiments/records/LAB-12.yaml"
+  - label: "OBSERVED"
+    text: "video stream 720x1280 (9:16 vertical) @ 30 fps h264; audio aac 1ch 44100 Hz"
+    source: "artifacts/reference/lab-12/artifact.json"
+  - label: "OBSERVED"
+    text: "full spoken content transcribed via ASR (committed transcript is the content-level record for this capture)"
+    source: "docs/experiments/records/LAB-12-transcript.txt"
+annotations:
+  transcript_path: "docs/experiments/records/LAB-12-transcript.txt"
+  scene_annotation_path: null
+  notes: null
+comparison:
+  lab_artifact_id: null
+  lab_pipeline: null
+  metrics: []
+confidence: "high"
+unresolved_behavior:
+  - "vs LAB-07 control (unmutated fixture): different title, -12.9% duration, different content scenario — the artifact-level response is GLOBAL (title+duration+content all move), matching the audio surface's LAB-05 global re-plan finding."
+  - "vs the lab's C-5 video locality (EXP-V-L-01): the lab's single-claim swap changes EXACTLY the target scene's SVG + render spec + narration with 0 structure reshuffle; the product re-plans the whole episode — the locality-class distinction is the recorded parity divergence."
+tl_hooks: []
+evidence_paths:
+  - "artifacts/reference/lab-12/How_Multi-Agent_Orchestration_Works.mp4"
+  - "artifacts/reference/lab-12/artifact.json"
+  - "docs/experiments/records/LAB-12-transcript.txt"
+  - "docs/experiments/records/LAB-05.yaml"
+  - "docs/experiments/records/LAB-07.yaml"
+status: "ingested"

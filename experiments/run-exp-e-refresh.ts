@@ -47,7 +47,7 @@ import type { OverviewPlan, SemanticGraph, VideoScene } from '../src/contracts';
 import {
   buildExplainerComparisonRecord,
   buildVideoCustomPromptComparisonRecord,
-  buildVideoLocalityPendingRecord,
+  buildVideoLocalityComparisonRecord,
 } from '../tools/comparison/video-hooks';
 
 const E_REFRESH_ROOT = 'artifacts/video/exp-e-refresh';
@@ -464,12 +464,12 @@ function runLocality(): void {
       F2_structure_zero_reshuffle: !structureReshuffle && changedRenderSpecs === 1 && changedNarration === 1,
       F3_determinism_double_run: detBase && detMut,
     },
-    // WFLX-P3 (EV-025): the ad-hoc productComparison pending string is
-    // REPLACED by a schema-compliant comparison record (no video-side
-    // mutation capture exists — COMPARISON PENDING REFERENCE CAPTURE with
-    // the TL hook; the audio-surface LAB-05/LAB-06 finding is the recorded
-    // hypothesis, never video truth).
-    productComparisonRecord: buildVideoLocalityPendingRecord({
+    // WFLX-P3 (EV-025) -> FILLED 2026-10-02: the ad-hoc productComparison
+    // pending string is REPLACED by a schema-compliant comparison record;
+    // the video-side mutation capture (LAB-12, b30-mutated fixture) has
+    // LANDED, so a future full re-run emits the filled dimension comparison
+    // (global re-plan vs lab C-5 locality) into this report directly.
+    productComparisonRecord: buildVideoLocalityComparisonRecord({
       changedSvgs: changedSvgs.length,
       sceneCount: compileBase.scenes.length,
       targetSceneId: targetScene.id,

@@ -2,36 +2,62 @@
   "recordType": "ComparisonRecord",
   "schemaVersion": "1.0.0",
   "id": "VIDEO-PARITY-06",
-  "kind": "pending-slot",
+  "kind": "dimension-comparison",
   "timestamp_utc": "2026-10-01T20:00:00Z",
   "operator": "wflx-p3",
   "surface": "video",
   "dimension": "video.mutation-locality",
   "reference_config": {
-    "notebook": null,
-    "format": "Explainer (video) + one-source mutation (the EXP-V-L-01 axis)",
-    "language": null,
-    "length": null,
-    "visual_style": null,
-    "custom_prompt": null,
-    "other_config": null
+    "notebook": "WFLX-LAB-12 (fresh; id 4863612c) — mutation arm: the b30-mutated fixture ingested via 'Copied text' in a NEW notebook, then a Short generated with the control procedure (English, default focus)",
+    "format": "Short (crop_9_16 — the same 'New!' bite-sized format as LAB-07)",
+    "language": "English (dialog default — the CONTROL language; only the source differs from LAB-07)",
+    "length": "Short (default for the format)",
+    "visual_style": "",
+    "custom_prompt": "",
+    "other_config": {
+      "generation_start": "2026-10-02T06:27:24Z (Generate now)",
+      "generation_ready": "~2026-10-02T06:44:00Z (~17.5 min wall — inside the 17.5-28.4 min Short lane band)",
+      "concurrent_generation": "generated CONCURRENTLY with LAB-11 (language arm, WFLX-LAB-07 notebook) — the product allows parallel video generations across notebooks (OBSERVED)",
+      "source_ingestion": "new notebook -> Add sources -> Copied text -> paste the b30-mutated fixture (1260 bytes, byte-faithful paste verified against the React textarea state); Insert",
+      "download": "studio row more-menu -> Download (.mp4) via the replay browser's operator Google session (VPN egress), 2026-10-02T06:41Z"
+    }
   },
   "source_fingerprint": null,
   "artifact_fingerprint": {
-    "sha256": null,
-    "path": null,
+    "sha256": "e55360d16ee8eb6792995972fcbd90585a6b1c879db2b05ba9269ed454bce732",
+    "path": "artifacts/reference/lab-12/How_Multi-Agent_Orchestration_Works.mp4",
     "media_present": false,
     "additional": [],
-    "note": "no video-side source-mutation product capture exists (LAB-05 is the AUDIO-surface mutation probe)"
+    "note": "media git-ignored (artifacts/reference/lab-0X/*.mp4); sha256 + metadata committed"
   },
-  "captured_utc": null,
-  "duration_seconds": null,
-  "custom_prompt": null,
+  "captured_utc": "2026-10-02T06:27:24Z",
+  "duration_seconds": 73.862676,
+  "custom_prompt": "",
   "observations": [
     {
       "label": "OBSERVED",
-      "text": "the product mutation probe (LAB-05, b30 paragraph edit) is AUDIO-surface: global re-plan with macro-pattern preservation. No video-surface mutation capture exists; the audio-surface finding (global re-plan; mutation locality not separately observable above run-to-run variance) is the working hypothesis for video",
-      "source": "docs/experiments/records/LAB-05.yaml + docs/experiments/records/LAB-06.yaml"
+      "text": "(artifact-level GLOBAL response): a single-paragraph source edit produced a DIFFERENT generated title ('How Multi-Agent Orchestration Works' vs the control's 'How Multi-Agent Orchestration Divides AI Work'), a SHORTER duration (73.86 s = 1:13.9 vs 84.82 s control, -12.9%), and a different content scenario (a weather-app build narrative — 'Build a complete weather app from scratch' with an Orchestrator splitting subtasks — vs the control's scrape/script/generate request narrative) — the real product re-plans the whole video episode, it does not minimally patch it (the LAB-05 audio finding EXTENDED TO THE VIDEO SURFACE).",
+      "source": "docs/experiments/records/LAB-12.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(mutated content NOT voiced — honest n=1 finding): the b30 mutation content ('credentials... rotated quarterly') does NOT surface anywhere in the 74 s episode (full-coverage ASR: 0-28/28-56/56-74 s windows, all clean English) — UNLIKE the audio Deep Dive surface where LAB-05's mutated claim WAS voiced verbatim in the closing segment. Reading: the Short format's ~74 s content budget selects ONE narrative arc (here multi-agent orchestration) and the credentials/rotation topic area was NOT selected this run; with the run-to-run stochasticity of LAB-08 (twin), a different run COULD select it — the mutatedContentVoiced axis on the video Short surface is selection-dependent (n=1), recorded UNRESOLVED, never promoted to a like-for-like claim.",
+      "source": "docs/experiments/records/LAB-12.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(macro-structure preserved): the Short skeleton is intact — challenge-statement hook at 0:00 ('Ask a standard AI to build a massive project all at once, and it will probably hallucinate'), orchestration narrative with subtask routing (designer/coder/tester agents, error-checking loop), closing callback synthesis ('what about that complete weather app you asked for at the very beginning?... a finished deployed application without you writing a single line').",
+      "source": "docs/experiments/records/LAB-12.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(format invariants under mutation): same 9:16 vertical geometry (720x1280) @ 30 fps h264 + AAC mono 44.1 kHz — the format envelope is identical to every English Short capture; the source mutation changes CONTENT, not FORMAT.",
+      "source": "docs/experiments/records/LAB-12.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(generation lane): immediate video lane (~17.5 min wall, concurrent with LAB-11's generation in another notebook) — no scheduling dialog on the video surface.",
+      "source": "docs/experiments/records/LAB-12.yaml"
     },
     {
       "label": "REPRODUCED",
@@ -40,7 +66,7 @@
     }
   ],
   "annotations": {
-    "transcript_path": null,
+    "transcript_path": "docs/experiments/records/LAB-12-transcript.txt",
     "scene_annotation_path": null,
     "notes": null
   },
@@ -58,15 +84,15 @@
           "note": null
         },
         "product": {
-          "value": null,
-          "source": null,
+          "value": "(artifact-level GLOBAL response): a single-paragraph source edit produced a DIFFERENT generated title ('How Multi-Agent Orchestration Works' vs the control's 'How Multi-Agent Orchestration Divides AI Work'), a SHORTER duration (73.86 s = 1:13.9 vs 84.82 s control, -12.9%), and a different content scenario (a weather-app build narrative — 'Build a complete weather app from scratch' with an Orchestrator splitting subtasks — vs the control's scrape/script/generate request narrative) — the real product re-plans the whole video episode, it does not minimally patch it (the LAB-05 audio finding EXTENDED TO THE VIDEO SURFACE).",
+          "source": "docs/experiments/records/LAB-12.yaml (title/duration/content all changed under the b30 edit)",
           "note": null
         },
-        "delta": null,
-        "verdict": "PENDING",
-        "pending_reason": "COMPARISON PENDING REFERENCE CAPTURE",
-        "confidence": "low",
-        "note": "the product-side video mutation capture does not exist (the mutation probe family is audio-side: LAB-05)"
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "the product re-plans the WHOLE episode under a single-paragraph source edit (different title, -12.9% duration, different content scenario) — the LAB-05 audio global-re-plan finding EXTENDED TO THE VIDEO SURFACE; the lab’s C-5 locality is an architecture choice (deterministic scene-local patching), recorded as the locality-class distinction, never normalized."
       },
       {
         "metric": "videoMutation.macroStructurePreservation",
@@ -78,29 +104,51 @@
           "note": null
         },
         "product": {
-          "value": null,
-          "source": null,
+          "value": "(macro-structure preserved): the Short skeleton is intact — challenge-statement hook at 0:00 ('Ask a standard AI to build a massive project all at once, and it will probably hallucinate'), orchestration narrative with subtask routing (designer/coder/tester agents, error-checking loop), closing callback synthesis ('what about that complete weather app you asked for at the very beginning?... a finished deployed application without you writing a single line').",
+          "source": "docs/experiments/records/LAB-12.yaml (ASR: hook at 0:00, orchestration narrative, closing callback synthesis)",
           "note": null
         },
-        "delta": null,
-        "verdict": "PENDING",
-        "pending_reason": "COMPARISON PENDING REFERENCE CAPTURE",
-        "confidence": "low",
-        "note": "the product-side video mutation capture does not exist"
+        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
+        "verdict": "VERIFIED",
+        "pending_reason": null,
+        "confidence": "high",
+        "note": "both sides preserve the macro skeleton under the source edit: the lab keeps scene structure (0 reshuffle); the product keeps the Short skeleton (challenge-hook -> narrative -> callback synthesis) while re-planning content wholesale."
+      },
+      {
+        "metric": "videoMutation.durationResponsePercent",
+        "unit": "%",
+        "measurement_class": "like-for-like",
+        "lab": {
+          "value": 0,
+          "source": "lab C-5 locality: the single-scene swap keeps the timeline identical (0% duration response by construction — scene-local patching never moves timing)",
+          "note": null
+        },
+        "product": {
+          "value": -12.9,
+          "source": "LAB-12 73.862676 s (b30-mutated fixture) vs LAB-07 control 84.822494 s (unmutated) = -12.9%",
+          "note": null
+        },
+        "delta": "lab 0%, product -12.9% — |Δ| 12.9 pp — rule percent-point-tolerance <= 5 pp",
+        "verdict": "DIVERGENT",
+        "pending_reason": null,
+        "confidence": "medium",
+        "note": "the product duration moves materially under the source edit (-12.9%) — the artifact-level global-response signature (matching the audio surface’s LAB-05 +19% finding, opposite sign, similar magnitude class); the lab’s scene-local patching moves it 0%."
       }
     ]
   },
-  "confidence": "medium",
+  "confidence": "high",
   "unresolved_behavior": [
-    "video-surface mutation locality: no product capture — UNRESOLVED (audio-surface global-re-plan finding is the hypothesis, not video truth)"
+    "the mutated claim (b30 credentials/rotation) does NOT surface in the video Short’s full-coverage transcript (n=1) — selection-dependent on the ~74 s content budget, UNLIKE the audio Deep Dive where LAB-05 voiced it verbatim; with run-to-run stochasticity (LAB-08) a different run could select it — recorded UNRESOLVED, never promoted to a like-for-like claim"
   ],
-  "tl_hooks": [
-    "TL: land a video-surface source-mutation capture (Explainer or Short + one-source edit + regenerate, LAB-series pattern) to fill this record"
-  ],
+  "tl_hooks": [],
   "evidence_paths": [
+    "docs/experiments/records/LAB-12.yaml",
+    "docs/experiments/records/LAB-12-transcript.txt",
+    "artifacts/reference/lab-12/artifact.json",
+    "docs/experiments/comparisons/estate/ESTATE-LAB-12.yaml",
     "artifacts/video/exp-v-l-01/locality-report.json",
-    "docs/experiments/records/EXP-V-L-01.yaml",
-    "docs/experiments/records/LAB-05.yaml"
+    "docs/experiments/records/LAB-05.yaml",
+    "docs/experiments/records/LAB-07.yaml"
   ],
-  "status": "pending-capture"
+  "status": "compared"
 }
