@@ -7,6 +7,9 @@
  * Rules (documented; HYPOTHESIS-labeled editorial priors where noted):
  * - Topics: one per H2 section (in document order). Title strips a
  *   "Section N — " prefix when present. Salience decays with section order.
+ *   In a multi-source graph, topic ids are namespaced per source (same
+ *   condition as claim ids) because section/source titles are not unique
+ *   across sources.
  * - Entities: surfaces of list items, split on "/" into parts. Kind comes
  *   from a small lexicon plus suffix heuristics. Mentions = all exact
  *   occurrences of the surface in the source text.
@@ -239,9 +242,14 @@ export class DeterministicExtractor implements LlmExtractor {
     }
     const { createdAt } = input.options;
     const sourceIds = input.sources.map((s) => s.id);
-    // Claim ids derive from per-source block ids; namespace them when
-    // multiple sources are extracted into one graph.
-    const claimPrefix = sourceIds.length > 1 ? (source: SourceArtifact) => `${slugify(source.id)}-` : () => '';
+    // Claim ids derive from per-source block ids; topic ids derive from
+    // section/source titles — neither is unique across sources, so both are
+    // namespaced per source when multiple sources are extracted into one
+    // graph (single-source ids stay unprefixed).
+    const idPrefix =
+      sourceIds.length > 1 ? (source: SourceArtifact) => `${slugify(source.id)}-` : () => '';
+    const claimPrefix = idPrefix;
+    const topicPrefix = idPrefix;
     const allClaims: ClaimRecord[] = [];
     const entityMap = new Map<Id, MutableEntity>();
     const relationships: RelationshipRecord[] = [];
@@ -267,7 +275,9 @@ export class DeterministicExtractor implements LlmExtractor {
         if (section.heading === undefined && section.blocks.length === 0) continue;
         sectionIndex += 1;
         const topicId =
-          section.heading !== undefined ? `topic-${slugify(sectionTitleOf(section.heading))}` : `topic-${slugify(source.title)}`;
+          section.heading !== undefined
+            ? `topic-${topicPrefix(source)}${slugify(sectionTitleOf(section.heading))}`
+            : `topic-${topicPrefix(source)}${slugify(source.title)}`;
         const title = section.heading !== undefined ? sectionTitleOf(section.heading) : source.title;
 
         const sectionEntities = new Map<Id, MutableEntity>();
