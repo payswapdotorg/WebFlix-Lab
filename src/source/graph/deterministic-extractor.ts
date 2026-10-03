@@ -370,10 +370,19 @@ export class DeterministicExtractor implements LlmExtractor {
       }
     }
 
-    // Attach relationship claimIds (claims whose evidence block matches).
+    // Attach relationship claimIds (claims whose evidence grounds in the
+    // relationship's own evidence block). Block ids repeat per source, so the
+    // match is scoped to the (sourceId, blockId) PAIR — blockId alone would
+    // attach claims from a foreign source in multi-source graphs.
     for (const rel of relationships) {
+      const anchor = rel.evidence[0];
       rel.claimIds = allClaims
-        .filter((c) => c.evidence.some((span) => span.blockId === rel.evidence[0]?.blockId))
+        .filter((c) =>
+          anchor !== undefined &&
+          c.evidence.some(
+            (span) => span.sourceId === anchor.sourceId && span.blockId === anchor.blockId,
+          ),
+        )
         .map((c) => c.id);
     }
 
