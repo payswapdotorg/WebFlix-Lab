@@ -228,7 +228,7 @@ export function diffGraphs(baseline: SemanticGraph, variant: SemanticGraph): Gra
     entitiesAdded: [...varEntities].filter((name) => !baseEntities.has(name)),
     entitiesRemoved: [...baseEntities].filter((name) => !varEntities.has(name)),
     topicsAdded: [...varTopics].filter((title) => !baseTopics.has(title)),
-    topicsRemoved: [...baseTopics].filter((title) => !baseTopics.has(title)),
+    topicsRemoved: [...baseTopics].filter((title) => !varTopics.has(title)),
   };
 }
 
