@@ -778,3 +778,52 @@ transition); credential sweep over the wave diff = 0 hits.
   encoder nondeterminism stays excluded-by-rule; C-1/C-2/C-4/C-6 stay
   OUT; Interactive Audio product capture stays OPERATOR-GATED (ask
   live in the operator outbox).
+
+## 2026-10-03 19:4x UTC — WFLX-V3A DELIVERED + MERGED (PR #14, station-reviewed, TL #2 sign-off)
+
+- **The W1 multi-source blocker is FIXED and the EXP-V-05/06 records are
+  flipped to real results** (EV-030, status: reproduced). Branch
+  work/wflx-v3a-multi-source (9 commits, head 167080f) merged to main
+  via PR #14 after the full station review.
+- Root cause fixed: src/contracts/validation.ts BlockIndex keyed blocks
+  by blockId ALONE while every adapter numbers block ids per-source
+  from b1 — the index now keys by the (sourceId, blockId) PAIR (74f450f,
+  public get() signature unchanged). Sibling namespace fixes: topic ids
+  per source (8dbd753), relationship claimIds pair scoping (81aa5fc),
+  paragraph-claim entity attachment pair scoping (572759c), plus the
+  pre-existing diffGraphs topicsRemoved comparator typo (3b84931).
+- EXP-V-05 (order swap): covered claim SET / scene/beat counts /
+  beat-scene ORDER invariant; plan fingerprint changed through exactly
+  the two predicted channels — status supported (computed). EXP-V-06
+  (source removal): 21 claims / 22 entities / 3 topics drop, scenes
+  7->6, 0/6 common scenes survived unchanged — the stale-grounding
+  falsifier did NOT fire — status supported (computed). HANDOFF law
+  held: tools/experiments/configs.ts byte-unchanged; the flip lives in
+  runner code with statuses computed from measured diffs.
+- Station review record (TL #2, trust nothing): typecheck 0 errors;
+  lint clean; chunked battery 474/474 (164 + 159 + 117 + 34 = 456
+  baseline + 18 new); credential sweep 0 hits; frozen trees intact
+  (src/audio, src/video, src/director, src/compositor untouched);
+  single-source byte-identity PROVEN twice (snapshot fe1ef349… +
+  estate-level full-series byte-identity, the documented exp-d
+  encoder-nondeterministic raw-MP4 snapshot the sole exclusion by
+  rule); double-run output-set digest 53ee77ad… (182 files).
+- TL rulings on the worker's HANDOFF lines: (1) entity-mention
+  replacement semantics (cross-source mention sets are
+  last-processed-source-wins, not merged — OBSERVED, pinned by test)
+  ACCEPTED AS-IS: entities are global by design, every present mention
+  verifies; a merge semantics would be a behavior change outside this
+  lane — recorded as a candidate for a future work order if multi-source
+  entity synthesis becomes a product requirement. (2) the exp-d
+  artifact.json re-emission ACCEPTED per the documented exclusion
+  (composition content fingerprint unchanged). (3) the TL-side design
+  decisions recorded in the flipped records' next_experiment
+  (primary-source primacy is positional; removal-driven re-planning is
+  full-plan recombination) acknowledged as open research questions —
+  no queued lab arm.
+- v3 lane register (post-delivery): WFLX-V3A COMPLETE; C-8 RULED OUT
+  (79f9a01); encoder nondeterminism stays excluded-by-rule; C-1/C-2/
+  C-4/C-6 stay OUT; Interactive Audio product capture stays
+  OPERATOR-GATED (the ask stands in the operator outbox — the ONE open
+  parity slot). The v3 research ledger is exhausted of schedulable
+  lanes; the roadmap's remaining open item is operator-gated.
