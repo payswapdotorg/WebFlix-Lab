@@ -328,8 +328,13 @@ export class DeterministicExtractor implements LlmExtractor {
             const kind: ClaimRecord['kind'] =
               isPurpose ? 'goal' : block.text.includes('[REDACTED]') ? 'constraint' : 'fact';
             const salience = isPurpose ? 0.9 : 0.8;
+            // Entities are intentionally GLOBAL (shared across sources), but
+            // a claim's entityIds must list entities mentioned in THIS
+            // claim's evidence block — the mention match is scoped to the
+            // (sourceId, blockId) pair so a foreign source's same-numbered
+            // block cannot leak entities into the claim.
             const mentioned = [...entityMap.values()].filter((e) =>
-              e.mentions.some((m) => m.blockId === block.id),
+              e.mentions.some((m) => m.sourceId === source.id && m.blockId === block.id),
             );
             sectionClaims.push(
               claimOf(
