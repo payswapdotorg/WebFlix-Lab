@@ -175,7 +175,17 @@ export interface VideoFreshChainArm {
   readonly styleBible?: StyleBible;
 }
 
-/** Blocked arm: two-source chain expected to fail (W1 blocker; EXP-V-05/06). */
+/**
+ * Blocked arm: two-source chain expected to fail (W1 blocker; EXP-V-05/06).
+ *
+ * WFLX-V3A record flip (work order 34, 2026-10-03): the W1 blocker is FIXED
+ * (BlockIndex pair-keying), so the 'video-blocked' kind no longer asserts a
+ * blocker — tools/experiments/pipeline.ts runs it as the REAL multi-source
+ * arm (adapter -> DeterministicExtractor -> Director -> storyboard layer).
+ * The experiment CONFIGS stay byte-unchanged (the HANDOFF law: re-run
+ * UNCHANGED); `expectedBlocker` is preserved verbatim as inert design
+ * metadata documenting the pre-flip contract.
+ */
 export interface VideoBlockedArm {
   readonly kind: 'video-blocked';
   readonly runId: string;
@@ -279,6 +289,13 @@ export interface VideoArmData {
   readonly perSceneSvgSha256: readonly { readonly sceneId: string; readonly sha256: string }[];
   readonly videoQaMetrics: Record<string, string>;
   readonly svgDeterminismProof: { readonly hashA: string; readonly hashB: string; readonly byteIdentical: boolean };
+  /**
+   * WFLX-V3A record flip: set on EXP-V-06's two-source baseline arm, which
+   * additionally runs the single-source removal control (the [A] chain with
+   * source B removed); the control is cached as its own arm under this runId
+   * and participates in the diff phase as the variant.
+   */
+  readonly removalControlRunId?: string;
 }
 
 export interface VideoBlockedArmData {

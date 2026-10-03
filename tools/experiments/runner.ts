@@ -43,7 +43,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 
 import { join } from 'node:path';
 import { stableStringify } from '../../src/audio';
 import type { OverviewPlan, SemanticGraph } from '../../src/contracts';
-import { executeArm } from './pipeline';
+import { executeArm, runMultisourceArm } from './pipeline';
 import {
   ARMS_DATA_DIR,
   EVIDENCE_ENTRIES_PATH,
@@ -171,7 +171,12 @@ function isMeasuredData(
   return data.kind !== 'video-blocked';
 }
 
-async function executeArms(
+/**
+ * Executes every unique arm once (same runId = same arm; re-use instead of
+ * re-running). Exported for the tests/integration record-flip asserts, which
+ * regenerate the EXP-V-05/06 records through this exact machinery.
+ */
+export async function executeArms(
   configs: readonly ExperimentConfig[],
   quiet: boolean,
 ): Promise<Map<string, ExecutedArm>> {
@@ -189,6 +194,15 @@ async function executeArms(
         continue;
       }
       if (!quiet) process.stdout.write(`[${config.id}] `);
+      if (arm.kind === 'video-blocked') {
+        // WFLX-V3A record flip: the blocked-attempt arm is now the REAL
+        // multi-source arm; EXP-V-06's baseline additionally runs the
+        // single-source removal control, cached as its own arm.
+        const { baseline, control } = await runMultisourceArm(arm);
+        cache.set(arm.runId, { spec: arm, data: baseline });
+        if (control !== null) cache.set(control.runId, { spec: arm, data: control });
+        continue;
+      }
       const data = await executeArm(arm);
       cache.set(arm.runId, { spec: arm, data });
     }
@@ -318,13 +332,32 @@ function buildDualComparison(
 // Per-experiment result assembly
 // ---------------------------------------------------------------------------
 
-function buildExperimentResult(
+/**
+ * Assembles one experiment's result + record. Exported for the
+ * tests/integration record-flip asserts (byte-identical regeneration of the
+ * EXP-V-05/06 records through the exact runner machinery).
+ */
+export function buildExperimentResult(
   config: ExperimentConfig,
   cache: ReadonlyMap<string, ExecutedArm>,
 ): { result: ExperimentResult; record: RecordSpec } {
-  const arms = config.arms.map((arm) => {
-    const executed = cache.get(arm.runId);
-    if (executed === undefined) throw new Error(`arm ${arm.runId} was not executed`);
+  // WFLX-V3A record flip: EXP-V-06's single-source removal control is a
+  // runner-derived arm (the config arm list stays byte-unchanged per the
+  // HANDOFF law); it participates as the variant in the diff phase.
+  const configArms = config.arms.map((arm) => cache.get(arm.runId) as ExecutedArm);
+  const executedArms: ExecutedArm[] = [...configArms];
+  for (const arm of [...configArms]) {
+    const controlRunId =
+      arm.data.kind === 'video' ? arm.data.removalControlRunId : undefined;
+    if (controlRunId === undefined) continue;
+    const control = cache.get(controlRunId);
+    if (control === undefined) {
+      throw new Error(`${config.id}: removal control arm '${controlRunId}' missing from the execution cache`);
+    }
+    executedArms.push(control);
+  }
+
+  const arms = executedArms.map((executed) => {
     return {
       kind: executed.data.kind,
       runId: executed.data.runId,
@@ -334,8 +367,6 @@ function buildExperimentResult(
       qaMetrics: isMeasuredData(executed.data) ? qaMetricsOf(executed.data) : {},
     };
   });
-
-  const executedArms = config.arms.map((arm) => cache.get(arm.runId) as ExecutedArm);
   const audioArms = executedArms.filter(isAudioArm);
   const videoArms = executedArms.filter(isVideoArm);
 
@@ -644,4 +675,9 @@ async function main(): Promise<void> {
   }
 }
 
-await main();
+// Direct-execution guard: `bun run tools/experiments/runner.ts` runs the
+// series; importing the module (tests/integration record-flip asserts) must
+// NOT. import.meta.main is true only for the entry file.
+if (import.meta.main) {
+  await main();
+}

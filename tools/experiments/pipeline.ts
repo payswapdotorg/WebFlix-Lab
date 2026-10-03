@@ -40,7 +40,7 @@ import { selectIllustrationProvider } from '../../src/providers/visual/factory';
 import type { IllustrationProvider } from '../../src/providers/visual/port';
 import type { StoryboardScene, StyleBible } from '../../src/video';
 import { stableStringify } from '../../src/audio';
-import type { SemanticGraph } from '../../src/contracts';
+import type { SemanticGraph, SourceArtifact } from '../../src/contracts';
 import type {
   ArmData,
   ArmSpec,
@@ -59,6 +59,7 @@ import {
   EXP_A_AUDIO_SEED,
   EXP_D_SEED,
   EXP_NOW,
+  EXP_V_DIRECTOR_SEED,
   EXP_V_VIDEO_SEED,
   SOURCE_SPLIT_MARKER,
 } from './runner-types';
@@ -327,79 +328,96 @@ async function runStoryboardLayer(
 }
 
 // ---------------------------------------------------------------------------
-// Blocked arm (multi-source chain attempt — EXP-V-05/06)
+// Multi-source arm (WFLX-V3A record flip — the former blocked arm)
 // ---------------------------------------------------------------------------
 
-async function runBlockedArm(arm: VideoBlockedArm): Promise<ArmData> {
-  process.stdout.write(`  blocked-attempt ${arm.runId} ... `);
+/**
+ * The multi-source Director request, constructed by the RUNNER because the
+ * blocked-era configs never carried one (the experiment CONFIGS stay
+ * byte-unchanged per the HANDOFF law). Mirrors the EXP-V series conventions:
+ * video explainer, technical audience, the config's "180 s (intended)"
+ * length, the EXP-V director seed, the fixed now, one shared planId.
+ */
+const MULTISOURCE_REQUEST = {
+  modality: 'video' as const,
+  audience: 'technical' as const,
+  language: 'en',
+  targetDurationSeconds: 180,
+  seed: EXP_V_DIRECTOR_SEED,
+  now: EXP_NOW,
+  planId: 'plan-exp-v-multisource-180s',
+};
+
+/** Split the raw fixture at the Section 2 marker (the EXP-V-05/06 design). */
+function splitRawNote(runId: string): { a: string; b: string } {
   const idx = RAW_NOTE.indexOf(SOURCE_SPLIT_MARKER);
-  if (idx <= 0) throw new Error(`[${arm.runId}] split marker not found in raw fixture`);
-  const partA = RAW_NOTE.slice(0, idx);
-  const partB = RAW_NOTE.slice(idx);
-  const adapter = new MarkdownNoteAdapter();
-  const extractor = new DeterministicExtractor();
+  if (idx <= 0) throw new Error(`[${runId}] split marker not found in raw fixture`);
+  return { a: RAW_NOTE.slice(0, idx), b: RAW_NOTE.slice(idx) };
+}
+
+/** Ingest one split part through MarkdownNoteAdapter with the fixed stamp. */
+async function ingestPart(id: string, content: string): Promise<SourceArtifact> {
+  return new MarkdownNoteAdapter().ingest({
+    id,
+    label: `${id}.md`,
+    createdAt: EXP_NOW,
+    content,
+  });
+}
+
+/** One full multi-source chain: adapter -> extractor -> Director -> storyboard. */
+async function runMultisourceStoryboard(
+  runId: string,
+  experiment: string,
+  sources: readonly SourceArtifact[],
+): Promise<ArmData> {
+  process.stdout.write(`  multisource ${runId} (${sources.map((s) => s.id).join(' + ')}) ... `);
+  const graph = await new DeterministicExtractor().extract({ sources, options: { createdAt: EXP_NOW } });
+  const plan = compileOverviewPlan({ ...MULTISOURCE_REQUEST, sources, graph });
+  const { data } = await runStoryboardLayer(runId, experiment, 'exp-v', plan, graph, EXP_V_VIDEO_SEED);
+  // The graph is persisted beside the arm outputs so the runner's diff phase
+  // can re-read both arms' graphs without re-extracting (fresh-chain law).
+  persistFreshChainGraph('exp-v', runId, graph, 'video');
+  return data;
+}
+
+/**
+ * The record-flipped arm runner (formerly runBlockedArm, which ASSERTED the
+ * W1 blocker; the BlockIndex pair-keying fix removed it).
+ *
+ * - runId suffix 'ba' ingests source-note-b BEFORE source-note-a (the
+ *   EXP-V-05 order swap); everything else is [A, B].
+ * - 'multisource-baseline-ab' (EXP-V-06) additionally runs the single-source
+ *   removal control — the [A] chain with source B removed — as its own arm
+ *   under runId 'multisource-removed-b' (mutation: [A, B] -> [A]).
+ */
+export async function runMultisourceArm(
+  arm: VideoBlockedArm,
+): Promise<{ baseline: ArmData; control: ArmData | null }> {
+  const parts = splitRawNote(arm.runId);
   const order = arm.runId.endsWith('ba')
     ? ([
-        { id: 'source-note-b', content: partB },
-        { id: 'source-note-a', content: partA },
+        { id: 'source-note-b', content: parts.b },
+        { id: 'source-note-a', content: parts.a },
       ] as const)
     : ([
-        { id: 'source-note-a', content: partA },
-        { id: 'source-note-b', content: partB },
+        { id: 'source-note-a', content: parts.a },
+        { id: 'source-note-b', content: parts.b },
       ] as const);
-  const sources = await Promise.all(
-    order.map((part) =>
-      adapter.ingest({
-        id: part.id,
-        label: `${part.id}.md`,
-        createdAt: EXP_NOW,
-        content: part.content,
-      }),
-    ),
-  );
-  let message = '';
-  let succeeded = false;
-  try {
-    await extractor.extract({ sources, options: { createdAt: EXP_NOW } });
-    succeeded = true;
-  } catch (error) {
-    message = (error as Error).message;
+  const sources = await Promise.all(order.map((part) => ingestPart(part.id, part.content)));
+  const baseline = await runMultisourceStoryboard(arm.runId, arm.experiment, sources);
+
+  if (arm.runId !== 'multisource-baseline-ab') {
+    return { baseline, control: null };
   }
-  if (succeeded) {
-    // The blocker is GONE — the record must not claim it.
-    throw new Error(
-      `[${arm.runId}] two-source extraction SUCCEEDED — the W1 blocker no longer reproduces; ` +
-        `update the EXP-V-05/06 records`,
-    );
-  }
-  if (!message.includes(arm.expectedBlocker)) {
-    throw new Error(
-      `[${arm.runId}] unexpected blocker: expected '${arm.expectedBlocker}' in: ${message.slice(0, 200)}`,
-    );
-  }
-  const blockerDetail = [...message.matchAll(/"path":"([^"]+)"/g)]
-    .map((match) => match[1] ?? '')
-    .filter((path, i, all) => all.indexOf(path) === i)
-    .slice(0, 6);
-  const blocker = message.split(':')[0] ?? 'unknown error';
-  const dir = join('artifacts/video/exp-v', arm.runId);
-  writeJson(dir, 'blocker.json', {
-    runId: arm.runId,
-    attemptedChain: 'MarkdownNoteAdapter (two sources) -> DeterministicExtractor',
-    sourceOrder: order.map((part) => part.id),
-    splitMarker: SOURCE_SPLIT_MARKER,
-    errorHeadline: blocker,
-    errorSamplePaths: blockerDetail,
-    note: 'Deterministic failure — the contract validator (src/contracts/validation.ts BlockIndex) indexes blocks by block id only, and the adapter numbers blocks per source, so any two-source ingestion collides on b1..bn.',
-  });
-  process.stdout.write(`blocked: ${blocker}\n`);
+  // EXP-V-06: the single-source control ([A]; B removed per the config's
+  // mutation field) — the removal diff has its variant arm.
+  const sourceA = sources.find((s) => s.id === 'source-note-a');
+  if (sourceA === undefined) throw new Error(`[${arm.runId}] source-note-a missing after ingestion`);
+  const control = await runMultisourceStoryboard('multisource-removed-b', 'exp-v-06', [sourceA]);
   return {
-    kind: 'video-blocked',
-    runId: arm.runId,
-    experiment: arm.experiment,
-    artifactDir: dir,
-    blocker,
-    blockerDetail,
+    baseline: { ...baseline, removalControlRunId: 'multisource-removed-b' },
+    control,
   };
 }
 
@@ -524,8 +542,13 @@ export async function executeArm(arm: ArmSpec): Promise<ArmData> {
       persistFreshChainGraph('exp-v', a.runId, chain.graph, 'video');
       return data;
     }
-    case 'video-blocked':
-      return runBlockedArm(arm as VideoBlockedArm);
+    case 'video-blocked': {
+      // WFLX-V3A record flip: the real multi-source arm runner (the W1
+      // blocker is fixed). The removal control, when produced, is returned
+      // alongside and cached by the runner's executeArms.
+      const { baseline } = await runMultisourceArm(arm as VideoBlockedArm);
+      return baseline;
+    }
     case 'dual-audio': {
       const a = arm as DualAudioArm;
       const plan = compileOverviewPlan({
