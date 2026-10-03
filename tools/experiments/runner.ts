@@ -413,6 +413,8 @@ export function buildExperimentResult(
     id: config.id,
     matrixEntry: config.matrixEntry,
     surface: config.surface,
+    // Placeholder: superseded by the RECORD's status after assembly (the
+    // WFLX-V3A record flip computes the re-run verdicts in records.ts).
     status: config.authored.status,
     arms,
     audioDiffs,
@@ -424,7 +426,7 @@ export function buildExperimentResult(
   };
   const record = assembleRecord(config, result);
   const recordSha256 = recordDigestOf(renderRecordYaml(record));
-  return { result: { ...result, recordSha256 }, record };
+  return { result: { ...result, status: record.status, recordSha256 }, record };
 }
 
 // ---------------------------------------------------------------------------
