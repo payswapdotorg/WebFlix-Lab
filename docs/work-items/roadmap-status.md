@@ -758,3 +758,23 @@ transition); credential sweep over the wave diff = 0 hits.
   Interactive Audio product capture stays OPERATOR-GATED (AUDIO-PARITY-08
   TL hooks fill it mechanically when the operator's capture lands; the ask
   is re-posted in the replay outbox 2026-10-03).
+
+## 2026-10-03 12:2x UTC — v3 LANE: C-8 RULED OUT (TL #2) — the plan shape stays modality-exclusive
+
+- **C-8 dual-modality plan shape ADJUDICATED-OUT (v3)**:
+  docs/handoff/v3-line-ruling-c8-dual-modality.md authored + RULED. The
+  modality-exclusive OverviewPlan is the lab's architecture law (EV-010:
+  the typed cross-field checks are deliberate); the shared spine
+  (source, SemanticGraph, seed, claim universe, coverage accounting) is
+  the cross-modal contract (EXP-D-01 REPRODUCED: identical accounted/
+  covered claim sets across surfaces). The restructure is rejected with
+  recorded reasons: no enabling feature; modality-native coverage
+  economics (11/11 voiced vs 7/11 visualized at the same 300 s budget);
+  re-plan granularity coupling against the smallest-unit law C-5 just
+  landed (EV-014); a breaking CONTRACTS_VERSION wave with no capability
+  gain. Revisit trigger recorded (OBSERVED product plan object driving
+  both modalities in one pass) — not scheduled.
+- v3 lane register (post-ruling): WFLX-V3A multi-source in flight;
+  encoder nondeterminism stays excluded-by-rule; C-1/C-2/C-4/C-6 stay
+  OUT; Interactive Audio product capture stays OPERATOR-GATED (ask
+  live in the operator outbox).
