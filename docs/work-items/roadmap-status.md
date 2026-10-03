@@ -728,3 +728,33 @@ transition); credential sweep over the wave diff = 0 hits.
   replay-dispatched, every capture harvested through the operator's
   authenticated replay session, every verdict honest. The standing
   directive (no early returns until the parity phase closes) is fulfilled.
+
+## 2026-10-03 10:30 UTC — v3 LINE OPENED (TL #2, operator re-anchor) — WFLX-V3A dispatched
+
+- OPERATOR RE-ANCHOR received 2026-10-03: payswapdotorg/WebFlix-Lab is the
+  SOLE SOURCE OF TRUTH (the repo-is-canonical law restated by the operator
+  directly). All campaign effort concentrates here; no other repository is
+  a roadmap target.
+- Station state re-verified fresh at the re-anchor (trust nothing):
+  main @ debcb24 — typecheck 0 errors; lint clean; chunked battery
+  456/456 (contracts 75 + source 45 + director 31 + audio 159 + video 117
+  + integration 29), 0 fail — matches the signed parity-close baseline
+  exactly.
+- THE v3 LINE OPENS with lane 1 (WFLX-V3A, the W1 multi-source HANDOFF):
+  the TL reproduced the long-standing EXP-V-05/06 blocker at the station —
+  src/contracts/validation.ts BlockIndex keys by blockId ALONE while
+  adapters number block ids per-source from b1, so two-source graphs
+  collide in the index and every second source's evidence fails the pair
+  lookup ("references unknown block bN"). The class comment's own law
+  ("source ids make pairs unique in valid data") was never implemented as
+  a pair key. Root cause + work order handed to the worker:
+  docs/work-items/34-WFLX-V3A-MULTI-SOURCE.md (fix + sibling namespace
+  audit + EXP-V-05/06 re-run UNCHANGED per the HANDOFF law + EV-030).
+- WFLX-V3A dispatched from inside the replay (agents tab, GLM-5.3 exact,
+  Full-Stack, push-first delivery). Watch armed; station review on
+  delivery.
+- v3 lane queue behind V3A: C-8 dual-modality plan shape (TL ruling doc
+  first — the v2-wave precedent; EV-010/EV-011 standing inputs);
+  Interactive Audio product capture stays OPERATOR-GATED (AUDIO-PARITY-08
+  TL hooks fill it mechanically when the operator's capture lands; the ask
+  is re-posted in the replay outbox 2026-10-03).
