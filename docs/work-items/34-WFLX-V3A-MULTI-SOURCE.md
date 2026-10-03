@@ -32,8 +32,13 @@ AGENTS.md: OBSERVED / DOCUMENTED / HYPOTHESIS / REPRODUCED / UNRESOLVED.
 ## 0. Ground rules
 
 - Repo: https://github.com/payswapdotorg/WebFlix-Lab.git (public read).
-- Baseline: main @ debcb24 (must contain docs/promotion/parity-close-decision.md
-  and docs/experiments/records/LAB-12.yaml; if absent STOP, report UNRESOLVED).
+- Baseline: main @ 79a8a31 or later (must contain this work order at
+  docs/work-items/34-WFLX-V3A-MULTI-SOURCE.md plus
+  docs/promotion/parity-close-decision.md and
+  docs/experiments/records/LAB-12.yaml; if absent STOP, report UNRESOLVED).
+  The TL landed this work order on main before dispatch — if the file already
+  exists, your FIRST COMMIT is satisfied verbatim; verify byte-equality instead
+  of re-committing.
 - Branch: work/wflx-v3a-multi-source from main. Push URL (token substituted
   at dispatch, never commit it):
   https://x-access-token:[REDACTED:github_token]@github.com/payswapdotorg/WebFlix-Lab.git
@@ -53,7 +58,7 @@ AGENTS.md: OBSERVED / DOCUMENTED / HYPOTHESIS / REPRODUCED / UNRESOLVED.
 
 ~~~bash
 git clone https://github.com/payswapdotorg/WebFlix-Lab.git
-cd WebFlix-Lab && git checkout main && git log --oneline -1   # debcb24
+cd WebFlix-Lab && git checkout main && git log --oneline -1   # 79a8a31 (tl2: v3 line opened...)
 git checkout -b work/wflx-v3a-multi-source
 bun install
 bun run typecheck && bun run lint
