@@ -54,6 +54,7 @@ import type {
   VideoCanonicalPlanArm,
   VideoDirectorArm,
   VideoFreshChainArm,
+  VideoArmData,
 } from './runner-types';
 import {
   EXP_A_AUDIO_SEED,
@@ -201,7 +202,7 @@ async function runStoryboardLayer(
   graph: Parameters<typeof compileVideoScenes>[1],
   surfaceSeed: string,
   styleBible?: StyleBible,
-): Promise<{ data: ArmData; run: CompileVideoStoryboardResult }> {
+): Promise<{ data: VideoArmData; run: CompileVideoStoryboardResult }> {
   process.stdout.write(`  video ${runId} ... `);
   const compiled = compileVideoScenes(plan, graph, {
     seed: surfaceSeed,
@@ -307,7 +308,7 @@ async function runStoryboardLayer(
   });
 
   const metrics = videoMetricsFor(runId, experiment, run, graph);
-  const data: ArmData = {
+  const data: VideoArmData = {
     kind: 'video',
     runId,
     experiment,
@@ -370,7 +371,7 @@ async function runMultisourceStoryboard(
   runId: string,
   experiment: string,
   sources: readonly SourceArtifact[],
-): Promise<ArmData> {
+): Promise<VideoArmData> {
   process.stdout.write(`  multisource ${runId} (${sources.map((s) => s.id).join(' + ')}) ... `);
   const graph = await new DeterministicExtractor().extract({ sources, options: { createdAt: EXP_NOW } });
   const plan = compileOverviewPlan({ ...MULTISOURCE_REQUEST, sources, graph });
@@ -405,7 +406,7 @@ export async function runMultisourceArm(
         { id: 'source-note-b', content: parts.b },
       ] as const);
   const sources = await Promise.all(order.map((part) => ingestPart(part.id, part.content)));
-  const baseline = await runMultisourceStoryboard(arm.runId, arm.experiment, sources);
+  const baseline: VideoArmData = await runMultisourceStoryboard(arm.runId, arm.experiment, sources);
 
   if (arm.runId !== 'multisource-baseline-ab') {
     return { baseline, control: null };
