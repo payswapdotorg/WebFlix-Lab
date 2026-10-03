@@ -44,23 +44,28 @@ function issue(path: string, message: string): ValidationIssue {
 }
 
 class BlockIndex {
-  private readonly byId = new Map<string, { source: SourceArtifact; block: SourceBlock }>();
+  /**
+   * Blocks are keyed by the (sourceId, blockId) PAIR: every adapter numbers
+   * block ids per-source from b1, so blockId alone is NOT unique across the
+   * sources of a multi-source graph — only the pair is (the W1 multi-source
+   * law; fixed 2026-10-03, work order 34-WFLX-V3A).
+   */
+  private readonly byPair = new Map<string, { source: SourceArtifact; block: SourceBlock }>();
 
   constructor(sources: readonly SourceArtifact[]) {
     for (const source of sources) {
       for (const block of source.blocks) {
-        // First definition wins; source ids make pairs unique in valid data.
-        if (!this.byId.has(block.id)) {
-          this.byId.set(block.id, { source, block });
+        const key = `${source.id}\u0000${block.id}`;
+        // First definition wins; the pair key makes this a no-op in valid data.
+        if (!this.byPair.has(key)) {
+          this.byPair.set(key, { source, block });
         }
       }
     }
   }
 
   get(sourceId: string, blockId: string): { source: SourceArtifact; block: SourceBlock } | undefined {
-    const hit = this.byId.get(blockId);
-    if (hit === undefined || hit.source.id !== sourceId) return undefined;
-    return hit;
+    return this.byPair.get(`${sourceId}\u0000${blockId}`);
   }
 }
 
