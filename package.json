@@ -25,7 +25,8 @@
     "exp:vcinlive": "bun run experiments/run-exp-v-cin-live-01.ts",
     "cmp:ingest": "bun run tools/comparison/ingest.ts",
     "exp:cmpaudio": "bun run experiments/run-comparison-audio.ts",
-    "exp:cmpvideo": "bun run experiments/run-comparison-video.ts"
+    "exp:cmpvideo": "bun run experiments/run-comparison-video.ts",
+    "studio": "bun run apps/studio/server.ts"
   },
   "dependencies": {
     "zod": "^4.6.5"

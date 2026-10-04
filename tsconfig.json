@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "types": ["bun"],
+    "types": [
+      "bun"
+    ],
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
@@ -15,5 +19,11 @@
     "noEmit": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "experiments/**/*.ts", "eslint.config.js"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "experiments/**/*.ts",
+    "apps/**/*.ts",
+    "eslint.config.js"
+  ]
 }

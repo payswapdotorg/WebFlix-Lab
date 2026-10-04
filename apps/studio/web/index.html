@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebFlix-Lab · Operator Studio</title>
+  <meta name="description" content="WebFlix-Lab research implementation: compile an Audio Overview through the real lab pipeline and play it. Not the Gemini Notebook product.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1417'/%3E%3Cpath d='M12 9l12 7-12 7z' fill='%234db6ac'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">WFLX</span>
+        <div class="brand-copy">
+          <h1>Operator Studio</h1>
+          <p class="brand-sub">
+            WebFlix-Lab research implementation — Audio Overview compiled through the real lab
+            pipeline. <strong>Not the Gemini Notebook product.</strong>
+          </p>
+        </div>
+      </div>
+      <div id="provider-chip" class="provider-chip" aria-live="polite" title="Provider state (from /api/health)">
+        <span class="chip-label">provider</span>
+        <span id="provider-chip-text" class="chip-text">checking…</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- ============ 1 · Source + 2 · Compile ============ -->
+      <section class="panel panel-left" aria-labelledby="sources-heading">
+        <h2 id="sources-heading">1 · Source</h2>
+        <p class="panel-note">
+          Checked-in fixtures, ingested through the real chain:
+          <span class="mono">adapter → understanding → Director</span>.
+        </p>
+        <ul id="source-list" class="source-list" aria-label="Pipeline sources"></ul>
+        <p id="sources-empty" class="muted" hidden>No sources available.</p>
+
+        <h2 id="compile-heading">2 · Compile</h2>
+        <div class="controls">
+          <label class="control">
+            <span class="control-label">Mode</span>
+            <select id="mode-select" aria-describedby="mode-help"></select>
+            <span id="mode-help" class="control-help">Audio formats the Director already supports.</span>
+          </label>
+          <label class="control">
+            <span class="control-label">Duration</span>
+            <select id="duration-select"></select>
+            <span class="control-help">Target seconds (canonical default per mode).</span>
+          </label>
+          <button id="compile-button" class="btn btn-primary" type="button">
+            Compile Overview
+          </button>
+        </div>
+        <p id="compile-hint" class="compile-hint">
+          Offline deterministic provider · pure-TS mastering · in-memory artifacts only.
+        </p>
+      </section>
+
+      <!-- ============ 3 · Overview ============ -->
+      <section class="panel panel-right" aria-labelledby="overview-heading">
+        <h2 id="overview-heading">3 · Overview</h2>
+
+        <div id="overview-empty" class="state state-empty">
+          <div class="state-glyph" aria-hidden="true">◍</div>
+          <p class="state-title">No overview yet</p>
+          <p class="state-body">
+            Pick a source, choose a mode, and <strong>Compile Overview</strong>. The compile runs
+            the real pipeline end-to-end on this machine.
+          </p>
+        </div>
+
+        <div id="overview-loading" class="state state-loading" hidden>
+          <div class="spinner" role="status" aria-label="Compiling"></div>
+          <p class="state-title">Compiling through the real pipeline…</p>
+          <p class="state-body mono">adapter → understanding → Director → plan → audio compile</p>
+        </div>
+
+        <div id="overview-error" class="state state-error" hidden>
+          <div class="state-glyph" aria-hidden="true">✕</div>
+          <p class="state-title" id="error-title">Compile failed</p>
+          <p class="state-body" id="error-message"></p>
+          <p class="state-hint" id="error-hint">Fix the input and compile again.</p>
+        </div>
+
+        <div id="overview-ready" hidden>
+          <div class="card player-card">
+            <div class="player-main">
+              <button id="play-button" class="btn btn-play" type="button" aria-label="Play overview">
+                <span id="play-icon" aria-hidden="true">▶</span>
+              </button>
+              <div class="player-timeline">
+                <div
+                  id="progress-track"
+                  class="progress-track"
+                  role="slider"
+                  tabindex="0"
+                  aria-label="Seek position"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-valuenow="0"
+                  aria-valuetext="0:00">
+                  <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <div class="player-times">
+                  <span id="time-current" class="mono">0:00</span>
+                  <span id="now-playing" class="now-playing" aria-live="polite"></span>
+                  <span id="time-total" class="mono">–:––</span>
+                </div>
+              </div>
+            </div>
+            <p id="player-error" class="player-error" hidden></p>
+            <p class="player-meta">
+              <span id="player-mode" class="tag"></span>
+              <span id="player-provider" class="tag tag-dim"></span>
+              <span id="player-evidence" class="tag tag-dim">REPRODUCED · lab evidence</span>
+            </p>
+          </div>
+
+          <div class="columns">
+            <div class="card transcript-card">
+              <h3>Transcript</h3>
+              <p class="card-note">Click a turn to seek; the current turn highlights during playback.</p>
+              <ol id="transcript-list" class="transcript-list"></ol>
+            </div>
+            <div class="side-col">
+              <div class="card">
+                <h3>Metadata</h3>
+                <dl id="metadata-list" class="kv"></dl>
+              </div>
+              <div class="card">
+                <h3>Provenance</h3>
+                <dl id="provenance-list" class="kv"></dl>
+                <p class="card-note">The repo’s artifact.json conventions (GeneratedArtifact sidecar).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Evidence class: <strong>REPRODUCED</strong> — lab reconstruction, never product-parity
+        evidence (AGENTS.md). Speech is the offline deterministic placeholder provider.
+      </p>
+      <p>
+        W2 will add Interactive Audio session UI on this shell; W3 verifies the operator journey.
+        Microphone / voice input is <strong>UNRESOLVED</strong> and is not offered on this surface.
+      </p>
+    </footer>
+  </div>
+
+  <audio id="player" preload="auto"></audio>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
