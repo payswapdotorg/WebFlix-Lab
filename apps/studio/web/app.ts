@@ -1195,11 +1195,11 @@ function setActiveMaster(which: 'baseline' | 'session'): void {
   if (which === 'session' && latest === null) return; // nothing to load yet
   interactive.activeMaster = which;
   if (which === 'session' && latest !== null) {
-    audio.src = latest.sessionMaster.audioUrl;
+    audio.src = withGatewayQuery(latest.sessionMaster.audioUrl);
     setText(playerMode, `session master · fork ${latest.interventionSeq}`);
     setText(nowPlaying, 'session master ready');
   } else {
-    audio.src = overview.audioUrl;
+    audio.src = withGatewayQuery(overview.audioUrl);
     setText(playerMode, `${overview.plan.mode} · ${overview.plan.targetDurationSeconds}s target`);
     setText(nowPlaying, 'baseline ready');
   }
