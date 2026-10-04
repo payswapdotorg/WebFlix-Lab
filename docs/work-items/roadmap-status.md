@@ -882,3 +882,39 @@ transition); credential sweep over the wave diff = 0 hits.
   nondeterminism excluded-by-rule). No open roadmap items remain. The
   next stage is the operator's Studio UI handoff (browser-testable
   surface over the frozen pipeline), tracked separately.
+
+## 2026-10-04 03:0x UTC — STUDIO STAGE: WFLX-UI1 MERGED (TL #2 station review) — the Operator Studio shell is live
+
+- **The studio stage opened** (operator Final TL Handoff): the lab's first
+  browser surface over the frozen pipeline. Governing document
+  `docs/handoff/tl2-overview-studio-handoff.md` (the path AGENTS.md has
+  reserved since bootstrap).
+- **WFLX-UI1 delivered + merged**: branch `work/wflx-ui1-studio-shell`
+  (work order recorded verbatim as
+  `docs/work-items/35-WFLX-UI1-STUDIO-SHELL.md`). The shell delivers the
+  REAL pipeline chain in-browser — source adapter → understanding →
+  Director → plan → `compileAudioOverview` (no pre-baked plan JSONs, no
+  domain duplication: `apps/studio/pipeline.ts` imports the frozen
+  machinery) — with a player (HTTP-Range WAV streaming), the transcript
+  timeline (20 turns, per-turn purpose labels + timestamps), the
+  provenance panel (REPRODUCED evidence class, seed, media sha256, QA
+  passed-with-issues reported honestly), the offline-provider honesty
+  line, and the W2 stub routes (501 + typed handoff body).
+- Station review (TL #2, trust nothing): typecheck 0 errors; lint clean;
+  chunked battery **493/493** (474 baseline + 19 studio tests — battery
+  moves only upward); credential sweep 0 hits; frozen trees byte-stable
+  (`src/**`, `artifacts/**`, `docs/experiments/**` untouched — the
+  determinism spine intact; studio compiles in-memory, two-boot
+  byte-identity asserted by the worker's own determinism test);
+  agent-browser pass at :4313: source → compile Deep-Dive 300 s →
+  20-turn transcript → play (307.59 s duration) → provenance panel
+  verified end-to-end.
+- Duplicate work-order cleanup: the TL's provisional
+  `35-WFLX-UI-STUDIO.md` + `worker-prompts/wflx-ui-w1.md` (written while
+  unaware the wave had already been dispatched pre-recycle) removed in
+  favor of the worker's verbatim record; the handoff doc's port law
+  corrected to 4313 and the wave ledger updated to as-delivered state.
+- Next: WFLX-UI2 (Interactive Audio integration over the stub routes —
+  `InteractiveAudioSession.intervene()` driving Join/Ask, locality +
+  grounding proofs on screen), then WFLX-UI3 (journey verification +
+  station integration).

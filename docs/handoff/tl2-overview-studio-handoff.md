@@ -69,20 +69,24 @@ claims, no multi-user/auth, no persistence beyond the process.
 
 ## 5. Deployment shape (the operator console environment)
 
-- One Bun HTTP server, fixed port **3101**, entry `apps/studio/server.ts`
-  (`bun run studio:dev` → `bun --hot apps/studio/server.ts` — hot-reload
-  for iteration, exactly the mini-service convention).
-- The page is a SINGLE `index.html` with inline CSS/JS (no external asset
-  hosts, no CDN, no framework downloads) — the operator's gateway routes
-  by the `XTransformPort=3101` query, so every fetch/audio URL from the
-  page carries that query in RELATIVE form (e.g. `api/source?XTransformPort=3101`).
-  No absolute URLs, no websockets needed for v1.
-- Session state is in-process (a Map of `InteractiveAudioSession` +
-  compiled baselines). Restart resets state — acceptable and documented.
-- WAV bytes are served from a binary endpoint (`api/audio/<id>`,
-  `audio/wav`) so `<audio>` elements stream them; artifact bytes live in
-  the in-process registry only (media stays fingerprinted-not-committed,
-  the LAB-series discipline).
+- One Bun HTTP server, fixed port **4313**, entry `apps/studio/server.ts`
+  (`bun run studio` → `bun run apps/studio/server.ts`; hot-reload variant
+  `bun --hot` for iteration). Route surface as delivered by W1:
+  `GET /api/sources`, `POST /api/overview`, `GET /audio/:id/master.wav`,
+  `GET /api/health`, and the W2 stub routes `POST /api/session` +
+  `POST /api/session/:id/intervene` (501 + typed handoff body).
+- The client is a zero-build static page (`apps/studio/web/` — HTML + CSS +
+  vanilla TS, no bundler, no framework, no CDN, no new npm deps). The
+  operator's gateway routes by the `XTransformPort=4313` query, so every
+  fetch/audio URL from the page carries that query in RELATIVE form (e.g.
+  `api/overview?XTransformPort=4313`). No absolute URLs, no websockets in v1.
+- Session state is in-process (an in-memory overview store; W2 adds the
+  `InteractiveAudioSession` registry). Restart resets state — accepted and
+  documented.
+- WAV bytes are served from a binary endpoint (`audio/wav`, HTTP Range
+  supported) so `<audio>` elements stream them; artifact bytes live in the
+  in-process registry only (media stays fingerprinted-not-committed, the
+  LAB-series discipline; `artifacts/` is never written).
 
 ## 6. Required UI surfaces (A–D)
 
@@ -129,39 +133,49 @@ must not break them and must SHOW them:
    `compileAudioOverview` with the intervention plan (the UI's compile
    provenance card for the response says so).
 
-## 8. Worker waves (TL orchestration, one PR each, station-reviewed)
+## 8. Worker waves (TL orchestration, station-reviewed)
 
-- **W1 — `wflx-ui-w1` app shell + source/overview UX.** `apps/studio/`
-  skeleton (server.ts + index.html + API modules), endpoints
-  `GET api/source`, `POST api/compile`, `GET api/audio/:id`; surfaces A, B,
-  C; `tests/studio/` API integration tests; `studio:dev` script. Exit:
-  compile-and-listen works end-to-end in a browser.
-- **W2 — `wflx-ui-w2` Interactive Audio integration.** Session registry +
-  endpoints (`POST api/session`, `POST api/session/:id/ask`,
-  `GET api/session/:id`); surface D (Join/Ask UI, inserted-turn timeline,
-  locality + grounding panels); interactive API tests. Exit: the full
-  Join → typed Ask → response → locality-proof journey works in a browser.
-- **W3 — `wflx-ui-w3` station integration + docs.** Provenance completeness
-  audit across surfaces, `apps/studio/README.md` (run + verify + honest
-  boundaries), station battery wiring (studio tests in the chunked runs),
-  cross-surface consistency pass, AGENTS.md read-list refresh. Exit:
-  station review green with studio tests counted.
+- **W1 — `wflx-ui1` app shell + source/overview UX — MERGED 2026-10-04.**
+  Branch `work/wflx-ui1-studio-shell` (work order
+  `docs/work-items/35-WFLX-UI1-STUDIO-SHELL.md`, recorded verbatim by the
+  worker). Delivered: `apps/studio/` (server, api/, web/, test/), the
+  REAL pipeline chain (source adapter → understanding → Director → plan →
+  audio compile — no pre-baked plans), player + transcript timeline +
+  metadata + provenance (REPRODUCED label, seed, sha256, QA honest report),
+  W2 stub routes, 19-test studio battery (station total 474 → 493).
+  Station review (TL #2): typecheck 0 / lint clean / 493/493 / credential
+  sweep clean / frozen trees byte-stable / agent-browser pass at :4313
+  (compile Deep-Dive → 20 turns → play 307.6 s → provenance panel).
+- **W2 — `wflx-ui2` Interactive Audio integration.** Replaces the stub
+  routes (`POST /api/session {overviewId}` → session established;
+  `POST /api/session/:id/intervene` → `InteractiveAudioSession.intervene()`);
+  surface D (Join/Ask UI on the transcript timeline, inserted-response
+  turns highlighted, session master playback, locality + grounding
+  panels rendering the `InteractiveSessionResult` proofs); interactive API
+  tests. Exit: the full Join → typed Ask → response → locality-proof
+  journey works in a browser.
+- **W3 — `wflx-ui3` station integration + journey verification.**
+  Provenance completeness audit across surfaces, `apps/studio/README.md`
+  full form (run + verify + honest boundaries), station battery wiring,
+  the end-to-end browser journey verification with agent-browser, and the
+  parity-close decision doc amendment (the studio evidence class —
+  REPRODUCED lab implementation, no new parity claims).
 
-Each wave: branch `work/wflx-ui-<w>`, PR, TL station review (typecheck /
-lint / full chunked battery / credential sweep / frozen-tree diff check),
-merge, next wave rebases.
+Each wave: branch `work/wflx-ui< n >-*`, TL station review (typecheck /
+lint / full chunked battery / credential sweep / frozen-tree diff check /
+agent-browser pass), merge, next wave rebases.
 
 ## 9. Acceptance (browser-testable, operator-verifiable)
 
 The operator opens the studio through the operator console (the preview
-gateway), and without any CLI: sees the source (B), compiles the Deep Dive
-5-min plan and listens to the overview (C), joins a session, asks the
-EXP-L-03 question "Can you say more about the open-source media projects
-and local model runtimes?", hears/inspects the inserted response, and sees
-the locality proof table all-green (D). The TL additionally verifies the
-same journey with the automation browser and cross-checks the dev server
-log. Fixture-only success is not product parity evidence — the UI carries
-that label on the landing surface.
+gateway, `XTransformPort=4313`), and without any CLI: sees the source (B),
+compiles the Deep Dive 5-min plan and listens to the overview (C), joins a
+session, asks the EXP-L-03 question "Can you say more about the open-source
+media projects and local model runtimes?", hears/inspects the inserted
+response, and sees the locality proof table all-green (D). The TL
+additionally verifies the same journey with the automation browser and
+cross-checks the dev server log. Fixture-only success is not product parity
+evidence — the UI carries that label on the landing surface.
 
 ## 10. Drift controls
 
