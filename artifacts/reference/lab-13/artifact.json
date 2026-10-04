@@ -1,0 +1,93 @@
+{
+  "id": "LAB-13",
+  "kind": "real-product Interactive Audio session capture (AUDIO-PARITY-08 — the operator-gated parity slot)",
+  "source": "control fixture (sha256:17dd7b1c2f33ef43117c2820d4788846c668b5b2093830d50546efce96056a47 — byte-identical to LAB-01/05/06/07/08/09/10)",
+  "captured_utc": "2026-10-04T00:11:19Z",
+  "session_window": "2026-10-04T00:11:19Z .. 00:29:00Z (interactive surface open .. Q2 response ready)",
+  "base_episode": {
+    "title": "Inside a Leaked Multi-Agent AI Blueprint",
+    "duration_seconds": 1183,
+    "duration_display": "19:43",
+    "format": "Deep Dive",
+    "hosts": 2,
+    "sources": 1,
+    "generation_start_utc": "2026-10-04T00:01:33Z",
+    "generation_ready_utc": "~2026-10-04T00:08Z (~6-7 min wall — IMMEDIATE lane; the 2026-10-01 scheduled era did not recur)"
+  },
+  "duration_seconds": 1183,
+  "hosts": 2,
+  "title": "Inside a Leaked Multi-Agent AI Blueprint",
+  "format": "Deep Dive (interactive session over the base episode)",
+  "length_setting": "Default",
+  "language": "English",
+  "notebook": "WFLX-LAB-13 (id 0cca6b34-5297-41ce-9d23-13b36d521532)",
+  "artifacts": [
+    {
+      "format": "evidence-screenshot (standard player)",
+      "title": "01-player-standard",
+      "duration_seconds": 1183,
+      "sha256": "30ceaf92951fc6a1fa1f91d6021ce519e67dba8e30cb5b92ca9995eb70b2027a",
+      "notes": "the standard player before joining: 00:00/19:43, controls, the Interactive surface"
+    },
+    {
+      "format": "evidence-screenshot (interactive join)",
+      "title": "02-interactive-join",
+      "duration_seconds": 1183,
+      "sha256": "1e70c47b5b9cde356d6194701216f5cb98d0ca33f53203c0b405ffb8062b3439",
+      "notes": "the interactive session surface: question composer, Join pill, 2 hosts"
+    },
+    {
+      "format": "evidence-screenshot (reply ready)",
+      "title": "03-reply-ready",
+      "duration_seconds": 1183,
+      "sha256": "f5b652bdab1431e58d81e5e81e3c381cb56f41f402bab6ccbd169c0dbc29ddf1",
+      "notes": "the grounded response text with inline citations rendered in the chat surface"
+    },
+    {
+      "format": "evidence-screenshot (response playing)",
+      "title": "04-response-playing",
+      "duration_seconds": 1183,
+      "sha256": "17c523480f686b4e411d05f911969873e6944c72c8050b501cf582ef48b416a9",
+      "notes": "the response voicing: dual-host waveform with playhead, pause state"
+    },
+    {
+      "format": "evidence-screenshot (episode resumed)",
+      "title": "05-episode-resumed",
+      "duration_seconds": 1183,
+      "sha256": "6a1f1d04aec0c0256e1ff88cd052d9d35275a6932aadb6aad51d09a3a4a8ebb3",
+      "notes": "the original episode waveform after the response completed — the resume observation"
+    }
+  ],
+  "interventions": [
+    {
+      "run": "q1-typed",
+      "submitted_utc": "2026-10-04T00:13:49Z",
+      "channel": "free-text composer ('Ask a question or create something')",
+      "listener_text": "Can you say more about the open-source media projects and local model runtimes?",
+      "response_ready_utc": "~2026-10-04T00:15Z (~80-90 s)",
+      "response_voicing": "played 00:15:23Z -> ~00:23Z (~7-8 min, dual-host waveform, pause_circle state)",
+      "grounding": "inline citations [1]/[2] to the single notebook source; content limits stated honestly"
+    },
+    {
+      "run": "q2-suggested-chip",
+      "submitted_utc": "2026-10-04T00:28:29Z",
+      "channel": "one-click suggested follow-up chip ('Tell me about local model runtimes')",
+      "listener_text": "Tell me about local model runtimes",
+      "response_ready_utc": "~2026-10-04T00:29Z (~60 s — faster follow-up)",
+      "response_voicing": "session continued; response text + new suggested chips rendered",
+      "grounding": "inline citations [1]/[2]; web-research follow-up offered"
+    }
+  ],
+  "resume_behavior": "original episode resumed in the same player after the Q1 response completed (~00:25Z observation: long waveform, playback continuing) — the join -> ask -> grounded response -> resume journey completed end-to-end",
+  "asr_transcript_path": "docs/experiments/records/LAB-13-transcript.txt (the chat-surface transcript — the response TEXT as rendered by the product, citations included)",
+  "screenshots": [
+    "artifacts/reference/lab-13/screenshots/01-player-standard.jpg",
+    "artifacts/reference/lab-13/screenshots/02-interactive-join.jpg",
+    "artifacts/reference/lab-13/screenshots/03-reply-ready.jpg",
+    "artifacts/reference/lab-13/screenshots/04-response-playing.jpg",
+    "artifacts/reference/lab-13/screenshots/05-episode-resumed.jpg"
+  ],
+  "operator": "tl2+operator",
+  "media_gitignored": false,
+  "media_note": "no media bytes to commit: the interactive SESSION is in-player by design (no session file materializes); the base-episode download button did not materialize a file under programmatic automation clicks (automation-context note, not a product claim)"
+}

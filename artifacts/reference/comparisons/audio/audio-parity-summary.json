@@ -66,11 +66,11 @@ records:
       - "VERIFIED"
   - id: "AUDIO-PARITY-08"
     dimension: "audio.interactive"
-    kind: "pending-slot"
+    kind: "dimension-comparison"
     verdicts:
-      - "PENDING"
-      - "PENDING"
-      - "PENDING"
+      - "VERIFIED"
+      - "VERIFIED"
+      - "VERIFIED"
 determinismSpotCheck:
   baselineRunId: "deepdive-5min-baseline"
   recompiledMediaSha256: "61ed761bece6628d6e7791589161643890b2a389850386c6e756f1e7abdd3aa4"
@@ -171,4 +171,4 @@ arms:
 honestBoundaries:
   - "comparisons are against the CAPTURED LAB-series artifacts, never live re-runs (the 2026-10-01 scheduling-lane behavior change is banked truth)"
   - "lab placeholder narration pins realized duration to planning targets (0% shift by construction where noted — measurement-class notes are in the records)"
-  - "AUDIO-PARITY-07 (custom prompt, LAB-10) and AUDIO-PARITY-08 (Interactive Audio) are COMPARISON PENDING REFERENCE CAPTURE"
+  - "AUDIO-PARITY-08 (Interactive Audio, LAB-13): the product capture used TYPED listener input (the documented stand-in class — no microphone/ASR parity claimed); the product resume is observed behaviorally (its turn bytes are unobservable), so the lab byte-identity locality proof has no like-for-like product analog — a measurement-class distinction, never a parity-defect claim"

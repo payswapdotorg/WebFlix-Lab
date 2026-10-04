@@ -63,13 +63,19 @@ describe('comparison harness end-to-end (EV-026)', () => {
         }
       }
     }
-    // The honest-boundary pending slot (Interactive Audio; LAB-10 filled 2026-10-02).
+    // AUDIO-PARITY-08 was FILLED 2026-10-04 (LAB-13: the Interactive Audio
+    // product capture — join -> typed question -> source-grounded response
+    // -> original episode resumes). It is now a dimension-comparison record
+    // with VERIFIED metrics; no audio pending-slot remains.
     for (const id of ['AUDIO-PARITY-08']) {
       const record = suite.records.find((candidate) => candidate.id === id);
       if (record === undefined) throw new Error(`${id} missing`);
-      expect(record.kind).toBe('pending-slot');
-      expect(record.tl_hooks.length).toBeGreaterThan(0);
-      for (const metric of record.comparison.metrics) expect(metric.verdict).toBe('PENDING');
+      expect(record.kind).toBe('dimension-comparison');
+      expect(record.tl_hooks.length).toBe(0);
+      for (const metric of record.comparison.metrics) {
+        expect(metric.verdict).toBe('VERIFIED');
+        expect(metric.pending_reason).toBeNull();
+      }
     }
   }, 120_000);
 

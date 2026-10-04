@@ -14,9 +14,9 @@
  * committed records byte-identically (asserted by the integration tests).
  *
  * Honest boundaries: comparisons are against CAPTURED artifacts (the
- * scheduling-lane behavior change is banked truth); dimensions without a
- * product-side capture (LAB-10 custom prompt, Interactive Audio) are
- * recorded COMPARISON PENDING REFERENCE CAPTURE.
+ * scheduling-lane behavior change is banked truth); all eight dimensions
+ * now carry product-side captures (LAB-01..13 — Interactive Audio landed
+ * 2026-10-04 as LAB-13, closing the operator-gated slot).
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -69,7 +69,7 @@ async function main(): Promise<void> {
     honestBoundaries: [
       'comparisons are against the CAPTURED LAB-series artifacts, never live re-runs (the 2026-10-01 scheduling-lane behavior change is banked truth)',
       'lab placeholder narration pins realized duration to planning targets (0% shift by construction where noted — measurement-class notes are in the records)',
-      'AUDIO-PARITY-07 (custom prompt, LAB-10) and AUDIO-PARITY-08 (Interactive Audio) are COMPARISON PENDING REFERENCE CAPTURE',
+      'AUDIO-PARITY-08 (Interactive Audio, LAB-13): the product capture used TYPED listener input (the documented stand-in class — no microphone/ASR parity claimed); the product resume is observed behaviorally (its turn bytes are unobservable), so the lab byte-identity locality proof has no like-for-like product analog — a measurement-class distinction, never a parity-defect claim',
     ],
   };
   writeFileSync(

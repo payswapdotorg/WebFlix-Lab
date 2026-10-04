@@ -1,12 +1,12 @@
 {
   "recordType": "ComparisonRecord",
   "schemaVersion": "1.0.0",
-  "id": "AUDIO-PARITY-08",
-  "kind": "dimension-comparison",
+  "id": "ESTATE-LAB-13",
+  "kind": "estate-capture",
   "timestamp_utc": "2026-10-01T20:00:00Z",
   "operator": "wflx-p3",
   "surface": "audio",
-  "dimension": "audio.interactive",
+  "dimension": "reference.audio.lab-13",
   "reference_config": {
     "notebook": "WFLX-LAB-13 (dedicated; id 0cca6b34-5297-41ce-9d23-13b36d521532) — the Interactive Audio product capture (AUDIO-PARITY-08, the ONE operator-gated parity slot)",
     "format": "Deep Dive ( Customize Audio Overview dialog: Deep Dive/Brief/Critique/Debate, English, Default length, empty focus — the baseline control)",
@@ -76,6 +76,11 @@
     },
     {
       "label": "OBSERVED",
+      "text": "(typed intervention -> response): the typed question renders as a chat turn ('Thoughts' expandable panel + timestamp 'Today • 11:57 PM' + '1 source' indicator); response state machine observed verbatim: 'Thinking...' -> 'Reply ready.' (~80-90 s Q1; ~60 s Q2 follow-up).",
+      "source": "docs/experiments/records/LAB-13.yaml"
+    },
+    {
+      "label": "OBSERVED",
       "text": "(source grounding, VERIFIED): the response text is source-grounded WITH INLINE CITATIONS — '[1]'/'[2]' reference chips resolve to the notebook's single source; the Q1 response states the fixture's actual content limits ('The source note lists open-source media projects and local model runtimes as entries within its catalog of AI tools, models, and repositories [1]. However, it only includes them as category headings and does not provide specific project names, descriptions, or technical details [1].') — the grounding is to the REAL fixture content, not a generic answer.",
       "source": "docs/experiments/records/LAB-13.yaml"
     },
@@ -100,9 +105,19 @@
       "source": "docs/experiments/records/LAB-13.yaml"
     },
     {
-      "label": "REPRODUCED",
-      "text": "lab side: the InteractiveAudioSession prototype (EV-018) reconstructs the observable journey as an additive session layer with per-turn C-5 locality — original turn WAVs byte-identical, startMs shifts by exactly the inserted total; listener voice input stays UNRESOLVED (text-scripted stand-ins)",
-      "source": "docs/experiments/records/EXP-L-03.yaml"
+      "label": "OBSERVED",
+      "text": "(player mechanics): no time display in the interactive player state (the standard player shows 'MM:SS / 19:43'; the interactive state shows waveform only); no <audio> element src is exposed to the DOM (MSE/WebAudio-class playback — consistent with the LAB-01 player class); playback reality verified by advancing time display (00:08 -> 00:18 -> 00:33) on the standard player and by pause_circle/Play-audio state transitions in the interactive state.",
+      "source": "docs/experiments/records/LAB-13.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "(generation lane): base-episode generation was IMMEDIATE this run (~6-7 min, started 00:01:33Z, ready ~00:08Z) — the 2026-10-01 scheduled-queuing era ('generate in a few hours') did NOT recur; the audio lane's scheduling behavior is era/load-dependent (immediate era: Sept 28 LAB-01..06 + this run; scheduled era: Oct 1 LAB-10).",
+      "source": "docs/experiments/records/LAB-13.yaml"
+    },
+    {
+      "label": "OBSERVED",
+      "text": "full spoken content transcribed via ASR (committed transcript is the content-level record for this capture)",
+      "source": "docs/experiments/records/LAB-13-transcript.txt"
     }
   ],
   "annotations": {
@@ -111,86 +126,27 @@
     "notes": null
   },
   "comparison": {
-    "lab_artifact_id": "artifact-exp-a-deepdive-5min-baseline",
-    "lab_pipeline": "lab pipeline: Director -> audio compile, OFFLINE deterministic default (seed wflx-exp-a-audio-seed, fixed now 2026-09-27T00:00:00Z; the EXP-A series constants — values reproduce the committed artifacts/audio/exp-a-r2 store)",
-    "metrics": [
-      {
-        "metric": "interactive.interventionSourceGrounding",
-        "unit": null,
-        "measurement_class": "qualitative",
-        "lab": {
-          "value": "REPRODUCED (EV-018): listener intervention at a turn boundary -> deterministic claim retrieval over the same semantic graph -> source-grounded response (W1 deep validation + W2 dialogue-graph grounding, zero issues; claims resolve; anchors voiced)",
-          "source": "docs/experiments/records/EXP-L-03.yaml + artifacts/audio/interactive-01/",
-          "note": null
-        },
-        "product": {
-          "value": "(source grounding, VERIFIED): the response text is source-grounded WITH INLINE CITATIONS — '[1]'/'[2]' reference chips resolve to the notebook's single source; the Q1 response states the fixture's actual content limits ('The source note lists open-source media projects and local model runtimes as entries within its catalog of AI tools, models, and repositories [1]. However, it only includes them as category headings and does not provide specific project names, descriptions, or technical details [1].') — the grounding is to the REAL fixture content, not a generic answer.",
-          "source": "docs/experiments/records/LAB-13.yaml (the response text with inline [1]/[2] citations rendered in the chat surface — committed transcript)",
-          "note": null
-        },
-        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
-        "verdict": "VERIFIED",
-        "pending_reason": null,
-        "confidence": "high",
-        "note": "both sides ground the intervention response to the SAME committed source content: the product renders inline citation chips ([1]/[2] -> the notebook source) and states the fixture’s content limits honestly; the lab resolves claims over the same graph through the frozen machinery. The product’s grounding is OBSERVED in the session; the lab’s is REPRODUCED with asserted claim resolution."
-      },
-      {
-        "metric": "interactive.resumeOriginalOverview",
-        "unit": null,
-        "measurement_class": "qualitative",
-        "lab": {
-          "value": "REPRODUCED (EV-018): the ORIGINAL overview resumes with its original turns intact — every original turn WAV byte-identical across the boundary; startMs shifts by exactly the inserted response total (21171 ms session-01 / 12314 ms session-02), 0 pre-boundary",
-          "source": "docs/experiments/records/EXP-L-03.yaml + artifacts/audio/interactive-01/",
-          "note": null
-        },
-        "product": {
-          "value": "(resume, VERIFIED): after the response completed, the ORIGINAL EPISODE resumed in the same player (long waveform, playback continuing; observed at ~00:25Z) — the join -> ask -> grounded response -> resume-original-overview journey completed END-TO-END in the real product. Honest measurement-class note: the product resume is observed BEHAVIORALLY (UI states + waveform + continued playback); the lab's byte-identity locality proof has NO product-side analog (the product's turn bytes are not exposed for hashing) — a measurement-class distinction, not a parity defect claim.",
-          "source": "docs/experiments/records/LAB-13.yaml (the ~00:25Z observation: original episode waveform + continued playback after the response completed)",
-          "note": null
-        },
-        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
-        "verdict": "VERIFIED",
-        "pending_reason": null,
-        "confidence": "high",
-        "note": "measurement-class note (binding): the product’s resume is observed BEHAVIORALLY (player states + waveform + continued playback — the join -> ask -> respond -> resume journey completed end-to-end); the product’s turn-level bytes are not exposed for hashing, so the lab’s byte-identity locality proof has NO like-for-like product analog — a measurement-class distinction recorded, never normalized into a parity-defect claim."
-      },
-      {
-        "metric": "interactive.formatInvariants",
-        "unit": null,
-        "measurement_class": "qualitative",
-        "lab": {
-          "value": "REPRODUCED (EV-018): the session layer is additive over the SAME compile artifacts — codec/geometry invariants hold across the boundary by construction (the session master reuses the baseline turn WAVs; only the inserted response and the post-boundary shift are new)",
-          "source": "docs/experiments/records/EXP-L-03.yaml + src/audio/interactive/session.ts",
-          "note": null
-        },
-        "product": {
-          "value": "(response voicing): the response is VOICED by the same 2 hosts through the same player — playing the reply shows a dual-host waveform (green+blue) with playhead; the Q1 response voicing ran ~7-8 min (00:15:23Z play -> ~00:23Z) before the episode transition. The response is a conversational mini-segment, not a single TTS utterance.",
-          "source": "docs/experiments/records/LAB-13.yaml (the dual-host waveform + 2-host register of the voiced response)",
-          "note": null
-        },
-        "delta": "rule cited-qualitative-alignment (statements recorded; judgment cited to both-side observations)",
-        "verdict": "VERIFIED",
-        "pending_reason": null,
-        "confidence": "high",
-        "note": "the product’s response is voiced by the SAME 2 hosts through the same player (dual-host waveform observed; the base episode’s 19:43/Deep Dive/2-host row unchanged by the session) — the 2-host dialogic register is preserved across the intervention boundary on both sides."
-      }
-    ]
+    "lab_artifact_id": null,
+    "lab_pipeline": null,
+    "metrics": []
   },
   "confidence": "high",
   "unresolved_behavior": [
-    "listener VOICE capture (speech-to-intent + barge-in + mid-turn interruption) remains UNRESOLVED on both sides — the product capture used TYPED listener input (the documented stand-in class); no microphone/ASR parity is claimed anywhere",
-    "the product’s response is a multi-minute 2-host conversational rendering while the lab’s response is a compiled response-plan segment through the same W1+W2 machinery — a duration/register distinction recorded, not normalized",
-    "the product offers web-research escalation + suggested follow-up chips inside the session; the lab grounds offline to the committed graph only — a capability-surface distinction recorded (not a parity claim)",
-    "the product’s turn-level byte identity is unobservable (no session file materializes; MSE-class playback) — the lab’s byte-identity law has no product-side analog (measurement-class note on the resume metric)"
+    "vs the lab prototype (EV-018): the lab reuses the ORIGINAL turn WAVs byte-identically and shifts startMs by exactly the inserted duration (C-5 locality, asserted); the product's resume is observed behaviorally only — its turn-level byte identity is unobservable (measurement-class distinction recorded, not normalized).",
+    "vs the lab prototype: the product's response is a multi-minute 2-host conversational rendering; the lab's response is a compiled single-turn-class response plan through the same W1+W2 machinery (duration/register distinction recorded).",
+    "vs the lab prototype: the product offers web-research escalation + suggested follow-up chips in the session; the lab grounds offline to the committed graph and offers no research escalation (capability-surface distinction recorded)."
   ],
   "tl_hooks": [],
   "evidence_paths": [
-    "docs/experiments/records/LAB-13.yaml",
-    "docs/experiments/records/LAB-13-transcript.txt",
     "artifacts/reference/lab-13/artifact.json",
-    "artifacts/reference/lab-13/screenshots/",
-    "docs/experiments/comparisons/estate/ESTATE-LAB-13.yaml",
+    "artifacts/reference/lab-13/screenshots/01-player-standard.jpg",
+    "artifacts/reference/lab-13/screenshots/02-interactive-join.jpg",
+    "artifacts/reference/lab-13/screenshots/03-reply-ready.jpg",
+    "artifacts/reference/lab-13/screenshots/04-response-playing.jpg",
+    "artifacts/reference/lab-13/screenshots/05-episode-resumed.jpg",
+    "docs/experiments/records/LAB-13-transcript.txt",
+    "docs/experiments/records/LAB-01.yaml (the chip + player UI precedent)",
     "docs/experiments/records/EXP-L-03.yaml (the lab prototype this capture compares against)"
   ],
-  "status": "compared"
+  "status": "ingested"
 }

@@ -233,57 +233,6 @@ function buildDimensionRecord(estate: Estate, input: DimensionInput): Comparison
   return record;
 }
 
-function pendingRecord(
-  id: string,
-  dimension: string,
-  metrics: readonly ComparisonMetric[],
-  observations: readonly Observation[],
-  tlHooks: readonly string[],
-  evidencePaths: readonly string[],
-  notes: readonly string[],
-): ComparisonRecord {
-  const record: ComparisonRecord = {
-    recordType: COMPARISON_RECORD_TYPE,
-    schemaVersion: COMPARISON_SCHEMA_VERSION,
-    id,
-    kind: 'pending-slot',
-    timestamp_utc: RECORD_STAMP,
-    operator: OPERATOR,
-    surface: 'audio',
-    dimension,
-    reference_config: {
-      notebook: null,
-      format: 'Deep Dive + custom steering prompt (product-side capture scheduled — LAB-10)',
-      language: null,
-      length: null,
-      visual_style: null,
-      custom_prompt: null,
-      other_config: null,
-    },
-    source_fingerprint: null,
-    artifact_fingerprint: {
-      sha256: null,
-      path: null,
-      media_present: false,
-      additional: [],
-      note: 'product-side capture does not exist yet (LAB-10 scheduled; Interactive Audio operator-gated)',
-    },
-    captured_utc: null,
-    duration_seconds: null,
-    custom_prompt: null,
-    observations: [...observations],
-    annotations: { transcript_path: null, scene_annotation_path: null, notes: null },
-    comparison: { lab_artifact_id: null, lab_pipeline: LAB_PIPELINE_NOTE, metrics: [...metrics] },
-    confidence: 'low',
-    unresolved_behavior: [...notes],
-    tl_hooks: [...tlHooks],
-    evidence_paths: [...evidencePaths],
-    status: 'pending-capture',
-  };
-  assertRecordValid(record);
-  return record;
-}
-
 const labObservation = (text: string, source: string): Observation => ({
   label: 'REPRODUCED',
   text,
@@ -1077,87 +1026,96 @@ export async function runAudioComparisonSuite(): Promise<AudioSuiteResult> {
     }),
   );
 
-  // ---- AUDIO-PARITY-08: Interactive Audio — PENDING ------------------------
+  // ---- AUDIO-PARITY-08: Interactive Audio (LAB-13) ------------------------
+  // FILLED 2026-10-04: the operator-gated product capture LANDED (LAB-13,
+  // WFLX-LAB-13 notebook): join -> typed question -> source-grounded response
+  // (inline citations) voiced by the same 2 hosts -> original episode resumed.
+  // The pending slot's TL hook executed: ingest.ts LAB_IDS + LAB-13 capture
+  // record landed; this record now carries the comparison.
+  const estateLab13 = estateById(estate, 'ESTATE-LAB-13');
   records.push(
-    pendingRecord(
-      'AUDIO-PARITY-08',
-      'audio.interactive',
-      [
-        {
+    buildDimensionRecord(estate, {
+      id: 'AUDIO-PARITY-08',
+      surface: 'audio',
+      dimension: 'audio.interactive',
+      estateRecordId: 'ESTATE-LAB-13',
+      labArtifactId: baseline.artifactId,
+      confidence: 'high',
+      metrics: [
+        qualitativeMetric({
           metric: 'interactive.interventionSourceGrounding',
-          unit: null,
-          measurement_class: 'qualitative',
           lab: {
-            value: 'REPRODUCED (EV-018): listener intervention at a turn boundary -> deterministic claim retrieval over the same semantic graph -> source-grounded response (W1 deep validation + W2 dialogue-graph grounding, zero issues; claims resolve; anchors voiced)',
+            text: 'REPRODUCED (EV-018): listener intervention at a turn boundary -> deterministic claim retrieval over the same semantic graph -> source-grounded response (W1 deep validation + W2 dialogue-graph grounding, zero issues; claims resolve; anchors voiced)',
             source: 'docs/experiments/records/EXP-L-03.yaml + artifacts/audio/interactive-01/',
-            note: null,
           },
-          product: { value: null, source: null, note: null },
-          delta: null,
-          verdict: 'PENDING',
-          pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-          confidence: 'low',
-          note: 'Interactive Audio product capture is operator-gated (the listener verbally joins the hosts); no product-side capture exists yet.',
-        },
-        {
+          product: {
+            text: observationOf(estateLab13, 'source grounding').text,
+            source: 'docs/experiments/records/LAB-13.yaml (the response text with inline [1]/[2] citations rendered in the chat surface — committed transcript)',
+          },
+          verdict: 'VERIFIED',
+          confidence: 'high',
+          note: 'both sides ground the intervention response to the SAME committed source content: the product renders inline citation chips ([1]/[2] -> the notebook source) and states the fixture’s content limits honestly; the lab resolves claims over the same graph through the frozen machinery. The product’s grounding is OBSERVED in the session; the lab’s is REPRODUCED with asserted claim resolution.',
+        }),
+        qualitativeMetric({
           metric: 'interactive.resumeOriginalOverview',
-          unit: null,
-          measurement_class: 'qualitative',
           lab: {
-            value: 'REPRODUCED (EV-018): the ORIGINAL overview resumes with its original turns intact — every original turn WAV byte-identical across the boundary; startMs shifts by exactly the inserted response total (21171 ms session-01 / 12314 ms session-02), 0 pre-boundary',
+            text: 'REPRODUCED (EV-018): the ORIGINAL overview resumes with its original turns intact — every original turn WAV byte-identical across the boundary; startMs shifts by exactly the inserted response total (21171 ms session-01 / 12314 ms session-02), 0 pre-boundary',
             source: 'docs/experiments/records/EXP-L-03.yaml + artifacts/audio/interactive-01/',
-            note: null,
           },
-          product: { value: null, source: null, note: null },
-          delta: null,
-          verdict: 'PENDING',
-          pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-          confidence: 'low',
-          note: null,
-        },
-        {
+          product: {
+            text: observationOf(estateLab13, 'resume').text,
+            source: 'docs/experiments/records/LAB-13.yaml (the ~00:25Z observation: original episode waveform + continued playback after the response completed)',
+          },
+          verdict: 'VERIFIED',
+          confidence: 'high',
+          note: 'measurement-class note (binding): the product’s resume is observed BEHAVIORALLY (player states + waveform + continued playback — the join -> ask -> respond -> resume journey completed end-to-end); the product’s turn-level bytes are not exposed for hashing, so the lab’s byte-identity locality proof has NO like-for-like product analog — a measurement-class distinction recorded, never normalized into a parity-defect claim.',
+        }),
+        qualitativeMetric({
           metric: 'interactive.formatInvariants',
-          unit: null,
-          measurement_class: 'qualitative',
           lab: {
-            value: 'REPRODUCED (EV-018): "Interactive mode" chip OBSERVED in the product player UI (LAB-01 other_config); lab prototype keeps codec/geometry invariants across the session boundary',
-            source: 'docs/experiments/records/EXP-L-03.yaml + docs/experiments/records/LAB-01.yaml (player_ui)',
-            note: null,
+            text: 'REPRODUCED (EV-018): the session layer is additive over the SAME compile artifacts — codec/geometry invariants hold across the boundary by construction (the session master reuses the baseline turn WAVs; only the inserted response and the post-boundary shift are new)',
+            source: 'docs/experiments/records/EXP-L-03.yaml + src/audio/interactive/session.ts',
           },
-          product: { value: null, source: null, note: null },
-          delta: null,
-          verdict: 'PENDING',
-          pending_reason: 'COMPARISON PENDING REFERENCE CAPTURE',
-          confidence: 'low',
-          note: 'product-side: the Interactive mode chip is OBSERVED in the player UI; the full intervention->response->resume journey has no committed product capture.',
-        },
+          product: {
+            text: observationOf(estateLab13, 'response voicing').text,
+            source: 'docs/experiments/records/LAB-13.yaml (the dual-host waveform + 2-host register of the voiced response)',
+          },
+          verdict: 'VERIFIED',
+          confidence: 'high',
+          note: 'the product’s response is voiced by the SAME 2 hosts through the same player (dual-host waveform observed; the base episode’s 19:43/Deep Dive/2-host row unchanged by the session) — the 2-host dialogic register is preserved across the intervention boundary on both sides.',
+        }),
       ],
-      [
-        {
-          label: 'OBSERVED',
-          text: 'the product player UI exposes an "Interactive mode" chip (recorded in the LAB-01 capture other_config)',
-          source: 'docs/experiments/records/LAB-01.yaml',
-        },
-        {
-          label: 'REPRODUCED',
-          text: 'the lab Interactive Audio prototype (P1 Deliverable C / EV-018) reconstructs the observable behavior as an additive session layer with per-turn C-5 locality — lab reproduction only, NOT product parity evidence',
-          source: 'docs/experiments/records/EXP-L-03.yaml',
-        },
+      productObservations: [
+        productObservation(observationOf(estateLab13, 'surface')),
+        productObservation(observationOf(estateLab13, 'join')),
+        productObservation(observationOf(estateLab13, 'source grounding')),
+        productObservation(observationOf(estateLab13, 'response voicing')),
+        productObservation(observationOf(estateLab13, 'resume')),
+        productObservation(observationOf(estateLab13, 'multi-turn')),
+        productObservation(observationOf(estateLab13, 'web-research offer')),
       ],
-      [
-        'TL: Interactive Audio real-product capture (listener verbally joins the hosts, receives a source-grounded response, original overview resumes) is operator-gated through the replay browser — land it per the LAB-series pattern, then re-run exp:cmpaudio to fill this record',
+      labObservations: [
+        labObservation(
+          'lab side: the InteractiveAudioSession prototype (EV-018) reconstructs the observable journey as an additive session layer with per-turn C-5 locality — original turn WAVs byte-identical, startMs shifts by exactly the inserted total; listener voice input stays UNRESOLVED (text-scripted stand-ins)',
+          'docs/experiments/records/EXP-L-03.yaml',
+        ),
       ],
-      [
-        'docs/experiments/records/EXP-L-03.yaml',
-        'artifacts/audio/interactive-01/',
-        'docs/audio/interactive-audio-architecture.md',
-        'docs/experiments/records/LAB-01.yaml',
+      unresolvedBehavior: [
+        'listener VOICE capture (speech-to-intent + barge-in + mid-turn interruption) remains UNRESOLVED on both sides — the product capture used TYPED listener input (the documented stand-in class); no microphone/ASR parity is claimed anywhere',
+        'the product’s response is a multi-minute 2-host conversational rendering while the lab’s response is a compiled response-plan segment through the same W1+W2 machinery — a duration/register distinction recorded, not normalized',
+        'the product offers web-research escalation + suggested follow-up chips inside the session; the lab grounds offline to the committed graph only — a capability-surface distinction recorded (not a parity claim)',
+        'the product’s turn-level byte identity is unobservable (no session file materializes; MSE-class playback) — the lab’s byte-identity law has no product-side analog (measurement-class note on the resume metric)',
       ],
-      [
-        'Interactive Audio product capture: none exists (operator-gated); the product player chip is the only product-side observable so far',
-        'listener voice capture UNRESOLVED (EXP-L-03 uses text-scripted stand-ins; no speech-to-intent claimed)',
+      tlHooks: [],
+      evidencePaths: [
+        'docs/experiments/records/LAB-13.yaml',
+        'docs/experiments/records/LAB-13-transcript.txt',
+        'artifacts/reference/lab-13/artifact.json',
+        'artifacts/reference/lab-13/screenshots/',
+        'docs/experiments/comparisons/estate/ESTATE-LAB-13.yaml',
+        'docs/experiments/records/EXP-L-03.yaml (the lab prototype this capture compares against)',
       ],
-    ),
+    }),
   );
 
   return { records, arms, determinism, mutationLocality };
