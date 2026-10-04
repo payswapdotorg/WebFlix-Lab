@@ -37,6 +37,20 @@ import type {
 } from '../api/types';
 
 // ---------------------------------------------------------------------------
+// Gateway routing (TL environment patch, 2026-10-04): the operator console
+// exposes ONE external port; the preview gateway routes to the studio's
+// fixed port 4313 ONLY when the request carries the XTransformPort query.
+// Every fetch/audio URL therefore appends it (harmless on direct localhost
+// access — the server ignores unknown query parameters).
+// ---------------------------------------------------------------------------
+
+const GATEWAY_PORT_QUERY = 'XTransformPort=4313';
+
+function withGatewayQuery(url: string): string {
+  return url + (url.includes('?') ? '&' : '?') + GATEWAY_PORT_QUERY;
+}
+
+// ---------------------------------------------------------------------------
 // Typed DOM façade (local, minimal, exact)
 // ---------------------------------------------------------------------------
 
@@ -136,7 +150,7 @@ class StudioHttpError extends Error {
 }
 
 async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, init);
+  const response = await fetch(withGatewayQuery(url), init);
   const body: unknown = await response.json().catch(() => null);
   if (!response.ok) {
     const message =
@@ -538,7 +552,7 @@ async function compileOverview(): Promise<void> {
 function renderOverview(overview: OverviewResponse): void {
   setPhase('ready');
 
-  audio.src = overview.audioUrl;
+  audio.src = withGatewayQuery(overview.audioUrl);
   audio.load();
   show(playerError, false);
   setText(playerError, '');

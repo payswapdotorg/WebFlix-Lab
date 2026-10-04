@@ -20,7 +20,10 @@ describe('static client surface', () => {
       expect(html).toContain('Operator Studio');
       expect(html).toContain('WebFlix-Lab research implementation');
       expect(html).toContain('UNRESOLVED'); // honest microphone boundary in the footer
-      expect(html).toContain('<script type="module" src="/app.js">');
+      // Gateway routing (TL patch 2026-10-04): subresource references carry the
+      // XTransformPort query so the console gateway routes them to :4313.
+      expect(html).toContain('<script type="module" src="app.js?XTransformPort=4313">');
+      expect(html).toContain('href="styles.css?XTransformPort=4313"');
     } finally {
       await studio.stop();
     }
