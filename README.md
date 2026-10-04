@@ -69,7 +69,10 @@ The core abstraction is an Overview Compiler, not a monolithic prompt.
 ## Operator Studio (apps/studio)
 
 Compile an Audio Overview through the real pipeline and play it in the
-browser (REPRODUCED-class lab evidence; offline deterministic provider):
+browser (REPRODUCED-class lab evidence; offline deterministic provider), then
+join an Interactive Audio session over it — typed listener questions at turn
+boundaries, source-grounded responses spliced in, locality + grounding proofs
+on screen (fork semantics, honestly labeled):
 
 ```bash
 bun run studio    # serves http://localhost:4313 (fixed port)
