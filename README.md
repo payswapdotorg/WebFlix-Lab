@@ -68,17 +68,20 @@ The core abstraction is an Overview Compiler, not a monolithic prompt.
 
 ## Operator Studio (apps/studio)
 
-Compile an Audio Overview through the real pipeline and play it in the
-browser (REPRODUCED-class lab evidence; offline deterministic provider), then
-join an Interactive Audio session over it — typed listener questions at turn
-boundaries, source-grounded responses spliced in, locality + grounding proofs
-on screen (fork semantics, honestly labeled):
+The browser surface over the frozen pipeline — WFLX-UI1 (shell: real-pipeline
+compile, player, transcript, provenance) and WFLX-UI2 (Interactive Audio:
+join a session, ask typed listener questions at turn boundaries, hear the
+source-grounded responses spliced in, read the locality + grounding proofs
+on screen — fork semantics, honestly labeled) are both merged; the studio
+stage is complete. Everything it produces is REPRODUCED-class lab evidence
+(offline deterministic provider; not the Gemini Notebook product):
 
 ```bash
 bun run studio    # serves http://localhost:4313 (fixed port)
 ```
 
-See apps/studio/README.md for the surface, port law, and honest boundaries.
+See apps/studio/README.md for the operator journey, the surface, the port
+law + operator-console gateway note, and the honest boundaries.
 
 ## Team
 
