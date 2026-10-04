@@ -605,6 +605,8 @@ playButton.addEventListener('click', () => {
 audio.addEventListener('play', () => {
   setText(playIcon, '❚❚');
   playButton.setAttribute('aria-label', 'Pause overview');
+  // A successful play clears any earlier playback error (stale-error nit).
+  show(playerError, false);
 });
 
 audio.addEventListener('pause', () => {
