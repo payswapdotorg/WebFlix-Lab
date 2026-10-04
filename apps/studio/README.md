@@ -84,8 +84,9 @@ re-verified at the WFLX-UI3 station review):
    **Compile Overview**. The real chain runs per request: source adapter →
    understanding → Director → plan → `compileAudioOverview` (no pre-baked
    plan JSON, no fixture shortcut). Loading state while it runs; typed
-   errors on failure. Verified: Deep-Dive 300 s → 20 turns, 307.59 s
-   actual.
+   errors on failure. Verified: Deep-Dive 300 s → 24 turns, 307.6 s
+   actual (WFLX-UI3 station re-verification on the current main; the
+   roadmap station records carry the same journey).
 3. **Player + transcript + provenance** — the master WAV streams through
    the player (play/pause, seek, progress bar); the transcript timeline
    highlights the current turn from the timing manifest (click a turn to
