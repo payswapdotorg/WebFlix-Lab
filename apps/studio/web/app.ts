@@ -745,6 +745,12 @@ function renderProvenance(overview: OverviewResponse): void {
   setText(provenanceList, '');
   kvRow(provenanceList, 'Artifact id', overview.artifactId, { mono: true, title: overview.artifactId });
   kvRow(provenanceList, 'Evidence class', overview.evidenceClass, { dim: true });
+  // WFLX-UI3 audit fill: the GeneratedArtifact sourceIds convention (lineage).
+  kvRow(provenanceList, 'Source ids', artifact.sourceIds.join(', '), {
+    mono: true,
+    dim: true,
+    title: artifact.sourceIds.join(', '),
+  });
   kvRow(provenanceList, 'Media sha256', shortHash(artifact.media.sha256), {
     mono: true,
     title: artifact.media.sha256,
@@ -1390,6 +1396,28 @@ function renderProvenanceIx(record: SessionInterveneResponse): void {
     mono: true,
     title: provenance.sessionMasterSha256,
   });
+  // WFLX-UI3 audit fill (provenance completeness): the fields the machinery
+  // already computes — response speech provider (handoff §4: provider is
+  // never hidden), session lineage sourceIds, and the response segment QA
+  // summary carried on the session artifact sidecar.
+  kvRow(ixProvenanceKv, 'Response speech provider', record.response.provider, { dim: true });
+  kvRow(ixProvenanceKv, 'Source ids', provenance.sourceIds.join(', '), {
+    mono: true,
+    dim: true,
+    title: provenance.sourceIds.join(', '),
+  });
+  kvRow(
+    ixProvenanceKv,
+    'Response QA',
+    `${provenance.responseQa.status}${provenance.responseQa.issueCount > 0 ? ` · ${provenance.responseQa.issueCount} issue(s)` : ''}`,
+    { dim: true },
+  );
+  kvRow(
+    ixProvenanceKv,
+    'Reproducible',
+    provenance.reproducible ? 'yes (byte-identical re-fork)' : 'no',
+    { dim: true },
+  );
   kvRow(ixProvenanceKv, 'Same machinery', provenance.sameMachineryNote, { dim: true });
 }
 

@@ -349,6 +349,25 @@ export interface SessionInterveneResponse {
     readonly sessionArtifactId: string;
     readonly sessionMasterSha256: string;
     readonly sameMachineryNote: string;
+    /**
+     * WFLX-UI3 audit fill (provenance completeness): the session lineage's
+     * source artifact ids (GeneratedArtifact.sourceIds convention — the
+     * session artifact carries the baseline's sourceIds).
+     */
+    readonly sourceIds: readonly string[];
+    /**
+     * WFLX-UI3 audit fill: the response segment's QA summary as carried on
+     * the session artifact sidecar (status + issue count; honest reporting).
+     */
+    readonly responseQa: {
+      readonly status: string;
+      readonly issueCount: number;
+    };
+    /**
+     * WFLX-UI3 audit fill: the session artifact's generator reproducible
+     * flag (byte-identical re-fork at fixed seed/now/intervention).
+     */
+    readonly reproducible: boolean;
   };
 }
 
