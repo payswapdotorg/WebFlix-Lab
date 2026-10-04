@@ -196,6 +196,23 @@ product format exists). The honest divergence ledger (§3) and the
 promotion posture (§4) are untouched. The studio's honest boundaries are
 labeled on the surface itself and documented in apps/studio/README.md.
 
-- [ ] TL #2 — pending station review of the wflx-ui3 branch (gates +
-      credential sweep + frozen-tree diff + doc read-through + the browser
-      journey re-verification) before merge.
+- [x] TL #2 — SIGNED OFF 2026-10-04 (station review complete before merge,
+      merge 4b96675): gates re-run at the reviewed HEAD — typecheck 0
+      errors, lint clean, chunked battery 502/502 exact (164 + 159 + 117 +
+      34 + 28); credential sweep over the full 787-line diff + all commit
+      messages: 0 hits; frozen-tree diff: only the 9 allowed paths
+      (src/**, artifacts/**, experiments/**, tests/** outside
+      apps/studio/test/** untouched); doc read-through done; agent-browser
+      journey re-verified on the reviewed branch: compile Deep-Dive 300s
+      → 24 turns / 307.6 s, provenance panel carries the G1 Source-ids
+      fill, Join → boundary 4 → typed ask → 24/24 original-turn
+      byte-identity, pre-boundary +0 ms, post-boundary uniformly
+      +21,157 ms (question-dependent; the W2 station question shifted
+      +21,173 ms — the invariant is the uniform shift, both satisfy it),
+      F1 grounding PASSED (2 claims by content match), all five audit
+      fills rendering (G1–G5), session master 328.7 s, zero console
+      errors. TL ruling on the flagged W1-era note: the live compile is
+      24 turns (byte-deterministic); the earlier "20-turn" station note
+      stands as a historical record (append-only discipline — not
+      retroactively edited); the living documents
+      (apps/studio/README.md) carry the live 24-turn number.

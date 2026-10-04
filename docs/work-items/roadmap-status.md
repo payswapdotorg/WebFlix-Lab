@@ -955,3 +955,52 @@ transition); credential sweep over the wave diff = 0 hits.
   307.59 baseline + 21.17 inserted (exact).
 - Studio wave ledger: W1 merged, W2 merged; WFLX-UI3 (station integration +
   journey documentation + parity-close amendment) dispatches next.
+
+## 2026-10-04 07:3x UTC — STUDIO STAGE: WFLX-UI3 MERGED (TL #2 station review) — THE STUDIO STAGE IS COMPLETE
+
+- **WFLX-UI3 delivered + merged** (branch
+  `work/wflx-ui3-station-integration`, 8 commits, +539/−82, merge
+  4b96675; work order recorded verbatim as
+  `docs/work-items/37-WFLX-UI3-STATION-INTEGRATION.md` + the worker's
+  audit record appended to it): the repository is now fully
+  self-describing for a cold clone — apps/studio/README.md full form
+  (what the studio is, how to run it, the operator journey, honest
+  boundaries, the gateway note), the root-README studio section refresh,
+  the AGENTS.md read-list line (the studio enters the repo canon), and
+  the parity-close-decision §6 studio-stage amendment — **TL-signed
+  post-review** (checkbox closed with the full station record).
+- **Provenance-completeness audit** (Deliverable C): 39 audited cells
+  (13 convention fields × 3 surfaces against the GeneratedArtifact /
+  artifact.json conventions) — **27 PASS / 5 GAP → FIXED / 7 N/A**. All
+  five gaps were machinery-computed-but-undisplayed fields, fixed in the
+  DISPLAY LAYER ONLY (DTO + serialization + render; zero machinery
+  changes, zero frozen-tree edits, zero new routes): G1 overview
+  Source-ids row, G2 response speech provider, G3 session lineage
+  sourceIds, G4 response QA summary, G5 reproducible flag. Pinned by one
+  regression test — battery 501 → **502** (the work order's 501+N rule,
+  N=1, reason recorded).
+- Station review (TL #2, trust nothing): typecheck 0 errors; lint clean;
+  chunked battery **502/502 EXACT** (164 + 159 + 117 + 34 + 28);
+  credential sweep over the full 787-line diff + all 8 commit messages:
+  0 hits; frozen-tree diff: only the 9 allowed paths. agent-browser
+  journey re-verified on the reviewed branch (the §6 sign-off record):
+  compile 24 turns / 307.6 s → G1 fill rendering → Join → boundary 4 →
+  typed ask → **24/24 byte-identity, pre-boundary +0 ms, post-boundary
+  uniformly +21,157 ms** (question-dependent shift; the invariant is the
+  uniform post-boundary shift) → **F1 grounding PASSED** (claim-b34 +
+  claim-b36 by content match) → all five fills rendering → session
+  master 328.7 s → zero console errors.
+- **TL ruling (the flagged W1-era note)**: the live Deep-Dive compile is
+  **24 turns / 307.6 s, byte-deterministic** — re-observed by both the
+  worker's agent-browser re-verification and the TL's station journey.
+  The earlier "20-turn" station note stands as a historical record
+  (append-only discipline — not retroactively edited); the living
+  documents (apps/studio/README.md) carry the live 24-turn number.
+- Worker's honest UNRESOLVED ledger stands: voice capture UNRESOLVED
+  (typed stand-in, labeled on the surface — by design, not a defect);
+  nothing else in scope.
+- **Studio wave ledger CLOSED: W1 + W2 + W3 all merged. The Operator
+  Studio is complete: source → compile → listen → join → ask → locality/
+  grounding proofs → provenance-complete, all browser-testable through
+  the operator console (Operator Studio tab, XTransformPort=4313) or
+  directly at :4313. The station battery is 502/502.**
