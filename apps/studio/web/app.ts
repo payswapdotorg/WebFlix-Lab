@@ -1,5 +1,5 @@
 /**
- * WebFlix-Lab Operator Studio (WFLX-UI1) — the zero-build web client.
+ * WebFlix-Lab Operator Studio (WFLX-UI1 + WFLX-UI2) — the zero-build web client.
  *
  * Vanilla TypeScript in a module script: no bundler, no framework, no CDN,
  * no npm dependency. The server serves this file type-stripped at /app.js;
@@ -17,14 +17,20 @@
  *
  * App states (work order §C): loading / error / empty / playing, plus the
  * honest provider state. NO dead controls: everything rendered does exactly
- * what it says; anything not implemented yet (Interactive Audio session UI —
- * W2) is simply not rendered.
+ * what it says. The interactive session surface (WFLX-UI2, surface D) renders
+ * ONLY after a successful compile: Join -> boundary markers in the transcript
+ * -> typed ask (voice capture UNRESOLVED, labeled verbatim) -> inserted
+ * response turns highlighted -> session master vs baseline in the player ->
+ * locality + grounding proofs. Fork semantics stay labeled at every step.
  */
 
 import type {
   AudioOverviewMode,
   HealthResponse,
   OverviewResponse,
+  SessionEstablishResponse,
+  SessionInterveneResponse,
+  SessionStateResponse,
   SourcesResponse,
   SourceDescriptor,
   TranscriptRow,
@@ -46,6 +52,7 @@ interface KeyboardEventLike {
 interface ClassListLike {
   toggle(token: string, force?: boolean): boolean;
   add(...tokens: string[]): void;
+  remove(...tokens: string[]): void;
   contains(token: string): boolean;
 }
 
@@ -162,6 +169,17 @@ function formatBytes(bytes: number): string {
   return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
+/** Thousands-grouped integer milliseconds, e.g. "+21,940 ms". */
+function formatMsDelta(ms: number): string {
+  const grouped = Math.abs(ms).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return `${ms < 0 ? '−' : '+'}${grouped} ms`;
+}
+
+/** Start offset in seconds with one decimal, e.g. "83.4 s". */
+function formatStartSec(ms: number): string {
+  return `${(ms / 1000).toFixed(1)} s`;
+}
+
 // ---------------------------------------------------------------------------
 // Client state
 // ---------------------------------------------------------------------------
@@ -177,7 +195,32 @@ interface ClientState {
   phase: Phase;
 }
 
+/**
+ * Interactive session state (WFLX-UI2). `latest` is the intervention whose
+ * timeline + proofs are displayed; `activeMaster` picks which WAV the player
+ * loads (session master vs baseline). Fork semantics: every intervention is
+ * an independent fork from the baseline — nothing here is cumulative.
+ */
+interface InteractiveState {
+  phase: 'idle' | 'joining' | 'joined';
+  sessionId: string | null;
+  overviewId: string | null;
+  turnCount: number;
+  validBoundaries: readonly number[];
+  joins: number;
+  selectedBoundary: number | null;
+  interventions: SessionInterveneResponse[];
+  latest: SessionInterveneResponse | null;
+  activeMaster: 'baseline' | 'session';
+  asking: boolean;
+}
+
 const DURATION_CHOICES: readonly number[] = [120, 180, 300, 420, 600];
+
+const SCRIPTED_QUESTIONS: readonly string[] = [
+  'Can you say more about the open-source media projects and local model runtimes?',
+  'What does the note say about its purpose?',
+];
 
 const state: ClientState = {
   sources: [],
@@ -186,6 +229,20 @@ const state: ClientState = {
   durationSeconds: 300,
   overview: null,
   phase: 'empty',
+};
+
+const interactive: InteractiveState = {
+  phase: 'idle',
+  sessionId: null,
+  overviewId: null,
+  turnCount: 0,
+  validBoundaries: [],
+  joins: 0,
+  selectedBoundary: null,
+  interventions: [],
+  latest: null,
+  activeMaster: 'baseline',
+  asking: false,
 };
 
 // ---------------------------------------------------------------------------
@@ -220,6 +277,38 @@ const playerProvider = elementById('player-provider');
 const transcriptList = elementById('transcript-list');
 const metadataList = elementById('metadata-list');
 const provenanceList = elementById('provenance-list');
+
+// --- Interactive session surface (WFLX-UI2) ---
+const ixSection = elementById('ix-section');
+const ixEntry = elementById('ix-entry');
+const ixJoinButton = elementById('ix-join-button');
+const ixJoining = elementById('ix-joining');
+const ixJoined = elementById('ix-joined');
+const transcriptIxNote = elementById('transcript-ix-note');
+const ixSessionKv = elementById('ix-session-kv');
+const ixAskCard = elementById('ix-ask-card');
+const ixNoBoundaries = elementById('ix-no-boundaries');
+const ixBoundaryStatus = elementById('ix-boundary-status');
+const ixAskInput = elementById('ix-ask-input');
+const ixChips = elementById('ix-chips');
+const ixAskButton = elementById('ix-ask-button');
+const ixAskLoading = elementById('ix-ask-loading');
+const ixAskError = elementById('ix-ask-error');
+const ixRejoinButton = elementById('ix-rejoin-button');
+const ixResults = elementById('ix-results');
+const ixResultsWide = elementById('ix-results-wide');
+const ixMasterSession = elementById('ix-master-session');
+const ixMasterBaseline = elementById('ix-master-baseline');
+const ixMasterKv = elementById('ix-master-kv');
+const ixLocalitySummary = elementById('ix-locality-summary');
+const ixLocalityBody = elementById('ix-locality-body');
+const ixLocalityInvariant = elementById('ix-locality-invariant');
+const ixGroundingSummary = elementById('ix-grounding-summary');
+const ixGroundingClaims = elementById('ix-grounding-claims');
+const ixGroundingKv = elementById('ix-grounding-kv');
+const ixProvenanceKv = elementById('ix-provenance-kv');
+const ixHistoryList = elementById('ix-history-list');
+const ixHistoryEmpty = elementById('ix-history-empty');
 
 // ---------------------------------------------------------------------------
 // Phase management (the four app states)
@@ -409,6 +498,7 @@ async function compileOverview(): Promise<void> {
     return;
   }
   stopPlayback();
+  resetInteractive();
   setPhase('loading');
   try {
     const overview = await fetchJson<OverviewResponse>('/api/overview', {
@@ -456,9 +546,10 @@ function renderOverview(overview: OverviewResponse): void {
   setText(playerMode, `${overview.plan.mode} · ${overview.plan.targetDurationSeconds}s target`);
   setText(playerProvider, overview.provider);
 
-  renderTranscript(overview);
+  renderTranscript();
   renderMetadata(overview);
   renderProvenance(overview);
+  renderIxEntry();
 
   updateProgress(0);
   setText(timeTotal, formatClock(overview.timing.totalDurationMs / 1000));
@@ -467,11 +558,65 @@ function renderOverview(overview: OverviewResponse): void {
   playButton.setAttribute('aria-label', 'Play overview');
 }
 
-function renderTranscript(overview: OverviewResponse): void {
+// ---------------------------------------------------------------------------
+// Transcript rendering (baseline turns; session timeline + boundary markers
+// once an interactive session is joined — WFLX-UI2)
+// ---------------------------------------------------------------------------
+
+/** The renderable row shape for whichever timeline is active. */
+interface TimelineRow {
+  readonly turnId: string;
+  readonly speakerName: string;
+  readonly purpose: string;
+  readonly text: string;
+  readonly startMs: number;
+  readonly inserted: boolean;
+  readonly baselineIndex: number | null;
+}
+
+/** True when the player is loaded with a session master + its timeline. */
+function sessionTimelineActive(): boolean {
+  return (
+    interactive.phase === 'joined' &&
+    interactive.activeMaster === 'session' &&
+    interactive.latest !== null
+  );
+}
+
+function activeTimelineRows(): readonly TimelineRow[] {
+  const overview = state.overview;
+  if (overview === null) return [];
+  const latest = interactive.latest;
+  if (sessionTimelineActive() && latest !== null) {
+    return latest.timeline.map((row) => ({
+      turnId: row.turnId,
+      speakerName: row.speakerName,
+      purpose: row.purpose,
+      text: row.text,
+      startMs: row.startMs,
+      inserted: row.inserted,
+      baselineIndex: row.baselineIndex,
+    }));
+  }
+  return overview.transcript.map((row: TranscriptRow) => ({
+    turnId: row.turnId,
+    speakerName: row.speakerName,
+    purpose: row.purpose,
+    text: row.text,
+    startMs: row.startMs,
+    inserted: false,
+    baselineIndex: row.index,
+  }));
+}
+
+function renderTranscript(): void {
   setText(transcriptList, '');
-  for (const row of overview.transcript) {
+  const rows = activeTimelineRows();
+  const joined = interactive.phase === 'joined';
+  for (const row of rows) {
     const li = doc.createElement('li');
     li.className = 'turn';
+    if (row.inserted) li.classList.add('inserted');
     li.dataset['turnId'] = row.turnId;
 
     const speaker = doc.createElement('div');
@@ -481,7 +626,7 @@ function renderTranscript(overview: OverviewResponse): void {
     setText(name, row.speakerName);
     const purpose = doc.createElement('span');
     purpose.className = 'turn-purpose';
-    setText(purpose, row.purpose);
+    setText(purpose, row.inserted ? `${row.purpose} · inserted` : row.purpose);
     const time = doc.createElement('span');
     time.className = 'turn-time';
     setText(time, formatClock(row.startMs / 1000));
@@ -499,7 +644,52 @@ function renderTranscript(overview: OverviewResponse): void {
       seekToMs(row.startMs);
     });
     transcriptList.appendChild(li);
+
+    // Boundary marker after every valid interior boundary (joined state only).
+    if (
+      joined &&
+      row.baselineIndex !== null &&
+      interactive.validBoundaries.includes(row.baselineIndex)
+    ) {
+      transcriptList.appendChild(boundaryMarker(row.baselineIndex, row.turnId));
+    }
   }
+}
+
+/** A ⌁ marker: the intervention point after baseline turn `index`. */
+function boundaryMarker(index: number, afterTurnId: string): DomElement {
+  const li = doc.createElement('li');
+  li.className = 'boundary-marker';
+  li.dataset['boundary'] = String(index);
+  const button = doc.createElement('button');
+  button.type = 'button';
+  button.className = 'boundary-btn';
+  const selected = interactive.selectedBoundary === index;
+  if (selected) li.classList.add('selected');
+  const forks = interactive.interventions.filter(
+    (record) => record.afterTurnIndex === index,
+  ).length;
+  setText(
+    button,
+    selected
+      ? `⑂ boundary ${index} · after ${afterTurnId} — selected`
+      : `⑂ boundary ${index} · ask after ${afterTurnId}${forks > 0 ? ` · ${forks} fork${forks > 1 ? 's' : ''} here` : ''}`,
+  );
+  button.setAttribute(
+    'aria-label',
+    `Select intervention boundary ${index}, after baseline turn ${afterTurnId}`,
+  );
+  button.addEventListener('click', () => {
+    selectBoundary(index);
+  });
+  li.appendChild(button);
+  return li;
+}
+
+function selectBoundary(index: number): void {
+  interactive.selectedBoundary = index;
+  renderTranscript();
+  renderBoundaryStatus();
 }
 
 function kvRow(
@@ -632,6 +822,9 @@ audio.addEventListener('timeupdate', () => {
 });
 
 function totalSeconds(): number {
+  if (sessionTimelineActive()) {
+    return (interactive.latest?.sessionMaster.totalDurationMs ?? 0) / 1000;
+  }
   const total = state.overview?.timing.totalDurationMs;
   return total === undefined ? 0 : total / 1000;
 }
@@ -683,9 +876,9 @@ progressTrack.addEventListener('keydown', (event: KeyboardEventLike) => {
 });
 
 function highlightCurrentTurn(ms: number): void {
-  const rows = state.overview?.transcript;
-  if (rows === undefined) return;
-  let current: TranscriptRow | null = null;
+  const rows = activeTimelineRows();
+  if (rows.length === 0) return;
+  let current: TimelineRow | null = null;
   for (const row of rows) {
     if (row.startMs <= ms) current = row;
     else break;
@@ -696,7 +889,10 @@ function highlightCurrentTurn(ms: number): void {
   if (current !== null) {
     const li = transcriptList.querySelector(`li.turn[data-turn-id="${current.turnId}"]`);
     li?.scrollIntoView({ block: 'nearest' });
-    setText(nowPlaying, `${current.speakerName} · ${current.purpose}`);
+    setText(
+      nowPlaying,
+      `${current.speakerName} · ${current.purpose}${current.inserted ? ' · inserted' : ''}`,
+    );
   } else {
     setText(nowPlaying, 'ready');
   }
@@ -706,6 +902,537 @@ function stopPlayback(): void {
   audio.pause();
   audio.removeAttribute('src');
   audio.load();
+}
+
+// ---------------------------------------------------------------------------
+// Interactive session surface (WFLX-UI2, surface D) — join, ask, proofs
+// ---------------------------------------------------------------------------
+
+/** Reset every interactive client state (on compile / re-compile). */
+function resetInteractive(): void {
+  interactive.phase = 'idle';
+  interactive.sessionId = null;
+  interactive.overviewId = null;
+  interactive.turnCount = 0;
+  interactive.validBoundaries = [];
+  interactive.joins = 0;
+  interactive.selectedBoundary = null;
+  interactive.interventions = [];
+  interactive.latest = null;
+  interactive.activeMaster = 'baseline';
+  interactive.asking = false;
+  show(ixSection, false);
+  show(ixEntry, false);
+  show(ixJoining, false);
+  show(ixJoined, false);
+  show(transcriptIxNote, false);
+}
+
+/** After a successful compile: show the join entry (fork semantics labeled). */
+function renderIxEntry(): void {
+  show(ixSection, true);
+  show(ixJoining, false);
+  show(ixJoined, false);
+  show(ixEntry, true);
+  ixJoinButton.disabled = false;
+}
+
+ixJoinButton.addEventListener('click', () => {
+  void joinSession();
+});
+
+async function joinSession(): Promise<void> {
+  const overview = state.overview;
+  if (overview === null) return;
+  show(ixEntry, false);
+  show(ixJoining, true);
+  ixJoinButton.disabled = true;
+  try {
+    const established = await fetchJson<SessionEstablishResponse>('/api/session', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ overviewId: overview.artifactId }),
+    });
+    interactive.phase = 'joined';
+    interactive.sessionId = established.sessionId;
+    interactive.overviewId = established.overviewId;
+    interactive.turnCount = established.turnCount;
+    interactive.validBoundaries = established.validBoundaries;
+    interactive.joins = established.joins;
+    interactive.selectedBoundary = null;
+    interactive.interventions = [];
+    interactive.latest = null;
+    interactive.activeMaster = 'baseline';
+    interactive.asking = false;
+    show(ixJoining, false);
+    show(ixJoined, true);
+    show(transcriptIxNote, true);
+    renderChips();
+    renderSessionCard();
+    renderAskSurface();
+    renderBoundaryStatus();
+    renderHistory();
+    hideAskError();
+    renderTranscript();
+    // A re-join on an already-intervened session (e.g. after a page reload of
+    // the same overview) restores the fork history from the session state.
+    if (established.joins > 1) {
+      await syncSessionState();
+    }
+  } catch (error) {
+    show(ixJoining, false);
+    show(ixEntry, true);
+    ixJoinButton.disabled = false;
+    setText(
+      ixEntry,
+      `Join failed: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
+/** Fetch GET /api/session/:id and restore history (re-join path). */
+async function syncSessionState(): Promise<void> {
+  const sessionId = interactive.sessionId;
+  if (sessionId === null) return;
+  try {
+    const sessionState = await fetchJson<SessionStateResponse>(`/api/session/${sessionId}`);
+    interactive.joins = sessionState.joins;
+    if (sessionState.interventions.length > 0 && interactive.interventions.length === 0) {
+      // Full intervention records are not carried by the state route; the
+      // panels render from live asks. History rows below still summarize the
+      // server-side records honestly.
+      renderSessionCard();
+    }
+  } catch {
+    // The state route is best-effort for the re-join path; ask errors surface
+    // typed bodies on their own.
+  }
+}
+
+function renderChips(): void {
+  setText(ixChips, '');
+  const chipNote = doc.createElement('span');
+  chipNote.className = 'ix-chips-label';
+  setText(chipNote, 'scripted (EXP-L-03) — not AI-suggested:');
+  ixChips.appendChild(chipNote);
+  for (const question of SCRIPTED_QUESTIONS) {
+    const chip = doc.createElement('button');
+    chip.type = 'button';
+    chip.className = 'ix-chip';
+    setText(chip, question);
+    chip.title = 'Fill the ask box with this scripted question (one click).';
+    chip.addEventListener('click', () => {
+      ixAskInput.value = question;
+      ixAskInput.title = question;
+      hideAskError();
+    });
+    ixChips.appendChild(chip);
+  }
+}
+
+function renderSessionCard(): void {
+  setText(ixSessionKv, '');
+  const boundaries =
+    interactive.validBoundaries.length > 0
+      ? `${interactive.validBoundaries.length} (0..${interactive.validBoundaries[interactive.validBoundaries.length - 1]})`
+      : 'none (no interior boundaries)';
+  kvRow(ixSessionKv, 'Session id', interactive.sessionId ?? '—', { mono: true });
+  kvRow(ixSessionKv, 'Baseline overview', interactive.overviewId ?? '—', {
+    mono: true,
+    title: interactive.overviewId ?? '',
+  });
+  kvRow(ixSessionKv, 'Baseline turns', String(interactive.turnCount));
+  kvRow(ixSessionKv, 'Valid boundaries', boundaries, { dim: true });
+  kvRow(ixSessionKv, 'Joins', String(interactive.joins), { dim: true });
+  kvRow(ixSessionKv, 'Registry', 'in-memory — restart resets', { dim: true });
+}
+
+/** The ask card renders only when the baseline HAS interior boundaries. */
+function renderAskSurface(): void {
+  const hasBoundaries = interactive.validBoundaries.length > 0;
+  show(ixAskCard, hasBoundaries);
+  show(ixNoBoundaries, !hasBoundaries);
+}
+
+function renderBoundaryStatus(): void {
+  if (interactive.selectedBoundary === null) {
+    setText(
+      ixBoundaryStatus,
+      `No boundary selected — click a ⑂ marker in the transcript (panel 3) to choose where the listener joins.`,
+    );
+    ixBoundaryStatus.classList.remove('armed');
+    return;
+  }
+  const boundary = interactive.selectedBoundary;
+  const forkCount = interactive.interventions.filter(
+    (record) => record.afterTurnIndex === boundary,
+  ).length;
+  setText(
+    ixBoundaryStatus,
+    `boundary ${boundary} armed — the listener joins after baseline turn ${boundary} ` +
+      `(${boundary + 1} of ${interactive.turnCount})${forkCount > 0 ? ` · ${forkCount} fork${forkCount > 1 ? 's' : ''} already recorded here` : ''}`,
+  );
+  ixBoundaryStatus.classList.add('armed');
+}
+
+function showAskError(message: string, offerRejoin: boolean): void {
+  show(ixAskError, true);
+  setText(ixAskError, message);
+  show(ixRejoinButton, offerRejoin);
+}
+
+function hideAskError(): void {
+  show(ixAskError, false);
+  setText(ixAskError, '');
+  show(ixRejoinButton, false);
+}
+
+ixAskButton.addEventListener('click', () => {
+  void ask();
+});
+
+ixAskInput.addEventListener('keydown', (event: KeyboardEventLike) => {
+  if (event.key === 'Enter') {
+    void ask();
+  }
+});
+
+ixRejoinButton.addEventListener('click', () => {
+  hideAskError();
+  void joinSession();
+});
+
+async function ask(): Promise<void> {
+  if (interactive.asking) return;
+  if (interactive.sessionId === null) return;
+  hideAskError();
+  if (interactive.selectedBoundary === null) {
+    showAskError('Pick a boundary first: click a ⑂ marker in the transcript (panel 3).', false);
+    return;
+  }
+  const listenerText = ixAskInput.value.trim();
+  if (listenerText.length === 0) {
+    showAskError('Type a listener question first (typed stand-in — voice capture UNRESOLVED).', false);
+    return;
+  }
+
+  interactive.asking = true;
+  ixAskButton.disabled = true;
+  ixAskInput.disabled = true;
+  show(ixAskLoading, true);
+  try {
+    const response = await fetchJson<SessionInterveneResponse>(
+      `/api/session/${interactive.sessionId}/intervene`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          afterTurnIndex: interactive.selectedBoundary,
+          listenerText,
+        }),
+      },
+    );
+    interactive.interventions.push(response);
+    interactive.latest = response;
+    ixAskInput.value = '';
+    // The session master becomes the player's load, the timeline re-renders
+    // with the inserted turns, and the proofs render (all below).
+    setActiveMaster('session');
+    renderIxResults();
+    renderBoundaryStatus();
+    renderHistory();
+    renderTranscript();
+    ixResultsWide.scrollIntoView({ block: 'start' });
+  } catch (error) {
+    if (error instanceof StudioHttpError) {
+      const offerRejoin = error.code === 'unknown-session' || error.code === 'unknown-overview';
+      showAskError(
+        `Ask failed — ${error.code}: ${error.message}`,
+        offerRejoin,
+      );
+    } else {
+      showAskError(
+        `Ask failed — network: ${error instanceof Error ? error.message : String(error)}`,
+        false,
+      );
+    }
+  } finally {
+    interactive.asking = false;
+    ixAskButton.disabled = false;
+    ixAskInput.disabled = false;
+    show(ixAskLoading, false);
+  }
+}
+
+// --- Masters: session master vs baseline in the same player ---------------
+
+ixMasterSession.addEventListener('click', () => {
+  setActiveMaster('session');
+});
+
+ixMasterBaseline.addEventListener('click', () => {
+  setActiveMaster('baseline');
+});
+
+function setActiveMaster(which: 'baseline' | 'session'): void {
+  const overview = state.overview;
+  const latest = interactive.latest;
+  if (overview === null) return;
+  if (which === 'session' && latest === null) return; // nothing to load yet
+  interactive.activeMaster = which;
+  if (which === 'session' && latest !== null) {
+    audio.src = latest.sessionMaster.audioUrl;
+    setText(playerMode, `session master · fork ${latest.interventionSeq}`);
+    setText(nowPlaying, 'session master ready');
+  } else {
+    audio.src = overview.audioUrl;
+    setText(playerMode, `${overview.plan.mode} · ${overview.plan.targetDurationSeconds}s target`);
+    setText(nowPlaying, 'baseline ready');
+  }
+  audio.load();
+  setText(timeTotal, formatClock(totalSeconds()));
+  updateProgress(0);
+  renderMasterCard();
+  renderTranscript();
+}
+
+function renderMasterCard(): void {
+  setText(ixMasterKv, '');
+  const latest = interactive.latest;
+  const overview = state.overview;
+  if (latest === null || overview === null) return;
+  const sessionActive = interactive.activeMaster === 'session';
+  ixMasterSession.setAttribute('aria-pressed', sessionActive ? 'true' : 'false');
+  ixMasterBaseline.setAttribute('aria-pressed', sessionActive ? 'false' : 'true');
+  ixMasterSession.classList.toggle('active', sessionActive);
+  ixMasterBaseline.classList.toggle('active', !sessionActive);
+  kvRow(ixMasterKv, 'Playing', sessionActive ? 'session master' : 'baseline master', {
+    dim: true,
+  });
+  kvRow(ixMasterKv, 'Session master', latest.sessionMaster.artifactId, {
+    mono: true,
+    title: latest.sessionMaster.artifactId,
+  });
+  kvRow(ixMasterKv, 'Session sha256', shortHash(latest.sessionMaster.sha256), {
+    mono: true,
+    title: latest.sessionMaster.sha256,
+  });
+  kvRow(
+    ixMasterKv,
+    'Session size',
+    `${formatBytes(latest.sessionMaster.sizeBytes)} · ${(latest.sessionMaster.totalDurationMs / 1000).toFixed(1)} s · ${latest.sessionMaster.turnCount} turns`,
+    { dim: true },
+  );
+  kvRow(ixMasterKv, 'Baseline master', overview.artifactId, {
+    mono: true,
+    dim: true,
+    title: overview.artifactId,
+  });
+  kvRow(
+    ixMasterKv,
+    'Baseline size',
+    `${(latest.sessionMaster.baselineTotalDurationMs / 1000).toFixed(1)} s · ${overview.plan.turnCount} turns`,
+    { dim: true },
+  );
+}
+
+// --- Results panels: locality, grounding, provenance -----------------------
+
+function renderIxResults(): void {
+  const latest = interactive.latest;
+  if (latest === null) {
+    show(ixResults, false);
+    show(ixResultsWide, false);
+    return;
+  }
+  show(ixResults, true);
+  show(ixResultsWide, true);
+  renderMasterCard();
+  renderGrounding(latest);
+  renderLocality(latest);
+  renderProvenanceIx(latest);
+}
+
+function renderLocality(record: SessionInterveneResponse): void {
+  const locality = record.locality;
+  const identical = locality.rows.filter((row) => row.wavSha256Equal).length;
+  setText(
+    ixLocalitySummary,
+    `byte identity ${identical}/${locality.rows.length} original turns · ` +
+      `machinery verdict ${locality.passed ? 'PASSED' : 'FAILED'} · original order ${locality.originalOrderPreserved ? 'preserved' : 'BROKEN'}`,
+  );
+  ixLocalitySummary.classList.toggle('ok', locality.passed);
+  ixLocalitySummary.classList.toggle('bad', !locality.passed);
+
+  setText(ixLocalityBody, '');
+  for (const row of locality.rows) {
+    const tr = doc.createElement('tr');
+    if (row.postBoundary) tr.classList.add('post-boundary');
+
+    const turnCell = doc.createElement('td');
+    setText(turnCell, row.turnId);
+    turnCell.className = 'mono';
+    tr.appendChild(turnCell);
+
+    const identityCell = doc.createElement('td');
+    identityCell.className = row.wavSha256Equal ? 'verdict ok' : 'verdict bad';
+    setText(identityCell, row.wavSha256Equal ? '✓ identical' : '✗ DIFFERS');
+    tr.appendChild(identityCell);
+
+    const baselineCell = doc.createElement('td');
+    setText(baselineCell, formatStartSec(row.baselineStartMs));
+    baselineCell.className = 'mono';
+    tr.appendChild(baselineCell);
+
+    const sessionCell = doc.createElement('td');
+    setText(sessionCell, formatStartSec(row.sessionStartMs));
+    sessionCell.className = 'mono';
+    tr.appendChild(sessionCell);
+
+    const shiftCell = doc.createElement('td');
+    setText(shiftCell, formatMsDelta(row.startMsDelta));
+    shiftCell.className = row.postBoundary ? 'mono shift' : 'mono shift zero';
+    shiftCell.title = row.postBoundary
+      ? `post-boundary shift (boundary ${record.afterTurnIndex})`
+      : 'pre-boundary: no shift';
+    tr.appendChild(shiftCell);
+
+    ixLocalityBody.appendChild(tr);
+  }
+
+  setText(
+    ixLocalityInvariant,
+    locality.shiftEqualsInsertedTotal
+      ? `⑂ invariant holds: post-boundary shift == inserted response total — ${formatMsDelta(locality.postBoundaryShiftMs)} == ${formatMsDelta(locality.insertedTotalMs)}`
+      : `✗ INVARIANT VIOLATED: post-boundary shift ${formatMsDelta(locality.postBoundaryShiftMs)} != inserted response total ${formatMsDelta(locality.insertedTotalMs)}`,
+  );
+  ixLocalityInvariant.classList.toggle('ok', locality.shiftEqualsInsertedTotal);
+  ixLocalityInvariant.classList.toggle('bad', !locality.shiftEqualsInsertedTotal);
+}
+
+function renderGrounding(record: SessionInterveneResponse): void {
+  const grounding = record.grounding;
+  setText(
+    ixGroundingSummary,
+    `F1 grounding check ${grounding.passed ? 'PASSED' : 'FAILED'} · ` +
+      `${grounding.retrievedClaimIds.length} claim${grounding.retrievedClaimIds.length === 1 ? '' : 's'} retrieved ` +
+      `${grounding.matchedByContent ? 'by content match' : 'by the honest fallback (top salience — the question matched no claim content)'}`,
+  );
+  ixGroundingSummary.classList.toggle('ok', grounding.passed);
+  ixGroundingSummary.classList.toggle('bad', !grounding.passed);
+
+  setText(ixGroundingClaims, '');
+  for (const claim of grounding.claims) {
+    const li = doc.createElement('li');
+    li.className = 'ix-claim';
+    const id = doc.createElement('span');
+    id.className = 'mono ix-claim-id';
+    setText(id, claim.claimId);
+    const statement = doc.createElement('span');
+    statement.className = 'ix-claim-statement';
+    setText(statement, claim.statement);
+    const salience = doc.createElement('span');
+    salience.className = 'ix-claim-salience';
+    setText(salience, `salience ${claim.salience.toFixed(2)}`);
+    li.appendChild(id);
+    li.appendChild(statement);
+    li.appendChild(salience);
+    ixGroundingClaims.appendChild(li);
+  }
+
+  setText(ixGroundingKv, '');
+  kvRow(ixGroundingKv, 'Response turn', grounding.responseTurnId, { mono: true });
+  kvRow(ixGroundingKv, 'Matched by content', grounding.matchedByContent ? 'yes' : 'no — fallback', {
+    dim: true,
+  });
+  kvRow(ixGroundingKv, 'W1 deep validation', grounding.w1Valid ? 'valid' : 'INVALID', { dim: true });
+  kvRow(ixGroundingKv, 'W2 dialogue-graph issues', String(grounding.w2IssueCount), { dim: true });
+  kvRow(ixGroundingKv, 'Claims resolve in graph', grounding.claimsResolve ? 'yes' : 'NO', {
+    dim: true,
+  });
+}
+
+function renderProvenanceIx(record: SessionInterveneResponse): void {
+  const provenance = record.provenance;
+  setText(ixProvenanceKv, '');
+  kvRow(ixProvenanceKv, 'Listener input', record.listenerInputMode, { dim: true });
+  kvRow(ixProvenanceKv, 'Semantics', record.semantics, { dim: true });
+  kvRow(ixProvenanceKv, 'Question', `“${record.listenerText}”`, { dim: true });
+  kvRow(ixProvenanceKv, 'Boundary', `after turn ${record.afterTurnIndex}`, { dim: true });
+  kvRow(ixProvenanceKv, 'Inserted turns', record.insertedTurnIds.join(' + '), { mono: true });
+  kvRow(ixProvenanceKv, 'Seed', provenance.seed, { mono: true, dim: true });
+  kvRow(ixProvenanceKv, 'Now', provenance.now, { mono: true, dim: true });
+  kvRow(ixProvenanceKv, 'Mastering', provenance.mastering, { dim: true });
+  kvRow(ixProvenanceKv, 'Response plan', provenance.responsePlanId, { mono: true, title: provenance.responsePlanId });
+  kvRow(ixProvenanceKv, 'Response artifact', provenance.responseArtifactId, {
+    mono: true,
+    title: provenance.responseArtifactId,
+  });
+  kvRow(ixProvenanceKv, 'Session artifact', provenance.sessionArtifactId, {
+    mono: true,
+    title: provenance.sessionArtifactId,
+  });
+  kvRow(ixProvenanceKv, 'Session master sha256', shortHash(provenance.sessionMasterSha256), {
+    mono: true,
+    title: provenance.sessionMasterSha256,
+  });
+  kvRow(ixProvenanceKv, 'Same machinery', provenance.sameMachineryNote, { dim: true });
+}
+
+// --- Fork history -----------------------------------------------------------
+
+function renderHistory(): void {
+  setText(ixHistoryList, '');
+  const records = interactive.interventions;
+  show(ixHistoryEmpty, records.length === 0);
+  for (const record of records) {
+    const li = doc.createElement('li');
+    li.className = 'ix-history-item';
+    if (interactive.latest?.interventionId === record.interventionId) {
+      li.classList.add('current');
+    }
+    const button = doc.createElement('button');
+    button.type = 'button';
+    button.className = 'ix-history-btn';
+    const head = doc.createElement('span');
+    head.className = 'ix-history-head';
+    setText(
+      head,
+      `fork ${record.interventionSeq} · boundary ${record.afterTurnIndex} · “${record.listenerText}”`,
+    );
+    const meta = doc.createElement('span');
+    meta.className = 'ix-history-meta mono';
+    setText(
+      meta,
+      `${record.insertedTurnIds.join(' + ')} · sha ${shortHash(record.sessionMaster.sha256)}`,
+    );
+    const verdicts = doc.createElement('span');
+    verdicts.className = 'ix-history-verdicts';
+    setText(
+      verdicts,
+      `F1 ${record.grounding.passed ? '✓' : '✗'} · F2 ${record.locality.passed ? '✓' : '✗'} · order ${record.locality.originalOrderPreserved ? '✓' : '✗'}`,
+    );
+    button.appendChild(head);
+    button.appendChild(meta);
+    button.appendChild(verdicts);
+    button.setAttribute(
+      'aria-label',
+      `Show fork ${record.interventionSeq}: boundary ${record.afterTurnIndex}, question ${record.listenerText}`,
+    );
+    button.addEventListener('click', () => {
+      interactive.latest = record;
+      renderIxResults();
+      renderBoundaryStatus();
+      renderHistory();
+      if (interactive.activeMaster === 'session') {
+        setActiveMaster('session');
+      }
+      renderTranscript();
+      ixResultsWide.scrollIntoView({ block: 'start' });
+    });
+    li.appendChild(button);
+    ixHistoryList.appendChild(li);
+  }
 }
 
 // ---------------------------------------------------------------------------
