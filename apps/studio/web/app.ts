@@ -1412,6 +1412,12 @@ function renderProvenanceIx(record: SessionInterveneResponse): void {
     `${provenance.responseQa.status}${provenance.responseQa.issueCount > 0 ? ` · ${provenance.responseQa.issueCount} issue(s)` : ''}`,
     { dim: true },
   );
+  kvRow(
+    ixProvenanceKv,
+    'Reproducible',
+    provenance.reproducible ? 'yes (byte-identical re-fork)' : 'no',
+    { dim: true },
+  );
   kvRow(ixProvenanceKv, 'Same machinery', provenance.sameMachineryNote, { dim: true });
 }
 

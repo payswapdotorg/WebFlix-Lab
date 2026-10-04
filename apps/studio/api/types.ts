@@ -363,6 +363,11 @@ export interface SessionInterveneResponse {
       readonly status: string;
       readonly issueCount: number;
     };
+    /**
+     * WFLX-UI3 audit fill: the session artifact's generator reproducible
+     * flag (byte-identical re-fork at fixed seed/now/intervention).
+     */
+    readonly reproducible: boolean;
   };
 }
 

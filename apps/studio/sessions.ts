@@ -419,6 +419,7 @@ function serializeIntervention(
         status: result.session.artifact.qa?.status ?? 'not-evaluated',
         issueCount: result.session.artifact.qa?.issues.length ?? 0,
       },
+      reproducible: result.session.artifact.generator.reproducible,
     },
   };
 }

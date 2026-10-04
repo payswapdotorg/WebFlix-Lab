@@ -344,6 +344,9 @@ describe('Interactive Audio session routes (WFLX-UI2)', () => {
 
       // The serialized session artifact id IS the served master's id.
       expect(record.provenance.sessionArtifactId).toBe(record.sessionMaster.artifactId);
+
+      // The session artifact's generator reproducible flag (offline path).
+      expect(record.provenance.reproducible).toBe(true);
     },
     30000,
   );
