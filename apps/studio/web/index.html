@@ -126,7 +126,7 @@
           <div class="columns">
             <div class="card transcript-card">
               <h3>Transcript</h3>
-              <p class="card-note">Click a turn to seek; the current turn highlights during playback.</p>
+              <p class="card-note">Click a turn to seek; the current turn highlights during playback.<span id="transcript-ix-note" hidden> After joining a session, <strong>⌁ markers</strong> pick the intervention boundary and inserted response turns highlight.</span></p>
               <ol id="transcript-list" class="transcript-list"></ol>
             </div>
             <div class="side-col">
@@ -143,6 +143,144 @@
           </div>
         </div>
       </section>
+      <!-- ============ 4 · Interactive session (W2) ============ -->
+      <section id="ix-section" class="panel ix-panel" aria-labelledby="ix-heading" hidden>
+        <h2 id="ix-heading">4 · Interactive session</h2>
+
+        <!-- Entry: join (appears after a successful compile) -->
+        <div id="ix-entry" class="ix-entry" hidden>
+          <div class="ix-semantics">
+            <p class="ix-semantics-line">
+              <strong>each question re-forks the session from the baseline (lab semantics)</strong>
+            </p>
+            <p class="ix-semantics-sub">
+              Join an <span class="mono">InteractiveAudioSession</span> over the compiled overview above:
+              ask a typed listener question at a turn boundary, hear the source-grounded response
+              spliced in, and read the locality + grounding proofs. This is the lab’s
+              fork-and-compare surface — not a cumulative product chat, and not the Gemini Notebook product.
+            </p>
+          </div>
+          <button id="ix-join-button" class="btn btn-primary" type="button">Join Interactive Session</button>
+          <p class="ix-entry-note">
+            Typed listener questions only — voice capture is <strong>UNRESOLVED</strong> (text stand-in;
+            no microphone is faked). The session registry is in-memory on the server — a restart resets it.
+          </p>
+        </div>
+
+        <!-- Joining (loading) -->
+        <div id="ix-joining" class="state state-loading" hidden>
+          <div class="spinner" role="status" aria-label="Joining"></div>
+          <p class="state-title">Establishing the interactive session…</p>
+          <p class="state-body mono">InteractiveAudioSession over the stored baseline</p>
+        </div>
+
+        <!-- Joined surface -->
+        <div id="ix-joined" hidden>
+          <div class="ix-labels" aria-label="Session semantics (always visible)">
+            <p class="ix-label-line">
+              <span aria-hidden="true">⑂</span> <strong>each question re-forks the session from the baseline (lab semantics)</strong>
+            </p>
+            <p class="ix-label-line">
+              <span aria-hidden="true">⌨</span> <strong>typed listener question — voice capture UNRESOLVED (text stand-in)</strong>
+            </p>
+          </div>
+
+          <div class="columns ix-columns">
+            <div class="side-col">
+              <div class="card">
+                <h3>Session</h3>
+                <dl id="ix-session-kv" class="kv"></dl>
+              </div>
+
+              <div class="card ix-ask-card" id="ix-ask-card">
+                <h3>Ask</h3>
+                <p id="ix-boundary-status" class="ix-boundary-status" aria-live="polite"></p>
+                <label class="control" for="ix-ask-input">
+                  <span class="control-label">typed listener question — voice capture UNRESOLVED (text stand-in)</span>
+                  <input id="ix-ask-input" class="ix-input" type="text" autocomplete="off"
+                    placeholder="What should the hosts answer from the source?" />
+                  <span class="control-help">typed stand-in — voice capture UNRESOLVED; no microphone is faked</span>
+                </label>
+                <div class="ix-chips" id="ix-chips" aria-label="Scripted questions (EXP-L-03), one-click fill"></div>
+                <div class="ix-ask-actions">
+                  <button id="ix-ask-button" class="btn btn-primary" type="button">Ask at boundary</button>
+                </div>
+                <div id="ix-ask-loading" class="ix-ask-loading" hidden>
+                  <div class="spinner" role="status" aria-label="Compiling the response"></div>
+                  <p>Forking from the baseline and compiling the source-grounded response through the
+                    <span class="mono">same machinery</span>…</p>
+                </div>
+                <p id="ix-ask-error" class="ix-ask-error" hidden></p>
+                <button id="ix-rejoin-button" class="btn" type="button" hidden>Re-join session</button>
+              </div>
+
+              <div class="card" id="ix-no-boundaries" hidden>
+                <h3>Ask</h3>
+                <p class="card-note">
+                  This baseline has no interior turn boundaries (fewer than two turns) — there is
+                  nothing to ask yet. Recompile a multi-turn mode (deep-dive, critique, debate).
+                </p>
+              </div>
+            </div>
+
+            <div class="side-col">
+              <div id="ix-results" hidden>
+                <div class="card ix-masters-card">
+                  <h3>Masters — compare</h3>
+                  <div class="ix-master-toggle" role="group" aria-label="Which master the player loads">
+                    <button id="ix-master-session" class="btn ix-master-btn" type="button"
+                      aria-pressed="false">Session master</button>
+                    <button id="ix-master-baseline" class="btn ix-master-btn" type="button"
+                      aria-pressed="true">Baseline master</button>
+                  </div>
+                  <dl id="ix-master-kv" class="kv"></dl>
+                </div>
+
+                <div class="card">
+                  <h3>Grounding — retrieved claims (F1)</h3>
+                  <p id="ix-grounding-summary" class="ix-proof-summary"></p>
+                  <ul id="ix-grounding-claims" class="ix-claims"></ul>
+                  <dl id="ix-grounding-kv" class="kv"></dl>
+                </div>
+              </div>
+
+              <div class="card" id="ix-history-card">
+                <h3>Fork history</h3>
+                <p class="card-note">Every question re-forks from the baseline — nothing is cumulative.</p>
+                <ul id="ix-history-list" class="ix-history" aria-label="Interventions on this session"></ul>
+                <p id="ix-history-empty" class="muted" hidden>No interventions yet — ask the first question.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="ix-results-wide" hidden>
+            <div class="card">
+              <h3>Locality proof — original turns across the boundary</h3>
+              <p id="ix-locality-summary" class="ix-proof-summary"></p>
+              <div class="ix-table-wrap">
+                <table class="ix-table" id="ix-locality-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Original turn</th>
+                      <th scope="col">Byte identity (WAV sha256)</th>
+                      <th scope="col">Baseline start</th>
+                      <th scope="col">Session start</th>
+                      <th scope="col">Shift</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ix-locality-body"></tbody>
+                </table>
+              </div>
+              <p id="ix-locality-invariant" class="ix-invariant"></p>
+            </div>
+
+            <div class="card">
+              <h3>Response provenance</h3>
+              <dl id="ix-provenance-kv" class="kv"></dl>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="app-footer">
@@ -151,8 +289,9 @@
         evidence (AGENTS.md). Speech is the offline deterministic placeholder provider.
       </p>
       <p>
-        W2 will add Interactive Audio session UI on this shell; W3 verifies the operator journey.
-        Microphone / voice input is <strong>UNRESOLVED</strong> and is not offered on this surface.
+        Interactive sessions use the lab’s fork semantics (each question re-forks from the baseline)
+        and typed listener input — voice capture is <strong>UNRESOLVED</strong>; no microphone is
+        offered or faked on this surface. W3 verifies the full operator journey.
       </p>
     </footer>
   </div>

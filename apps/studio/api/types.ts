@@ -169,7 +169,7 @@ export interface OverviewResponse {
 }
 
 // ---------------------------------------------------------------------------
-// Errors + W2 session-boundary stubs
+// Errors
 // ---------------------------------------------------------------------------
 
 export interface ApiErrorBody {
@@ -178,9 +178,206 @@ export interface ApiErrorBody {
   readonly stage?: string;
 }
 
-export interface SessionStubBody {
-  readonly error: 'not-implemented-by-w1';
-  readonly handoff: 'wflx-ui2';
+// ---------------------------------------------------------------------------
+// Interactive Audio session (WFLX-UI2) — POST /api/session,
+// POST /api/session/:id/intervene, GET /api/session/:id
+// ---------------------------------------------------------------------------
+
+/**
+ * The lab's fork-and-compare session semantics, as the machinery defines
+ * them (each intervene() re-forks from the stored baseline). Displayed
+ * verbatim on the UI surface — the product's cumulative multi-turn chat is
+ * NOT imitated.
+ */
+export const SESSION_FORK_SEMANTICS =
+  'each question re-forks the session from the baseline (lab semantics)' as const;
+
+/**
+ * The documented text-scripted stand-in class (LAB-13 / EXP-L-18): voice
+ * capture is UNRESOLVED; the UI carries this exact label and offers no
+ * microphone anything.
+ */
+export const SESSION_LISTENER_INPUT_MODE =
+  'typed listener question — voice capture UNRESOLVED (text stand-in)' as const;
+
+/** In-memory session registry note (restart resets; documented). */
+export const SESSION_PERSISTENCE_NOTE =
+  'in-memory session registry on this server instance only — restart resets sessions and compiled overviews' as const;
+
+/** POST /api/session request body. */
+export interface SessionEstablishRequest {
+  readonly overviewId: string;
+}
+
+/** POST /api/session response (session established over the stored baseline). */
+export interface SessionEstablishResponse {
+  readonly sessionId: string;
+  /** The compiled baseline's artifact id (the studio overview store key). */
+  readonly overviewId: string;
+  /** Baseline turn count (timing manifest entries). */
+  readonly turnCount: number;
+  /** Valid interior turn boundaries: indexes 0..turnCount-2. */
+  readonly validBoundaries: readonly number[];
+  /** Times this baseline has been joined (idempotent re-join increments). */
+  readonly joins: number;
+  readonly semantics: string;
+  readonly listenerInputMode: string;
+  readonly persistenceNote: string;
+  readonly evidenceClass: 'REPRODUCED';
+}
+
+/** POST /api/session/:id/intervene request body. */
+export interface SessionInterveneRequest {
+  readonly afterTurnIndex: number;
+  readonly listenerText: string;
+}
+
+/**
+ * One turn in the session timeline: the baseline sequence with the response
+ * turns inserted at the boundary (original order preserved). Inserted rows
+ * carry `inserted: true` and a null baselineIndex.
+ */
+export interface SessionTurnRow {
+  readonly turnId: string;
+  readonly sessionIndex: number;
+  /** Baseline turn index for original turns; null for inserted response turns. */
+  readonly baselineIndex: number | null;
+  readonly speakerRole: string;
+  readonly speakerName: string;
+  readonly purpose: string;
+  readonly text: string;
+  readonly wordCount: number;
+  readonly startMs: number;
+  readonly endMs: number;
+  readonly durationMs: number;
+  readonly gapAfterMs: number;
+  readonly inserted: boolean;
+}
+
+/** Locality proof row: one original turn, baseline vs session. */
+export interface SessionLocalityRow {
+  readonly turnId: string;
+  readonly baselineIndex: number;
+  /** Byte-identity verdict: baseline turn WAV bytes reused in the session master. */
+  readonly wavSha256Equal: boolean;
+  readonly actualSecondsEqual: boolean;
+  readonly gapAfterMsEqual: boolean;
+  readonly baselineStartMs: number;
+  readonly sessionStartMs: number;
+  /** The post-boundary shift (0 pre-boundary; the inserted response total after). */
+  readonly startMsDelta: number;
+  readonly postBoundary: boolean;
+}
+
+/** A retrieved claim grounding the response (graph statement, for the panel). */
+export interface SessionGroundingClaim {
+  readonly claimId: string;
+  readonly statement: string;
+  readonly salience: number;
+}
+
+/** POST /api/session/:id/intervene response (serialized InteractiveSessionResult). */
+export interface SessionInterveneResponse {
+  readonly sessionId: string;
+  readonly overviewId: string;
+  readonly interventionId: string;
+  readonly interventionSeq: number;
+  readonly afterTurnIndex: number;
+  readonly listenerText: string;
+  readonly listenerInputMode: string;
+  readonly semantics: string;
+  readonly evidenceClass: 'REPRODUCED';
+  /** The full session sequence: original turns + inserted response turns. */
+  readonly timeline: readonly SessionTurnRow[];
+  readonly insertedTurnIds: readonly string[];
+  /** The response block (compiled through the same machinery). */
+  readonly response: {
+    readonly planId: string;
+    readonly turnCount: number;
+    readonly realizedTexts: readonly string[];
+    readonly provider: string;
+    readonly sameMachineryNote: string;
+  };
+  /** The session master (its own artifact id — never overwrites the baseline). */
+  readonly sessionMaster: {
+    readonly artifactId: string;
+    readonly audioUrl: string;
+    readonly sha256: string;
+    readonly sizeBytes: number;
+    readonly totalDurationMs: number;
+    readonly turnCount: number;
+    readonly baselineTotalDurationMs: number;
+  };
+  /** The baseline master stays available for comparison. */
+  readonly baselineMaster: {
+    readonly artifactId: string;
+    readonly audioUrl: string;
+    readonly totalDurationMs: number;
+  };
+  /** Locality proof (C-5): per-original-turn byte identity + the shift invariant. */
+  readonly locality: {
+    readonly rows: readonly SessionLocalityRow[];
+    readonly postBoundaryShiftMs: number;
+    /** Inserted response total recomputed from the session timeline (turns + gaps). */
+    readonly insertedTotalMs: number;
+    /** Invariant: post-boundary shift == inserted response total (and pre-boundary shift 0). */
+    readonly shiftEqualsInsertedTotal: boolean;
+    readonly originalOrderPreserved: boolean;
+    readonly byteIdentityAllGreen: boolean;
+    readonly passed: boolean;
+    readonly invariantLine: string;
+  };
+  /** Grounding summary (F1): retrieval + the W1/W2 check verdict. */
+  readonly grounding: {
+    readonly passed: boolean;
+    readonly w1Valid: boolean;
+    readonly w2IssueCount: number;
+    readonly claimsResolve: boolean;
+    readonly responseTurnId: string;
+    readonly retrievedClaimIds: readonly string[];
+    readonly matchedByContent: boolean;
+    readonly claims: readonly SessionGroundingClaim[];
+  };
+  /** Retrieval + response provenance. */
+  readonly provenance: {
+    readonly seed: string;
+    readonly now: string;
+    readonly mastering: string;
+    readonly baselineArtifactId: string;
+    readonly responsePlanId: string;
+    readonly responseArtifactId: string;
+    readonly sessionArtifactId: string;
+    readonly sessionMasterSha256: string;
+    readonly sameMachineryNote: string;
+  };
+}
+
+/** Fork-history entry in GET /api/session/:id. */
+export interface SessionInterventionSummary {
+  readonly interventionId: string;
+  readonly interventionSeq: number;
+  readonly afterTurnIndex: number;
+  readonly listenerText: string;
+  readonly insertedTurnIds: readonly string[];
+  readonly sessionArtifactId: string;
+  readonly sessionMasterSha256: string;
+  readonly groundingPassed: boolean;
+  readonly localityPassed: boolean;
+  readonly originalOrderPreserved: boolean;
+}
+
+/** GET /api/session/:id response (current session state). */
+export interface SessionStateResponse {
+  readonly sessionId: string;
+  readonly overviewId: string;
+  readonly joins: number;
+  readonly turnCount: number;
+  readonly validBoundaries: readonly number[];
+  readonly semantics: string;
+  readonly listenerInputMode: string;
+  readonly persistenceNote: string;
+  readonly evidenceClass: 'REPRODUCED';
+  readonly interventions: readonly SessionInterventionSummary[];
 }
 
 export type { AudioOverviewMode, GeneratedArtifact, TimingManifest, UtcTimestamp };
