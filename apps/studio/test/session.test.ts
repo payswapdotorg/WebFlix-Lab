@@ -322,6 +322,32 @@ describe('Interactive Audio session routes (WFLX-UI2)', () => {
     expect(seqs).toEqual(seqs.map((_, index) => index + 1));
   });
 
+  test(
+    'WFLX-UI3 provenance completeness fills: sourceIds, response QA, response provider',
+    async () => {
+      const record = await intervene(studio, established.sessionId, BOUNDARY, QUESTION_OSS);
+
+      // GeneratedArtifact.sourceIds convention (audit fill): the session
+      // lineage's source ids equal the compiled baseline's sidecar sources.
+      expect(record.provenance.sourceIds).toEqual(overview.artifact.sourceIds);
+
+      // The response segment's QA summary rides the session artifact sidecar
+      // (status + issue count; honest reporting, never hidden).
+      expect(['passed', 'passed-with-issues', 'failed', 'not-evaluated']).toContain(
+        record.provenance.responseQa.status,
+      );
+      expect(record.provenance.responseQa.issueCount).toBeGreaterThanOrEqual(0);
+
+      // Handoff §4 law: the provider is never hidden — the response speech
+      // provider is the honest offline speech-stage id.
+      expect(record.response.provider).toBe('deterministic-offline-tts');
+
+      // The serialized session artifact id IS the served master's id.
+      expect(record.provenance.sessionArtifactId).toBe(record.sessionMaster.artifactId);
+    },
+    30000,
+  );
+
   test('typed error paths (4xx bodies, never a 501 stub)', async () => {
     // Unknown baseline overview.
     const unknownOverview = await postJson(studio, '/api/session', {

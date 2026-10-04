@@ -411,6 +411,14 @@ function serializeIntervention(
       sessionArtifactId: result.session.artifactId,
       sessionMasterSha256,
       sameMachineryNote: SAME_MACHINERY_NOTE,
+      // WFLX-UI3 audit fill (display layer only): the GeneratedArtifact
+      // sourceIds convention on the session lineage, + the response segment's
+      // QA summary as carried on the session artifact sidecar (never hidden).
+      sourceIds: [...result.session.artifact.sourceIds],
+      responseQa: {
+        status: result.session.artifact.qa?.status ?? 'not-evaluated',
+        issueCount: result.session.artifact.qa?.issues.length ?? 0,
+      },
     },
   };
 }
