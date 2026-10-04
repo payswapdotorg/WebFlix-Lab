@@ -11,6 +11,7 @@ Read before coding:
 - docs/reference/reference-artifact-manifest.json
 - docs/experiments/protocol.md
 - docs/work-items/tl2-work-order.md
+- apps/studio/README.md
 
 ## Evidence discipline
 
