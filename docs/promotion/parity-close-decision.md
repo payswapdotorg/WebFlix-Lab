@@ -129,3 +129,73 @@ integration consumption of the handoff.
       station (declared rules re-derived from the two values; the
       byte-regeneration falsifier re-run green; the full battery 456/456
       re-verified before each push at f54ee39 and bd773ed).
+
+---
+
+## 6. Studio-stage amendment (2026-10-04) — drafted by wflx-ui3, pending TL sign-off
+
+Section status: **DRAFTED 2026-10-04 by Worker 3 (wflx-ui3 — station
+integration + journey docs wave; work order recorded verbatim at
+docs/work-items/37-WFLX-UI3-STATION-INTEGRATION.md)**. Per this document's
+conventions the TL signs after station review; the checkbox at the end of
+this section stays open until then. Evidence labels follow AGENTS.md —
+everything in this section is REPRODUCED-class.
+
+The post-parity studio stage (docs/handoff/tl2-overview-studio-handoff.md)
+added the lab's first browser surface **over the frozen pipeline** — no
+pipeline change, no new product-parity evidence, no parity conclusion
+moved:
+
+- **WFLX-UI1 (app shell) — MERGED 2026-10-04** (branch
+  `work/wflx-ui1-studio-shell`; work order
+  docs/work-items/35-WFLX-UI1-STUDIO-SHELL.md): the real chain in-browser
+  (source adapter → understanding → Director → plan →
+  `compileAudioOverview` — no pre-baked plans), player, transcript
+  timeline, provenance panel, the W2 stub routes; battery 474 → 493.
+- **WFLX-UI2 (Interactive Audio) — MERGED 2026-10-04** (branch
+  `work/wflx-ui2-interactive-audio`; work order
+  docs/work-items/36-WFLX-UI2-INTERACTIVE-AUDIO.md): the real
+  `InteractiveAudioSession` routes (establish/intervene/state) + surface D
+  (boundary markers, typed ask, inserted turns, masters compare, locality +
+  grounding + provenance panels, fork history); battery 493 → 501.
+- **WFLX-UI3 (station integration + journey docs) — this wave** (branch
+  `work/wflx-ui3-station-integration`): the provenance-completeness audit
+  across the three surfaces against the GeneratedArtifact / artifact.json
+  conventions — **27 PASS / 5 GAP → fixed in the display layer only / 7
+  N/A** across 39 audited cells; zero machinery changes, zero frozen-tree
+  edits — plus apps/studio/README.md full form, the root-README studio
+  section, this amendment, and the AGENTS.md read-list line; battery
+  501 → 502 (the one added test pins the audit fills — the work order's
+  501+N rule, N=1, reported).
+
+**In-browser verification record** (the TL's agent-browser journey through
+the operator console gateway; recorded in docs/work-items/roadmap-status.md
+— the 2026-10-04 studio-stage entries): compile Deep-Dive 300 s (20 turns,
+307.59 s actual) → Join Interactive Session (`ix-session-1`, 24 turns, 23
+valid boundaries) → boundary 4 → the EXP-L-03 typed question → **24/24
+original-turn byte-identity, pre-boundary +0 ms, post-boundary uniformly
++21,173 ms, F1 grounding PASS** (claim-b13 + claim-b14, retrieved by
+content), **session master 328.76 s = 307.59 + 21.17 exact**.
+
+**Parity posture — UNCHANGED by the studio stage.** The studio is a
+REPRODUCED-class lab implementation: the offline deterministic provider
+(placeholder audio), fork-and-compare session semantics (each question
+re-forks from the stored baseline — the product's cumulative multi-turn
+chat is NOT imitated), typed listener input (voice capture UNRESOLVED —
+labeled on the surface), in-memory stores, media fingerprinted-not-
+committed. It observes nothing about the Gemini product, adds **no
+product-parity evidence**, and changes **no conclusion** of §§1–4. The
+parity ledger stands as recorded at the close and after the one
+post-close fill: **audio 21 VERIFIED / 14 DIVERGENT / 0 PENDING** (the
+2026-10-04 LAB-13 product capture closed the AUDIO-PARITY-08
+operator-gated slot — docs/experiments/comparisons/audio/
+AUDIO-PARITY-08.yaml + the roadmap-status 2026-10-04 02:20 UTC entry;
+all three metrics VERIFIED), **video as closed** (9 V / 11 D / 3 P — the
+three PENDING being the Cinematic scoping truth by construction: no
+product format exists). The honest divergence ledger (§3) and the
+promotion posture (§4) are untouched. The studio's honest boundaries are
+labeled on the surface itself and documented in apps/studio/README.md.
+
+- [ ] TL #2 — pending station review of the wflx-ui3 branch (gates +
+      credential sweep + frozen-tree diff + doc read-through + the browser
+      journey re-verification) before merge.
