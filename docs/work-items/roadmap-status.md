@@ -1,25 +1,26 @@
 # TL #2 Roadmap Status — live position
 
-Updated: 2026-09-29 08:25 UTC by TL #2 — P3B COMPLETE (both waves merged).
-Wave 1 (PR #8, 43b21df, EV-010): cross-modal IR compliance (shared-spine,
-HANDOFF 1 adjudicated), unified artifact manifest registry (13 records),
-reproducibility metadata, local refinement loop. Wave 2 (PR #9, 49306bc,
-EV-011): integration experiment runner + 15 records (EXP-A-01..06-R2 under
-the fixed Director, EXP-V-01..08 storyboard ablations, EXP-D-01 dual-
-modality comparison), provider-matrix cross-surface exercise log, packet
-determinism proof (identical digest pair bc95eb72…, 160 files). KEY FINDING
-(OBSERVED): compositor raw MP4 renders are encoder-nondeterministic across
-identical invocations — content-fingerprinted, excluded from the digest set
-by rule. V-05/V-06 multi-source arms BLOCKED honestly (Deterministic-
-Extractor inconsistent graph — HANDOFF to the source-surface wave). Gates on
-main: 352/352. Checklist §2 = ALL EIGHT ITEMS ticked.
+Updated: 2026-10-04 07:30 UTC by TL #2 — ALL STAGES COMPLETE.
+R&D roadmap COMPLETE (Phase 4 TL SIGNED PROMOTE, PR #10). Parity Completion
+Phase CLOSED 2026-10-02 (capture matrix COMPLETE; the AUDIO-PARITY-08
+operator-gated slot closed 2026-10-04 by the LAB-13 Interactive Audio
+product capture — audio ledger 21 VERIFIED / 14 DIVERGENT / 0 PENDING; video
+closed). v3 line: WFLX-V3A merged (PR #14); C-8 ruled out; lane exhausted.
+Studio stage COMPLETE 2026-10-04: WFLX-UI1 + UI2 + UI3 all merged — the
+Operator Studio (apps/studio/, `bun run studio`, port 4313) is
+browser-testable end-to-end: source → compile → listen → join → ask →
+locality/grounding proofs, provenance-complete (audit 27 PASS / 5 GAP
+fixed display-layer-only / 7 N/A). Gates on main @ a2c31ac: typecheck 0
+errors, lint clean, chunked battery 502/502 (164 + 159 + 117 + 34 + 28).
+Historical entries below are append-only records of each merge — the
+dated sections carry the full station evidence.
 
-Next: v2 contract wave execution (C-5 per-turn content-keyed seeding on BOTH
-surfaces — run-evidence confirmed on video by EXP-V-04; C-7 shared rate
-model; C-8 dual-modality plan shape; C-9 styleBibleVersion emission; C-10
-monologic brief) + EXP-X-02 (control vs C-5 treatment arms per
-docs/experiments/design-exp-x-02.md) — then Phase 4 promotion assembly and
-TL evidence sign-off.
+Next: nothing scheduled — the roadmap is complete end-to-end; the resident
+TL watch continues (estate health, honest-boundary labels standing). The
+historical header that preceded this one (P3B completion, 2026-09-29,
+including its KEY FINDING on compositor encoder-nondeterminism and its
+then-current "Next" line) is preserved verbatim in the git history at
+this file's prior commits.
 
 This file is the operator-visible progress surface for the work order in
 `tl2-work-order.md`. It is updated by the TL between merges; the commit
