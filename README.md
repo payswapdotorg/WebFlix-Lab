@@ -66,6 +66,17 @@ Source Adapter -> SourceArtifact -> Source Intelligence
 
 The core abstraction is an Overview Compiler, not a monolithic prompt.
 
+## Operator Studio (apps/studio)
+
+Compile an Audio Overview through the real pipeline and play it in the
+browser (REPRODUCED-class lab evidence; offline deterministic provider):
+
+```bash
+bun run studio    # serves http://localhost:4313 (fixed port)
+```
+
+See apps/studio/README.md for the surface, port law, and honest boundaries.
+
 ## Team
 
 TL #2 owns shared contracts, reference environment, evidence integrity, integration, and acceptance.
