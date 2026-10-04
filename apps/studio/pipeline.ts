@@ -1,5 +1,5 @@
 /**
- * WebFlix-Lab Operator Studio (WFLX-UI1) — pipeline boundary.
+ * WebFlix-Lab Operator Studio (WFLX-UI1 + WFLX-UI2) — pipeline boundary.
  *
  * THE ONE WIRING POINT between the studio and the real lab pipeline. This
  * module ONLY orchestrates existing, frozen exports — it re-implements
@@ -9,12 +9,20 @@
  *   DeterministicExtractor (src/source/graph)   -> SemanticGraph
  *   compileOverviewPlan (src/director)          -> OverviewPlan
  *   compileAudioOverview (src/audio)            -> AudioOverviewResult
+ *   InteractiveAudioSession (src/audio/interactive) — driven by sessions.ts
  *
  * Determinism spine (binding): the studio pins fixed seed/now constants and
  * the offline deterministic speech provider, and the pure-TS mastering
  * backend. Two server boots fed identical compile requests therefore produce
  * byte-identical master WAVs (asserted in apps/studio/test/determinism.test.ts).
  * Compiled media lives in memory ONLY — the studio never writes artifacts/.
+ *
+ * WFLX-UI2 extension: a compiled overview now retains the FULL
+ * AudioOverviewResult plus the graph/sources/seed/now/mastering the
+ * InteractiveAudioSession constructor needs (see StoredOverview), and the
+ * studio context carries the in-memory SESSION REGISTRY + session-audio
+ * store (see sessions.ts). Zero domain logic here — this layer only
+ * re-exports and calls.
  *
  * Evidence class of everything produced here: REPRODUCED (lab
  * implementation; AGENTS.md). The offline provider's speech is placeholder
@@ -26,10 +34,16 @@ import { join } from 'node:path';
 import {
   AUDIO_OVERVIEW_MODES,
   type AudioOverviewMode,
+  type SemanticGraph,
   type SourceArtifact,
   type UtcTimestamp,
 } from '../../src/contracts';
-import { compileAudioOverview, type AudioOverviewResult } from '../../src/audio';
+import {
+  compileAudioOverview,
+  type AudioOverviewResult,
+  type MasteringBackend,
+} from '../../src/audio';
+import { InteractiveAudioSession } from '../../src/audio/interactive/session';
 import { compileOverviewPlan } from '../../src/director/compiler';
 import { MarkdownNoteAdapter, MARKDOWN_NOTE_ADAPTER_ID } from '../../src/source/markdown-note-adapter';
 import {
@@ -42,6 +56,7 @@ import {
   STUDIO_AUDIO_MODES,
   type OverviewResponse,
   type ProviderState,
+  type SessionInterveneResponse,
   type SourceDescriptor,
   type SourcesResponse,
   type TranscriptRow,
@@ -88,18 +103,85 @@ const SOURCE_CATALOG: readonly SourceCatalogEntry[] = [
 // In-memory overview store (per server instance; never persisted)
 // ---------------------------------------------------------------------------
 
+/** The mastering backend the studio pins for every compile + session fork. */
+export const STUDIO_MASTERING: MasteringBackend = 'pure-ts';
+
+/**
+ * A compiled overview as retained for the interactive session layer
+ * (WFLX-UI2): the full AudioOverviewResult (plan, graph, realized, timing,
+ * synthesis, master, artifact, wav) plus exactly the constructor inputs
+ * InteractiveAudioSession needs (the understanding graph, the source
+ * artifacts, the compile seed/now, the mastering backend). The studio never
+ * re-implements any of it — it hands the stored pieces to the machinery.
+ */
 export interface StoredOverview {
   readonly response: OverviewResponse;
   readonly wav: Uint8Array;
+  /** The FULL compiler result (WFLX-UI2: the session baseline). */
+  readonly result: AudioOverviewResult;
+  /** The understanding graph the baseline was compiled against. */
+  readonly graph: SemanticGraph;
+  /** The source artifacts fed to the Director + compiler. */
+  readonly sources: readonly SourceArtifact[];
+  /** The compile seed (must equal the baseline compile seed — session law). */
+  readonly seed: string;
+  /** The fixed compile timestamp (no hidden wall clock). */
+  readonly now: UtcTimestamp;
+  /** The mastering backend used for baseline + session forks. */
+  readonly mastering: MasteringBackend;
+}
+
+/**
+ * The in-memory interactive session registry entry (WFLX-UI2): the live
+ * InteractiveAudioSession instance (the machinery), its stored baseline id,
+ * the join count, and the serialized intervention results (fork history —
+ * each intervene() re-forks from the stored baseline; lab fork-and-compare
+ * semantics, never a cumulative product chat).
+ */
+export interface StoredSession {
+  readonly sessionId: string;
+  /** The baseline overview's artifact id (the ctx.store key). */
+  readonly overviewId: string;
+  /** THE machinery — constructed once per baseline, driven per intervention. */
+  readonly session: InteractiveAudioSession;
+  readonly seed: string;
+  readonly now: UtcTimestamp;
+  readonly mastering: MasteringBackend;
+  /** Baseline turn count (valid boundaries are the interior 0..turnCount-2). */
+  readonly turnCount: number;
+  joins: number;
+  /** Fork history: serialized interventions (SessionInterveneResponse). */
+  readonly interventions: SessionInterveneResponse[];
+}
+
+/** A session master WAV registered for the /audio/:id/master.wav endpoint. */
+export interface StoredSessionAudio {
+  readonly wav: Uint8Array;
+  readonly sessionId: string;
+  /** Session artifacts carry their OWN ids — never the baseline's. */
+  readonly artifactId: string;
 }
 
 export interface StudioContext {
   readonly env: NodeJS.ProcessEnv;
+  /** Compiled overviews keyed by baseline artifact id. */
   readonly store: Map<string, StoredOverview>;
+  /** Interactive sessions keyed by sessionId (WFLX-UI2; in-memory only). */
+  readonly sessions: Map<string, StoredSession>;
+  /** Session master WAVs keyed by session artifact id (own ids, never the baseline's). */
+  readonly sessionAudio: Map<string, StoredSessionAudio>;
+  /** Session id sequence (ids are per-instance; restart resets everything). */
+  sessionSeq: number;
 }
 
 export function createStudioContext(env: NodeJS.ProcessEnv = process.env): StudioContext {
-  return { env, store: new Map() };
+  return {
+    env,
+    store: new Map(),
+    sessions: new Map(),
+    sessionAudio: new Map(),
+    sessionSeq: 0,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -298,7 +380,7 @@ export async function compileStudioOverview(
       seed: STUDIO_AUDIO_SEED,
       now: STUDIO_NOW,
       providerChoice: 'offline',
-      mastering: 'pure-ts',
+      mastering: STUDIO_MASTERING,
       notes:
         'WebFlix-Lab Operator Studio compile (offline deterministic provider; ' +
         'REPRODUCED-class lab evidence — not product parity).',
@@ -306,7 +388,18 @@ export async function compileStudioOverview(
   });
 
   const response = assembleOverviewResponse(request.sourceId, result);
-  ctx.store.set(response.artifactId, { response, wav: result.wav });
+  // WFLX-UI2: retain the FULL result + constructor inputs so the interactive
+  // session layer can drive InteractiveAudioSession over THIS baseline.
+  ctx.store.set(response.artifactId, {
+    response,
+    wav: result.wav,
+    result,
+    graph,
+    sources: [source],
+    seed: STUDIO_AUDIO_SEED,
+    now: STUDIO_NOW,
+    mastering: STUDIO_MASTERING,
+  });
   return response;
 }
 

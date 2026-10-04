@@ -1,12 +1,17 @@
 /**
- * WebFlix-Lab Operator Studio (WFLX-UI1) — GET /audio/:id/master.wav.
+ * WebFlix-Lab Operator Studio (WFLX-UI1 + WFLX-UI2) — GET /audio/:id/master.wav.
  *
  * Serves the compiled master WAV from the per-instance in-memory store with
  * proper HTTP Range support (audio elements need `Accept-Ranges: bytes` to
  * seek reliably and to stream progressively instead of re-fetching the whole
- * body). Nothing is ever written to artifacts/ (determinism spine: the
- * studio adds no committed artifacts). Byte-identity across boots is
- * asserted in apps/studio/test/determinism.test.ts.
+ * body). WFLX-UI2: the SAME endpoint pattern also serves SESSION MASTER WAVs
+ * from the session-audio store — session artifacts carry their OWN ids, so a
+ * session master can never collide with (or overwrite) its baseline.
+ *
+ * Nothing is ever written to artifacts/ (determinism spine: the studio adds
+ * no committed artifacts). Byte-identity across boots is asserted in
+ * apps/studio/test/determinism.test.ts; session-master identity across
+ * double-interventions in apps/studio/test/session.test.ts.
  */
 
 import type { StudioContext } from '../pipeline';
@@ -30,15 +35,16 @@ function wavHeaders(extra: Record<string, string>): Record<string, string> {
 
 export function handleAudio(ctx: StudioContext, artifactId: string, req: Request): Response {
   const stored = ctx.store.get(artifactId);
-  if (stored === undefined) {
+  const sessionMaster = ctx.sessionAudio.get(artifactId);
+  const wav = stored?.wav ?? sessionMaster?.wav;
+  if (wav === undefined) {
     return errorResponse(
       404,
       'unknown-artifact',
-      `no compiled overview for artifact id '${artifactId}' on this server instance — compile first via POST /api/overview`,
+      `no compiled overview or session master for artifact id '${artifactId}' on this server instance — compile via POST /api/overview or intervene via POST /api/session/:id/intervene`,
     );
   }
 
-  const wav = stored.wav;
   const total = wav.byteLength;
 
   // Single-range requests only (what audio elements issue).

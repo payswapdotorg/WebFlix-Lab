@@ -1,5 +1,5 @@
 /**
- * WebFlix-Lab Operator Studio (WFLX-UI1) — request router.
+ * WebFlix-Lab Operator Studio (WFLX-UI1 + WFLX-UI2) — request router.
  *
  * One dispatch table for the whole surface:
  *
@@ -9,24 +9,27 @@
  *   GET  /api/health                  {ok, version, provider}
  *   GET  /api/sources                 checked-in pipeline sources
  *   POST /api/overview                compile through the real pipeline
- *   POST /api/session                 501 stub — W2 boundary hook
- *   POST /api/session/:id/intervene   501 stub — W2 boundary hook
- *   GET  /audio/:id/master.wav        compiled master WAV (in-memory store)
+ *   POST /api/session                 join an Interactive Audio session (W2)
+ *   POST /api/session/:id/intervene   typed listener question at a boundary (W2)
+ *   GET  /api/session/:id             session state + fork history (W2)
+ *   GET  /audio/:id/master.wav        compiled master WAV (overview OR session master)
  *
  * Handlers stay thin (see api/*); all pipeline calls go through
- * apps/studio/pipeline.ts, which imports the EXISTING compiler.
+ * apps/studio/pipeline.ts, and all session calls through
+ * apps/studio/sessions.ts — both import the EXISTING machinery.
  */
 
 import { handleAudio } from './audio';
 import { errorResponse, methodNotAllowedResponse, notFoundResponse } from './errors';
 import { handleHealth } from './health';
 import { handleOverview } from './overview';
-import { handleSessionCreate, handleSessionIntervene } from './session';
+import { handleSessionCreate, handleSessionIntervene, handleSessionState } from './session';
 import { handleSources } from './sources';
 import { handleAppJs, handleIndex, handleStyles } from './static';
 import type { StudioContext } from '../pipeline';
 
 const SESSION_INTERVENE_ROUTE = /^\/api\/session\/([^/]+)\/intervene$/;
+const SESSION_STATE_ROUTE = /^\/api\/session\/([^/]+)$/;
 
 type Handler = (ctx: StudioContext, req: Request, params: string[]) => Response | Promise<Response>;
 
@@ -43,11 +46,16 @@ const ROUTES: readonly Route[] = [
   { method: 'GET', pattern: '/api/health', handler: (ctx) => handleHealth(ctx) },
   { method: 'GET', pattern: '/api/sources', handler: () => handleSources() },
   { method: 'POST', pattern: '/api/overview', handler: (ctx, req) => handleOverview(ctx, req) },
-  { method: 'POST', pattern: '/api/session', handler: () => handleSessionCreate() },
+  { method: 'POST', pattern: '/api/session', handler: (ctx, req) => handleSessionCreate(ctx, req) },
   {
     method: 'POST',
     pattern: SESSION_INTERVENE_ROUTE,
-    handler: () => handleSessionIntervene(),
+    handler: (ctx, req, params) => handleSessionIntervene(ctx, req, params[0] ?? ''),
+  },
+  {
+    method: 'GET',
+    pattern: SESSION_STATE_ROUTE,
+    handler: (ctx, _req, params) => handleSessionState(ctx, params[0] ?? ''),
   },
   {
     method: 'GET',
