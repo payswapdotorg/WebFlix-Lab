@@ -115,3 +115,121 @@ amendment explicitly introduces NO new parity evidence.
 No new UI capability. No new API routes. No pipeline changes. No new npm
 deps. No frozen-tree edits. No artifacts/ writes. No PRs/merges. No
 parity claims.
+
+---
+
+# WFLX-UI3 Delivery Record — Provenance Completeness Audit (Worker 3)
+
+Appended by W3 per Deliverable C. Evidence class: REPRODUCED (lab
+implementation; AGENTS.md). Audit basis: `src/contracts/generated-artifact.ts`
+(the `GeneratedArtifact` convention) + the committed `artifacts/**`
+sidecars (e.g. `artifacts/audio/canonical-deep-dive-5min/artifact.json`,
+`artifacts/audio/interactive-01/session-01/artifact.json`) + the studio's
+delivered surfaces read in full (`apps/studio/pipeline.ts`, `sessions.ts`,
+`api/*.ts`, `web/app.ts`, `web/index.html`).
+
+## Field-by-field audit (PASS / GAP / N/A per surface)
+
+Surfaces: **S1** = source surface (`GET /api/sources` + landing card);
+**S2** = overview surface (`POST /api/overview` + player/transcript/
+metadata/provenance panels); **S3** = interactive session surface
+(`POST /api/session`, `POST /api/session/:id/intervene`,
+`GET /api/session/:id` + session/master/locality/grounding/provenance/
+history panels).
+
+| # | Convention field (audited meaning) | S1 Source | S2 Overview | S3 Session |
+|---|---|---|---|---|
+| 1 | Source fingerprint (`SourceArtifact.fingerprint`: contentSha256 / rawSha256 / textLength) | **PASS** — API carries all three; UI renders the content sha short + full values in the tooltip | **PASS** — the compile runs over the enumerated source whose fingerprint is displayed at selection; the response carries `sourceId` + the artifact sidecar lineage | **PASS** (after fill G3) — lineage `sourceIds` serialized + rendered; the fingerprint itself lives on S1 where it belongs |
+| 2 | Plan id (`planId` + `planHash`) | **N/A** — no plan exists at enumeration (modes + canonical durations listed instead) | **PASS** — planId + planHash in the metadata panel (full values in tooltips) + `artifact.planId` in the provenance panel | **PASS** — responsePlanId serialized + rendered; the baseline planId renders in the S2 metadata panel |
+| 3 | Seed (`generator.seed`; studio constants) | **N/A** — no seed-bearing record pre-compile | **PASS** — `Generator · seed …` + the reproducible flag rendered | **PASS** — provenance.seed + provenance.now rendered |
+| 4 | Artifact ids (artifact id; `sourceIds`; session/response/baseline ids) | **PASS** — SourceArtifact id in the API + the radio value; title/label/fingerprint rendered | **GAP → FIXED (G1)** — artifactId rendered; `artifact.sourceIds` was computed + serialized but NOT rendered → row added | **GAP → FIXED (G3)** — session/response/baseline artifact ids rendered; lineage `sourceIds` were not serialized → DTO + render added |
+| 5 | Media sha256 (`media.sha256`; session master sha; per-turn WAV identity) | **N/A** — no media at source stage | **PASS** — media sha256 (short + full tooltip), size, format rendered; the sidecar-hash == served-bytes equality is test-asserted | **PASS** — sessionMasterSha256 in the master card + ix provenance; the locality table renders per-turn WAV byte-identity verdicts; served-bytes equality test-asserted |
+| 6 | Evidence class labels (`REPRODUCED`) | **PASS** — surface note in the API response; header "Not the Gemini Notebook product" | **PASS** — `evidenceClass` in the DTO; "REPRODUCED · lab evidence" tag on the player card; footer | **PASS** — `evidenceClass` on establish/state/intervene DTOs; static labels in the ix section + footer |
+| 7 | Providers (per-stage provider usage; speech provider) | **PASS** — adapter + extractor ids rendered in the source stats | **PASS** — speech provider in the player card + provenance; every stage·provider row rendered | **GAP → FIXED (G2)** — the response speech provider was serialized (`response.provider`) but NOT rendered → row added |
+| 8 | Timestamps (`createdAt` / `now`) | **N/A** — the fixed studio ingest constant; no per-source record exists on the fixture | **PASS** — "Created at" rendered | **PASS** — "Now" rendered |
+| 9 | Mastering backend | **N/A** | **PASS** — "Mastering · pure-ts (deterministic)" | **PASS** — "Mastering" rendered in ix provenance |
+| 10 | Reproducible flag (`generator.reproducible`) | **N/A** | **PASS** — "Reproducible · yes (byte-identical recompile)" | **GAP → FIXED (G5)** — the session artifact's flag was not serialized → DTO + render added |
+| 11 | QA summary (`qa.status` + issues) | **N/A** | **PASS** — honest status + issue count rendered | **GAP → FIXED (G4)** — the response segment's QA (carried on the session artifact sidecar) was not serialized → DTO + render added |
+| 12 | Notes (honest boundary notes) | **PASS** — research-implementation surface note | **PASS** — `artifact.notes` rendered | **PASS** — the same-machinery note rendered; the honest-boundary labels are static on the surface |
+| 13 | Lineage (`derivedFromArtifactId` / fork lineage) | **N/A** | **PASS** — fresh generation per compile; no lineage exists to show | **PASS** — baseline artifact id + fork history (seq, boundary, question, inserted ids, sha, verdicts) rendered |
+
+**Totals: 39 audited cells — 27 PASS / 5 GAP→FIXED / 7 N/A.** The N/A
+cells are fields that do not exist at that stage of the chain (no plan,
+seed, media, QA, mastering, or reproducible-flag record exists at source
+enumeration; no lineage on a fresh compile). All five gaps were
+machinery-computed-but-undisplayed fields, fixed in the DISPLAY LAYER ONLY
+(`apps/studio/api/types.ts` DTO + `apps/studio/sessions.ts` serialization +
+`apps/studio/web/app.ts` rendering) per the work order's fix rule — zero
+machinery changes, zero frozen-tree edits, zero new API routes.
+
+## Gap fixes (display layer only)
+
+- **G1** overview provenance: `Source ids` row (render-only — the DTO
+  already carried the full artifact).
+- **G2** ix provenance: `Response speech provider` row (render-only —
+  `response.provider` was already serialized).
+- **G3** ix provenance: `Source ids` row (DTO + serialize + render —
+  `result.session.artifact.sourceIds`).
+- **G4** ix provenance: `Response QA` row, status + issue count (DTO +
+  serialize + render — the sidecar's `qa` summary).
+- **G5** ix provenance: `Reproducible` row (DTO + serialize + render —
+  `generator.reproducible`).
+
+Regression test: `apps/studio/test/session.test.ts` gains one test pinning
+the fills (sourceIds == the baseline sidecar's, response QA status shape,
+response provider id, session artifact id == served master id, the
+reproducible flag) — battery 501 → **502** (the work order's 501+N rule,
+N=1, reason: the audit finding required a regression pin).
+
+## HANDOFF lines (frozen-tree findings)
+
+**None.** No audit finding required a frozen-tree change. Observed, not
+actionable (no gap): the W1-era roadmap station note says "20-turn
+transcript" for the Deep-Dive compile; the current main produces a
+24-turn/307.6 s baseline (byte-deterministic per the double-boot test —
+WFLX-UI3 station re-verification, agent-browser). The roadmap is TL-owned;
+flagged here for the TL's station review, not edited.
+
+## Station re-verification (agent-browser, this wave)
+
+Boot `bun run studio` (:4313) → source card (fingerprint) → compile
+Deep-Dive 300 s (24 turns, 307.6 s) → provenance panel incl. the G1
+`Source ids` row → Join (`ix-session-1`, 24 turns, 23 boundaries 0..22) →
+boundary 4 → typed EXP-L-03 question → **24/24 original turns
+byte-identical, pre-boundary +0 ms, post-boundary uniformly +21,173 ms
+(invariant line: +21,173 ms == +21,173 ms), F1 grounding PASSED (claim-b13
++ claim-b14 by content), session master 328.8 s = 24+2 turns** → ix
+provenance renders all five fills (response provider, source ids,
+response QA, reproducible, same machinery) → zero browser console
+errors/warnings. Matches the TL's W2 station record exactly.
+
+## Gates (Deliverable F)
+
+- `bun run typecheck` — **0 errors**.
+- `bun run lint` — **clean**.
+- `bun test` — **502/502 pass, 0 fail** (501 baseline + 1 WFLX-UI3
+  provenance regression test; 17,721 expect() calls, 56 files).
+- Credential sweep over the full diff (669 lines): credential patterns
+  (classic + fine-grained GitHub PAT prefixes, AWS keys, PEM blocks,
+  Slack tokens, API-key prefixes, JWTs) — **0 hits**; the session's push credential string — **0 hits**; loose
+  terms (password/secret/api-key) — **0 hits**. The PAT line in the
+  verbatim work order above is the redacted placeholder as delivered —
+  the auditable form (per the 35/36 convention and the work order's
+  credential law).
+- Frozen-tree diff check: `git diff --name-only main..HEAD` touches ONLY
+  `docs/work-items/37-…`, `apps/studio/README.md`, `README.md` (studio
+  section only), `docs/promotion/parity-close-decision.md` (appended
+  section only), `AGENTS.md` (one read-list line), and the
+  display-layer-fix files (`apps/studio/api/types.ts`,
+  `apps/studio/sessions.ts`, `apps/studio/web/app.ts`,
+  `apps/studio/test/session.test.ts`). **`src/**`, `artifacts/**`,
+  `experiments/**`, `tests/**` (outside `apps/studio/test/**`): untouched.**
+
+## UNRESOLVED (honest list)
+
+- Voice capture remains **UNRESOLVED** (typed stand-in — unchanged,
+  labeled on the surface; no microphone/ASR anywhere).
+- The W1-era "20-turn" roadmap note vs the current 24-turn compile —
+  flagged for the TL above (roadmap is TL-owned).
+- Nothing else in this wave's scope is unresolved; all deliverables
+  A–F are VERIFIED with evidence as recorded above.
