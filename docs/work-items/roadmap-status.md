@@ -918,3 +918,40 @@ transition); credential sweep over the wave diff = 0 hits.
   `InteractiveAudioSession.intervene()` driving Join/Ask, locality +
   grounding proofs on screen), then WFLX-UI3 (journey verification +
   station integration).
+
+## 2026-10-04 05:5x UTC — STUDIO STAGE: WFLX-UI2 MERGED (TL #2 station review) — Interactive Audio is browser-testable
+
+- **WFLX-UI2 delivered + merged** (branch `work/wflx-ui2-interactive-audio`,
+  work order recorded verbatim as `docs/work-items/36-WFLX-UI2-INTERACTIVE-AUDIO.md`):
+  the W1 stub routes are now REAL session routes over
+  `InteractiveAudioSession` — `POST /api/session` (establish: session id,
+  turn count, valid interior boundaries), `POST /api/session/:id/intervene`
+  (the full `InteractiveSessionResult` serialization: inserted response
+  turns, session master on the /audio endpoint, locality proof rows,
+  grounding summary, retrieval + response provenance),
+  `GET /api/session/:id` (registry state). Surface D: join, boundary
+  markers on the transcript timeline, the typed-ask box (voice capture
+  UNRESOLVED — text stand-in, labeled on the surface), inserted-turn
+  highlighting, masters compare (session vs baseline), locality + grounding
+  + provenance panels, fork history — the fork-and-compare lab semantics
+  labeled, never imitating the product's cumulative chat.
+- Station review (TL #2, trust nothing): typecheck 0 errors; lint clean;
+  chunked battery **501/501** (493 + 8 session tests — §7 guarantees
+  asserted end-to-end at router level: original-turn byte identity across
+  the boundary, post-boundary shift == inserted total, order preserved,
+  grounding outcome, double-intervene determinism); credential sweep 0
+  hits; frozen trees byte-stable. Gateway patch rebased cleanly (fetchJson
+  inherits XTransformPort routing); the TL patched the two master-switch
+  `audio.src` assignments for the same coverage.
+- agent-browser journey (the acceptance path, through the console gateway):
+  compile Deep-Dive 300 s (20 turns) -> Join (session ix-session-1,
+  24 turns, 23 valid boundaries) -> boundary 4 -> typed EXP-L-03 question
+  "Can you say more about the open-source media projects and local model
+  runtimes?" -> inserted response turns rendered -> LOCALITY table
+  24/24 byte-identical, pre-boundary +0 ms, post-boundary uniformly
+  +21,173 ms -> GROUNDING F1 PASSED (claim-b13 open-source media projects
+  + claim-b14 local model runtimes, retrieved by content, W1 valid / W2
+  zero issues / claims resolve) -> session master plays 328.76 s =
+  307.59 baseline + 21.17 inserted (exact).
+- Studio wave ledger: W1 merged, W2 merged; WFLX-UI3 (station integration +
+  journey documentation + parity-close amendment) dispatches next.
