@@ -28,6 +28,10 @@ export function createStudioServer(options: StudioServerOptions = {}): Bun.Serve
   const ctx = createStudioContext(options.env ?? process.env);
   return Bun.serve({
     port: options.port ?? STUDIO_PORT,
+    // 255 s (the Bun max): audio elements stream the multi-MB master WAV
+    // progressively and may stall between range reads — the 10 s default
+    // idle timeout kills those connections mid-transfer.
+    idleTimeout: 255,
     async fetch(req: Request): Promise<Response> {
       return handleStudioRequest(ctx, req);
     },

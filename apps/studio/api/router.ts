@@ -52,7 +52,7 @@ const ROUTES: readonly Route[] = [
   {
     method: 'GET',
     pattern: /^\/audio\/([A-Za-z0-9_-]+)\/master\.wav$/,
-    handler: (ctx, _req, params) => handleAudio(ctx, params[0] ?? ''),
+    handler: (ctx, req, params) => handleAudio(ctx, params[0] ?? '', req),
   },
 ];
 

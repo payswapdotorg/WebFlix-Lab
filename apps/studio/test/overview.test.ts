@@ -88,6 +88,7 @@ describe('POST /api/overview — real pipeline integration', () => {
       const audioResponse = await fetch(`${studio.baseUrl}${overview.audioUrl}`);
       expect(audioResponse.status).toBe(200);
       expect(audioResponse.headers.get('content-type')).toBe('audio/wav');
+      expect(audioResponse.headers.get('accept-ranges')).toBe('bytes');
       const bytes = new Uint8Array(await audioResponse.arrayBuffer());
 
       // WAV contract: RIFF header, byte count, and the sidecar's media sha256.
@@ -96,6 +97,36 @@ describe('POST /api/overview — real pipeline integration', () => {
       expect(sha256).toBe(overview.artifact.media.sha256);
       expect(new TextDecoder().decode(bytes.slice(0, 4))).toBe('RIFF');
       expect(new TextDecoder().decode(bytes.slice(8, 12))).toBe('WAVE');
+
+      // Range contract (audio-element seeking): 206 + exact slice + headers.
+      const rangeResponse = await fetch(`${studio.baseUrl}${overview.audioUrl}`, {
+        headers: { range: 'bytes=100-199' },
+      });
+      expect(rangeResponse.status).toBe(206);
+      expect(rangeResponse.headers.get('content-range')).toBe(
+        `bytes 100-199/${overview.artifact.media.sizeBytes}`,
+      );
+      expect(rangeResponse.headers.get('content-length')).toBe('100');
+      const slice = new Uint8Array(await rangeResponse.arrayBuffer());
+      expect(slice.byteLength).toBe(100);
+      expect(slice[0]).toBe(bytes[100]);
+      expect(slice[99]).toBe(bytes[199]);
+
+      // Suffix range and open-ended range.
+      const suffix = await fetch(`${studio.baseUrl}${overview.audioUrl}`, {
+        headers: { range: `bytes=${overview.artifact.media.sizeBytes - 10}-` },
+      });
+      expect(suffix.status).toBe(206);
+      expect(suffix.headers.get('content-length')).toBe('10');
+
+      // Unsatisfiable range -> 416 with the total.
+      const unsatisfiable = await fetch(`${studio.baseUrl}${overview.audioUrl}`, {
+        headers: { range: `bytes=${overview.artifact.media.sizeBytes + 5}-` },
+      });
+      expect(unsatisfiable.status).toBe(416);
+      expect(unsatisfiable.headers.get('content-range')).toBe(
+        `bytes */${overview.artifact.media.sizeBytes}`,
+      );
     } finally {
       await studio.stop();
     }
